@@ -607,10 +607,20 @@ function wcolordiff() {
 }
 alias cdiff='wcolordiff'
 
+# grep prints line number if piped, might break other things?
+# http://unix.stackexchange.com/a/25549/43935
+grep() {
+    if [[ -t 1 ]]; then
+	command grep -n "$@"
+    else
+	command grep "$@"
+    fi
+}
+
 # 3-line context in grep
+alias grepi='grep -i'
 alias grepc='grep -C 3'
 alias grepic='grepc -i'
-alias grepi='grep -i'
 
 # Applications
 #ls | open -f # pipe ls, open in default application (probably texteditor)
