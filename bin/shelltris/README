@@ -1,0 +1,84 @@
+
+Shelltris README:
+
+Shelltris is my first attempt at writing a video game in a shell script.
+It uses a small C helper, getch, which must be built for your operating
+system.  The current CFLAGS in the Makefile are tuned for Mac OS X
+(4-way "universal").  Tweak as needed, then do a "make".  The shell
+script expects the getch file to be in the current directory.
+
+Once you have built the helper, you can play the game by changing into
+the shelltris directory and typing:
+
+	./shelltris.sh
+
+It will calibrate itself for a few second, then ask you to hit 'p' to play.
+
+
+--------------------
+KEYS:
+--------------------
+
+,     - rotate counterclockwise
+.     - rotate clockqise
+z     - move left
+x     - move right
+space - move piece faster
+q     - end the game immediately
+
+
+--------------------
+KNOWN ISSUES:
+--------------------
+
+* No high score support.
+* Timing loops are highly sensitive to changes in CPU performance (a problem
+  that is basically unavoidable, unfortunately).
+* In spite of attempts to calibrate the timers, there is still more
+  variation from machine to machine than I would like.
+* The script must execute itself several times with different flags to do
+  calibration.  This means that the path to the script must be hard-coded
+  within the script itself.  It is currently hard-coded to assume the
+  script is in the current directory.
+* This has not been tested except in Mac OS X.  While it should work in
+  other OSes, I make no guarantees.
+
+
+--------------------
+PERFORMANCE:
+--------------------
+
+For maximum performance on slower machines, I recommend using Mac OS X v10.5
+over previous versions.  Terminal 2.0 seems to be dramatically faster than
+previous versions (on the same hardware) for every drawing test I've tried.
+Your mileage may vary.
+
+
+--------------------
+LEGAL STUFF:
+--------------------
+
+This software is provided AS-IS with NO WARRANTY.  If something goes
+wrong, you're on your own.  This software may be freely distributed,
+provided that notices of copyright and authorship remain unmodified.
+
+If you find bugs and are able to fix them, please email the fixes
+to dgatwood@mac.com and I'll try to get them into future versions
+of the software.  The same applies if you come up with interesting
+features.
+
+Beyond that, you may use portions of this code in other software,
+so long as it results in a substantially different piece of software,
+and so long as you provide reasonable credit in the software and any
+accompanying documentation.
+
+
+--------------------
+REVISION HISTORY:
+--------------------
+
+Posting Date	| Vers.	| Notes
+------------------------------------------------------------------------
+2007-12-12	| 1.0	| First public release.
+2007-12-18	| 1.1	| Linux compatibility fixes.
+
