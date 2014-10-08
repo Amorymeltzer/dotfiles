@@ -1,0 +1,116 @@
+[user]
+name = Amory Meltzer
+email = Amorymeltzer@gmail.com
+
+[core]
+editor = emacs
+# Use custom `.gitignore`
+excludesfile = ~/.global-gitignore
+# Treat spaces before tabs, lines that are indented with 8 or more spaces,
+# and all kinds of trailing whitespace as an error
+# [default] trailing-space: looks for spaces at the end of a line
+# [default] space-before-tab: looks for spaces before tabs at the beginning of
+# a line
+whitespace = space-before-tab,indent-with-non-tab,trailing-space
+# Make `git rebase` safer on OS X 10.7 with autosave/versions
+# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+# trustctime = false
+
+[credential]
+helper = osxkeychain
+
+[alias]
+stat = status
+# Not sure what do
+#s = status --ignore-submodules=untracked
+s = status --short --branch
+c = commit
+cm = commit -m
+a = add
+aa = add -A
+aas = "!git aa; git s"
+sn = status --untracked=no
+co = checkout
+wc = whatchanged
+l = log --decorate
+l1 = log --oneline --decorate
+# View abbreviated SHA, description, and history graph of the latest 20 commits
+graph = log --pretty=oneline -n 20 --graph --abbrev-commit --decorate
+b = branch
+branches = branch -a
+# Remove branches that have already been merged with master
+remove-merged-branches = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+remotes = remote -v
+sub = submodule
+suba = submodule add
+subu = submodule update --init
+pom = push origin master
+# Use rebase to prevent unnecessary commits
+pum = pull --rebase origin master
+h = rev-parse HEAD
+d = diff --word-diff
+# Show the staged changes.
+dc = diff --cached --word-diff
+# Like "git show myfile", but uses the last commit that changed "myfile".
+showlast = log -n 1 -p
+# Switch to a branch, creating it if necessary
+go = checkout -B
+# Show verbose output about tags, branches or remotes
+# Don't use?
+tags = tag -l
+# Find branches containing commit
+fb = "!f() { git branch -a --contains $1; }; f"
+# Find tags containing commit
+ft = "!f() { git describe --always --contains $1; }; f"
+# Find commits by source code
+fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+# Find commits by commit message
+fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+	unstage = reset HEAD --
+
+[color]
+# Use colors in Git commands that are capable of colored output when outputting to the terminal
+ui = auto
+
+[color "branch"]
+current = yellow reverse
+local = yellow
+remote = green
+
+[color "diff"]
+meta = yellow bold
+frag = magenta bold
+old = red bold
+new = green bold
+
+[color "status"]
+added = yellow
+changed = green
+untracked = cyan
+
+[gc]
+auto = 256
+
+[push]
+default = simple
+
+[merge]
+# Include summaries of merged commits in newly created merge commit messages
+# Not sure what do
+log = true
+
+# URL shorthands
+[url "git@github.com:"]
+insteadOf = "gh:"
+pushInsteadOf = "github:"
+pushInsteadOf = "git://github.com/"
+[url "git://github.com/"]
+insteadOf = "github:"
+[url "git@gist.github.com:"]
+insteadOf = "gst:"
+pushInsteadOf = "gist:"
+pushInsteadOf = "git://gist.github.com/"
+[url "git://gist.github.com/"]
+insteadOf = "gist:"
+[hub]
+protocol = https
