@@ -746,12 +746,6 @@ alias pandora='pianobar'
 # or mplayer
 alias mplayer='mplayer -msgcolor'
 
-# Shuffle command to replace the missing shuf and sort -R in OSX.  unsort
-# doesn't really do the job.  From https://stackoverflow.com/a/6511327/2521092
-function shuf() {
-    perl -MList::Util=shuffle -e 'print shuffle(<STDIN>);'
-}
-#export -f shuf;
 
 # Show most used commands, from: http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
 # Fixed by doing $4 instead of $2
@@ -958,29 +952,14 @@ pass ()
 
 
 
-# Look up stock prices
-#function finance() { quote=`echo $1` ; curl -s "http://download.finance.yahoo.com/d/quotes.csv?s=$quote&f=l1";}
-function finance() {
+# Stock prices, use ~/bin/finance script for historical or current indices
+function stockmarket() {
     for quote in $@;
     do
 	printf "$quote\t";
 	curl -s "http://download.finance.yahoo.com/d/quotes.csv?s=$quote&f=l1";
     done
 }
-
-# Export -f func makes it available to bash scripts
-# Alternatively source ~/.bashrc and do shopt -s expand_aliases in the script
-#function stockmarket() { quote=`echo $1` ; curl -s "http://finance.yahoo.com/q/hp?s=$quote+Historical+Prices" | perl -ne 'print "$1\t$2 $3 ($4%)\n" if /\yfs\_l10.*?\"\>(\d+,?\d*\.\d\d).*\_arrow\"\ alt\=\"(.*?)\"\>\s*(\d+,?\d*\.\d\d)\<\/span.*yfs\_p20.*?\"\>\((\d*\.\d\d)/;';}; export -f stockmarket
-
-function stockmarket() {
-    for quote in $@;
-    do
-	printf "$quote\t";
-	curl -s "http://finance.yahoo.com/q/hp?s=$quote+Historical+Prices" | perl -ne 'print "$1\t$2 $3 ($4%)" if /\yfs\_l10.*?\"\>(\d+,?\d*\.\d\d).*\_arrow\"\ alt\=\"(.*?)\"\>\s*(\d+,?\d*\.\d\d)\<\/span.*yfs\_p20.*?\"\>\((\d*\.\d\d)/;';
-	echo;
-    done
-}
-#export -f stockmarket;
 
 
 # Calculate netBenefits stuff, uses ~/bin/ticker.sh, which just curls the website to get end-of-day quote

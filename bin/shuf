@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# shuf by Amory Meltzer
+# Shuffle command to replace the missing shuf and sort -R in OSX.  unsort
+# Doesn't really do the job.  From https://stackoverflow.com/a/6511327/2521092
+
+
+perl -MList::Util=shuffle -e 'print shuffle(<STDIN>);'

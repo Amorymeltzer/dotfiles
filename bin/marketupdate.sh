@@ -11,5 +11,5 @@ fi
 
 for ticker in $FILES
 do
-    stockmarket $ticker
+    finance $ticker
 done
