@@ -355,33 +355,27 @@ PROMPT_COMMAND=prompt_command
 
 
 ## Sourcin'
-## Should probably make a loop for .completions.d ;;;;;; ##### FIXME TODO
-# z, the awesome helper for moving around to popular directories
-. ~/.z.sh
-
 # Advanced bash completion (http://www.caliban.org/bash/index.shtml#completion)
-. ~/.completions.d/bash_completion
 # Defaults completion (https://github.com/revans/bash-it/blob/master/completion)
-. ~/.completions.d/defaults.completion.bash
-# Macports completions
-. ~/.completions.d/port_completion
-# pip completion
-# . ~/.completions.d/pip.completion.bash
-# ssh completion
-. ~/.completions.d/ssh.completion.bash
-# eject completion
-. ~/.completions.d/eject_completion
+for file in ~/.completions.d/*; do
+    [ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
+
 # whois, etc. auto-completion based on entries in known_hosts.
 if [[ -e ~/.ssh/known_hosts ]]; then
-    # complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp stfp whois nslookup nmap
-    complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" scp stfp whois nslookup nmap
+    #complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" scp stfp whois nslookup nmap
+    # Better than above as well as above-sourced completion file?
+    # ;;;;;; ##### FIXME TODO
+    complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp stfp whois nslookup nmap
 fi
 
 # Add `killall` tab completion for common apps
 # complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall
 
-# Add some shit for grc completion ;;;;;; ##### FIXME TODO
 
+# z, the awesome helper for moving around to popular directories
+. ~/.z.sh
 
 # ido-like CD, not perfect
 # if [ -f ~/bash-ido ]; then
