@@ -308,6 +308,7 @@ function prompt_command {
 	fi
     }
 
+
     # So.  Slow.
     # prompt_git() {
     #	local s='';
