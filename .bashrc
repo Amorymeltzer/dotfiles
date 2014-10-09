@@ -308,6 +308,49 @@ function prompt_command {
 	fi
     }
 
+    # So.  Slow.
+    # prompt_git() {
+    #	local s='';
+    #	local branchName='';
+
+    #	# Check if the current directory is in a Git repository.
+    #	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
+
+    #	    # check if the current directory is in .git before running git checks
+    #	    if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+
+    #		# Ensure the index is up to date.
+    #		git update-index --really-refresh -q &>/dev/null;
+
+    #		# Check for uncommitted changes in the index.
+    #		if ! $(git diff --quiet --ignore-submodules --cached); then
+    #		    s+='+';
+    #		fi;
+
+    #		# Check for unstaged changes.
+    #		if ! $(git diff-files --quiet --ignore-submodules --); then
+    #		    s+='!';
+    #		fi;
+
+    #		# Check for untracked files.
+    #		if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+    #		    s+='?';
+    #		fi;
+
+    #		# Check for stashed files.
+    #		if $(git rev-parse --verify refs/stash &>/dev/null); then
+    #		    s+='$';
+    #		fi;
+
+    #	    fi;
+    #	    [ -n "${s}" ] && s="[${s}]";
+
+    #	    echo -e "${s}";
+
+    #	else
+    #	    return;
+    #	fi;
+    # }
 
     #   PS1="${Color_Black}"'$fill \t\n'"${Color_Cyan}"'${debian_chroot:+($debian_chroot)}\u@\h:\w\$'"${Color_zOff} "
 
@@ -352,7 +395,6 @@ export PS3='#? '   # Tertiary prompt, select menus
 export PS4='+ '    # Quaternary prompt, ?
 
 PROMPT_COMMAND=prompt_command
-
 
 ## Sourcin'
 # Advanced bash completion (http://www.caliban.org/bash/index.shtml#completion)
