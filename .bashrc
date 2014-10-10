@@ -455,6 +455,8 @@ function gitignore() {
     ignore=".gitignore"
     if [[ ! -f $ignore ]]; then
 	ignore="~/.global-gitignore"
+    elif [[ -n $1 && $1 = "g" ]]; then
+	ignore="~/.global-gitignore"
     fi
     emacs $ignore
     }
