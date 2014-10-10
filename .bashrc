@@ -308,52 +308,11 @@ function prompt_command {
 	fi
     }
 
-
-    # So.  Slow.
-    # prompt_git() {
-    #	local s='';
-    #	local branchName='';
-
-    #	# Check if the current directory is in a Git repository.
-    #	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
-
-    #	    # check if the current directory is in .git before running git checks
-    #	    if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
-
-    #		# Ensure the index is up to date.
-    #		git update-index --really-refresh -q &>/dev/null;
-
-    #		# Check for uncommitted changes in the index.
-    #		if ! $(git diff --quiet --ignore-submodules --cached); then
-    #		    s+='+';
-    #		fi;
-
-    #		# Check for unstaged changes.
-    #		if ! $(git diff-files --quiet --ignore-submodules --); then
-    #		    s+='!';
-    #		fi;
-
-    #		# Check for untracked files.
-    #		if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-    #		    s+='?';
-    #		fi;
-
-    #		# Check for stashed files.
-    #		if $(git rev-parse --verify refs/stash &>/dev/null); then
-    #		    s+='$';
-    #		fi;
-
-    #	    fi;
-    #	    [ -n "${s}" ] && s="[${s}]";
-
-    #	    echo -e "${s}";
-
-    #	else
-    #	    return;
-    #	fi;
-    # }
-
     #   PS1="${Color_Black}"'$fill \t\n'"${Color_Cyan}"'${debian_chroot:+($debian_chroot)}\u@\h:\w\$'"${Color_zOff} "
+
+    psbegin="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
+    #  psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
+    psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\][\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
 
     #    if (($? > 0)); then
     if ((${ERRORS} > 0)); then
@@ -362,7 +321,10 @@ function prompt_command {
 	#	export PS1="${Color_Black}"'$fill\n'"${Color_Cyan}\t \#_${Color_Red}\u${Color_Cyan}:\w> ${Color_zOff}"
 	#	export PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]\h\[$Color_Cyan\]]-[\[$Color_zOff\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$Color_Red_Bold_Intense\]->\[$Color_zOff\] "
 
-	export PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+	#  export PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+	#  PS1+="[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+	#  PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+	PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$"
     else
 	#	export PS1="${Color_Cyan}\t \#_\u:\w> ${Color_zOff}";
 	#	export PS1="${Color_Black}"'$fill \t\n'"${Color_Cyan}\t \#_\u:\w> ${Color_zOff}"
@@ -371,8 +333,14 @@ function prompt_command {
 	#	export PS1="\n\[$Color_Cyan\]┌─[\[$Color_Green\]\u\[$Color_Blue\]@\[$Color_Red\]\h\[$Color_Cyan\]]-[\[$Color_zOff\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Magenta\]\$\[$Color_Cyan\]]->\[$Color_zOff\] "
 	#	export PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─[\[$Color_Green\]\u\[$Color_Blue\]@\[$Color_Red\]\h\[$Color_Cyan\]]-[\[$Color_zOff\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Magenta\]\#\[$Color_Cyan\]]->\[$Color_zOff\] "
 
-	export PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─[\[${SUD}\]\u\[$Color_Blue\]@\[${CNX}\]\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Magenta\]\#\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+	#  PS1+="[\[${SUD}\]\u\[$Color_Blue\]@\[${CNX}\]\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Magenta\]\#\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+	#  PS1="$psbegin[\[${SUD}\]\u\[$Color_Blue\]@\[${CNX}\]$psmiddle[\[$Color_Magenta\]\#\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+	PS1="$psbegin[\[${SUD}\]\u\[$Color_Blue\]@\[${CNX}\]$psmiddle[\[$Color_Magenta\]\#"
     fi
+
+    psend="\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+    PS1+=$psend
+    export PS1
 
     history -a # All terminal windows go to same history
 

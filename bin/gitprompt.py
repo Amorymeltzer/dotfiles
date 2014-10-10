@@ -45,9 +45,12 @@ def check(dirname):
         # if clean:
         #     sys.stdout.write("".join(messages))
         # else:
-        sys.stdout.write("".join(messages))
+    else:
+        messages = ["-"]
 
-        run('cd ../')
+    sys.stdout.write("".join(messages))
+
+    run('cd ../')
 
 #-------------------
 # Now, onto the main event!
