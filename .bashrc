@@ -311,8 +311,8 @@ function prompt_command {
     #   PS1="${Color_Black}"'$fill \t\n'"${Color_Cyan}"'${debian_chroot:+($debian_chroot)}\u@\h:\w\$'"${Color_zOff} "
 
     psbegin="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
-    #  psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
-    psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\][\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
+    #psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
+    psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
 
     #    if (($? > 0)); then
     if ((${ERRORS} > 0)); then
