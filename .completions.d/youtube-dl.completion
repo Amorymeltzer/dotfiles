@@ -27,3 +27,4 @@ __youtube_dl()
 }
 
 complete -F __youtube_dl youtube-dl
+complete -F __youtube_dl youtube
