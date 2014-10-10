@@ -112,7 +112,7 @@ export Color_White_Underline="\033[4;37m"       # White
 # export Color_White_Reverse="\033[7;37m"       # White
 
 # Background
-# z for sorting
+# 'z' prefix merely for sorting
 export Color_Black_zBackground="\033[40m"       # Black
 export Color_Red_zBackground="\033[41m"         # Red
 export Color_Green_zBackground="\033[42m"       # Green
@@ -163,6 +163,7 @@ function allcolors() {
 	printf "\x1b[38;5;${i}mcolour${i}\n"
     done
 }
+
 # Set less as default man pager, meaning screen won't clear after quitting man
 # -F, quit-if-one-screen, if it fits then print it and quit it
 # -X, no-init, don't clear screen first
@@ -217,11 +218,6 @@ bind "set expand-tilde off" # don't expand ~ to home dir when completing.  Off i
 bind "set history-preserve-point on" # try to keep the cursor position when moving through  history
 
 
-# Defined here as it's used in prompt
-function battery_charge {
-    echo `battery.py` 2>/dev/null
-}
-
 ### Prompts ----------------------------------------------------------
 #export PS1="${Color_Cyan}\t \#_\u:\w> ${Color_zOff}"  # Primary prompt with user and path
 #export PS1="${Color_Cyan}\u@\h${Color_Green} \w> ${Color_zOff}"  # Primary prompt with user, host, and path
@@ -237,6 +233,10 @@ function battery_charge {
 
 # Neater, no errors?
 fill="--- " # Why the space?
+
+function battery_charge {
+    echo `battery.py` 2>/dev/null
+}
 
 # Reset color for command output, invoked every time before command is executed
 # Seems unnecessary right now
@@ -368,6 +368,7 @@ PROMPT_COMMAND=prompt_command
 ## Sourcin'
 # Advanced bash completion (http://www.caliban.org/bash/index.shtml#completion)
 # Defaults completion (https://github.com/revans/bash-it/blob/master/completion)
+# Etc.
 for file in ~/.completions.d/*; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
@@ -376,7 +377,7 @@ unset file;
 # whois, etc. auto-completion based on entries in known_hosts.
 if [[ -e ~/.ssh/known_hosts ]]; then
     #complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" scp stfp whois nslookup nmap
-    # Better than above as well as above-sourced completion file?
+    # Better than above as well as above-sourced ssh completion file?
     # ;;;;;; ##### FIXME TODO
     complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp stfp whois nslookup nmap
 fi
@@ -388,7 +389,7 @@ fi
 # z, the awesome helper for moving around to popular directories
 . ~/.z.sh
 
-# ido-like CD, not perfect
+# Emacs ido-like for bash CD, not perfect
 # if [ -f ~/bash-ido ]; then
 #     . ~/bash-ido
 # fi
@@ -412,7 +413,7 @@ export PERL_MM_USE_DEFAULT=1
 # Make perl -d automatically use NYTProf
 export PERL5DB='use Devel::NYTProf'
 # Define nytprofhtml, see also dprofpp
-alias nytprofhtml='~/.cpan/build/Devel-NYTProf-5.04-4mP05e/bin/nytprofhtml'
+# alias nytprofhtml='~/.cpan/build/Devel-NYTProf-5.04-4mP05e/bin/nytprofhtml'
 # Access Perl::Critic documentation
 function explain_perlcritic() {
     #  perldoc -oman Perl::Critic::Policy::"$1"
@@ -472,6 +473,7 @@ alias eds="cd ~/.emacs.d/site-lisp/"
 alias bin="cd ~/bin"
 alias m='more'
 #alias c='cat'
+alias g='git'
 alias j="jobs"
 alias h='history 15'
 alias cl='clear'
@@ -482,7 +484,7 @@ alias count='wc -l '
 
 # http://linux.die.net/man/1/pygmentize
 # Colorized cat
-alias c='pygmentize -O bg=light -g '
+alias cot='pygmentize -O bg=light -g '
 
 # o with no args opens current directory, otherwise opens the given location
 function o() {
@@ -524,7 +526,7 @@ alias perlcheat='man perlcheat'
 # command word following the alias is also checked for alias expansion."
 alias sudo='sudo '
 # sudo aliases
-alias bitch,='sudo '
+alias motherfucker,='sudo '
 alias fuckyou,='sudo '
 
 # Prompt before overwrite, be vocal about it
@@ -536,7 +538,7 @@ alias rm='rm -v'
 
 # Make intermediate directories and be verbose about it
 alias mkdir='mkdir -pv'
-# Deleting intermediate directories maybe not so logical
+# Deleting intermediate directories not as logical
 # alias rmdir='rmdir -p'
 
 # mkdir then cd
@@ -554,8 +556,14 @@ function mkcd() {
 # Make a directory and move a file into it
 # Usage: mkmv <file> directory>
 function mkmv() {
-    mkdir "$2"
-    mv "$1" "$2"
+    if [[ $# -ne 2 ]]; then
+	echo "Usage: mkmv <file> <directory>"
+    elif [ -d $2 ]; then
+	echo "$1 already exists"
+    else
+	mkdir "$2"
+	mv "$1" "$2"
+    fi
 }
 
 
@@ -570,7 +578,6 @@ alias dud='du -d 1'
 function psu {
     ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command'
 }
-
 
 function diskusage() {
     df -h "`pwd`" | awk 'NR==2 { print "Used " $3 " of " $2 ", " $4 " (" $5 ") remaining" }'
@@ -595,11 +602,8 @@ alias hax='growlnotify -t System error -m "WTF R U DOIN"'
 alias beep='tput bel'
 
 # Enhanced WHOIS
-# Busted mid-2014
+# Busted as of mid-2014
 # alias whois='whois -h whois-servers.net'
-
-# Macports changelog
-alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
 
 # Use colordiff if it exists
 if [ -a /opt/local/bin/colordiff ]; then
@@ -614,13 +618,13 @@ alias cdiff='wcolordiff'
 
 # grep prints line number if piped, might break other things?
 # http://unix.stackexchange.com/a/25549/43935
-grep() {
-    if [[ -t 1 ]]; then
-	command grep -n "$@"
-    else
-	command grep "$@"
-    fi
-}
+# grep() {
+#     if [[ -t 1 ]]; then
+#	command grep -n "$@"
+#     else
+#	command grep "$@"
+#     fi
+# }
 
 # 3-line context in grep
 alias grepi='grep -i'
@@ -652,6 +656,8 @@ alias pinactive='port echo inactive '
 alias pinfo='port info '
 alias psearch='port search '
 alias pun='sudo port uninstall '
+# Macports changelog
+alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
 
 # Quickly open and make a new perl file executable and with headers
 function newperl() {
@@ -785,8 +791,7 @@ alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date
 alias stopwatch='timer'
 
 # Get week number
-alias week='date +%V'
-
+alias weeknum='date +%V'
 
 # Quickly check connection by pinging google
 alias pg='ping -c 1 google.com'
@@ -956,7 +961,6 @@ pass ()
 }
 
 
-
 # Stock prices, use ~/bin/finance script for historical or current indices
 function stockmarket() {
     for quote in $@;
@@ -965,7 +969,6 @@ function stockmarket() {
 	curl -s "http://download.finance.yahoo.com/d/quotes.csv?s=$quote&f=l1";
     done
 }
-
 
 # Calculate netBenefits stuff, uses ~/bin/ticker.sh, which just curls the website to get end-of-day quote
 alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
