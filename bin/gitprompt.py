@@ -28,11 +28,11 @@ def check(dirname):
         if re.search(r'nothing to commit.?.?working directory clean.?', out):
             messages.append("=")
         # Check for untracked files
-        if 'nothing added to commit but untracked files present' in out:
-            messages.append("?")
-            clean = False
         if 'Changes not staged for commit' in out:
             messages.append("+")
+            clean = False
+        if 'Untracked files' in out:
+            messages.append("?")
             clean = False
         if 'Changes to be committed' in out:
             messages.append("!")
