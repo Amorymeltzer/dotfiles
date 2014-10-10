@@ -451,6 +451,13 @@ alias reload='. ~/.bashrc'
 alias ee='emacs ~/.emacs'
 alias gitconfig='emacs ~/.gitconfig'
 alias eg='emacs ~/.gitconfig'
+function gitignore() {
+    ignore=".gitignore"
+    if [[ ! -f $ignore ]]; then
+	ignore="~/.global-gitignore"
+    fi
+    emacs $ignore
+    }
 
 # Navigation -------------------------------------------------------
 alias ..='cd ..'
@@ -1338,6 +1345,8 @@ function remind() {
 }
 
 
+# Add in -d -a flags for if
+# ;;;;;; ##### FIXME TODO
 function bashtips() {
     echo "
 DIRECTORIES
