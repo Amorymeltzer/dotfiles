@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+# Report on git status of a given folder.  Faster than some bash-based options
+# Borrows HEAVILY from mnagel's excellent clustergit (Github: mnagel/clustergit)
 
 # Grab some libraries
 import re
