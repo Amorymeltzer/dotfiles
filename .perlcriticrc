@@ -5,11 +5,11 @@ verbose = 9
 # Minimum length of regex before whining about /x
 # Default is 0
 [RegularExpressions::RequireExtendedFormatting]
-minimum_regex_length_to_complain_about = 25
+minimum_regex_length_to_complain_about = 30
 # Refuses unescaped spaces in regex, useful when using /x flag
 # strict = 1
 # Don't complain about certain postfix control structures
-# until when unless when while
+# until when unless when while also available
 [ControlStructures::ProhibitPostfixControls]
 allow = for if
 
