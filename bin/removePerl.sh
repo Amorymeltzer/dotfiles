@@ -5,6 +5,7 @@ rm ~/.bash_profile
 rm ~/.bash_history
 rm ~/.inputrc
 rm ~/.perlcriticrc
+rm ~/.perltidyrc
 rm ~/.gitconfig
 rm ~/.z
 rm ~/.z.sh

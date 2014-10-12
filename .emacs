@@ -258,6 +258,10 @@
 ;; Should show all but doesnt? ;;;;;; ##### FIXME TODO
 (setq flymake-number-of-errors-to-display nil)
 
+;; Perltidy, also exists as stand-alone command line program
+;; Uses ~/.perltidyrc
+(require 'perltidy)
+
 ;; Whitespace
 (require 'whitespace)
 ;; Turn on globally, probably if better just for programming modes
