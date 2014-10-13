@@ -1,0 +1,20 @@
+# Bash completion for eject
+# Fucks up on spaces
+_eject()
+{
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    #COMPREPLY=( $( compgen -W "($(ls /Volumes/ | grep -v "Macintosh HD") )" -- $cur ))
+    #COMPREPLY=( $( compgen -W "($(command ls /Volumes/* | grep "^/Volumes" | grep -v "Macintosh HD"))" -- $cur ))
+
+    # COMPREPLY=( $( compgen -W "($(mount | grep Volumes | sed 's/ type [$ ]* [^ ]*$//' | sed 's/^[^ ]* on //' | sed 's/ /\\ /g' | sed 's/\\ (hfs.*//' )" -- $cur ))
+    #COMPREPLY=( $( compgen -W "($(mount | grep Volumes | sed 's/ type [^ ]* [^ ]*$//' | sed 's/^[^ ]* on //' | sed 's/ /\\ /g' | sed 's/\\ (hfs.*//' ) )" -- $cur ))
+
+    #  COMPREPLY=( $( compgen -W '$(mount | grep Volumes | sed "s/ type [^ ]* [^ ]*$//" | sed "s/^[^ ]* on //" | sed "s/ /\\ /g" | sed "s/\\ (hfs.*//")' -- $cur ) )
+    COMPREPLY=( $( compgen -W '$(mount | grep Volumes | sed "s/ type [^ ]* [^ ]*$//" | sed "s/^[^ ]* on //" | sed "s/ /\\ /g" | sed "s/\\ (.*//")' -- $cur ) )
+
+
+    return 0
+}
+complete -F _eject eject
