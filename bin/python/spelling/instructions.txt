@@ -1,0 +1,3 @@
+"python" to enter interpreter
+import spelling
+spelling.correct ('speling')

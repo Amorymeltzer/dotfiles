@@ -1,0 +1,3 @@
+#!/bin/sh
+#  ./coral.app/Contents/MacOS/coral "$*"
+/Applications/coral.app/Contents/MacOS/coral "$*"

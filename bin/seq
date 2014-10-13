@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Rude seq replacement for osx
+# Comments in http://scruss.com/blog/2008/02/08/seq-for-os-x/
+
+if [ $# -eq 2 ]
+then
+    let from="$1";
+    let to="$2";
+elif [ $# -eq 1 ]
+then
+    let from="0";
+    let to="$1";
+else
+    echo "USAGE: seq [num from] [num to]"
+    exit 1;
+fi
+
+while [ $from -lt $to ]
+do
+#     printf "$from ";
+    echo "$from ";
+    from=$[$from+1]
+done
+# printf "$from ";
+echo "$from ";

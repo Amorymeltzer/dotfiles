@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+itunes() {
+  if [ -z "$1" -o "$1" = '-h' -o "$1" = '--help' ]; then
+    itunes-hints
+  else
+    osascript -e 'tell app "iTunes" to '"$*"
+  fi
+}
+
+
+itunes-hints() {
+  cat - <<EOS
+Usage:
+  itunes play
+  itunes stop
+  itunes playpause
+  itunes set mute to 1
+  itunes set mute to 0
+  itunes quit
+
+  itunes next track
+  itunes previous track
+  itunes play playlist \"name\"
+  itunes play track 3 of current playlist
+
+  itunes get player state
+  itunes get player position
+
+  itunes get artist of current track
+  itunes get name of current track
+
+  itunes get current stream title
+  itunes get current stream URL
+
+  itunes get name of every playlist
+  itunes get name of every track in current playlist
+  itunes get name of track 3 of current playlist
+
+  itunes set position of window \"iTunes\" to '{0,22}'
+  itunes set bounds of window \"iTunes\" to '{0,22,800,600}'
+  itunes set visible of window \"iTunes\" to 1
+
+  : ... anything you can tell iTunes via OSA
+  : See /Applications/AppleScript/Script Editor
+
+  vol up       - Increase volume by 10%
+  vol down     - Decrease volume by 10%
+  vol <0-100>  - Set volume from 0 to 100%
+EOS
+}
