@@ -1,1 +1,0 @@
-/Users/Amory/.completions.d/

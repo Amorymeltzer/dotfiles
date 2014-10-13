@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# finance by Amory Meltzer
+# Look up yesterday's quote for a stock, or the current value for an index
+
+for quote in $@;
+do
+    printf "$quote\t";
+    curl -s "http://finance.yahoo.com/q/hp?s=$quote+Historical+Prices" | perl -ne 'print "$1\t$2 $3 ($4%)" if /\yfs\_l10.*?\"\>(\d+,?\d*\.\d\d).*\_arrow\"\ alt\=\"(.*?)\"\>\s*(\d+,?\d*\.\d\d)\<\/span.*yfs\_p20.*?\"\>\((\d*\.\d\d)/;';
+    echo;
+done
