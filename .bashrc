@@ -483,6 +483,7 @@ alias bin="cd ~/bin"
 alias m='more'
 #alias c='cat'
 alias g='git'
+alias gs='git s'
 alias j="jobs"
 alias h='history 15'
 alias cl='clear'
