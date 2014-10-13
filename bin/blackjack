@@ -434,7 +434,8 @@ function main() {
     play-round 100
 }
 
-PREFIX=$PWD
+#  PREFIX=$PWD
+PREFIX="$HOME/bin"
 if [ -L "$0" ]; then
     PREFIX=$(ls -l "$0" | sed -e 's/.*-> \(.*\)/\1/')
     PREFIX=${PREFIX%/*}
