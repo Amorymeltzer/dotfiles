@@ -390,8 +390,8 @@ fi
 . ~/.z.sh
 
 # Emacs ido-like for bash CD, not perfect
-# if [ -f ~/bash-ido ]; then
-#     . ~/bash-ido
+# if [ -f ~/bin/bash-ido ]; then
+#     . ~/bin/bash-ido
 # fi
 
 
