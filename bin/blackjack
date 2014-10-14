@@ -4,6 +4,7 @@
 # https://en.wikipedia.org/wiki/Blackjack
 
 ## TODO
+# Doubling shows up all the time?
 # Turn did-you-win stuff into a separate function?  Can't be too bad...
 # Commandline option to NOT show correct move
 # Better output, show results/score after each playing
@@ -115,7 +116,7 @@ function add-used() {
 
 function reshuffle-cards() {
     echo Reshuffle cards >&2
-    cat $USEDCARDS | shuf >> $CARDFILE
+    shuf < $USEDCARDS >> $CARDFILE
     clear-used
 }
 
@@ -133,7 +134,7 @@ function shuffle-cards() {
     array=(A 2 3 4 5 6 7 8 9 0 J Q K)
     jot - 0 416 | while true; do
 	read line || break
-	echo ${array[$(($line / 32))]}
+	echo ${array[$((line / 32))]}
     done | head -n 416 | shuf > $CARDFILE
 }
 
@@ -351,7 +352,7 @@ function play-round() {
     pcount=$(count-value $player)
     if [ $pcount -gt 21 ]; then
 	echo "Bust!  You lose!"
-	((pmoney -= $pbet))
+	((pmoney -= pbet))
     else
 	dealer=$(play-dealer $dealer)
 	dcount=$(count-value $dealer)
@@ -366,13 +367,13 @@ function play-round() {
 	    fi
 	elif [ $dcount -gt 21 ]; then
 	    echo "Dealer busts, you win!"
-	    ((pmoney += $pbet))
+	    ((pmoney += pbet))
 	elif [ $pcount -gt $dcount ]; then
 	    echo "You win!"
-	    ((pmoney += $pbet))
+	    ((pmoney += pbet))
 	elif [ $dcount -gt $pcount ]; then
 	    echo "You lose!"
-	    ((pmoney -= $pbet))
+	    ((pmoney -= pbet))
 	else
 	    echo "Push, you tie!"
 	fi
@@ -382,7 +383,7 @@ function play-round() {
 	gpcount=$(count-value $ghost)
 	if [ $gpcount -gt 21 ]; then
 	    echo "Bust!  You lose!"
-	    ((pmoney -= $gpbet))
+	    ((pmoney -= gpbet))
 	else
 	    # dealer=$(play-dealer $dealer)
 	    dcount=$(count-value $dealer)
@@ -397,13 +398,13 @@ function play-round() {
 		fi
 	    elif [ $dcount -gt 21 ]; then
 		echo "Dealer busts, you win!"
-		((pmoney += $gpbet))
+		((pmoney += gpbet))
 	    elif [ $gpcount -gt $dcount ]; then
 		echo "You win!"
-		((pmoney += $gpbet))
+		((pmoney += gpbet))
 	    elif [ $dcount -gt $gpcount ]; then
 		echo "You lose!"
-		((pmoney -= $gpbet))
+		((pmoney -= gpbet))
 	    else
 		echo "Push, you tie!"
 	    fi
