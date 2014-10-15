@@ -942,6 +942,8 @@ buffer or region to mardown and display it in a separate window."
 ;; (global-set-key (kbd "C-c C-b") 'bs-show)
 ;; What about ibuffer?!  Also iswitchb-mode for switching...
 ;; (global-set-key (kbd "C-c C-b") 'ibuffer
+;; Consider this from http://emacs.stackexchange.com/q/2177/2051
+;; (add-hook 'ibuffer-mode-hook (lambda () (ibuffer-auto-mode 1)))
 
 ;; Also electric, but... eh
 ;; (electric-buffer-list)
