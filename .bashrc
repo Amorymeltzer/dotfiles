@@ -1221,7 +1221,7 @@ function binaryclock() {
 # function youtube() {
 # wget $1 -qO- | sed 's/\\u0026/\&/g' | sed -n "/fmt_url_map/{s/[\'\"\|]/\n/g;p}" | sed -n '/^fmt_url_map/,/videoplayback/p' | sed -e :a -e '$q;N;5,$D;ba' | tr -d '\n' | sed -e 's/\(.*\),\(.\)\{1,3\}/\1/' | wget -i - -O $2.flv
 # }
-alias youtube='youtube-dl'
+# alias youtube='youtube-dl'
 
 # Summary of enWiki article, perl bit accounts for some UTF-8 unicode stuff
 # https://dgl.cx/wikipedia-dns
