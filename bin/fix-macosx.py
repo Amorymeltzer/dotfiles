@@ -9,7 +9,7 @@ import os, sys
 # We only handle Yosemite's spotlight for now
 majorRelease = int(os.uname()[2].split(".")[0])
 if majorRelease < 14:
-  print "Good news! This version of Mac OS X's Spotlight is not known to invade your privacy."
+  print "Good news! This version of Mac OS X's Spotlight and Safari are not known to invade your privacy."
   sys.exit(0)
 
 def fixSpotlight ():
@@ -56,12 +56,12 @@ def fixSpotlight ():
         if not item.has_key(key):
           missing_keys.append(key)
 
-      if len(missing_keys) is not 0:
+      if len(missing_keys) != 0:
         print "Preference item %s is missing expected keys (%s), skipping" % (item, missing_keys)
         newItems.append(item)
         continue
 
-      if not item["name"] in DISABLED_ITEMS:
+      if item["name"] not in DISABLED_ITEMS:
         newItems.append(item)
         continue
 
@@ -72,5 +72,20 @@ def fixSpotlight ():
   CFPreferencesSetValue(PREF_NAME, newItems, BUNDLE_ID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
   CFPreferencesSynchronize(BUNDLE_ID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
 
+def fixSafariSpotlight ():
+    # Safari "Spotlight" respects the system-wide Spotlight privacy settings
+    # EXCEPT when it comes to submitting search metrics to Apple.
+    #
+    # To disable these metrics, we have to disable Safari's *seperate*
+    # "Spotlight Suggestions" setting, in addition to Spotlight's
+    # "Spotlight Suggestions".
+    #
+    # You'll be forgiven if you find this confusing.
+    BUNDLE_ID="com.apple.Safari"
+    PREF_NAME="UniversalSearchEnabled"
+    CFPreferencesSetValue(PREF_NAME, False, BUNDLE_ID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
+    CFPreferencesSynchronize(BUNDLE_ID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
+
 fixSpotlight()
+fixSafariSpotlight()
 print "All done. Make sure to log out (and back in) for the changes to take effect."
