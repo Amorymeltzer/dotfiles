@@ -725,24 +725,9 @@ alias unmount='diskutil umount '
 alias eject='unmount '
 
 # Move the given file(s) to the Trash.
-# Which is better? ;;;;;; ##### FIXME TODO
 function trash() {
     mv $1 ~/.Trash
 }
-# function trash {
-#     local path;
-#     for path; do
-#	# Make relative paths "absolutey".
-#	[ "${path:0:1}" = '/' ] || path="$PWD/$1";
-
-#	# Execute the AppleScript to nudge Finder.
-#	echo "$(cat <<-EOD
-#			tell application "Finder"
-#				delete POSIX file "${path//\"/\"}"
-#			end
-#		EOD)" | osascript;
-#     done;
-# }
 
 
 # Control iTunes ---------------------------------------------------
@@ -1401,7 +1386,22 @@ M-~     complete user name
 M-@     complete host name
 M-\$    complete variable name
 M-!     complete command name
-M-^     complete history"
+M-^     complete history
+IF-THEN TEST OPERATORS
+______________________
+-e      file exists
+-a      file exists, deprecated
+-f      file is a regular file
+-s      file is not zero size
+-d      file is a directory
+-h      file is a symbolic link
+-L      file is a symbolic link
+-r      file has read permissiong
+-w      file has write permission
+-x      file has execute permission
+-nt     file is newer than file2
+-ot     file is older than file2
+-eq, -ne, -gt, -ge, -lt, -le"
 }
 
 
