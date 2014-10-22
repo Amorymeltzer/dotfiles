@@ -617,8 +617,8 @@ buffer or region to mardown and display it in a separate window."
 (display-time-mode t)
 
 ;; Battery percentage
-(display-battery-mode t)
-(setq battery-update-interval 180) ;; Default 60s
+;; (display-battery-mode t)
+;; (setq battery-update-interval 180) ;; Default 60s
 
 ;; Show column-number, size in the mode line
 (column-number-mode 1) ; performance hit?
