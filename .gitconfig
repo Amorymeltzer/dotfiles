@@ -16,6 +16,11 @@ whitespace = space-before-tab,indent-with-non-tab,trailing-space
 # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
 # trustctime = false
 
+# Use 12 characters for the abbreviated commit hash. See:
+# http://blog.cuviper.com/2013/11/10/how-short-can-git-abbreviate/
+# Via: http://git.io/QXnAqw
+# abbrev = 12
+
 [credential]
 helper = osxkeychain
 
