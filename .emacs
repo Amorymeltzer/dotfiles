@@ -600,9 +600,9 @@ buffer or region to mardown and display it in a separate window."
 ;; scrolling
 (setq
  scroll-margin 0                        ;; do smooth scrolling
- scroll-conservatively 100000           ;; ... the defaults ...
- scroll-up-aggressively 0               ;; ... are very ...
- scroll-down-aggressively 0             ;; ... annoying
+ scroll-conservatively 100000		;; ... the defaults ...
+ scroll-up-aggressively 0.0               ;; ... are very ...
+ scroll-down-aggressively 0.0             ;; ... annoying
  scroll-preserve-screen-position t)     ;; preserve screen pos with C-v/M-v
 
 ;; Keep cursor away from edges when scrolling up/down
@@ -617,8 +617,8 @@ buffer or region to mardown and display it in a separate window."
 (display-time-mode t)
 
 ;; Battery percentage
-;; (display-battery-mode t)
-;; (setq battery-update-interval 180) ;; Default 60s
+(display-battery-mode t)
+(setq battery-update-interval 180) ;; Default 60s
 
 ;; Show column-number, size in the mode line
 (column-number-mode 1) ; performance hit?
