@@ -11,6 +11,15 @@ if /usr/bin/which -s port-tclsh; then exec port-tclsh "$0" -i `which port-tclsh`
 # Once "good enough", integrate into port
 
 
+# See https://trac.macports.org/wiki/Migration for instructions
+# port -qv installed > myports.txt
+# port echo requested | cut -d ' ' -f 1 > requested.txt
+# sudo port -f uninstall installed
+# sudo port clean all
+# sudo port unsetrequested installed
+# < requested.txt xargs sudo port setrequested
+
+
 set MY_VERSION 0.1
 
 proc printUsage {} {
