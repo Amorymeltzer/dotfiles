@@ -34,6 +34,7 @@ cm = commit -m
 a = add
 aa = add -A
 aas = "!git aa; git s"
+scan = "!~/bin/gscan"
 sn = status --untracked=no
 co = checkout
 wc = whatchanged
