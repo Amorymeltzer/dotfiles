@@ -45,7 +45,6 @@ alias tree='tree -Csuh'
 alias git='hub'
 
 # ls colors, see: http://www.linux-sxs.org/housekeeping/lscolors.html
-#alias ls='ls --color=auto' # For linux, etc
 #export LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rb=90'  #LS_COLORS is not supported by the default ls command in OS-X
 #export LS_COLORS="ExGxBxDxCxEgEdxbxgxcxd"
 #export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:';
@@ -613,8 +612,8 @@ alias last_modified='ls -t $* 2> /dev/null | head -n 3 '
 
 # growlnotify: add after to show when done
 # Maybe other options...
-alias growl='growlnotify -t Terminal -m "Done" && tput bel' # Red badge and popping only in 10.7+
-alias hax='growlnotify -t System error -m "WTF R U DOIN"'
+# Just use terminal-notifier...
+alias growl='growlnotify -t Terminal -m "Done" && tput bel' # Red badge? and popping only in 10.7+
 
 alias beep='tput bel'
 
@@ -1297,7 +1296,7 @@ foldoc () { curl dict://dict.org/d:${1}:foldoc; }
 # urbandict
 urban() { word=`echo $* | sed 's/ /%20/g'`; curl -s http://www.urbandictionary.com/define.php?term=$word | iconv | grep -A 4 -m 1 "'meaning'>" | tail -n 4 | sed '2,3d'; }
 
-# Add note to Notes.app (OS X 10.8)
+# Add note to Notes.app (OS X 10.8+)
 # Usage: `note 'title' 'body'` or `echo 'body' | note`
 # Title is optional
 function note() {
@@ -1321,7 +1320,7 @@ function note() {
     END
 }
 
-# Add reminder to Reminders.app (OS X 10.8)
+# Add reminder to Reminders.app (OS X 10.8+)
 # Usage: `remind 'foo'` or `echo 'foo' | remind`
 function remind() {
     local text
