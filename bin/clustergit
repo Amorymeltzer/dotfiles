@@ -139,6 +139,13 @@ def read_arguments(args):
                 help        = "Checkout branch"
                 )
 
+    parser.add_option("--warn-unversioned",
+                action      = "store_true",
+                dest        = "unversioned",
+                default     = False,
+                help        = "Prints a warning if a directory is not under git version control"
+                )
+
     (options, args) = parser.parse_args(args)
     return options
 
@@ -197,7 +204,8 @@ def check(dirname, options):
             can_push = False
             can_pull = True
             if len(options.branch) > 0 and 'On branch ' + options.branch not in out:
-                messages.append(colorize(Colors.WARNING, "Not on branch %s" % options.branch))
+                branch = out.splitlines()[0].replace("On branch ","")
+                messages.append(colorize(Colors.WARNING, "On branch %s" % branch))
                 can_pull = False
                 clean = False
             if re.search(r'nothing to commit.?.?working directory clean.?', out):
@@ -284,6 +292,10 @@ def check(dirname, options):
 
             if options.verbose:
                 sys.stdout.write("---------------- "+ infile +" -----------------\n")
+        elif options.unversioned and not infile.startswith("./.") and os.path.isdir(infile):
+            sys.stdout.write(infile.ljust(options.align) + ": ")
+            sys.stdout.write(colorize(Colors.WARNING, "Not a GIT repository")+"\n")
+            sys.stdout.flush()
     return gitted, dirties
 
 #-------------------
