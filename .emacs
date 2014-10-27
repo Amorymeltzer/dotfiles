@@ -368,7 +368,7 @@
 ;; Pointless if saving buffers as below?
 (require 'recentf)
 (recentf-mode 1)
-(setq recentf-save-file "~/.emacs.d/.recentf")
+(setq recentf-save-file "~/.emacs.d/recentf")
 ;; Uses ~ instead of full path
 (setq recentf-filename-handlers (quote abbreviate-file-name))
 ;; Same as above?
@@ -505,6 +505,7 @@ buffer or region to mardown and display it in a separate window."
       desktop-restore-eager t ; Load this many buffers, rest when lazy
       ;; desktop-restore-eager t ; Load this many buffers, rest when lazy
       desktop-load-locked-desktop 'ask ; Just as a reminder
+      desktop-base-file-name "emacs.desktop"
       ;; Don't try to save if file is locked, I'll always be quick
       desktop-not-loaded-hook (quote (desktop-save-mode-off))
       desktop-path (quote ("~/.emacs.d/" "~"))) ; Just in case
@@ -819,7 +820,7 @@ buffer or region to mardown and display it in a separate window."
 (setq ido-at-point-fuzzy t)
 
 ;; Specify save file in ~/.emacs.d/ folder
-(setq ido-save-directory-list-file "~/.emacs.d/.ido.last"
+(setq ido-save-directory-list-file "~/.emacs.d/ido.last"
       ;; Kind of keeps buffer names around via recentf in case things get closed
       ido-use-virtual-buffers t
       ;; Probably good/useful
@@ -1045,7 +1046,7 @@ buffer or region to mardown and display it in a separate window."
 ;; https://github.com/nonsequitur/smex/
 (require 'smex)
 ;; Specify save file in ~/.emacs.d/ folder, MUST be before initializing
-(setq smex-save-file "~/.emacs.d/.smex-items")
+(setq smex-save-file "~/.emacs.d/smex-items")
 (smex-initialize)
 
 ;; Only a slight speed enhancement, but let's be honest: I'm not loading tons
