@@ -66,6 +66,8 @@
 
 ;; Load everybody proper-like
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
+;; Prefer newer files even if not .elc
+(setq load-prefer-newer t)
 
 ;; It'sa me
 (setq user-mail-address "Amorymeltzer@gmail.com"
@@ -1551,6 +1553,7 @@ week. With two prefix arguments, add day of week and time."
 
 
 ;; On duplicate filenames, show paths not <2>
+;; Default in 24.4?
 (require 'uniquify)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
