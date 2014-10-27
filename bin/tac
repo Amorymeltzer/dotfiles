@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# tac by Amory Meltzer
+# Reverse cat, avoid needing coreutils
+# I really should just use coreutils
+
+for file in $@;
+do
+    tail -r $file;
+done
