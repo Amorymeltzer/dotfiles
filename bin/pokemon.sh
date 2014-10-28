@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pokemon.sh by ????
+# pokemon.sh by ninjalj
 # Tweaked October 2014 by Amory Meltzer to allow stdin and multiple inputs
 # Print correct pokemon given a number (original 150 only)
 # http://codegolf.stackexchange.com/q/9037/8946
