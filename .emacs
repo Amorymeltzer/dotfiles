@@ -475,6 +475,13 @@ buffer or region to mardown and display it in a separate window."
     (delete-region start end)
     (insert "<a href=\"\">" str "</a>")))
 
+;; Tidy mode to judge your html
+;; http://www.emacswiki.org/emacs/tidy.el
+(autoload 'tidy-buffer "tidy" "Run Tidy HTML parser on current buffer" t)
+(autoload 'tidy_arse-config-file "tidy" "Parse the `tidy-config-file'" t)
+(autoload 'tidy-save-settings "tidy" "Save settings to `tidy-config-file'" t)
+(autoload 'tidy-build-menu  "tidy" "Install an options menu for HTML Tidy." t)
+
 ;; Print a buffer.  Requires htmlize and coral.  See
 ;; http://www.emacswiki.org/emacs/MacPrintMode
 (when (require 'mac-print-mode nil t)
