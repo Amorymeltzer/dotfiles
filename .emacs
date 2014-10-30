@@ -206,6 +206,10 @@
 ;; otherwise Require flymake. ;;;;;; ##### FIXME TODO
 (require 'flymake)
 
+;; Deal with stupid jshint/javascript stuff
+;; I really need to migrate to flycheck
+(delete '("\\.js\\'" flymake-javascript-init) flymake-allowed-file-name-masks)
+
 ;; Static analysis can be slow, so only run flymake if I've not been typing for 5 seconds.
 ;; It will still run on save or hitting return.
 (setq flymake-no-changes-timeout 5)
