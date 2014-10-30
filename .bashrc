@@ -419,6 +419,9 @@ function explain_perlcritic() {
     perldoc Perl::Critic::Policy::"$1"
 }
 
+# Tell tidy to use a config file if it's there
+export HTML_TIDY=~/.tidyrc
+
 
 # emacs alias nonsense to prevent stupid C-z/fg stuff
 # http://stackoverflow.com/questions/18396070/start-emacs-in-shell-when-started-form-shell
