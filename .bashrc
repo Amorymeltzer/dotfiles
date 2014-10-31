@@ -381,7 +381,7 @@ if [[ -e ~/.ssh/known_hosts ]]; then
     complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp stfp whois nslookup nmap
 fi
 
-# netowrksetup completion based on -help flag
+# networksetup completion based on -help flag
 complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete)" networksetup;
 
 # Add `killall` tab completion for common apps
