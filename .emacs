@@ -430,6 +430,8 @@
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
 
+;; Should add some more here
+;; Also need to make interactives for bold, italics, headers, etc
 (eval-after-load "markdown-mode"
   '(progn
      ;; key bindings
@@ -488,8 +490,8 @@ buffer or region to mardown and display it in a separate window."
 
 ;; Print a buffer.  Requires htmlize and coral.  See
 ;; http://www.emacswiki.org/emacs/MacPrintMode
-(when (require 'mac-print-mode nil t)
-  (mac-print-mode 1))
+;; (when (require 'mac-print-mode nil t)
+;;   (mac-print-mode 1))
 
 
 (defun visit-most-recent-file ()
