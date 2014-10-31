@@ -484,9 +484,19 @@ buffer or region to mardown and display it in a separate window."
 ;; Tidy mode to judge your html
 ;; http://www.emacswiki.org/emacs/tidy.el
 (autoload 'tidy-buffer "tidy" "Run Tidy HTML parser on current buffer" t)
-(autoload 'tidy_arse-config-file "tidy" "Parse the `tidy-config-file'" t)
+(autoload 'tidy_parse-config-file "tidy" "Parse the `tidy-config-file'" t)
 (autoload 'tidy-save-settings "tidy" "Save settings to `tidy-config-file'" t)
 (autoload 'tidy-build-menu  "tidy" "Install an options menu for HTML Tidy." t)
+
+(defun tidy-then-indent ()
+  "Tidy leaves a buffer looking flat, so indent after use"
+  (interactive)
+  (tidy-buffer)
+  (indent-buffer))
+
+(autoload 'tidy-then-indent "tidy" "Run Tidy HTML parser then indent the
+current buffer" t)
+(defalias 'tidy-indent 'tidy-then-indent)
 
 ;; Print a buffer.  Requires htmlize and coral.  See
 ;; http://www.emacswiki.org/emacs/MacPrintMode
