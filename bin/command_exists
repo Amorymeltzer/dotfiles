@@ -2,4 +2,4 @@
 # command_exists by Amory Meltzer
 # Test if a certain command is valid
 
-type "$1" &> /dev/null
+command -v "$1" &> /dev/null
