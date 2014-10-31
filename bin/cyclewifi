@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# cyclewifi by Amory Meltzer
+# Cycle wifi status
+# http://apple.stackexchange.com/a/36897/53735
+
+if [[ "$(networksetup -getairportpower en1)" == *On ]]; then
+    networksetup -setairportpower en1 off;
+    networksetup -setairportpower en1 on;
+else
+    networksetup -setairportpower en1 on;
+    networksetup -setairportpower en1 off;
+fi
