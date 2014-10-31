@@ -44,6 +44,7 @@ alias tree='tree -Csuh'
 # Alias hub as git for github https://github.com/github/hub
 alias git='hub'
 
+
 # ls colors, see: http://www.linux-sxs.org/housekeeping/lscolors.html
 #export LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rb=90'  #LS_COLORS is not supported by the default ls command in OS-X
 #export LS_COLORS="ExGxBxDxCxEgEdxbxgxcxd"
@@ -423,8 +424,9 @@ function explain_perlcritic() {
 }
 
 # Tell tidy to use a config file if it's there
-export HTML_TIDY=~/.tidyrc
-
+if command_exists tidy; then
+    export HTML_TIDY=~/.tidyrc
+fi
 
 # emacs alias nonsense to prevent stupid C-z/fg stuff
 # http://stackoverflow.com/questions/18396070/start-emacs-in-shell-when-started-form-shell
@@ -464,7 +466,7 @@ function gitignore() {
 	ignore="~/.global-gitignore"
     fi
     emacs $ignore
-    }
+}
 
 # Navigation -------------------------------------------------------
 alias ..='cd ..'
@@ -1097,11 +1099,11 @@ function getcertnames() {
     echo # newline
 
     local tmp=$(echo -e "GET / HTTP/1.0\nEOT" \
-	| openssl s_client -connect "${domain}:443" 2>&1);
+		       | openssl s_client -connect "${domain}:443" 2>&1);
 
     if [[ "${tmp}" = *"-----BEGIN CERTIFICATE-----"* ]]; then
 	local certText=$(echo "${tmp}" \
-	    | openssl x509 -text -certopt "no_header, no_serial, no_version, \
+				| openssl x509 -text -certopt "no_header, no_serial, no_version, \
 			no_signame, no_validity, no_issuer, no_pubkey, no_sigdump, no_aux");
 	echo "Common Name:"
 	echo # newline
@@ -1233,9 +1235,9 @@ function calc() {
     if [[ "$result" == *.* ]]; then
 	# improve the output for decimal numbers
 	printf "$result" |
-	sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
-	    -e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
-    -e 's/0*$//;s/\.$//'   # remove trailing zeros
+	    sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
+		-e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
+		-e 's/0*$//;s/\.$//'   # remove trailing zeros
     else
 	printf "$result"
     fi
