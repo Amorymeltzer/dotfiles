@@ -634,13 +634,12 @@ alias beep='tput bel'
 # Use colordiff if it exists
 if [ -a /opt/local/bin/colordiff ]; then
     alias diff='colordiff';
+    # Make wdiff colorful
+    function wcolordiff() {
+	wdiff -n "$@" | colordiff
+    }
+    alias cdiff='wcolordiff'
 fi
-
-# Make wdiff colorful
-function wcolordiff() {
-    wdiff -n "$@" | colordiff
-}
-alias cdiff='wcolordiff'
 
 # grep prints line number if piped, might break other things?
 # http://unix.stackexchange.com/a/25549/43935
