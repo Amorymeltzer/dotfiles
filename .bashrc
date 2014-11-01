@@ -685,6 +685,7 @@ alias psearch='port search '
 alias pin='sudo port install '
 alias pun='sudo port uninstall '
 # Macports changelog
+# https://trac.macports.org/browser/contrib/port-whatsnew/port-whatsnew
 alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
 
 # Quickly open and make a new perl file executable and with headers
