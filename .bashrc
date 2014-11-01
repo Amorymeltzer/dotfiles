@@ -383,7 +383,7 @@ if [[ -e ~/.ssh/known_hosts ]]; then
 fi
 
 # networksetup completion based on -help flag
-complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete)" networksetup;
+complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
 
 # Add `killall` tab completion for common apps
 # complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall
