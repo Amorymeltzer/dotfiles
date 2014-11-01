@@ -591,6 +591,11 @@ function mkmv() {
 }
 
 
+# Base 10 instead of base 2
+function diskusage() {
+    df -H "`pwd`" | awk 'NR==2 { print "Used " $3 " of " $2 ", " $4 " (" $5 ") remaining" }'
+}
+
 # Human-readable values, and a total for du
 alias df='df -h'
 # Also ignore stupid things that require permissions
@@ -603,9 +608,6 @@ function psu {
     ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command'
 }
 
-function diskusage() {
-    df -h "`pwd`" | awk 'NR==2 { print "Used " $3 " of " $2 ", " $4 " (" $5 ") remaining" }'
-}
 
 # Better format for uptime
 #alias utime="uptime | egrep -o -e 'up [0-9]*.*[0-9]* user[s]?' | tr -s ' '"
