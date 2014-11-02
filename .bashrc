@@ -480,6 +480,7 @@ alias -- --='cd -' # go back a directory
 #export CDPATH=".:~:~/Documents/perl"
 
 # Shortcuts
+alias do="cd ~/dotfiles"
 alias dr="cd ~/Dropbox"
 alias de="cd ~/Desktop"
 alias dg="cd ~/Documents/git"
@@ -660,7 +661,8 @@ fi
 alias grepi='grep -i'
 alias grepc='grep -C 3'
 alias grepic='grepc -i'
-alias grepiC='grepi -C 10'
+alias grepC='grep -C 10'
+alias grepiC='grepC -i'
 
 # Applications
 #ls | open -f # pipe ls, open in default application (probably texteditor)
