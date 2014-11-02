@@ -480,7 +480,7 @@ alias -- --='cd -' # go back a directory
 #export CDPATH=".:~:~/Documents/perl"
 
 # Shortcuts
-alias do="cd ~/dotfiles"
+alias dt="cd ~/dotfiles"
 alias dr="cd ~/Dropbox"
 alias de="cd ~/Desktop"
 alias dg="cd ~/Documents/git"
