@@ -482,6 +482,7 @@ alias -- --='cd -' # go back a directory
 # Shortcuts
 alias dr="cd ~/Dropbox"
 alias de="cd ~/Desktop"
+alias dg="cd ~/Documents/git"
 alias dp="cd ~/Documents/perl"
 alias ds="cd ~/Documents/perl/sandbox"
 alias wb="cd ~/Documents/perl/website"
@@ -522,7 +523,6 @@ function o() {
 # Too scary?
 # alias q='exit
 
-
 # cd and ls together
 function cdl() {
     cd "$1" ; ls ;
@@ -555,10 +555,14 @@ alias fuckyou,='sudo '
 
 # Prompt before overwrite, be vocal about it
 alias mv='mv -vi' # add -f to override, or \ before command
-#alias cp='cp -vi'
 alias cp='cp -Rvi' # recursive if folder, the ending / makes a difference
 #alias rm='rm -i' # Too annoying, perhaps?
 alias rm='rm -v'
+# Move the given file(s) to the Trash.
+# Alias rm to this instead?
+function trash() {
+    mv $1 ~/.Trash
+}
 
 # Make intermediate directories and be verbose about it
 alias mkdir='mkdir -pv'
@@ -578,7 +582,7 @@ function mkcd() {
 }
 
 # Make a directory and move a file into it
-# Usage: mkmv <file> directory>
+# Swap the order, allow multiple files ;;;;;; ##### FIXME TODO
 function mkmv() {
     if [[ $# -ne 2 ]]; then
 	echo "Usage: mkmv <file> <directory>"
@@ -591,11 +595,10 @@ function mkmv() {
 }
 
 
-# Base 10 instead of base 2
+# Base 10 instead of base 2, up here to "beat" the alias below
 function diskusage() {
     df -H "`pwd`" | awk 'NR==2 { print "Used " $3 " of " $2 ", " $4 " (" $5 ") remaining" }'
 }
-
 # Human-readable values, and a total for du
 alias df='df -h'
 # Also ignore stupid things that require permissions
@@ -643,7 +646,7 @@ if [ -a /opt/local/bin/colordiff ]; then
     fi
 fi
 
-# grep prints line number if piped, might break other things?
+# grep prints line number if piped, kinda sorta breaks other things
 # http://unix.stackexchange.com/a/25549/43935
 # grep() {
 #     if [[ -t 1 ]]; then
@@ -653,10 +656,11 @@ fi
 #     fi
 # }
 
-# 3-line context in grep
+# Case and context in grep
 alias grepi='grep -i'
 alias grepc='grep -C 3'
 alias grepic='grepc -i'
+alias grepiC='grepi -C 10'
 
 # Applications
 #ls | open -f # pipe ls, open in default application (probably texteditor)
@@ -735,11 +739,6 @@ function sandisk() {
 }
 alias unmount='diskutil umount '
 alias eject='unmount '
-
-# Move the given file(s) to the Trash.
-function trash() {
-    mv $1 ~/.Trash
-}
 
 
 # Control iTunes ---------------------------------------------------
