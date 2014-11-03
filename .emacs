@@ -1079,10 +1079,11 @@ current buffer" t)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 ;; This is your old M-x.
-(global-set-key (kbd "C-c M-x") 'execute-extended-command)
+(global-set-key (kbd "C-c M-x") 'smex-update-and-run)
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 ;; Just in case you can't use meta for some reason, although admittedly this
 ;; is probably just a waste of a useful key combo
-(global-set-key (kbd "C-c x") 'execute-extended-command)
+;; (global-set-key (kbd "C-c x") 'execute-extended-command)
 (setq smex-prompt-string "Smx ")
 (setq smex-history-length 256)
 
