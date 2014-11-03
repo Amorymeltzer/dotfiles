@@ -796,7 +796,7 @@ function setvolume() {
 	osascript -e "set volume $1"
     fi
 }
-alias volumemiddle='osascript -e "set volume 3.5"'
+alias middlevolume='osascript -e "set volume 3.5"'
 alias maxvolume='osascript -e "set volume 7"'
 alias mutevolume='osascript -e "set volume 0"'
 
