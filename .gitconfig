@@ -46,7 +46,8 @@ l1 = log --oneline --decorate
 l15 = log --oneline --decorate -5
 # View abbreviated SHA, description, and history graph of the latest 20 commits
 graph = log --pretty=oneline -n 20 --graph --abbrev-commit --decorate
-
+# List contributors with number of commits
+contributors = shortlog --summary --numbered
 b = branch
 br = branch
 branches = branch -a
@@ -79,7 +80,7 @@ ft = "!f() { git describe --always --contains $1; }; f"
 fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
 # Find commits by commit message
 fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
-	unstage = reset HEAD --
+unstage = reset HEAD --
 
 [color]
 # Use colors in Git commands that are capable of colored output when outputting to the terminal
