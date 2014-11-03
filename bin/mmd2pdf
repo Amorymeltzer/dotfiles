@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+# mmd2pdf.sh
+# @author Mark R. Gollnick <mark.r.gollnick@gmail.com> &#10013;
+# @license Boost Software Licence v1.0 <http://www.boost.org/LICENSE_1_0.txt>
+# @date Fri, 30 Oct 2013 21:04:10 -0500
+# @desc Convert Multi-Markdown text files to PDF files, easily.
+
+ARGC=($#)
+ARGV=($@)
+WDIR=$([[ $0 == /* ]] && echo "${0%/*}" || echo "${PWD}/${0%/*}")
+WDIR=${WDIR%/.}
+THIS=${0##*/}
+POS=$'/'
+DOS=$'\\\\'
+
+# Orientation
+STYLE_CSS="$WDIR/css/style.css"
+MATHJAX_JS="$WDIR/externals/MathJax/MathJax.js"
+HIGHLIGHT_JS="$WDIR/externals/highlight.min.js"
+HIGHLIGHT_CSS="$WDIR/externals/highlight.js/src/styles/github.css"
+case "$OS" in *"Win"*)
+    STYLE_CSS=/${STYLE_CSS:1:1}:${STYLE_CSS:2}
+    MATHJAX_JS=/${MATHJAX_JS:1:1}:${MATHJAX_JS:2}
+    HIGHLIGHT_JS=/${HIGHLIGHT_JS:1:1}:${HIGHLIGHT_JS:2}
+    HIGHLIGHT_CSS=/${HIGHLIGHT_CSS:1:1}:${HIGHLIGHT_CSS:2}
+;; esac
+STYLE_CSS="file://$STYLE_CSS"
+MATHJAX_JS="file://$MATHJAX_JS"
+CONFIG_JS="$WDIR/js/config.js"
+HIGHLIGHT_JS="file://$HIGHLIGHT_JS"
+HIGHLIGHT_CSS="file://$HIGHLIGHT_CSS"
+
+
+# Initialization
+MATH="N"
+KEEPHTML="N"
+DIR_OUT="."
+unset FILE_IN
+unset NAME_IN
+INIT="N"
+
+SAVE_IFS=$IFS
+IFS=$'\n';
+for (( i=0; i<$ARGC; i++ )); do
+    arg="${ARGV[$i]}"
+    if [ "$arg" == "--math" ]; then MATH="Y"
+    elif [ "$arg" == "--keep-html" ]; then KEEPHTML="M"
+    elif [ "$arg" == "--no-pdf" ]; then KEEPHTML="Y"
+    elif [ -e "$arg" ]; then
+        FILE_IN="$arg"
+        DIR_OUT=${FILE_IN%/*}
+        NAME_IN=${FILE_IN#$DIR_OUT/}
+        NAME_IN=${NAME_IN%.*}
+        INIT="Y"
+    fi
+done
+if [[ "$DIR_OUT" == "$FILE_IN" ]]; then
+    DIR_OUT="."
+fi
+
+# Usage Block
+if [ "$INIT" != "Y" ]; then
+    echo "
+$THIS:
+Shell script for easily converting MultiMarkdown texts into PDF documents.
+Written by Mark R. Gollnick <mark.r.gollnick@gmail.com>, Fall 2013. &#10013;
+
+Requirements:
+    MultiMarkdown:  fletcherpenny.net/multimarkdown
+    wkhtmltopdf:    code.google.com/p/wkhtmltopdf
+
+Usage:
+    $THIS [OPTIONS] <input_file.md>
+
+Produces one file of the form \`input_file.pdf' in the same directory
+as the input.
+
+To insert page breaks in the resulting PDF, use:
+    <div style=\"page-break-after: always;\"></div>
+
+Options:
+    --math         Enable TeX equation rendering using MathJax
+    --keep-html    Retains the intermediate HTML document used to
+                   render the PDF.
+    --no-pdf       Do not generate PDF, only HTML. For previewing.
+"
+    exit 1
+fi
+
+
+# STEP 0: Normalize input
+MDHTML_OUT="$DIR_OUT/$NAME_IN.md.html"
+HEADER_OUT="$DIR_OUT/$NAME_IN.head.html"
+HTML_OUT="$DIR_OUT/$NAME_IN.html"
+PDF_OUT="$DIR_OUT/$NAME_IN.pdf"
+
+# STEP 1: Markdown to HTML
+multimarkdown "$FILE_IN" > "$MDHTML_OUT"
+
+# STEP 2: Format HTML
+(echo "<!DOCTYPE html>
+<html>
+<head>
+<meta charset=\"utf-8\" />
+<title>$NAME_IN</title>
+<link type=\"text/css\" rel=\"stylesheet\" href=\"$STYLE_CSS\" />
+<link type=\"text/css\" rel=\"stylesheet\" href=\"$HIGHLIGHT_CSS\" />")>$HEADER_OUT
+if [ "$MATH" == "Y" ]; then
+    (echo "<script type=\"text/x-mathjax-config\">")>>$HEADER_OUT
+    mv $HEADER_OUT $HEADER_OUT.editing
+    cat $HEADER_OUT.editing $CONFIG_JS > $HEADER_OUT
+    rm $HEADER_OUT.editing
+    (echo "</script>
+<script type=\"text/javascript\" src=\"$MATHJAX_JS\">
+</script>
+<script type=\"text/javascript\" src=\"$HIGHLIGHT_JS\">
+</script>")>>$HEADER_OUT
+fi
+(echo "</head>
+<body>")>>$HEADER_OUT
+cat $HEADER_OUT $MDHTML_OUT > $HTML_OUT
+(echo "
+<script type=\"text/javascript\">
+hljs.tabReplace = '    '; //4 spaces
+hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>")>>$HTML_OUT
+rm -f $HEADER_OUT $MDHTML_OUT
+
+# STEP 3: HTML to PDF
+if [ "$KEEPHTML" != "Y" ]; then
+    if [ "$MATH" == "N" ]; then
+        wkhtmltopdf --margin-top 1in --margin-right 1in --margin-bottom 1in --margin-left 1in --enable-external-links --enable-internal-links --footer-center "Page [page] of [toPage]" --footer-font-name "Verdana" --footer-font-size 11 "$HTML_OUT" "$PDF_OUT"
+    else
+        wkhtmltopdf --margin-top 1in --margin-right 1in --margin-bottom 1in --margin-left 1in --enable-external-links --enable-internal-links --footer-center "Page [page] of [toPage]" --footer-font-name "Verdana" --footer-font-size 11 --enable-javascript --javascript-delay 10000 "$HTML_OUT" "$PDF_OUT"
+    fi
+fi
+if [ "$KEEPHTML" == "N" ]; then
+    rm -f $HTML_OUT
+fi
+if [ "$KEEPHTML" == "Y" ]; then
+    echo "Wrote as $HTML_OUT. Have a nice day!"
+else
+    echo "Wrote as $PDF_OUT. Have a nice day!"
+fi
