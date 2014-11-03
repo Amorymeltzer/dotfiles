@@ -25,6 +25,7 @@ whitespace = space-before-tab,indent-with-non-tab,trailing-space
 helper = osxkeychain
 
 [alias]
+h = help
 stat = status
 # Not sure what do
 #s = status --ignore-submodules=untracked
@@ -38,12 +39,16 @@ scan = "!~/bin/gscan"
 sn = status --untracked=no
 co = checkout
 wc = whatchanged
-l = log --decorate
+
+# Do something more interesting/useful/unified with these
+l = log --decorate --graph
 l1 = log --oneline --decorate
 l15 = log --oneline --decorate -5
 # View abbreviated SHA, description, and history graph of the latest 20 commits
 graph = log --pretty=oneline -n 20 --graph --abbrev-commit --decorate
+
 b = branch
+br = branch
 branches = branch -a
 # Remove branches that have already been merged with master
 remove-merged-branches = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
@@ -54,6 +59,7 @@ subu = submodule update --init
 pom = push origin master
 # Use rebase to prevent unnecessary commits
 pum = pull --rebase origin master
+cfg = config --global
 h = rev-parse HEAD
 d = diff --word-diff
 # Show the staged changes.

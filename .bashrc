@@ -43,7 +43,17 @@ alias tree='tree -Csuh'
 # Git stuff
 # Alias hub as git for github https://github.com/github/hub
 alias git='hub'
-
+alias g='git'
+alias gs='git s'
+alias ga='git add '
+alias gaas='git aas'
+alias gas='git aas'
+alias gd='git d'
+alias gdc='git dc'
+alias gcm='git cm '
+alias gl='git l1 -5'
+complete -F _git hub
+complete -F _git g
 
 # ls colors, see: http://www.linux-sxs.org/housekeeping/lscolors.html
 #export LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rb=90'  #LS_COLORS is not supported by the default ls command in OS-X
@@ -263,7 +273,7 @@ function prompt_command {
     # Test user type
     # Doesn't auto work with root ;;;;;; ##### FIXME TODO
     # see also `id -un` instead(?) og `logname`
-    if [[ ${USER} == "root" ]]; then
+    if [[ $UID -eq 0 ]]; then
 	SUD=${Color_Red}           # User is root
     elif [[ ${USER} != $(logname) ]]; then
 	SUD=${Color_Red_zBackground} # User is not login user
@@ -491,15 +501,6 @@ alias eds="cd ~/.emacs.d/site-lisp/"
 alias bin="cd ~/bin"
 alias m='more'
 #alias c='cat'
-alias g='git'
-alias gs='git s'
-alias ga='git add '
-alias gaas='git aas'
-alias gas='git aas'
-alias gd='git d'
-alias gdc='git dc'
-alias gcm='git cm '
-alias gl='git l1 -5'
 alias j="jobs"
 alias h='history 15'
 alias cl='clear'
