@@ -796,7 +796,9 @@ function setvolume() {
 	osascript -e "set volume $1"
     fi
 }
-alias volume_middle='osascript -e "set volume 3.5"'
+alias volumemiddle='osascript -e "set volume 3.5"'
+alias maxvolume='osascript -e "set volume 7"'
+alias mutevolume='osascript -e "set volume 0"'
 
 # Seriously though, just use pianobar/pandora
 alias pandora='pianobar'
