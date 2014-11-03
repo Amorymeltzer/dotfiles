@@ -788,6 +788,16 @@ alias stfu="osascript -e 'set volume output muted true'"
 alias pumpitup="osascript -e 'set volume 7'"
 alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
+# Volume control
+function setvolume() {
+    if [ ! $1 -o $1 -lt 0 -o $1 -gt 7 2>/dev/null ]; then
+	echo "setvolume <0-7>"
+    else
+	osascript -e "set volume $1"
+    fi
+}
+alias volume_middle='osascript -e "set volume 3.5"'
+
 # Seriously though, just use pianobar/pandora
 alias pandora='pianobar'
 # or mplayer
@@ -1308,30 +1318,30 @@ function extract {
 
 # Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
 function targz() {
-	local tmpFile="${@%/}.tar";
-	tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
+    local tmpFile="${@%/}.tar";
+    tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
 
-	size=$(
-		stat -f"%z" "${tmpFile}" 2> /dev/null; # OS X `stat`
-		stat -c"%s" "${tmpFile}" 2> /dev/null # GNU `stat`
+    size=$(
+	stat -f"%z" "${tmpFile}" 2> /dev/null; # OS X `stat`
+	stat -c"%s" "${tmpFile}" 2> /dev/null # GNU `stat`
 	);
 
-	local cmd="";
-	if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
-		# the .tar file is smaller than 50 MB and Zopfli is available; use it
-		cmd="zopfli";
+    local cmd="";
+    if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
+	# the .tar file is smaller than 50 MB and Zopfli is available; use it
+	cmd="zopfli";
+    else
+	if hash pigz 2> /dev/null; then
+	    cmd="pigz";
 	else
-		if hash pigz 2> /dev/null; then
-			cmd="pigz";
-		else
-			cmd="gzip";
-		fi;
+	    cmd="gzip";
 	fi;
+    fi;
 
-	echo "Compressing .tar using \`${cmd}\`…";
-	"${cmd}" -v "${tmpFile}" || return 1;
-	[ -f "${tmpFile}" ] && rm "${tmpFile}";
-	echo "${tmpFile}.gz created successfully.";
+    echo "Compressing .tar using \`${cmd}\`…";
+    "${cmd}" -v "${tmpFile}" || return 1;
+    [ -f "${tmpFile}" ] && rm "${tmpFile}";
+    echo "${tmpFile}.gz created successfully.";
 }
 
 # Compare original and gzipped file size
