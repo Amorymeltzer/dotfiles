@@ -634,8 +634,8 @@ alias utime="uptime | egrep -o -e 'up [0-9]*.*[0-9]* user[s]?' | tr 'u' 'U'"
 alias top='top -d -o cpu'
 # Top by memory, not in delta
 alias topm='\top -o vsize'
-# Show three most recently modified files.
-alias last_modified='ls -t $* 2> /dev/null | head -n 3 '
+# Show five most recently modified files.
+alias last_modified='ls -t $* 2> /dev/null | head -n 5 '
 
 # growlnotify: add after to show when done
 # Maybe other options...
