@@ -1,0 +1,93 @@
+# OS X stuff #
+##############
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Perl stuff #
+##############
+/blib/
+/.build/
+_build/
+cover_db/
+inc/
+Build
+!Build/
+Build.bat
+.last_cover_stats
+/Makefile
+/Makefile.old
+/MANIFEST.bak
+/META.yml
+/META.json
+/MYMETA.*
+nytprof.out
+/pm_to_blib
+*.o
+*.bs
+
+# Elisp stuff #
+###############
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+# Compiled
+*.elc
+auto-save-list
+tramp
+.\#*
+# Packaging
+.cask
+# elpa packages
+/elpa/
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# R stuff #
+###########
+# History files
+.Rhistory
+# Example code in package build process
+*-Ex.R
+# R data files from past sessions
+.Rdata
+# RStudio files
+.Rproj.user/
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.pyc
+*.egg-info
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
