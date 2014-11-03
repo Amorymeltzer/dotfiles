@@ -709,8 +709,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 
 
 # Function to update everything?
-alias update=
-"sudo softwareupdate -iva; sudo port selfupdate; port echo outdated; sudo port upgrade outdated; sudo port uninstall inactive; sudo cpan -r;"
+alias update="sudo softwareupdate -iva; sudo port selfupdate; port echo outdated; sudo port upgrade outdated; sudo port uninstall inactive; sudo cpan -r;"
 # sudo gem update --system; sudo gem update
 
 # Quickly open and make a new perl file executable and with headers
