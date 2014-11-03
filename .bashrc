@@ -8,6 +8,12 @@
 # to avoid weirdness when calling bash from within bash
 ITSME=$(hostname -s)
 
+# I see this around, seems good?  ;;;;;; ##### FIXME TODO
+# if not running interactively, don't do anything
+if [ -z "$PS1" ]; then
+    return
+fi
+
 # Colors ----------------------------------------------------------
 export TERM=xterm-color
 # Change for different colors, to magenta
