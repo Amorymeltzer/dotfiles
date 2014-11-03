@@ -1,0 +1,9 @@
+bare: yes
+clean: yes
+quiet: no
+replace-color: yes
+show-errors: 6
+show-warnings: yes
+tidy-mark: yes
+word-2000: yes
+wrap: 0
