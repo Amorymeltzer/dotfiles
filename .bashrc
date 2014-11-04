@@ -728,8 +728,6 @@ function pipupgrade()
 # Function to update everything?
 function update()
 {
-    # sudo softwareupdate -iva;
-
     sudo port selfupdate;
     port echo outdated;
     sudo port upgrade outdated;
@@ -745,6 +743,9 @@ function update()
     sudo gem update --system
     sudo gem update
     sudo gem cleanup;
+
+    #  sudo softwareupdate -iva;
+    sudo softwareupdate -l;
 }
 
 # Quickly open and make a new perl file executable and with headers
