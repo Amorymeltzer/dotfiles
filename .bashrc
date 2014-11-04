@@ -715,6 +715,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
 function cpanclean() {
+    sudo cpan -c
     rm -r ~/.cpan/build/
     rm -r ~/.cpan/sources/authors/id
 }
