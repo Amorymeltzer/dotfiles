@@ -703,6 +703,9 @@ alias pactive='port echo active '
 alias pinactive='port echo inactive '
 alias pinfo='port info '
 alias psearch='port search '
+function pmoreinfo() {
+    psearch $1 | grep @ | cut -f 1 -d ' ' | while read prt; do pinfo $prt; done;
+}
 alias pin='sudo port install '
 alias pun='sudo port uninstall '
 # Macports changelog
@@ -714,7 +717,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 function cpanclean() {
     rm -r ~/.cpan/build/
     rm -r ~/.cpan/sources/authors/id
-    }
+}
 
 # Function to update everything?
 function update()
