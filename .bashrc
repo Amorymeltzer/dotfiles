@@ -728,18 +728,24 @@ function pipupgrade()
 # Function to update everything?
 function update()
 {
+    # sudo softwareupdate -iva;
+
     sudo port selfupdate;
     port echo outdated;
     sudo port upgrade outdated;
     sudo port uninstall inactive leaves;
+
+    # Run before? http://stackoverflow.com/a/21736287/2521092
+    # sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
     sudo cpan -u;
     sudo cpanclean;
+
+    sudo pipupgrade;
+
+    sudo gem update --system
+    sudo gem update
+    sudo gem cleanup;
 }
-# sudo softwareupdate -iva;
-# sudo gem update --system; sudo gem update
-# pip update?
-# Run before? http://stackoverflow.com/a/21736287/2521092
-# sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
 
 # Quickly open and make a new perl file executable and with headers
 function newperl() {
