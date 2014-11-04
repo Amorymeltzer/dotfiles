@@ -719,6 +719,11 @@ function cpanclean() {
     rm -r ~/.cpan/build/
     rm -r ~/.cpan/sources/authors/id
 }
+# Upgrade all pip modules, via http://stackoverflow.com/a/3452888/2521092
+function pipupgrade()
+{
+    pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
+}
 
 # Function to update everything?
 function update()
