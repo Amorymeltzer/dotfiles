@@ -712,7 +712,8 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 
 # Function to update everything?
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
-alias update="sudo softwareupdate -iva; sudo port selfupdate; port echo outdated; sudo port upgrade outdated; sudo port uninstall inactive; sudo cpan -u;"
+alias update=
+"sudo softwareupdate -iva; sudo port selfupdate; port echo outdated; sudo port upgrade outdated; sudo port uninstall inactive leaves; sudo cpan -u;"
 # sudo gem update --system; sudo gem update
 # Run before? http://stackoverflow.com/a/21736287/2521092
 # sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
