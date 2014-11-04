@@ -659,6 +659,8 @@ if [ -a /opt/local/bin/colordiff ]; then
 	alias diffc='wcolordiff '
     fi
 fi
+# But for real?  Just use dwdiff: git-like giff
+alias dwdiff='dwdiff -3cs '
 
 # grep prints line number if piped, kinda sorta breaks other things
 # http://unix.stackexchange.com/a/25549/43935
