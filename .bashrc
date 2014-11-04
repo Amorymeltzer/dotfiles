@@ -716,13 +716,13 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
 function cpanclean() {
     sudo cpan -c
-    rm -r ~/.cpan/build/
-    rm -r ~/.cpan/sources/authors/id
+    sudo rm -r ~/.cpan/build/
+    sudo rm -r ~/.cpan/sources/authors/id
 }
 # Upgrade all pip modules, via http://stackoverflow.com/a/3452888/2521092
 function pipupgrade()
 {
-    pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
+    sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
 }
 
 # Function to update everything?
@@ -736,9 +736,9 @@ function update()
     # Run before? http://stackoverflow.com/a/21736287/2521092
     # sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
     sudo cpan -u;
-    sudo cpanclean;
+    cpanclean;
 
-    sudo pipupgrade;
+    pipupgrade;
 
     sudo gem update --system
     sudo gem update
