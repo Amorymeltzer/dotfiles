@@ -651,7 +651,7 @@ alias beep='tput bel'
 # Use colordiff if it exists
 if [ -a /opt/local/bin/colordiff ]; then
     alias diff='colordiff ';
-    # Make wdiff colorful
+    # Make wdiff colorful.  Consdier cwdiff? ;;;;;; ##### FIXME TODO
     if [ -a /opt/local/bin/wdiff ]; then
 	function wcolordiff() {
 	    wdiff -n "$@" | colordiff
