@@ -4,16 +4,20 @@
 <dict>
 <key>constantArguments</key>
 <dict>
-  <key>bullet</key>
-  <string>- </string>
-  <key>alertBullet</key>
-  <string>!! </string>
+  <key>sectionSeparator</key>
+  <string>\n-------------------</string>
+  <key>propertySeparators</key>
+  <string>|, |\n  |</string>
+  <key>includeOnlyEventsFromNowOn</key>
+  <true/>
   <key>noCalendarNames</key>
+  <true/>
+  <key>noPropNames</key>
   <true/>
   <key>formatOutput</key>
   <true/>
-  <key>includeCals</key>
-  <string>Home,Work</string>
+  <key>excludeCals</key>
+  <string>Birthdays,Moon Phases</string>
 </dict>
 <key>formatting</key>
 <dict>
