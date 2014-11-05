@@ -188,11 +188,12 @@ function allcolors() {
 # -g, highlight search, slightly faster?
 # -M, display currently viewed lines
 # -w, highlight first new unread line
+# -N, display line numbers.  Not used.
 # -z[n], page scroll n lines instead of one page.  Not used.
 # more is less
 alias more='less '
-# Why doesn't this give the same results in man???
-# ;;;;;; ##### FIXME TODO
+# Doesn't display percentage until whole document has gone through.  Type Gg
+# once there to jump to bottom then to the top.  Ill-advised for large files
 export MANPAGER="less -FXiRgMw";
 export LESS="-FXiRgMw";
 
