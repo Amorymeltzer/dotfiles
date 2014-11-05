@@ -14,8 +14,6 @@ rm ~/.colordiffrc
 rm ~/.wgetrc
 rm ~/.curlrc
 rm ~/.hushlogin
-rm ~/.icalBuddyConfig.plist
-rm ~/diary
 rm ~/.emacs
 rm -r ~/.emacs.d
 rm -r ~/Documents/perl
