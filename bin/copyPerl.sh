@@ -17,6 +17,7 @@ rsync -avxz ~/.hushlogin /Volumes/SANDISK/mobilePerl/.hushlogin
 rsync -avxz ~/.emacs /Volumes/SANDISK/mobilePerl/.emacs
 rsync -avxz ~/.emacs.d/ /Volumes/SANDISK/mobilePerl/.emacs.d
 rsync -avxz ~/Documents/perl/ /Volumes/SANDISK/mobilePerl/perl
+rsync -avxz ~/Documents/git/ /Volumes/SANDISK/mobilePerl/git
 rsync -avxz ~/bin/ /Volumes/SANDISK/mobilePerl/bin --exclude-from=/Volumes/SANDISK/mobilePerl/exclude
 rsync -avxz ~/.completions.d/ /Volumes/SANDISK/mobilePerl/.completions.d
 

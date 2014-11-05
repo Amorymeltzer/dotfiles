@@ -17,5 +17,6 @@ rm ~/.hushlogin
 rm ~/.emacs
 rm -r ~/.emacs.d
 rm -r ~/Documents/perl
+rm -r ~/Documents/git
 rm -r ~/bin
 rm -r ~/.completions.d
