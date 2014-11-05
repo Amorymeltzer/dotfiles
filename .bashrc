@@ -180,7 +180,7 @@ function allcolors() {
     done
 }
 
-# Set less as default man pager, meaning screen won't clear after quitting man
+# Set less as default manpager, screen won't clear after quitting man
 # -F, quit-if-one-screen, if it fits then print it and quit it
 # -X, no-init, don't clear screen first
 # -i, ignore-case
@@ -189,9 +189,12 @@ function allcolors() {
 # -M, display currently viewed lines
 # -w, highlight first new unread line
 # -z[n], page scroll n lines instead of one page.  Not used.
-# Should alias this for regular more/less
+# more is less
+alias more='less '
+# Why doesn't this give the same results in man???
 # ;;;;;; ##### FIXME TODO
-export MANPAGER="less -FXiRgMw"
+export MANPAGER="less -FXiRgMw";
+export LESS="-FXiRgMw";
 
 # Use lesspipe.sh (look inside archives) just in case
 if [ -x /opt/local/bin/lesspipe.sh ]; then
