@@ -14,10 +14,12 @@
   <true/>
   <key>noPropNames</key>
   <true/>
-  <key>formatOutput</key>
-  <true/>
+  <key>excludeEventProps</key>
+  <string>url</string>
   <key>excludeCals</key>
   <string>Birthdays,Moon Phases</string>
+  <key>formatOutput</key>
+  <true/>
 </dict>
 <key>formatting</key>
 <dict>
@@ -26,7 +28,7 @@
   <key>datetimeValue</key>
   <string>yellow</string>
   <key>titleValue</key>
-  <string>magenta,bg:black</string>
+  <string>bright-magenta</string>
   <key>notesName</key>
   <string>cyan</string>
   <key>notesValue</key>
@@ -54,18 +56,18 @@
   <key>priorityValueLow</key>
   <string>green,bg:white</string>
   <key>sectionTitle</key>
-  <string>blue,underlined</string>
+  <string></string>
   <key>bullet</key>
   <string>white</string>
   <key>alertBullet</key>
   <string>red</string>
   <key>firstItemLine</key>
-  <string>bold</string>
+  <string></string>
 </dict>
 <key>formattedKeywords</key>
 <dict>
   <key>today</key>
-  <string>red,bold</string>
+  <string></string>
 </dict>
 </dict>
 </plist>
