@@ -14,6 +14,7 @@ rsync -avxz /Volumes/SANDISK/mobilePerl/.colordiffrc ~/.colordiffrc
 rsync -avxz /Volumes/SANDISK/mobilePerl/.wgetrc ~/.wgetrc
 rsync -avxz /Volumes/SANDISK/mobilePerl/.curlrc ~/.curlrc
 rsync -avxz /Volumes/SANDISK/mobilePerl/.hushlogin ~/.hushlogin
+rsync -avxz /Volumes/SANDISK/mobilePerl/.icalBuddyConfig.plist ~/.icalBuddyConfig.plist
 rsync -avxz /Volumes/SANDISK/mobilePerl/diary ~/diary
 rsync -avxz /Volumes/SANDISK/mobilePerl/.emacs ~/.emacs
 rsync -avxz /Volumes/SANDISK/mobilePerl/.emacs.d/ ~/.emacs.d
