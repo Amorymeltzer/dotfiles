@@ -665,7 +665,8 @@ if [ -a /opt/local/bin/colordiff ]; then
     fi
 fi
 # But for real?  Just use dwdiff: git-like giff
-alias dwdiff='dwdiff -3sc '
+# Use -3 option to only show changes
+alias dwdiff='dwdiff -sc '
 
 # grep prints line number if piped, kinda sorta breaks other things
 # http://unix.stackexchange.com/a/25549/43935
