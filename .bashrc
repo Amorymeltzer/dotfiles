@@ -192,6 +192,7 @@ function allcolors() {
 # -z[n], page scroll n lines instead of one page.  Not used.
 # more is less
 alias more='less '
+
 # Doesn't display percentage until whole document has gone through.  Type Gg
 # once there to jump to bottom then to the top.  Ill-advised for large files
 export MANPAGER="less -FXiRgMw";
@@ -664,7 +665,7 @@ if [ -a /opt/local/bin/colordiff ]; then
     fi
 fi
 # But for real?  Just use dwdiff: git-like giff
-alias dwdiff='dwdiff -3cs '
+alias dwdiff='dwdiff -3sc '
 
 # grep prints line number if piped, kinda sorta breaks other things
 # http://unix.stackexchange.com/a/25549/43935
