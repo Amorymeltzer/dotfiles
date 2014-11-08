@@ -44,10 +44,19 @@ wc = whatchanged
 l = log --decorate --graph
 l1 = log --oneline --decorate
 l15 = log --oneline --decorate -5
+ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]"--decorate --date=relative
+# Like "git show myfile", but uses the last commit that changed "myfile".
+showlast = log -n 1 -p
 # View abbreviated SHA, description, and history graph of the latest 20 commits
 graph = log --pretty=oneline -n 20 --graph --abbrev-commit --decorate
 # List contributors with number of commits
 contributors = shortlog --summary --numbered
+filelog = log -u
+fl = log -u
+cl = clone
 b = branch
 br = branch
 branches = branch -a
@@ -65,13 +74,19 @@ h = rev-parse HEAD
 d = diff --word-diff
 # Show the staged changes.
 dc = diff --cached --word-diff
-# Like "git show myfile", but uses the last commit that changed "myfile".
-showlast = log -n 1 -p
 # Switch to a branch, creating it if necessary
 go = checkout -B
 # Show verbose output about tags, branches or remotes
 # Don't use?
 tags = tag -l
+# Assume/Unassume changes
+assume = update-index --assume-unchanged
+unassume = update-index --no-assume-unchanged
+assumed = "!git ls-files -v | grep ^h | cut -c 3-"
+assumeall = "!git st -s | awk {'print $2'} | xargs git assume"
+unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
+# List all aliases
+aliases = "!git config -l | grep alias | cut -c 7-"
 # Find branches containing commit
 fb = "!f() { git branch -a --contains $1; }; f"
 # Find tags containing commit
