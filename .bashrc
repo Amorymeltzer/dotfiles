@@ -189,6 +189,7 @@ function colordump() {
 	    printf "\x1b[38;5;${i}mcolour${i} ";
 	fi
     done
+    echo
 }
 
 # Set less as default manpager, screen won't clear after quitting man
