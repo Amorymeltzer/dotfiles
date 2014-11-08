@@ -174,9 +174,20 @@ alias colorslist="set | egrep '^Color_\w*' | sort"  # Lists all the colors, uses
 # Lists colors in their actual color, on one line
 alias colors="echo -e \`colorslist | sed 's/\(.*\)=\(.*\)/\2 \1/'\`"
 
-function allcolors() {
+function colordump() {
+    # One column
+    # for i in {0..255} ; do
+    #	printf "\x1b[38;5;${i}mcolour${i}\n"
+    # done
+
+    # Six columns
     for i in {0..255} ; do
-	printf "\x1b[38;5;${i}mcolour${i}\n"
+	declare -i a="$i % 6";
+	if [ $a == '0' ]; then
+	    printf "\x1b[38;5;${i}mcolour${i}\n";
+	else
+	    printf "\x1b[38;5;${i}mcolour${i} ";
+	fi
     done
 }
 
