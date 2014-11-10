@@ -410,12 +410,12 @@ unset file;
 # whois, etc. auto-completion based on entries in known_hosts.
 if [[ -e ~/.ssh/known_hosts ]]; then
     #complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" scp stfp whois nslookup nmap
-    # Better than above as well as above-sourced ssh completion file?
+    # Better than above, as well as above-sourced ssh completion file?
     # ;;;;;; ##### FIXME TODO
     complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp stfp whois nslookup nmap
 fi
 
-# networksetup completion based on -help flag
+# networksetup completion
 complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
 
 # Add `killall` tab completion for common apps
@@ -546,9 +546,6 @@ function o() {
     fi
 }
 
-# Too scary?
-# alias q='exit
-
 # cd and ls together
 function cdl() {
     cd "$1" ; ls ;
@@ -582,14 +579,13 @@ alias fuckyou,='sudo '
 # Prompt before overwrite, be vocal about it
 alias mv='mv -vi' # add -f to override, or \ before command
 alias cp='cp -Rvi' # recursive if folder, the ending / makes a difference
-#alias rm='rm -i' # Too annoying, perhaps?
+# alias rm='rm -i' # Too annoying, perhaps?
 alias rm='rm -v'
 # Move the given file(s) to the Trash.
-# Alias rm to this instead?
+# Alias rm to this instead???
 function trash() {
     mv $1 ~/.Trash
 }
-
 # Make intermediate directories and be verbose about it
 alias mkdir='mkdir -pv'
 # Deleting intermediate directories not as logical
@@ -644,13 +640,12 @@ function psu {
 
 
 # Better format for uptime
-#alias utime="uptime | egrep -o -e 'up [0-9]*.*[0-9]* user[s]?' | tr -s ' '"
 alias utime="uptime | egrep -o -e 'up [0-9]*.*[0-9]* user[s]?' | tr 'u' 'U'"
 
+# Top by memory, not in delta
+alias topm='top -o vsize'
 # Top always sorted by cpu, in delta mode
 alias top='top -d -o cpu'
-# Top by memory, not in delta
-alias topm='\top -o vsize'
 # Show five most recently modified files.
 alias last_modified='ls -t $* 2> /dev/null | head -n 5 '
 
@@ -662,7 +657,7 @@ alias growl='growlnotify -t Terminal -m "Done" && tput bel' # Red badge? and pop
 alias beep='tput bel'
 
 # Enhanced WHOIS
-# Busted as of mid-2014
+# Busted as of mid-2014 ;;;;;; ##### FIXME TODO
 # alias whois='whois -h whois-servers.net'
 
 # Use colordiff if it exists
