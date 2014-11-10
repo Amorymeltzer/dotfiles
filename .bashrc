@@ -598,7 +598,6 @@ function mkcd() {
 }
 
 # Make a directory and move a file into it
-# Swap the order, allow multiple files ;;;;;; ##### FIXME TODO
 function mkmv() {
     if [[ $# -ne 2 ]]; then
 	echo "Usage: mkmv <file> <directory>"
