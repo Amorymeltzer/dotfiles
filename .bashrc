@@ -620,11 +620,12 @@ alias df='df -h'
 alias du='du -hc -I .cpan -I .config'
 # Depth of 1, the minimum
 alias dud='du -d 1'
-# Display used memory, should tweak for Mavericks-style info, color
-# ;;;;;; ##### FIXME TODO
+
 function memstat {
     vm_stat | cut -d ":" -f 2 | tr -d '. ' | tr '\n' ' ' | awk '{printf("U:%.1fG|F:%.1fG\n", (($3 + $4 + $6) * 4)/(1024*1024), (($2+$5) * 4)/(1024*1024))}'
 }
+# See memory_pressure for Mavericks-style-ish output
+# Tweak for Mavericks-style info, color ;;;;;; ##### FIXME TODO
 
 # Displays user owned processes status.
 function psu {
