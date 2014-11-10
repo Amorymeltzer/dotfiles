@@ -610,10 +610,6 @@ function mkmv() {
 }
 
 
-# Base 10 instead of base 2, up here to "beat" the alias below
-function diskusage() {
-    df -H "`pwd`" | awk 'NR==2 { print "Used " $3 " of " $2 ", " $4 " (" $5 ") remaining" }'
-}
 # Human-readable values, and a total for du
 alias df='df -h'
 # Also ignore stupid things that require permissions
@@ -621,25 +617,28 @@ alias du='du -hc -I .cpan -I .config'
 # Depth of 1, the minimum
 alias dud='du -d 1'
 
+# Better format for uptime
+alias utime="uptime | egrep -o -e 'up [0-9]*.*[0-9]* user[s]?' | tr 'u' 'U'"
+
+# Base 10 instead of base 2, up here to "beat" the alias below
+function diskusage() {
+    df -H "`pwd`" | awk 'NR==2 { print "Used " $3 " of " $2 ", " $4 " (" $5 ") remaining" }'
+}
+# Displays user owned processes status.
+function psu {
+    ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command'
+}
+
+# Top by memory, not in delta
+alias topm='top -o vsize'
+# Top always sorted by cpu, in delta mode
+alias top='top -d -o cpu'
 function memstat {
     vm_stat | cut -d ":" -f 2 | tr -d '. ' | tr '\n' ' ' | awk '{printf("U:%.1fG|F:%.1fG\n", (($3 + $4 + $6) * 4)/(1024*1024), (($2+$5) * 4)/(1024*1024))}'
 }
 # See memory_pressure for Mavericks-style-ish output
 # Tweak for Mavericks-style info, color ;;;;;; ##### FIXME TODO
 
-# Displays user owned processes status.
-function psu {
-    ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command'
-}
-
-
-# Better format for uptime
-alias utime="uptime | egrep -o -e 'up [0-9]*.*[0-9]* user[s]?' | tr 'u' 'U'"
-
-# Top by memory, not in delta
-alias topm='top -o vsize'
-# Top always sorted by cpu, in delta mode
-alias top='top -d -o cpu'
 # Show five most recently modified files.
 alias last_modified='ls -t $* 2> /dev/null | head -n 5 '
 
