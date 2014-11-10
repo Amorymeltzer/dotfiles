@@ -677,13 +677,13 @@ alias dwdiff='dwdiff -sc '
 
 # grep prints line number if piped, kinda sorta breaks other things
 # http://unix.stackexchange.com/a/25549/43935
-# grep() {
-#     if [[ -t 1 ]]; then
-#	command grep -n "$@"
-#     else
-#	command grep "$@"
-#     fi
-# }
+grepp() {
+    if [[ -t 1 ]]; then
+	command grep -n "$@"
+    else
+	command grep "$@"
+    fi
+}
 
 # Case and context in grep
 alias grepi='grep -i'
