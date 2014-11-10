@@ -14,6 +14,9 @@ if [ -z "$PS1" ]; then
     return
 fi
 
+# Localization
+export LC_ALL=C
+
 # Colors ----------------------------------------------------------
 export TERM=xterm-color
 # Change for different colors, to magenta
@@ -855,7 +858,7 @@ alias which='type -a'
 alias path='echo -e ${PATH//:/\\n}'
 
 # Matrix-esque screensaver-esque; man tr for different options
-alias matrix='env LC_CTYPE=C tr -c "[:print:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=lcase,unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
+alias matrix='tr -c "[:print:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=lcase,unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
 # Star Wars
 # C-] to exit
 alias starwars='telnet towel.blinkenlights.nl'
