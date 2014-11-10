@@ -170,7 +170,7 @@ export Color_White_Bold_Intense="\033[1;97m"      # White
 # export Color_White_zBackground_Intense="\033[0;107m"   # White
 
 
-alias colorslist="set | egrep '^Color_\w*' | sort"  # Lists all the colors, uses vars in .bashrc_non-interactive
+alias colorslist="set | egrep '^Color_\w*' | sort"
 # Lists colors in their actual color, on one line
 alias colors="echo -e \`colorslist | sed 's/\(.*\)=\(.*\)/\2 \1/'\`"
 
@@ -192,6 +192,8 @@ function colordump() {
     echo
 }
 
+# more is less
+alias more='less '
 # Set less as default manpager, screen won't clear after quitting man
 # -F, quit-if-one-screen, if it fits then print it and quit it
 # -X, no-init, don't clear screen first
@@ -202,8 +204,6 @@ function colordump() {
 # -w, highlight first new unread line
 # -N, display line numbers.  Not used.
 # -z[n], page scroll n lines instead of one page.  Not used.
-# more is less
-alias more='less '
 
 # Doesn't display percentage until whole document has gone through.  Type Gg
 # once there to jump to bottom then to the top.  Ill-advised for large files
@@ -377,9 +377,10 @@ function prompt_command {
     history -a # All terminal windows go to same history
 
     # create a $fill of all screen width minus the time string and a space:
-    # let fillsize=${COLUMNS}-9 # fit the date in
     # let fillsize=${COLUMNS} # fullscreen
-    let fillsize=${COLUMNS}-11 # battery charge via battery.py
+    # let fillsize=${COLUMNS}-9 # fit the date in
+    # Room for the date and battery charge via battery.py
+    let fillsize=${COLUMNS}-11
     fill=""
 
     while [ "$fillsize" -gt "0" ]
@@ -393,7 +394,7 @@ function prompt_command {
 
 export PS2="\[$Color_Cyan\]→\[$Color_zOff\] "    # Secondary prompt, multiline commands
 export PS3='#? '   # Tertiary prompt, select menus
-export PS4='+ '    # Quaternary prompt, ?
+export PS4='+ '    # Quaternary prompt, ???
 
 PROMPT_COMMAND=prompt_command
 
