@@ -430,12 +430,6 @@ complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | g
 #     . ~/bin/bash-ido
 # fi
 
-
-# Change window name
-# sudo aka sh doesn't like this
-echo -ne "\033]0;$1\007" # Just process name
-# echo -n $'\e]0;'"$@"$'\a'; What's the difference here?
-
 # Function to run upon exit of shell
 function _exit()
 {
