@@ -737,22 +737,30 @@ function pipupgrade()
 # Function to update everything?
 function update()
 {
+    echo "Updating MacPorts..."
     sudo port selfupdate;
     port echo outdated;
     sudo port upgrade outdated;
+    echo "Cleaning up MacPorts..."
     sudo port uninstall inactive leaves;
 
+    echo "Upgrading pip installs..."
     pipupgrade;
 
+    echo "Upgrading gem installs..."
     sudo gem update --system
     sudo gem update
+    echo "Cleaning up gems..."
     sudo gem cleanup;
 
+    echo "Upgrading CPAN modules..."
     # Run before? http://stackoverflow.com/a/21736287/2521092
     sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
     sudo cpan -u;
+    echo "Cleaning up CPAN directories..."
     cpanclean;
 
+    echo "Checking for Mac OSX software updates..."
     # sudo softwareupdate -iva;
     sudo softwareupdate -l;
 }
