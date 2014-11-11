@@ -7,7 +7,10 @@ export PATH="/opt/local/bin:/opt/local/sbin:~/bin:$PATH"
 # if [ -d ~/bin ]; then
 #     export PATH=~/bin:$PATH  # add bin folder to the path, if I've got it.
 # fi
-export PATH
+
+# Add unloved perl modules
+export MANPATH="/opt/local/share/perl5.20/siteman:/opt/local/share/perl5.20/man:$MANPATH"
+
 
 # emacs > vim
 export EDITOR="emacs"
