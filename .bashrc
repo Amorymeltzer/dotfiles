@@ -403,8 +403,10 @@ PROMPT_COMMAND=prompt_command
 
 ## Sourcin'
 # Advanced bash completion (http://www.caliban.org/bash/index.shtml#completion)
-# Defaults completion (https://github.com/revans/bash-it/blob/master/completion)
-# Etc.
+# Defaults, pip, and gem completion
+# (https://github.com/revans/bash-it/blob/master/completion)
+# Most of the rest symlinked from /opt/local/share/bash-completion/completions
+# based on what I had installed
 for file in ~/.completions.d/*; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
