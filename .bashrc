@@ -705,9 +705,9 @@ alias pall='sudo port selfupdate && port echo outdated && sudo port upgrade outd
 alias pout='port echo outdated '
 alias pug='sudo port upgrade outdated '
 alias puo='pug '
-alias pclean='sudo port clean --all installed'
 alias pleaves='port echo leaves '
 alias pcleaves='sudo sudo port uninstall leaves '
+alias pclean='sudo port clean --all installed'
 alias pactive='port echo active '
 alias pinactive='port echo inactive '
 alias pinfo='port info '
@@ -761,7 +761,7 @@ function update()
     #sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
     sudo cpan -u;
     echo "Cleaning up CPAN directories..."
-    cpanclean;
+    sudo cpanclean;
 
     echo "Checking for Mac OSX software updates..."
     # sudo softwareupdate -iva;
