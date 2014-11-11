@@ -17,4 +17,5 @@ _eject()
 
     return 0
 }
+complete -F _eject unmount
 complete -F _eject eject
