@@ -741,6 +741,8 @@ function update()
     sudo port selfupdate;
     port echo outdated;
     sudo port upgrade outdated;
+    echo "Logging leaves..."
+    port echo leaves >> ~/port_leaves_log.txt;
     echo "Cleaning up MacPorts..."
     sudo port uninstall inactive leaves;
     pclean;
