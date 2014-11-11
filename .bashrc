@@ -743,6 +743,7 @@ function update()
     sudo port upgrade outdated;
     echo "Cleaning up MacPorts..."
     sudo port uninstall inactive leaves;
+    pclean;
 
     echo "Upgrading pip installs..."
     pipupgrade;
