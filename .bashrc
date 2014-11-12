@@ -848,7 +848,9 @@ if [ -x /opt/local/bin/setvolume ]; then
     alias mutevolume='setvolume 0'
 else
     function setvolume() {
-	if [ ! $1 -o $1 -lt 0 -o $1 -gt 7 2>/dev/null ]; then
+	if [ ! $1 ]; then
+	    echo "setvolume <0-7>"
+	elif [ $1 -lt 0 -o $1 -gt 7 ]; then
 	    echo "setvolume <0-7>"
 	else
 	    osascript -e "set volume $1"
