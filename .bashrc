@@ -838,17 +838,25 @@ alias stfu="osascript -e 'set volume output muted true'"
 alias pumpitup="osascript -e 'set volume 7'"
 alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
-# Volume control
-function setvolume() {
-    if [ ! $1 -o $1 -lt 0 -o $1 -gt 7 2>/dev/null ]; then
-	echo "setvolume <0-7>"
-    else
-	osascript -e "set volume $1"
-    fi
-}
-alias middlevolume='osascript -e "set volume 3.5"'
-alias maxvolume='osascript -e "set volume 7"'
-alias mutevolume='osascript -e "set volume 0"'
+# Volume control, potentially based of osxutils
+# Should convert the osascript versions to use the same number scale
+# ;;;;;; ##### FIXME TODO
+if [ -x /opt/local/bin/setvolume ]; then
+    alias middlevolume='setvolume 50'
+    alias maxvolume='setvolume 100'
+    alias mutevolume='setvolume 0'
+else
+    function setvolume() {
+	if [ ! $1 -o $1 -lt 0 -o $1 -gt 7 2>/dev/null ]; then
+	    echo "setvolume <0-7>"
+	else
+	    osascript -e "set volume $1"
+	fi
+    }
+    alias middlevolume='osascript -e "set volume 3.5"'
+    alias maxvolume='osascript -e "set volume 7"'
+    alias mutevolume='osascript -e "set volume 0"'
+fi
 
 # Seriously though, just use pianobar/pandora
 alias pandora='pianobar'
