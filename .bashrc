@@ -783,6 +783,7 @@ function newbash() {
 	echo -e "#!/usr/bin/env bash\n# $1 by Amory Meltzer\n# " > $1 ; chmod 755 $1 ; emacs +3:3 $1 ;
     fi
 }
+alias nbash='newbash'
 
 # Recompile all elisp files, with proper warnings/output
 # alias recompile_emacs='emacs -batch -f batch-byte-compile ~/.emacs.d/**/*.el'
