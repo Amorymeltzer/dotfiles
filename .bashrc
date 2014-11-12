@@ -813,7 +813,10 @@ function sandisk() {
 }
 alias unmount='diskutil umount '
 alias eject='unmount '
-
+# Eject all drives, kind of slow?
+function  ejectall() {
+    find /Volumes -maxdepth 1 -not -user root -a -not -name '.*' -print0 | xargs -0 umount
+}
 
 # Control iTunes ---------------------------------------------------
 alias next='itunes next'
