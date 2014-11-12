@@ -962,6 +962,13 @@ alias pbp='pbpaste '
 alias copy="tr -d '\n' | pbcopy"
 
 alias uniqsort='sort $* | uniq -u | sort'
+# quicksort in three lines from http://git.io/UzwyWQ
+qsort()
+{
+    local L=""; local G=""; [ $# -eq 1 ] && echo $1 && return;
+    P=$1; shift; for i in $@; do [ $i -lt $P ] && L="$L $i" || G="$G $i"; done
+    [ -z "$L" ] || L=`qsort $L`; [ -z "$G" ] || G=`qsort $G`; echo "$L $P $G"
+}
 
 # Get rid of pesky .DS_Store files, recursively
 #  alias dscleanup='find . -type f -name "*.DS_Store" -ls delete"
