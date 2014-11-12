@@ -414,10 +414,9 @@ unset file;
 
 # whois, etc. auto-completion based on entries in known_hosts.
 if [[ -e ~/.ssh/known_hosts ]]; then
-    #complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" scp stfp whois nslookup nmap
-    # Better than above, as well as above-sourced ssh completion file?
-    # ;;;;;; ##### FIXME TODO
-    complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" ssh scp stfp whois nslookup nmap
+    # This completely supersedes the above-sourced ssh.completion file, need
+    # to stop that from happening. ;;;;;; ##### FIXME TODO
+    complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" whois nslookup nmap
 fi
 
 # networksetup completion
