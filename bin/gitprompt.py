@@ -1,4 +1,5 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
+# coding=UTF-8
 # Report on git status of a given folder.  Faster than some bash-based options
 # Borrows HEAVILY from mnagel's excellent clustergit (Github: mnagel/clustergit)
 
@@ -37,16 +38,13 @@ def check(dirname):
         if 'Changes to be committed' in out:
             messages.append("!")
             clean = False
-        # if 'Your branch is ahead of' in out:
-        #     messages.append(colorize(Colors.FAIL, "Unpushed commits"))
-        #     sys.stdout.write("".join(messages))
-        #     clean = False
-        # else:
-        #     clean = True
+        if 'Your branch is ahead of' in out:
+            # Output
+            # ⚡ → ↑ ↓ ↕ ○ ☿ ± ✘ ¤ « ¬ ¼ ½ ¾ × ƴ ˃ ˧ ૦ ᐅ ᗆ ᗌ ᗒ ᗘ ↀ ⇛ ⇒ ⇨ ↝ ∇ ⋕
+            #  ⌁ ⌇ ⎋ ⏆ ▶ ▷ ▸ ▹ ► ▻ ◆ ◇ ◈ ◊ ☇ ☈ ✈ ➤ ➙ ⨠ 𝆓
+            messages.append("→")
+            clean = False
 
-        # if clean:
-        #     sys.stdout.write("".join(messages))
-        # else:
     else:
         messages = ["-"]
 
