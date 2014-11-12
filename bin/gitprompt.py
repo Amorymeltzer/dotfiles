@@ -42,10 +42,10 @@ def check(dirname):
             # Output
             # ⚡ → ↑ ↓ ↕ ○ ☿ ± ✘ ¤ « ¬ ¼ ½ ¾ × ƴ ˃ ˧ ૦ ᐅ ᗆ ᗌ ᗒ ᗘ ↀ ⇛ ⇒ ⇨ ↝ ∇ ⋕
             #  ⌁ ⌇ ⎋ ⏆ ▶ ▷ ▸ ▹ ► ▻ ◆ ◇ ◈ ◊ ☇ ☈ ✈ ➤ ➙ ⨠ 𝆓
-            #  messages.append("→")
+            messages.append("→")
             clean = False
-            p = re.search("Your branch is ahead of .* by (\d+) commit", out)
-            messages.append(p.group(1))
+            # p = re.search("Your branch is ahead of .* by (\d+) commit", out)
+            # messages.append(p.group(1))
 
     else:
         messages = ["-"]
