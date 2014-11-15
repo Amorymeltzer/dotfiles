@@ -855,7 +855,9 @@ if [ ! -x /opt/local/bin/setvolume ]; then
 	fi
     }
 fi
+alias quartervolume='setvolume 25'
 alias middlevolume='setvolume 50'
+alias threequartervolume='setvolume 75'
 alias maxvolume='setvolume 100'
 alias mutevolume='setvolume 0'
 
