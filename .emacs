@@ -1952,6 +1952,12 @@ keyboard commands to a buffer.  Useful for screencasting Emacs."
 	     '("\\.\\(fasta\\|fa\\|exp\\|ace\\|gb\\)\\'" . dna-mode))
 (add-hook 'dna-mode-hook 'turn-on-font-lock)
 
+
+;; CSV mode
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+(autoload 'csv-mode "csv-mode"
+  "Major mode for editing comma-separated value files." t)
+
 ;; will I even use these?
 ;; (require 'thingatpt+)
 ;; Expanded things, namely kill thing, mark thing, and upward mark thing
