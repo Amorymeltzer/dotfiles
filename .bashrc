@@ -727,6 +727,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 
 # Homebrew
 alias brewall='brew update && brew outdated && brew upgrade '
+alias brewclean='brew cleanup '
 # Make homebrew verbose by defaults
 export HOMEBREW_VERBOSE=1
 
