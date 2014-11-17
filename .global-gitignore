@@ -33,12 +33,19 @@ nytprof.out
 ###############
 *~
 \#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
-# Compiled
-*.elc
+emacs.desktop
+emacs.desktop.lock
+ac-comphist.dat
+bookmarks
+history
+ido.last
+recentf
+saved-places
+smex-items
 auto-save-list
 tramp
+# Compiled
+*.elc
 .\#*
 # Packaging
 .cask
