@@ -730,6 +730,7 @@ alias brewall='brew update && brew outdated && brew upgrade '
 alias brewclean='brew cleanup '
 # Make homebrew verbose by defaults
 # export HOMEBREW_VERBOSE=1
+alias cask='brew cask '
 
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
 function cpanclean() {
