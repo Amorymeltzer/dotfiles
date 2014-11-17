@@ -765,7 +765,7 @@ function update()
     #sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
     sudo cpan -u;
     echo "Cleaning up CPAN directories..."
-    sudo cpanclean;
+    cpanclean;
 
     echo "Checking for Mac OSX software updates..."
     # sudo softwareupdate -iva;
