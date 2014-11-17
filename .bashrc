@@ -725,7 +725,8 @@ alias pun='sudo port uninstall '
 # https://trac.macports.org/browser/contrib/port-whatsnew/port-whatsnew
 alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
 
-
+# Homebrew
+alias brewall='brew update && brew outdated && brew upgrade '
 # Make homebrew verbose by defaults
 export HOMEBREW_VERBOSE=1
 
