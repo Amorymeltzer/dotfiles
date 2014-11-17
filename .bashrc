@@ -769,7 +769,7 @@ function update()
 
     echo "Checking for Mac OSX software updates..."
     # sudo softwareupdate -iva;
-    sudo softwareupdate -l;
+    softwareupdate -l;
 }
 
 # Quickly open and make a new perl file executable and with headers
