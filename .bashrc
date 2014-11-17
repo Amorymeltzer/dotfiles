@@ -726,6 +726,9 @@ alias pun='sudo port uninstall '
 alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
 
 
+# Make homebrew verbose by defaults
+export HOMEBREW_VERBOSE=1
+
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
 function cpanclean() {
     sudo cpan -c
