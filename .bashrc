@@ -767,6 +767,15 @@ function update()
     echo "Cleaning up CPAN directories..."
     cpanclean;
 
+    echo "Updating Homebrew..."
+    brew update
+    brew outdated
+    brew upgrade
+
+    echo "Cleaning up Homebrew..."
+    brew cleanup -n
+    brew cleanup
+
     echo "Checking for Mac OSX software updates..."
     # sudo softwareupdate -iva;
     softwareupdate -l;
