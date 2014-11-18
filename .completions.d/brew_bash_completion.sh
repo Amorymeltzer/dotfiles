@@ -463,6 +463,7 @@ _brew ()
             --env --prefix --repository
             audit
             cat
+            cask
             cleanup
             commands
             config --config
@@ -508,6 +509,7 @@ _brew ()
     test|unlink)                __brew_complete_installed ;;
     bottle)                     _brew_bottle ;;
     cleanup)                    _brew_cleanup ;;
+    cask)                       _cask ;;
     create)                     _brew_create ;;
     deps)                       _brew_deps ;;
     doctor|dr)                  _brew_doctor ;;
