@@ -731,8 +731,8 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # Symlink in /Applications
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
-alias brewall='brew update && brew outdated && brew upgrade '
-alias brewclean='brew cleanup && brew cask cleanup '
+alias ball='brew update && brew outdated && brew upgrade '
+alias bclean='brew cleanup && brew cask cleanup '
 alias bsearch='brew search '
 alias blist='brew list '
 alias bdoctor='brew doctor '
