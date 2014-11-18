@@ -58,6 +58,7 @@ graph = log --pretty=oneline -n 20 --graph --abbrev-commit --decorate
 contributors = shortlog --summary --numbered
 filelog = log -u
 fl = log -u
+rl = reflog --decorate
 
 cl = clone
 
