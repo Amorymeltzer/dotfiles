@@ -730,6 +730,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # export HOMEBREW_VERBOSE=1
 # Symlink in /Applications
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
 alias brewall='brew update && brew outdated && brew upgrade '
 alias brewclean='brew cleanup && brew cask cleanup '
 alias bsearch='brew search '
@@ -750,7 +751,8 @@ function cpanclean() {
 # Upgrade all pip modules, via http://stackoverflow.com/a/3452888/2521092
 function pipupgrade()
 {
-    sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
+    #  sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
+    sudo pip list | grep -v '^\-e' | cut -d ' ' -f 1  | xargs pip install -U
 }
 
 # Function to update everything?
