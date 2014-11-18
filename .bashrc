@@ -730,10 +730,12 @@ alias brewall='brew update && brew outdated && brew upgrade '
 alias brewclean='brew cleanup && brew cask cleanup '
 alias bsearch='brew search '
 alias blist='brew list '
+alias bdoctor='brew doctor '
 # Homebrew-cask
 alias cask='brew cask '
 alias csearch=' brew cask search '
 alias clist='brew cask list '
+alias cdoctor='brew cask doctor '
 # Make homebrew verbose by defaults
 # export HOMEBREW_VERBOSE=1
 
