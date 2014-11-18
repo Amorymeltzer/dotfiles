@@ -728,9 +728,14 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # Homebrew
 alias brewall='brew update && brew outdated && brew upgrade '
 alias brewclean='brew cleanup '
+alias bsearch='brew search '
+alias blist='brew list '
+# Homebrew-cask
+alias cask='brew cask '
+alias csearch=' brew cask search '
+alias clist='brew cask list '
 # Make homebrew verbose by defaults
 # export HOMEBREW_VERBOSE=1
-alias cask='brew cask '
 
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
 function cpanclean() {
