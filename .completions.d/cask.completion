@@ -29,4 +29,3 @@ _cask() {
 }
 
 complete -F _cask cask
-complete -F _cask "brew cask"
