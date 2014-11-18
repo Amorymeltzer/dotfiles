@@ -752,7 +752,7 @@ function cpanclean() {
 function pipupgrade()
 {
     #  sudo pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | sudo xargs pip install -U
-    sudo pip list | grep -v '^\-e' | cut -d ' ' -f 1  | sudo xargs pip install -U
+    sudo pip list --outdated | grep -v '^\-e' | cut -d ' ' -f 1  | sudo xargs pip install -U
 }
 
 # Function to update everything?
