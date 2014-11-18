@@ -1,6 +1,6 @@
 # Simple completion for brew cask
 
-_brew() {
+_cask() {
     local cur prev acts
 
     COMPREPLY=()
@@ -27,5 +27,6 @@ _brew() {
 	    ;;
     esac
 }
+
 complete -F _cask cask
 complete -F _cask "brew cask"
