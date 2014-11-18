@@ -727,7 +727,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 
 # Homebrew
 alias brewall='brew update && brew outdated && brew upgrade '
-alias brewclean='brew cleanup '
+alias brewclean='brew cleanup && brew cask cleanup '
 alias bsearch='brew search '
 alias blist='brew list '
 # Homebrew-cask
@@ -787,6 +787,8 @@ function update()
     echo "Cleaning up Homebrew..."
     brew cleanup -n
     brew cleanup
+    echo "Cleaning up casks..."
+    brew cask cleanup
 
     echo "Checking for Mac OSX software updates..."
     # sudo softwareupdate -iva;
