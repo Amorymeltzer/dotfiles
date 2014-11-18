@@ -1,3 +1,31 @@
 # Simple completion for brew cask
 
+_brew() {
+    local cur prev acts
 
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    acts="alfred audit cat cleanup create doctor edit fetch home info install list search uninstall update zap"
+
+    COMPREPLY=( $(compgen -W "${acts}" -- ${cur})
+	      )
+    if [[ ${cur} == -* ]] ; then
+	COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+    fi
+    case $prev in
+	cleanup|list|uninstall)
+	    COMPREPLY=$(brew cask list | grep -v "Kernel.exit")
+	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
+	    return 0
+	    ;;
+	install|info)
+	    COMPREPLY=$(brew cask search | grep -v "Kernel.exit")
+	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
+	    return 0
+	    ;;
+    esac
+}
+complete -F _cask cask
+complete -F _cask "brew cask"
