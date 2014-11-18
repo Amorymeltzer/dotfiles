@@ -725,7 +725,11 @@ alias pun='sudo port uninstall '
 # https://trac.macports.org/browser/contrib/port-whatsnew/port-whatsnew
 alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
 
-# Homebrew
+# Homebrew/Cask
+# Make homebrew verbose by defaults
+# export HOMEBREW_VERBOSE=1
+# Symlink in /Applications
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 alias brewall='brew update && brew outdated && brew upgrade '
 alias brewclean='brew cleanup && brew cask cleanup '
 alias bsearch='brew search '
@@ -736,8 +740,6 @@ alias cask='brew cask '
 alias csearch=' brew cask search '
 alias clist='brew cask list '
 alias cdoctor='brew cask doctor '
-# Make homebrew verbose by defaults
-# export HOMEBREW_VERBOSE=1
 
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
 function cpanclean() {
