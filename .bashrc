@@ -734,11 +734,13 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 alias ball='brew update && brew outdated && brew upgrade '
 alias bclean='brew cleanup && brew cask cleanup '
 alias bsearch='brew search '
+alias binfo='brew info '
 alias blist='brew list '
 alias bdoctor='brew doctor '
 # Homebrew-cask
 alias cask='brew cask '
-alias csearch=' brew cask search '
+alias csearch='brew cask search '
+alias cinfo='brew cask info '
 alias clist='brew cask list '
 alias cdoctor='brew cask doctor '
 
@@ -778,7 +780,7 @@ function update()
     sudo gem cleanup;
 
     echo "Upgrading CPAN modules..."
-    echo "(Temporarily turned off)"
+    echo "(Temporarily disabled)"
     # Run before? http://stackoverflow.com/a/21736287/2521092
     #sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
     #sudo cpan -u;
