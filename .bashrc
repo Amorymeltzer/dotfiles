@@ -711,7 +711,6 @@ alias pout='port echo outdated '
 alias pug='sudo port upgrade outdated '
 alias puo='pug '
 alias pleaves='port echo leaves '
-alias pcleaves='sudo sudo port uninstall leaves '
 alias pclean='sudo port clean --all installed'
 alias pactive='port echo active '
 alias pinactive='port echo inactive '
@@ -765,10 +764,11 @@ function update()
     sudo port selfupdate;
     port echo outdated;
     sudo port upgrade outdated;
+    echo "Cleaning up MacPorts..."
+    sudo port uninstall inactive;
     echo "Logging leaves..."
     port echo leaves >> ~/port_leaves_log.txt;
-    echo "Cleaning up MacPorts..."
-    sudo port uninstall inactive leaves;
+    sudo port uninstall leaves;
     pclean;
 
     echo "Upgrading pip installs..."
