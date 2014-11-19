@@ -77,6 +77,10 @@ subu = submodule update --init
 pom = push origin master
 # Use rebase to prevent unnecessary commits
 pum = pull --rebase origin master
+
+# Fetch and merge better than pull?
+fam = "!git fetch origin -v; git fetch upstream -v; git merge upstream/master"
+
 remotes = remote -v
 
 d = diff --word-diff
