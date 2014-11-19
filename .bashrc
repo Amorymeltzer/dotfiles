@@ -763,6 +763,7 @@ function update()
     echo "Updating MacPorts..."
     sudo port selfupdate;
     port echo outdated;
+    whatsnew;
     sudo port upgrade outdated;
     echo "Cleaning up MacPorts..."
     sudo port uninstall inactive;
