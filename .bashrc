@@ -703,6 +703,7 @@ alias firefox="open -a firefox"
 alias chrome="open -a google\ chrome"
 
 # Macports
+alias pecho='port echo '
 alias psync='sudo port sync '
 alias pself='sudo port selfupdate '
 alias pall='sudo port selfupdate && port echo outdated && sudo port upgrade outdated'
