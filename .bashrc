@@ -756,11 +756,12 @@ function pipupgrade()
     sudo pip freeze --local | grep -v '^\-e' | grep -v bonjour-py | cut -d = -f 1  | sudo xargs pip install -U
 }
 
-# Function to update everything?
+# Function to update pertty much everything
 function update()
 {
     # Call sudo early, before the first output
     sudo echo "Beginning update..."
+
     echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
     sudo port selfupdate;
     port echo outdated;
@@ -779,9 +780,9 @@ function update()
     echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}gems${Color_zOff}..."
     sudo gem update --system
     sudo gem update
+
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}gems${Color_zOff}..."
     sudo gem cleanup;
-
     echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}CPAN modules${Color_zOff}..."
     # Run before? http://stackoverflow.com/a/21736287/2521092
     #sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
