@@ -759,7 +759,9 @@ function pipupgrade()
 # Function to update everything?
 function update()
 {
-    echo "Updating MacPorts..."
+    #  echo "Updating MacPorts..."
+    # Call sudo early, before the first output
+    sudo echo "Updating MacPorts..."
     sudo port selfupdate;
     port echo outdated;
     whatsnew;
