@@ -759,49 +759,49 @@ function pipupgrade()
 # Function to update everything?
 function update()
 {
-    #  echo "Updating MacPorts..."
     # Call sudo early, before the first output
-    sudo echo "Updating MacPorts..."
+    sudo echo "Beginning update..."
+    echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
     sudo port selfupdate;
     port echo outdated;
     whatsnew;
     sudo port upgrade outdated;
-    echo "Cleaning up MacPorts..."
+    echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
     sudo port uninstall inactive;
-    echo "Logging leaves..."
+    echo -e "${Color_Green}Logging leaves${Color_zOff}..."
     port echo leaves >> ~/port_leaves_log.txt;
     sudo port uninstall leaves;
     pclean;
 
-    echo "Upgrading pip installs..."
+    echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}pip installs${Color_zOff}..."
     pipupgrade;
 
-    echo "Upgrading gem installs..."
+    echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}gem installs${Color_zOff}..."
     sudo gem update --system
     sudo gem update
-    echo "Cleaning up gems..."
+    echo -e "${Color_White}Cleaning ${Color_Red_Intense}gems${Color_zOff}..."
     sudo gem cleanup;
 
-    echo "Upgrading CPAN modules..."
-    echo "(Temporarily disabled)"
+    echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}CPAN modules${Color_zOff}..."
     # Run before? http://stackoverflow.com/a/21736287/2521092
     #sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
+    echo -e "${Color_Green}(Temporarily disabled)${Color_zOff}"
     #sudo cpan -u;
-    echo "Cleaning up CPAN directories..."
+    echo -e "${Color_White}Cleaning ${Color_Red_Intense}CPAN directories${Color_zOff}..."
     cpanclean;
 
-    echo "Updating Homebrew..."
+    echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
     brew update
     brew outdated
     brew upgrade
 
-    echo "Cleaning up Homebrew..."
+    echo -e "${Color_White}Cleaning ${Color_Red_Intense}Homebrew${Color_zOff}..."
     brew cleanup -n
     brew cleanup
-    echo "Cleaning up casks..."
+    echo -e "${Color_White}Cleaning ${Color_Red_Intense}casks${Color_zOff}..."
     brew cask cleanup
 
-    echo "Checking for Mac OSX software updates..."
+    echo -e "${Color_Cyan}Checking ${Color_Red_Intense}Mac OSX software updates${Color_zOff}..."
     # sudo softwareupdate -iva;
     softwareupdate -l;
 }
