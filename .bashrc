@@ -776,7 +776,7 @@ function update()
     echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}pip installs${Color_zOff}..."
     pipupgrade;
 
-    echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}gem installs${Color_zOff}..."
+    echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}gems${Color_zOff}..."
     sudo gem update --system
     sudo gem update
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}gems${Color_zOff}..."
