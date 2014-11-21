@@ -774,7 +774,7 @@ function update()
     sudo port uninstall leaves;
     pclean;
 
-    echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}pip installs${Color_zOff}..."
+    echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}pip python packages${Color_zOff}..."
     pipupgrade;
 
     echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}gems${Color_zOff}..."
