@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # Modified from https://tinypng.com/developers/reference
 # Make an image file tinier
+# Need to do a proper rename ;;;;;; ##### FIXME TODO
 
 require "net/https"
 require "uri"
