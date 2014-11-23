@@ -502,11 +502,12 @@ current buffer" t)
 ;; https://github.com/rejeep/wrap-region.el
 (require 'wrap-region)
 (wrap-region-mode t)
-;; (wrap-region-add-wrapper "$" "$")
-;; (wrap-region-add-wrapper "{-" "-}" "#")
-;; (wrap-region-add-wrapper "/" "/" nil 'ruby-mode)
-;; (wrap-region-add-wrapper "/* " " */" "#" '(java-mode javascript-mode css-mode))
-;; (wrap-region-add-wrapper "`" "`" nil '(markdown-mode ruby-mode))
+(wrap-region-add-wrappers
+ '(("$" "$")
+   ("{-" "-}" "#")
+   ("/" "/" nil ruby-mode)
+   ("/* " " */" "#" (java-mode javascript-mode css-mode))
+      ("`" "`" nil (markdown-mode ruby-mode))))
 
 ;; Print a buffer.  Requires htmlize and coral.  See
 ;; http://www.emacswiki.org/emacs/MacPrintMode
