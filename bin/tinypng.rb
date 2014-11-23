@@ -6,6 +6,12 @@ require "net/https"
 require "uri"
 
 key = "<your api key>"
+
+if ARGV[0].nil?
+  puts "You need to specify a file to upload."
+  exit!(1)
+end
+
 input = "large-input.png"
 output = "tiny-output.png"
 
