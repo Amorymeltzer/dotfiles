@@ -2425,7 +2425,7 @@ project root if possible."
 (key-chord-define-global "7y" "&")
 (key-chord-define-global "8u" "*")
 (key-chord-define-global "9i" "(")
-(key-chord-define-global "-p" "_")
+;; (key-chord-define-global "-p" "_")
 
 (key-chord-define-global "<<" 'smart-shift-left)
 (key-chord-define-global ">>" 'smart-shift-right)
