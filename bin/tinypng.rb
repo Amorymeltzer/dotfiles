@@ -1,3 +1,7 @@
+#!/usr/bin/env ruby
+# Modified from https://tinypng.com/developers/reference
+# Make an image file tinier
+
 require "net/https"
 require "uri"
 
