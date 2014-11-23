@@ -501,7 +501,8 @@ current buffer" t)
 ;; Wrap-region mode, wrap with quotes or braces
 ;; https://github.com/rejeep/wrap-region.el
 (require 'wrap-region)
-(wrap-region-mode t)
+;; (wrap-region-mode t)
+(wrap-region-global-mode t)
 (wrap-region-add-wrappers
  '(
    ;; ("$" "$")
