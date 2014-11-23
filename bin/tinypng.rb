@@ -12,8 +12,8 @@ if ARGV[0].nil?
   exit!(1)
 end
 
-ARGV.each do
-  input = "large-input.png"
+ARGV.each do |x|
+  input = "#{x}"
   output = "tiny-output.png"
 
   uri = URI.parse("https://api.tinypng.com/shrink")
