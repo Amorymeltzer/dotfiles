@@ -503,11 +503,12 @@ current buffer" t)
 (require 'wrap-region)
 (wrap-region-mode t)
 (wrap-region-add-wrappers
- '(("$" "$")
-   ("{-" "-}" "#")
-   ("/" "/" nil ruby-mode)
-   ("/* " " */" "#" (java-mode javascript-mode css-mode))
-      ("`" "`" nil (markdown-mode ruby-mode))))
+ '(
+   ;; ("$" "$")
+   ;; ("{-" "-}" "#")
+   ;; ("/" "/" nil ruby-mode)
+   ;; ("/* " " */" "#" (java-mode javascript-mode css-mode))
+   ("`" "`" nil (markdown-mode ruby-mode))))
 
 ;; Print a buffer.  Requires htmlize and coral.  See
 ;; http://www.emacswiki.org/emacs/MacPrintMode
