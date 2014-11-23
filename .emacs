@@ -498,6 +498,16 @@ buffer or region to mardown and display it in a separate window."
 current buffer" t)
 (defalias 'tidy-indent 'tidy-then-indent)
 
+;; Wrap-region mode, wrap with quotes or braces
+;; https://github.com/rejeep/wrap-region.el
+(require 'wrap-region)
+(wrap-region-mode t)
+;; (wrap-region-add-wrapper "$" "$")
+;; (wrap-region-add-wrapper "{-" "-}" "#")
+;; (wrap-region-add-wrapper "/" "/" nil 'ruby-mode)
+;; (wrap-region-add-wrapper "/* " " */" "#" '(java-mode javascript-mode css-mode))
+;; (wrap-region-add-wrapper "`" "`" nil '(markdown-mode ruby-mode))
+
 ;; Print a buffer.  Requires htmlize and coral.  See
 ;; http://www.emacswiki.org/emacs/MacPrintMode
 ;; (when (require 'mac-print-mode nil t)
