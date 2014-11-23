@@ -652,6 +652,7 @@ alias last_modified='ls -t $* 2> /dev/null | head -n 5 '
 # growlnotify: add after to show when done
 # Maybe other options...
 # Just use terminal-notifier...
+# Also checkout boxcar
 alias growl='growlnotify -t Terminal -m "Done" && tput bel' # Red badge? and popping only in 10.7+
 
 alias beep='tput bel'
