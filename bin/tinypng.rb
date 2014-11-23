@@ -5,7 +5,13 @@
 require "net/https"
 require "uri"
 
-key = "<your api key>"
+key = "asd"
+
+File.open(File.expand_path('~/.tinypng_api_key'), "r") do |f|
+  f.each_line do |line|
+    key = line.chomp
+  end
+end
 
 if ARGV[0].nil?
   puts "You need to specify a file to upload."
