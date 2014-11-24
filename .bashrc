@@ -754,7 +754,7 @@ function cpanclean() {
 # Upgrade all pip modules, via http://stackoverflow.com/a/3452888/2521092
 function pipupgrade()
 {
-    pip freeze --local | grep -v '^\-e' | grep -v bonjour-py | cut -d = -f 1  | xargs sudo pip install -U
+    pip list | grep -v '^\-e' | grep -v bonjour-py | grep -v pip | cut -d ' ' -f 1 | xargs sudo pip install -U
 }
 
 # Function to update pertty much everything
