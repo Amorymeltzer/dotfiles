@@ -4,7 +4,7 @@
 
 ;; Author: Ryan C. Thompson
 ;; URL: https://github.com/DarwinAwardWinner/ido-ubiquitous
-;; Version: 2.15
+;; Version: 2.16
 ;; Created: 2011-09-01
 ;; Keywords: convenience, completion, ido
 ;; EmacsWiki: InteractivelyDoThings
@@ -60,7 +60,7 @@
 
 ;;; Code:
 
-(defconst ido-ubiquitous-version "2.15"
+(defconst ido-ubiquitous-version "2.16"
   "Currently running version of ido-ubiquitous.
 
 Note that when you update ido-ubiquitous, this variable may not
@@ -334,7 +334,10 @@ You can restore these using the command `ido-ubiquitous-restore-default-override
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/39
     (disable exact "Info-read-node-name")
     ;; https://github.com/purcell/emacs.d/issues/182#issuecomment-44212927
-    (disable exact "tmm-menubar"))
+    (disable exact "tmm-menubar")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/58
+    ;; https://github.com/mooz/js2-mode/issues/181
+    (enable exact "imenu--completion-buffer"))
   "Default value of `ido-ubiquitous-function-overrides'.
 
 You can restore these using the command `ido-ubiquitous-restore-default-overrides'.")
@@ -716,7 +719,7 @@ future sessions."
                   (funcall setter var newval)))
     (message (if save
                  "ido-ubiquitous: Restored default command and function overrides and saved for future sessions."
-               "ido-ubiquitous: Restored default command and function overrides for current session only."))))
+               "ido-ubiquitous: Restored default command and function overrides for current session only. Call again with prefix to save for future sessions."))))
 
 (defun ido-ubiquitous-spec-match (spec symbol)
   "Returns t if SPEC matches SYMBOL (which should be a function name).
