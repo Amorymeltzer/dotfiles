@@ -6,9 +6,11 @@
 # Download dotfiles repo
 ## Use either curl or wget depending
 # Extract, move, source
-# Somehow install macports?
 # Homebrew
 # Casks - require perms?
+# Use cask to install macports
+# Proceed...
+
 
 
 mv ../../dotfiles/* ~/
