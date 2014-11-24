@@ -21,7 +21,7 @@ end
 
 ARGV.each do |x|
   input = "#{x}"
-  output = "tiny-output.png"
+  output = "tiny#{x}"
 
   uri = URI.parse("https://api.tinypng.com/shrink")
 
