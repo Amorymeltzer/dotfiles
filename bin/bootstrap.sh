@@ -11,3 +11,4 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 # Casks - require perms?
 # Use cask to install macports
 # Proceed...
+source ~/.bash_profile
