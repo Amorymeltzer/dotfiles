@@ -4,7 +4,7 @@
 
 
 # Download dotfiles repo
-curl -fSL https://codeload.github.com/amorymeltzer/dotfiles/zip/master
+bash "$(curl -fsSL https://raw.githubusercontent.com/Amorymeltzer/dotfiles/master/bin/bootstrap.sh)"
 ## Use either curl or wget depending
 # Extract, move, source
 mv ../../dotfiles/* ~/
