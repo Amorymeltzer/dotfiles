@@ -1089,7 +1089,6 @@ alias hidehidden="defaults write com.apple.Finder AppleShowAllFiles -bool false 
 
 # Merge PDF files
 # Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
-#alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
 function mergepdf() {
     if [ ! $1 ]; then
 	echo "Usage: mergepdf -o output.pdf input{1,2,3}.pdf";
@@ -1105,7 +1104,7 @@ function cdfinder() {
 alias cdf='cdfinder '
 
 
-## Various functions jacked from bash-it
+## Couple of functions jacked from bash-it
 ## https://github.com/revans/bash-it
 # Pick random line from a file
 pickfrom ()
@@ -1142,7 +1141,6 @@ alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
 function btc() {
     five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
     tail -n 1 ~/btc.csv;
-    #    echo -e "BTC: $five";
     echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five";
     echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five" >> ~/btc.csv;
 }
@@ -1150,7 +1148,6 @@ alias btn='btc'
 function bitcoin() {
     five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
     echo -e "BTC: $five";
-    #    echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five";
 }
 
 
