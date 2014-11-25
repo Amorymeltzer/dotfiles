@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 # bootstrap.sh by Amory Meltzer
 # Bootstrap installation of home environment
+# Start by git clone dotfiles repo, then run this
 
 
-# Download dotfiles repo
-bash "$(curl -fsSL https://raw.githubusercontent.com/Amorymeltzer/dotfiles/master/bin/bootstrap.sh)"
-## Use either curl or wget depending
 # Extract, move, source
 mv ../../dotfiles/* ~/
 # Homebrew
