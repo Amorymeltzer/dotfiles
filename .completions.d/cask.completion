@@ -15,7 +15,7 @@ _cask() {
 	COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
     fi
     case $prev in
-	cleanup|list|uninstall)
+	cleanup|cat|list|uninstall)
 	    COMPREPLY=$(brew cask list | grep -v "Kernel.exit")
 	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
 	    return 0
