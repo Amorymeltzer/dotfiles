@@ -732,18 +732,18 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # Symlink in /Applications
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
-alias ball='brew update && brew outdated && brew upgrade '
-alias bclean='brew cleanup && brew cask cleanup '
-alias bsearch='brew search '
-alias binfo='brew info '
-alias blist='brew list '
-alias bdoctor='brew doctor '
+alias ball='brew update && brew outdated && brew upgrade'
+alias bclean='brew cleanup && brew cask cleanup'
+alias bsearch='brew search'
+alias binfo='brew info'
+alias blist='brew list'
+alias bdoctor='brew doctor'
 # Homebrew-cask
-alias cask='brew cask '
-alias csearch='brew cask search '
-alias cinfo='brew cask info '
-alias clist='brew cask list '
-alias cdoctor='brew cask doctor '
+alias cask='brew cask'
+alias csearch='brew cask search'
+alias cinfo='brew cask info'
+alias clist='brew cask list'
+alias cdoctor='brew cask doctor'
 
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
 function cpanclean() {
