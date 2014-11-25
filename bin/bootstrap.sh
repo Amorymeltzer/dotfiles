@@ -9,6 +9,7 @@ rsync -avxz . ~
 # Homebrew
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 # Casks - require perms?
+brew install caskroom/cask/brew-cask
 # Use cask to install macports
 # Proceed...
 source ~/.bash_profile
