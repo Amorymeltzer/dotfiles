@@ -761,7 +761,7 @@ function pipupgrade()
 function update()
 {
     # Call sudo early, before the first output
-    sudo echo "Beginning update..."
+    sudo echo
 
     echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
     sudo port selfupdate;
