@@ -61,8 +61,6 @@ alias gd='git d'
 alias gdc='git dc'
 alias gcm='git cm '
 alias gl='git l1 -5'
-complete -F _git hub
-complete -F _git g
 
 # ls colors, see: http://www.linux-sxs.org/housekeeping/lscolors.html
 #export LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rb=90'  #LS_COLORS is not supported by the default ls command in OS-X
@@ -411,6 +409,10 @@ for file in ~/.completions.d/*; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
+
+# Git aliases
+complete -F _git hub
+complete -F _git g
 
 # whois, etc. auto-completion based on entries in known_hosts.
 if [[ -e ~/.ssh/known_hosts ]]; then
