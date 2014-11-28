@@ -1389,18 +1389,19 @@ function yotsuba() {
 #     #                       └─ default (when `--mathlib` is used) is 20
 #     #
 #     if [[ "$result" == *.* ]]; then
-# 	# improve the output for decimal numbers
-# 	printf "$result" |
-# 	    sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
-# 		-e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
-# 		-e 's/0*$//;s/\.$//'   # remove trailing zeros
+#	# improve the output for decimal numbers
+#	printf "$result" |
+#	    sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
+#		-e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
+#		-e 's/0*$//;s/\.$//'   # remove trailing zeros
 #     else
-# 	printf "$result"
+#	printf "$result"
 #     fi
 #     printf "\n"
 # }
 
 # Using Rscript allows more complex constructions, wrap () in quotes
+# http://www.compbiome.com/2010/06/r-command-line-calculator-using-rscript.html
 alias calc='Rscript -e "eval( parse( text=commandArgs( TRUE ) ) )"'
 
 function =() {
