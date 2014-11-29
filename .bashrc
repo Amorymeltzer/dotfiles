@@ -735,7 +735,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 alias ball='brew update && brew outdated && brew upgrade'
-alias bclean='brew cleanup && brew cask cleanup'
+alias bclean='brew cleanup && brew cleanup -s && brew cask cleanup'
 alias bsearch='brew search'
 alias binfo='brew info'
 alias blist='brew list'
