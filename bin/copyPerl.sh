@@ -7,6 +7,7 @@ rsync -avxz ~/.inputrc /Volumes/SANDISK/mobilePerl/.inputrc
 rsync -avxz ~/.perlcriticrc /Volumes/SANDISK/mobilePerl/.perlcriticrc
 rsync -avxz ~/.perltidyrc /Volumes/SANDISK/mobilePerl/.perltidyrc
 rsync -avxz ~/.tidyrc /Volumes/SANDISK/mobilePerl/.tidyrc
+rsync -avxz ~/.vimrc /Volumes/SANDISK/mobilePerl/.vimrc
 rsync -avxz ~/.gitconfig /Volumes/SANDISK/mobilePerl/.gitconfig
 rsync -avxz ~/.z /Volumes/SANDISK/mobilePerl/.z
 rsync -avxz ~/.z.sh /Volumes/SANDISK/mobilePerl/.z.sh

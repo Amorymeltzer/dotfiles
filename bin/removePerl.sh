@@ -7,6 +7,7 @@ rm ~/.inputrc
 rm ~/.perlcriticrc
 rm ~/.perltidyrc
 rm ~/.tidyrc
+rm ~/.vimrc
 rm ~/.gitconfig
 rm ~/.z
 rm ~/.z.sh
