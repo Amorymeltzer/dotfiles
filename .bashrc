@@ -1407,6 +1407,13 @@ alias calc='Rscript -e "eval( parse( text=commandArgs( TRUE ) ) )"'
 function =() {
     calc $@
 }
+
+alias sumup="perl -MList::Util=sum -alne 'push @S,@F; END { print sum @S }'"
+
+# 39 digits each
+alias pi="perl -Mbignum=PI -le 'print PI'"
+alias E="perl -Mbignum=e -le 'print e'"
+
 # Extract most types of compressed files
 function extract {
     echo Extracting $1 ...
