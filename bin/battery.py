@@ -34,7 +34,7 @@ charging = [l for l in output.splitlines() if 'IsCharging\" = ' in l][0]
 
 tester = charging.rpartition('=')[-1].strip()
 if tester == "Yes":
-    charging = "⚡"
+    charging = "↕"
 else:
     charging = "☿"
 
