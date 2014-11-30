@@ -1154,7 +1154,10 @@ function bitcoin() {
 
 
 # Get coordinates
-function findlocation() { place=`echo $* | sed 's/ /%20/g'` ; curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=$place&sensor=false" | grep -A 2 -e "location\"" -e "formatted_address" | grep -e "formatted" -e "lat" -e "lng" | sed -e 's/^ *//' -e 's/"//g' -e 's/formatted_address/Full address/g' -e 's/,$//g' -e 's/^.*{//g';}
+function findlocation() {
+    place=`echo $* | sed 's/ /%20/g'`
+    curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=$place&sensor=false" | grep -A 2 -e "location\"" -e "formatted_address" | grep -e "formatted" -e "lat" -e "lng" | sed -e 's/^ *//' -e 's/"//g' -e 's/formatted_address/Full address/g' -e 's/,$//g' -e 's/^.*{//g';
+}
 alias getlocation='findlocation'
 
 # Get the weather
@@ -1362,14 +1365,6 @@ function repeat()
 function binaryclock() {
     perl -e 'for(;;){@d=split("",`date +%H%M%S`);print"\r";for(0..5){printf"%.4b ",$d[$_]}sleep 1}'
 }
-
-# Save youtube video
-# See also: http://www.catonmat.net/blog/downloading-youtube-videos-with-a-perl-one-liner/
-# Broken
-# function youtube() {
-# wget $1 -qO- | sed 's/\\u0026/\&/g' | sed -n "/fmt_url_map/{s/[\'\"\|]/\n/g;p}" | sed -n '/^fmt_url_map/,/videoplayback/p' | sed -e :a -e '$q;N;5,$D;ba' | tr -d '\n' | sed -e 's/\(.*\),\(.\)\{1,3\}/\1/' | wget -i - -O $2.flv
-# }
-# alias youtube='youtube-dl'
 
 # Summary of enWiki article, perl bit accounts for some UTF-8 unicode stuff
 # https://dgl.cx/wikipedia-dns
