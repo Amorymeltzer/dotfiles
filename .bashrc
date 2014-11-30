@@ -1158,7 +1158,7 @@ function findlocation() {
     place=`echo $* | sed 's/ /%20/g'`
     curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=$place&sensor=false" | grep -A 2 -e "location\"" -e "formatted_address" | grep -e "formatted" -e "lat" -e "lng" | sed -e 's/^ *//' -e 's/"//g' -e 's/formatted_address/Full address/g' -e 's/,$//g' -e 's/^.*{//g';
 }
-alias getlocation='findlocation'
+alias getcoordinates='findlocation'
 
 # Get the weather
 function weather() {
