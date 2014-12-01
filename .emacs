@@ -743,6 +743,7 @@ current buffer" t)
   '(ace-jump-mode-enable-mark-sync))
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
+(add-to-list 'debug-ignored-errors "\\[AceJump\\].*")
 
 ;; Allow scrolling (not off-screen) during search
 ;; Kind of weird if going up?
