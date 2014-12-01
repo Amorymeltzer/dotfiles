@@ -239,17 +239,28 @@ alias lastman='lman '
 # Misc -------------------------------------------------------------
 # bash readline settings
 # note: bind used instead of sticking these in .inputrc
-bind "set completion-ignore-case on" # ignore case
-bind "set show-all-if-ambiguous on" # show list automatically, without double tab
-bind "set show-all-if-unmodified on" # similar to above?
-bind "set completion-prefix-display-length 2" # if long names are similar, use ...
-bind "set page-completions off" # show all autocomplete results at once???
-bind "set completion-query-items 125" # ask if sure for >125 items intead of 100
-bind "set match-hidden-files off" # only if start with .
-bind "set visible-stats on" # extra info when completing e.g. ls -F???
-bind "set mark-symlinked-directories on" # automatically add trailing slash when autocomplete symlinks to directories
-bind "set expand-tilde off" # don't expand ~ to home dir when completing.  Off is usually the default anyway
-bind "set history-preserve-point on" # try to keep the cursor position when moving through  history
+# ignore case
+bind "set completion-ignore-case on"
+# show list automatically, without double tab
+bind "set show-all-if-ambiguous on"
+# similar to above?
+bind "set show-all-if-unmodified on"
+# if long names are similar, use ...
+bind "set completion-prefix-display-length 2"
+# show all autocomplete results at once???
+bind "set page-completions off"
+# ask if sure for >125 items intead of 100
+bind "set completion-query-items 125"
+# only if start with .
+bind "set match-hidden-files off"
+# extra info when completing e.g. ls -F???
+bind "set visible-stats on"
+# automatically add trailing slash when autocomplete symlinks to directories
+bind "set mark-symlinked-directories on"
+# don't expand ~ to home dir when completing.  Off is usually the default anyway
+bind "set expand-tilde off"
+# try to keep the cursor position when moving through  history
+bind "set history-preserve-point on"
 
 
 ### Prompts ----------------------------------------------------------
