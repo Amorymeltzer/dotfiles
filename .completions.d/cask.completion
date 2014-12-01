@@ -15,12 +15,12 @@ _cask() {
 	COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
     fi
     case $prev in
-	cleanup|cat|list|uninstall)
+	cleanup|list|uninstall)
 	    COMPREPLY=$(brew cask list | grep -v "Kernel.exit")
 	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
 	    return 0
 	    ;;
-	install|info)
+	cat|install|info|home)
 	    COMPREPLY=$(brew cask search | grep -v "Kernel.exit")
 	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
 	    return 0
