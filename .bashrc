@@ -20,7 +20,9 @@ export LC_ALL=C
 # Colors ----------------------------------------------------------
 export TERM=xterm-color
 # Change for different colors, to magenta
-export GREP_OPTIONS='--color=auto' GREP_COLOR='0;35'
+#  export GREP_OPTIONS='--color=auto' GREP_COLOR='0;35'
+alias grep='grep --color=auto '
+export GREP_COLOR='0;35'
 export CLICOLOR=1
 
 # ls colors, see: http://www.linux-sxs.org/housekeeping/lscolors.html
