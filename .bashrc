@@ -763,8 +763,8 @@ alias cdoctor='brew cask doctor'
 # Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
 function cpanclean() {
     sudo cpan -c
-    sudo \rm -ir ~/.cpan/build/*
-    sudo \rm -ir ~/.cpan/sources/authors/id/*
+    sudo \rm -vr ~/.cpan/build/*
+    sudo \rm -vr ~/.cpan/sources/authors/id/*
 }
 # Upgrade all pip modules, via http://stackoverflow.com/a/3452888/2521092
 function pipupgrade()
