@@ -2109,7 +2109,7 @@ This checks in turn:
 ;; https://github.com/kbkbkbkb1/guide-key
 ;; https://github.com/m2ym/popwin-el
 (require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8"
+(setq guide-key/guide-key-sequence '("C-x" "C-c" "C-x 4" "C-x v" "C-x 8"
 				     "C-x +" "C-q" "C-x n")
       guide-key/idle-delay 0.2 ; quicker
       guide-key/recursive-key-sequence-flag t
