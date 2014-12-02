@@ -2111,7 +2111,7 @@ This checks in turn:
 (require 'guide-key)
 (setq guide-key/guide-key-sequence '("C-x" "C-c" "C-x 4" "C-x v" "C-x 8"
 				     "C-x +" "C-q" "C-x n")
-      guide-key/idle-delay 0.2 ; quicker
+      guide-key/idle-delay 0.5 ; quicker
       guide-key/recursive-key-sequence-flag t
       guide-key/popup-window-position 'bottom
       guide-key/recursive-key-sequence-flag t
