@@ -1022,7 +1022,6 @@ alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 # Which processes are listening on ports
 alias listen='lsof -iTCP -sTCP:LISTEN -P "$@" '
 
-# Use Quick Look feature in Leopard, but I'll never remember qlmanage
 alias quicklook="qlmanage -p "
 
 alias pbc='pbcopy '
@@ -1040,7 +1039,7 @@ qsort()
 }
 
 # Get rid of pesky .DS_Store files, recursively
-#  alias dscleanup='find . -type f -name "*.DS_Store" -ls delete"
+# alias dscleanup='find . -type f -name "*.DS_Store" -ls delete"
 alias dscleanup='find . -type f -name "*.DS_Store" -print0 | xargs -0 rm -v'
 # Clean up LaunchServices to remove duplicates in the "Open With" menu
 alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
@@ -1055,7 +1054,7 @@ command -v sha1sum > /dev/null || alias sha1sum="shasum"
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
-# TripperX logfile usage
+# Make tripperX use the logfile
 alias tripperx="tripperx -l"
 
 # ROT13-encode text. Works for decoding too
@@ -1063,7 +1062,7 @@ alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 # ROT47
 alias rot47='tr !-~ P-~!-O'
 
-# Convert the parameters or STDIN to lowercase.
+# Convert to lowercase.
 function lc {
     if [ $# -eq 0 ]; then
 	tr '[:upper:]' '[:lower:]';
@@ -1072,7 +1071,7 @@ function lc {
     fi;
 }
 
-# Convert the parameters or STDIN to uppercase.
+# Convert to uppercase.
 function uc {
     if [ $# -eq 0 ]; then
 	tr '[:lower:]' '[:upper:]';
@@ -1103,7 +1102,6 @@ alias showhidden="defaults write com.apple.Finder AppleShowAllFiles -bool true &
 alias hidehidden="defaults write com.apple.Finder AppleShowAllFiles -bool false && killall Finder"
 
 # Merge PDF files
-# Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
 function mergepdf() {
     if [ ! $1 ]; then
 	echo "Usage: mergepdf -o output.pdf input{1,2,3}.pdf";
