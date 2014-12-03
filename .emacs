@@ -640,8 +640,8 @@ current buffer" t)
 (setq
  scroll-margin 0                        ;; do smooth scrolling
  scroll-conservatively 100000		;; ... the defaults ...
- scroll-up-aggressively 0.0               ;; ... are very ...
- scroll-down-aggressively 0.0             ;; ... annoying
+ scroll-up-aggressively 0.0             ;; ... are very ...
+ scroll-down-aggressively 0.0           ;; ... annoying
  scroll-preserve-screen-position t)     ;; preserve screen pos with C-v/M-v
 
 ;; Keep cursor away from edges when scrolling up/down
