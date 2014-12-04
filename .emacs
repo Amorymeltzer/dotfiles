@@ -498,6 +498,10 @@ buffer or region to mardown and display it in a separate window."
 current buffer" t)
 (defalias 'tidy-indent 'tidy-then-indent)
 
+
+;; If a region selected, typing replaces it
+(delete-selection-mode t)
+
 ;; Wrap-region mode, wrap with quotes or braces
 ;; https://github.com/rejeep/wrap-region.el
 (require 'wrap-region)
@@ -510,6 +514,7 @@ current buffer" t)
    ;; ("/" "/" nil ruby-mode)
    ;; ("/* " " */" "#" (java-mode javascript-mode css-mode))
    ("`" "`" nil (markdown-mode ruby-mode))))
+
 
 ;; Print a buffer.  Requires htmlize and coral.  See
 ;; http://www.emacswiki.org/emacs/MacPrintMode
@@ -1359,9 +1364,6 @@ when in source code modes such as python-mode or perl-mode" t)
 (define-key my/ctrl-q-map (kbd ".") 'highlight-symbol-at-point)
 (define-key my/ctrl-q-map (kbd "?") 'highlight-symbol-remove-all)
 
-
-;; If a region selected, typing replaces it
-(delete-selection-mode t)
 
 ;; https://github.com/nflath/hungry-delete
 ;; Delete all white space chars at once
