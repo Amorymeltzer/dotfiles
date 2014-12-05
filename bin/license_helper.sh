@@ -3,4 +3,5 @@
 # Script to help automate license updating of hombrew-cask casks
 
 cd /usr/local/Library/Taps/caskroom/homebrew-cask/Casks/
-grep -i "license :unknown" *.rb | cut -f 1 -d ':' | sed 's/.rb$//g'
+
+grep -i "license :unknown" *.rb|cut -f 1 -d ':'|sed 's/.rb$//g'|shuf|head -n 1
