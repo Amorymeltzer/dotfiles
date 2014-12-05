@@ -4,4 +4,8 @@
 
 cd /usr/local/Library/Taps/caskroom/homebrew-cask/Casks/
 
-grep -i "license :unknown" *.rb|cut -f 1 -d ':'|sed 's/.rb$//g'|shuf|head -n 1
+cask=$(grep -i "license :unknown" *.rb|cut -f 1 -d ':'|sed 's/.rb$//g'|shuf|head -n 1)
+
+echo "Looking up homepage for $cask"
+sleep 1
+brew cask home $cask
