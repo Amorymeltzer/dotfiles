@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # license_helper.sh by Amory Meltzer
 # Script to help automate license updating of hombrew-cask casks
+## Use dedicated list to save time?
+## Ask first?
 
 cd /usr/local/Library/Taps/caskroom/homebrew-cask/Casks/
 
