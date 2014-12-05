@@ -843,6 +843,8 @@ function newbash() {
 }
 alias nbash='newbash'
 
+alias python3='python3.4 '
+
 # Recompile all elisp files, with proper warnings/output
 # alias recompile_emacs='emacs -batch -f batch-byte-compile ~/.emacs.d/**/*.el'
 function recompile_emacs() {
