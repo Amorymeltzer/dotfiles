@@ -782,6 +782,9 @@ function update()
     sudo port selfupdate;
     port echo outdated;
     whatsnew;
+
+    sudo -v			# Just in case
+
     sudo port upgrade outdated;
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
     sudo port uninstall inactive;
@@ -789,6 +792,8 @@ function update()
     port echo leaves >> ~/port_leaves_log.txt;
     sudo port uninstall leaves;
     pclean;
+
+    sudo -v			# Just in case
 
     echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}pip python packages${Color_zOff}..."
     pipupgrade;
@@ -803,9 +808,14 @@ function update()
     # Run before? http://stackoverflow.com/a/21736287/2521092
     #sudo perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
     echo -e "${Color_Green}(Temporarily disabled)${Color_zOff}"
+
+    sudo -v			# Just in case
+
     #sudo cpan -u;
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}CPAN directories${Color_zOff}..."
     cpanclean;
+
+    sudo -v			# Just in case
 
     echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
     brew update
