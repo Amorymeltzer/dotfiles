@@ -450,7 +450,6 @@
 ;; https://github.com/thomas11/md-readme
 (require 'md-readme)
 
-;; Should make only in markdown mode ;;;;;; ###### FIXME TODO
 (defun markdown-linkify ()
   "Make region or current word into a link to itself."
   (interactive)
