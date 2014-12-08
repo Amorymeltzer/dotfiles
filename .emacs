@@ -1451,10 +1451,6 @@ when in source code modes such as python-mode or perl-mode" t)
   (goto-char 0))
 
 
-;; String manipulation library
-;; https://github.com/magnars/s.el
-;; (require 's)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use ido to select which window based off window name
 (defun rotate-list (list count)
