@@ -94,6 +94,11 @@
 ;;		    :background "lightgray" :underline "darkgray")
 ;; (set-face-attribute 'ac-selection-face nil
 ;;		    :background "steelblue")
+;;
+;;
+;; ac-html mode, from https://github.com/cheunghy/ac-html
+(require 'ac-html)
+(add-hook 'html-mode-hook 'ac-html-enable)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Default M-/ is dabbrev-expand, but this is broken? ;;;;; ###### FIXME TODO
