@@ -1223,9 +1223,9 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Default mode
 (setq-default major-mode 'text-mode)
 
-;; Make RET aka C-m tab as well, C-j just newline.  Should probably make this
-;; localish ie not for text mode? FIXME TODO ;;;;;;;;;;;;;;; #############
+;; Make RET aka C-m tab as well, C-j just newline
 ;; (global-set-key "\C-m" 'newline-and-indent)
+
 ;; Cleaner: Reindent current line, insert newline, indent newline
 (global-set-key "\C-m" 'reindent-then-newline-and-indent)
 (global-set-key "\C-j" 'newline)
@@ -1699,7 +1699,6 @@ round to ones, tens, etc."
 
 
 ;; From https://github.com/purcell/emacs-xkcd
-;; Doesn't work? ;;;;;;; ######## FIXME TODO
 ;; (require 'emacs-xkcd)
 ;; (require 'xkcd); or this?
 
@@ -2043,7 +2042,7 @@ This checks in turn:
 ;; Do some color fixin' in cperl-mode
 (eval-after-load "cperl-mode"
   '(progn
-     (setq fill-column 78)		; Need a better palce for this...
+     (setq fill-column 78)		; Need a better place for this...
 					; ;;;;;; ##### FIXME TODO
      (set-face-attribute 'cperl-array-face nil :background "nil" :foreground
 			 "blue" :underline t) ; arrays
@@ -2080,12 +2079,6 @@ This checks in turn:
 
 ;; Perl mode alias to make cperl default for .pl
 (defalias 'perl-mode 'cperl-mode)
-
-
-
-;; Testing ;;;;;; ##### FIXME TODO
-;; (font-lock-remove-keywords 'cperl-mode '(("\\<\\(my\\)")))
-;; (font-lock-remove-keywords 'cperl-mode '(("\\<my")))
 
 
 ;;; Should probably figure out a way to diminish these fuckers
