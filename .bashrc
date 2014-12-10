@@ -470,24 +470,6 @@ if command_exists tidy; then
     export HTML_TIDY=~/.tidyrc
 fi
 
-# emacs alias nonsense to prevent stupid C-z/fg stuff
-# http://stackoverflow.com/questions/18396070/start-emacs-in-shell-when-started-form-shell
-# moved emacs -> emacs1 to get around grepping running emacs function
-# All this just to avoid cemacs???  Silly.
-# Totally borked on other machines, of course
-# alias em='/opt/local/bin/emacs1' # set up an if then thing here?
-# emacs () {
-#     if (ps|grep -e "emacs1$"); then
-#	echo  "Hey, emacs is already running";
-#	sleep .5
-#	fg %/opt/local/bin/emacs1
-#     else
-#	em $@
-#     fi
-# }
-# # Shortcut to revive sleeping emacs
-# bind -x '"\C-xe":fg %/opt/local/bin/emacs1'
-
 
 # Make customization easier
 alias bashrc='emacs ~/.bashrc'
