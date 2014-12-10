@@ -87,6 +87,8 @@ remotes = remote -v
 d = diff --word-diff
 # Show the staged changes.
 dc = diff --cached --word-diff
+# Use icdiff tool https://github.com/jeffkaufman/icdiff
+icdiff = "!git difftool --no-prompt --extcmd icdiff | less"
 h = rev-parse HEAD
 
 unstage = reset HEAD --
