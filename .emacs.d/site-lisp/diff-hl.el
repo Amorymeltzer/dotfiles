@@ -143,7 +143,11 @@
     (define-fringe-bitmap 'diff-hl-bmp-middle middle h w 'center)
     (define-fringe-bitmap 'diff-hl-bmp-bottom bottom h w 'bottom)
     (define-fringe-bitmap 'diff-hl-bmp-single single h w 'top)
+    (define-fringe-bitmap 'diff-hl-bmp-i [3 3 0 3 3 3 3 3 3 3] nil 2 'center)
     (let* ((w2 (* (/ w 2) 2))
+           ;; When fringes are disabled, it's easier to fix up the width,
+           ;; instead of doing nothing (#20).
+           (w2 (if (zerop w2) 2 w2))
            (delete-row (- (expt 2 (1- w2)) 2))
            (middle-pos (1- (/ w2 2)))
            (middle-bit (expt 2 middle-pos))
@@ -184,7 +188,7 @@
   (cl-case type
     (unknown 'question-mark)
     (change 'exclamation-mark)
-    (ignored 'filled-square)
+    (ignored 'diff-hl-bmp-i)
     (t (intern (format "diff-hl-bmp-%s" type)))))
 
 (defvar vc-svn-diff-switches)
@@ -449,6 +453,7 @@ in the source file, or the last line of the hunk above it."
         ;; doesn't care about changed VC state.
         ;; https://github.com/magit/magit/issues/603
         (add-hook 'magit-revert-buffer-hook 'diff-hl-update nil t)
+        (add-hook 'auto-revert-mode-hook 'diff-hl-update nil t)
         (add-hook 'text-scale-mode-hook 'diff-hl-define-bitmaps nil t))
     (remove-hook 'after-save-hook 'diff-hl-update t)
     (remove-hook 'after-change-functions 'diff-hl-edit t)
@@ -456,6 +461,7 @@ in the source file, or the last line of the hunk above it."
     (remove-hook 'vc-checkin-hook 'diff-hl-update t)
     (remove-hook 'after-revert-hook 'diff-hl-update t)
     (remove-hook 'magit-revert-buffer-hook 'diff-hl-update t)
+    (remove-hook 'auto-revert-mode-hook 'diff-hl-update t)
     (remove-hook 'text-scale-mode-hook 'diff-hl-define-bitmaps t)
     (diff-hl-remove-overlays)))
 

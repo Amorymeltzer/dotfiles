@@ -17,8 +17,10 @@
 ;; * keys for skipping from host section to host section.
 ;; * Add the following to your startup file.
 ;;   (autoload 'ssh-config-mode "ssh-config-mode" t)
-;;   (add-to-list 'auto-mode-alist '(".ssh/config\\'"  . ssh-config-mode))
-;;   (add-to-list 'auto-mode-alist '("sshd?_config\\'" . ssh-config-mode))
+;;   (add-to-list 'auto-mode-alist '(".ssh/config\\'"       . ssh-config-mode))
+;;   (add-to-list 'auto-mode-alist '("sshd?_config\\'"      . ssh-config-mode))
+;;   (add-to-list 'auto-mode-alist '("known_hosts\\'"       . ssh-known-hosts-mode))
+;;   (add-to-list 'auto-mode-alist '("authorized_keys2?\\'" . ssh-authorized-keys-mode))
 ;;   (add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
 
 ;;; History:
@@ -69,48 +71,57 @@
   (defvar ssh-config-words-ssh
     '("AddressFamily" "BatchMode" "BindAddress"
       "ChallengeResponseAuthentication" "CheckHostIP" "Cipher"
-      "Ciphers" "ClearAllForwardings" "Compression"
+      "Ciphers" "ClearAllForwardings" "Compression" "ControlPersist"
       "CompressionLevel" "ConnectionAttempts" "ConnectTimeout"
       "ControlMaster" "ControlPath" "DynamicForward" "EscapeChar"
-      "ForwardAgent" "ForwardX11" "ForwardX11Trusted"
-      "GatewayPorts" "GlobalKnownHostsFile" "GSSAPIAuthentication"
-      "GSSAPIDelegateCredentials" "HashKnownHosts"
-      "Host" "HostbasedAuthentication" "HostKeyAlgorithms"
-      "HostKeyAlias" "HostName"
-      "IdentityFile" "IdentitiesOnly"
-      "KbdInteractiveDevices" "LocalForward" "LogLevel" "MACs"
+      "ExitOnForwardFailure" "ForwardAgent" "ForwardX11"
+      "ForwardX11Timeout" "ForwardX11Trusted" "GatewayPorts"
+      "GlobalKnownHostsFile" "GSSAPIAuthentication"
+      "GSSAPIDelegateCredentials" "HashKnownHosts" "Host"
+      "HostbasedAuthentication" "HostKeyAlgorithms" "HostKeyAlias"
+      "HostName" "IdentityFile" "IdentitiesOnly" "IPQoS"
+      "KbdInteractiveAuthentication" "KbdInteractiveDevices"
+      "KexAlgorithms" "LocalCommand" "LocalForward" "LogLevel" "MACs"
       "NoHostAuthenticationForLocalhost" "NumberOfPasswordPrompts"
-      "PasswordAuthentication" "Port" "PreferredAuthentications"
-      "Protocol" "ProxyCommand" "PubkeyAuthentication"
-      "RemoteForward" "RhostsRSAAuthentication"
-      "RSAAuthentication" "SendEnv" "ServerAliveInterval"
-      "ServerAliveCountMax" "SmartcardDevice"
-      "StrictHostKeyChecking" "TCPKeepAlive" "UsePrivilegedPort"
-      "User" "UserKnownHostsFile" "VerifyHostKeyDNS"
-      "XAuthLocation")
+      "PKCS11Provider" "PasswordAuthentication" "PermitLocalCommand"
+      "Port" "PreferredAuthentications" "Protocol" "ProxyCommand"
+      "PubkeyAuthentication" "RekeyLimit" "RemoteForward" "RequestTTY"
+      "RhostsRSAAuthentication" "RSAAuthentication" "SendEnv"
+      "ServerAliveInterval" "ServerAliveCountMax"
+      "StrictHostKeyChecking" "TCPKeepAlive" "Tunnel" "TunnelDevice"
+      "UsePrivilegedPort" "User" "UserKnownHostsFile"
+      "VerifyHostKeyDNS" "VisualHostKey" "XAuthLocation"
+
+      ;; obsoleted keywords
+      "SmartcardDevice")
     "A list of keywords allowed in a user ssh config file.")
 
   (defvar ssh-config-words-sshd
-    '("AcceptEnv" "AddressFamily" "AllowGroups"
+    '("AcceptEnv" "AddressFamily" "AllowAgentForwarding" "AllowGroups"
       "AllowTcpForwarding" "AllowUsers" "AuthorizedKeysFile"
-      "Banner" "ChallengeResponseAuthentication" "Ciphers"
+      "AuthorizedPrincipalsFile" "Banner"
+      "ChallengeResponseAuthentication" "ChrootDirectory" "Ciphers"
       "ClientAliveInterval" "ClientAliveCountMax" "Compression"
-      "DenyGroups" "DenyUsers" "GatewayPorts"
-      "GSSAPIAuthentication" "GSSAPICleanupCredentials"
-      "HostbasedAuthentication" "HostKey" "IgnoreRhosts"
-      "IgnoreUserKnownHosts" "KerberosAuthentication"
+      "DebianBanner" "DenyGroups" "DenyUsers" "ForceCommand"
+      "GatewayPorts" "GSSAPIAuthentication" "GSSAPICleanupCredentials"
+      "GSSAPIKeyExchange" "HostbasedAuthentication"
+      "GSSAPIStrictAcceptorCheck" "HostKey"
+      "GSSAPIStoreCredentialsOnRekey" "IgnoreRhosts"
+      "HostbasedUsesNameFromPacketOnly" "IgnoreUserKnownHosts"
+      "HostCertificate" "KerberosAuthentication" "IPQoS"
       "KerberosGetAFSToken" "KerberosOrLocalPasswd"
-      "KerberosTicketCleanup" "KeyRegenerationInterval"
-      "ListenAddress" "LoginGraceTime" "LogLevel" "MACs"
-      "MaxAuthTries" "MaxStartups" "PasswordAuthentication"
-      "PermitEmptyPasswords" "PermitRootLogin"
-      "PermitUserEnvironment" "PidFile" "Port" "PrintLastLog"
-      "PrintMotd" "Protocol" "PubkeyAuthentication"
-      "RhostsRSAAuthentication" "RSAAuthentication"
+      "KerberosTicketCleanup" "KexAlgorithms"
+      "KeyRegenerationInterval" "ListenAddress" "LoginGraceTime"
+      "LogLevel" "MACs" "Match" "MaxAuthTries" "MaxSessions"
+      "MaxStartups" "PasswordAuthentication" "PermitBlacklistedKeys"
+      "PermitEmptyPasswords" "PermitOpen" "PermitRootLogin"
+      "PermitTunnel" "PermitUserEnvironment" "PidFile" "Port"
+      "PrintLastLog" "PrintMotd" "Protocol" "PubkeyAuthentication"
+      "RevokedKeys" "RhostsRSAAuthentication" "RSAAuthentication"
       "ServerKeyBits" "StrictModes" "Subsystem" "SyslogFacility"
-      "TCPKeepAlive" "UseDNS" "UseLogin" "UsePrivilegeSeparation"
-      "X11DisplayOffset" "X11Forwarding" "X11UseLocalhost"
-      "XAuthLocation")
+      "TCPKeepAlive" "TrustedUserCAKeys" "UseDNS" "UseLogin" "UsePAM"
+      "UsePrivilegeSeparation" "X11DisplayOffset" "X11Forwarding"
+      "X11UseLocalhost" "XAuthLocation")
     "A list of keywords allowed in a system sshd config file.")
   nil)
 
@@ -145,7 +156,7 @@
 
 ;;;;;
 
-(defvar ssh-config-mode-hook nil
+(defvar ssh-known-hosts-mode-hook nil
   "*Hook to setup `ssh-config-mode'.")
 
 (defvar ssh-known-hosts-mode-map
@@ -156,9 +167,22 @@
 
 (defvar ssh-known-hosts-font-lock-keywords
   ;; how to put eval-when-compile without recursive require?
-  '(("^\\([-a-z0-9.,]+\\)\\s-+\\(ssh-\\sw*\\)"
-     (1 font-lock-function-name-face)
-     (2 font-lock-keyword-face)))
+  `((,(concat
+       "^"
+       ;; marker (optional)
+       "\\(?:\\(@[^[:space:]]+\\)\\s-+\\)?"
+       ;; hostnames
+       "\\([-*a-z0-9.,]+\\||[^[:space:]]+\\)\\s-+"
+       ;; public key (fontify just key type)
+       "\\(\\(?:ssh\\|ecdsa\\)[^[:space:]]*\\|\\)"
+       )
+     (1 font-lock-variable-name-face nil t)
+     (2 font-lock-function-name-face)
+     (3 font-lock-keyword-face)
+     )
+    ("^[[:space:]]*\\(#.*\\)"
+     (1 font-lock-comment-face))
+    )
   "Expressions to hilight in `ssh-config-mode'.")
 ;; ssh-config-font-lock-keywords
 
@@ -177,6 +201,33 @@
   (setq font-lock-defaults '(ssh-known-hosts-font-lock-keywords))
   ;;
   (run-hooks 'ssh-known-hosts-mode-hook)
+  nil)
+
+;;;;;
+
+(define-generic-mode ssh-authorized-keys-mode
+  '(?\#)
+  nil
+  (eval-when-compile
+    (list
+     (list
+      (concat
+       ;; ignore options
+       ;; double quoted string will be fontified by generic mode.
+       ;; key type
+       "\\(\\(?:ecdsa\\|ssh\\)-[^[:space:]]+\\)\\s-+"
+       ;; base64
+       "\\([^[:space:]\n]+\\)"
+       ;; comment in public key
+       "\\(?: \\(.*\\)\\)?"
+       "$")
+      '(1 font-lock-keyword-face)
+      ;; not fontify like known_hosts
+      ;; '(2 font-lock-variable-name-face)
+      '(3 font-lock-comment-face nil t)
+      )))
+  ;; Not define `auto-mode-alist' obey the other mode in this elisp.
+  nil
   nil)
 
 ;; done loading
