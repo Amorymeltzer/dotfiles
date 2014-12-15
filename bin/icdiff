@@ -13,12 +13,13 @@ import os
 import sys
 import errno
 import difflib
-import optparse
+from optparse import Option, OptionParser
 import re
 import filecmp
 import unicodedata
+import codecs
 
-__version__ = "1.5.1"
+__version__ = "1.7.0"
 
 color_codes = {
     "red":     '\033[0;31m',
@@ -386,17 +387,40 @@ class ConsoleDiff(object):
 def simple_colorize(s, chosen_color):
     return "%s%s%s" % (color_codes[chosen_color], s, color_codes["none"])
 
+
+class MultipleOption(Option):
+    ACTIONS = Option.ACTIONS + ("extend",)
+    STORE_ACTIONS = Option.STORE_ACTIONS + ("extend",)
+    TYPED_ACTIONS = Option.TYPED_ACTIONS + ("extend",)
+    ALWAYS_TYPED_ACTIONS = Option.ALWAYS_TYPED_ACTIONS + ("extend",)
+
+    def take_action(self, action, dest, opt, value, values, parser):
+        if action == "extend":
+            values.ensure_value(dest, []).append(value)
+        else:
+            Option.take_action(self, action, dest, opt, value, values, parser)
+
+
 def start():
     # If you change any of these, also update README.
-    parser = optparse.OptionParser(usage="usage: %prog [options] left_file right_file",
-                                   description="Show differences between files in a two column view.")
+    parser = OptionParser(usage="usage: %prog [options] left_file right_file",
+                          version="icdiff version %s" % __version__,
+                          description="Show differences between files in a two column view.",
+                          option_class=MultipleOption)
     parser.add_option("--cols", default=None,
-                      help="specify the width of the screen. Autodetection is Linux only")
+                      help="specify the width of the screen. Autodetection is Unix only")
+    parser.add_option("--encoding", default="utf-8",
+                      help="specify the file encoding; defaults to utf8")
     parser.add_option("--head", default=0,
                       help="consider only the first N lines of each file")
     parser.add_option("--highlight", default=False,
                       action="store_true",
                       help="color by changing the background color instead of the foreground color.  Very fast, ugly, displays all changes")
+    parser.add_option("-L", "--label",
+                      action="extend",
+                      type="string",
+                      dest='labels',
+                      help="override file labels with arbitrary tags. Use twice, one for each file")
     parser.add_option("--line-numbers", default=False,
                       action="store_true",
                       help="generate output with line numbers")
@@ -406,26 +430,25 @@ def start():
     parser.add_option("--no-headers", default=False,
                       action="store_true",
                       help="don't label the left and right sides with their file names")
-    parser.add_option("--numlines", default=5,
-                      help="how many lines of context to print; can't be combined with --whole-file")
+    parser.add_option("--output-encoding", default="utf-8",
+                      help="specify the output encoding; defaults to utf8")
     parser.add_option("--recursive", default=False,
                       action="store_true",
                       help="recursively compare subdirectories")
     parser.add_option("--show-all-spaces", default=False,
                       action="store_true",
                       help="color all non-matching whitespace including that which is not needed for drawing the eye to changes.  Slow, ugly, displays all changes")
-    parser.add_option("--version", default=False,
+    parser.add_option("-u", "--patch", default=True,
                       action="store_true",
-                      help="print version and exit")
+                      help="generate patch. This is always true, and only exists for compatibility")
+    parser.add_option("-U", "--unified", "--numlines", default=5,
+                      metavar="NUM",
+                      help="how many lines of context to print; can't be combined with --whole-file")
     parser.add_option("--whole-file", default=False,
                       action="store_true",
                       help="show the whole file instead of just changed lines and context")
 
     (options, args) = parser.parse_args()
-
-    if options.version:
-        print("icdiff version %s" % __version__)
-        sys.exit()
 
     if len(args) != 2:
         parser.print_help()
@@ -450,15 +473,22 @@ def start():
     if options.recursive:
         diff_recursively(options, a, b)
     else:
-        diff_files(options, a, b)
+        diff_files(options, a, b, options.encoding)
+
+def codec_print(s, options):
+    s = "%s\n" % s
+    if hasattr(sys.stdout, "buffer"):
+        sys.stdout.buffer.write(s.encode(options.output_encoding))
+    else:
+        sys.stdout.write(s.encode(options.output_encoding))
 
 def diff_recursively(options, a, b):
     def print_meta(s):
-        print(simple_colorize(s, "magenta"))
+        codec_print(simple_colorize(s, "magenta"), options)
 
     if os.path.isfile(a) and os.path.isfile(b):
         if not filecmp.cmp(a, b):
-            diff_files(options, a, b)
+            diff_files(options, a, b, options.encoding)
 
     elif os.path.isdir(a) and os.path.isdir(b):
         a_contents = set(os.listdir(a))
@@ -473,15 +503,31 @@ def diff_recursively(options, a, b):
                 diff_recursively(options,
                                  os.path.join(a, child),
                                  os.path.join(b, child))
-
     elif os.path.isdir(a) and os.path.isfile(b):
         print_meta("File %s is a directory while %s is a file" % (a, b))
 
     elif os.path.isfile(a) and os.path.isdir(b):
         print_meta("File %s is a file while %s is a directory" % (a, b))
 
-def diff_files(options, a, b):
-    headers = a, b
+def read_file(fname, encoding):
+    try:
+        with codecs.open(fname, encoding=encoding, mode="rb") as inf:
+            return inf.readlines()
+    except UnicodeDecodeError as e:
+        sys.stderr.write(
+            "error: file '%s' not valid with encoding '%s': <%s> at %s-%s.\n" % (
+                fname, encoding, e.reason, e.start, e.end))
+        sys.exit(1)
+
+def diff_files(options, a, b, encoding):
+    if options.labels:
+        if len(options.labels) == 2:
+            headers = options.labels
+        else:
+            sys.stderr.write("error: to use arbitrary file labels, specify -L twice.\n")
+            sys.exit(1)
+    else:
+        headers = a, b
     if options.no_headers:
         headers = None, None
 
@@ -491,8 +537,8 @@ def diff_files(options, a, b):
         if os.path.isdir(x):
             sys.stderr.write("error: %s is a directory; did you mean to pass --recursive?\n" % x)
             sys.exit(1)
-    lines_a = open(a, "U").readlines()
-    lines_b = open(b, "U").readlines()
+    lines_a = read_file(a, encoding)
+    lines_b = read_file(b, encoding)
 
     if head != 0:
         lines_a = lines_a[:head]
@@ -506,8 +552,8 @@ def diff_files(options, a, b):
     for line in cd.make_table(
             lines_a, lines_b, headers[0], headers[1],
             context=(not options.whole_file),
-            numlines=int(options.numlines)):
-        print(line)
+            numlines=int(options.unified)):
+        codec_print(line, options)
         sys.stdout.flush()
 
 if __name__ == "__main__":
