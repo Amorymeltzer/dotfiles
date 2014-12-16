@@ -735,7 +735,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 alias ball='brew update && brew outdated && brew upgrade'
-alias bclean='brew cleanup && brew cleanup -s && brew cask cleanup'
+alias bclean='brew cleanup -n && brew cleanup && brew cleanup -s && brew cask cleanup'
 alias bsearch='brew search'
 alias binfo='brew info'
 alias blist='brew list'
@@ -807,6 +807,7 @@ function update()
     brew cleanup -n
     brew cleanup
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}casks${Color_zOff}..."
+    brew cask cleanup -s
     brew cask cleanup
 
     echo -e "${Color_Cyan}Checking ${Color_Red_Intense}Mac OSX software updates${Color_zOff}..."
