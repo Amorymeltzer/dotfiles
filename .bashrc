@@ -1046,6 +1046,10 @@ alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 command -v md5sum > /dev/null || alias md5sum="md5"
 # OS X has no `sha1sum`, so use `shasum` as a fallback
 command -v sha1sum > /dev/null || alias sha1sum="shasum"
+# OS X has no `sha256sum`, so use `shasum` as a fallback
+command -v sha256sum > /dev/null || alias sha256sum="shasum -a 256 "
+# OS X has no `sha512sum`, so use `shasum` as a fallback
+command -v sha512sum > /dev/null || alias sha512sum="shasum -a 512 "
 
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
