@@ -2534,6 +2534,7 @@ project root if possible."
   "Signal something that needs to be dealt with."
   (interactive)
   (insert "\;\;\;\;\;\; \#\#\#\#\# F\IXME T\ODO"))
+(defalias 'insert-fixme 'fixme-insert)
 
 (defun lorem ()
   "Insert a lorem ipsum."
