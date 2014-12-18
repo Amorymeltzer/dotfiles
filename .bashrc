@@ -809,10 +809,18 @@ function update()
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}CPAN directories${Color_zOff}..."
     cpanclean;
 
+    # Should probably make this verbose or something
     echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
     brew update
     brew outdated
     brew upgrade
+
+    # I'll eventually wrap this into a larger install and upgrade script (some
+    # ideas in 309, 4678, and automation.md) but for now this will at least
+    # tell me what is out of date
+    # ;;;;;; ##### FIXME TODO
+    echo -e "${Color_Cyan}Out-of-date ${Color_Red_Intense}casks${Color_zOff}..."
+    cask doutdated
 
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}Homebrew${Color_zOff}..."
     brew cleanup -n
