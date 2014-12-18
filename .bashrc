@@ -464,6 +464,17 @@ function explain_perlcritic() {
     #  perldoc -oman Perl::Critic::Policy::"$1"
     perldoc Perl::Critic::Policy::"$1"
 }
+# ;;;;;; ##### FIXME TODO
+_explain_perlcritic()
+{
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]^^} # Uppercase the result
+
+    COMPREPLY=( $( compgen -W "$(\ls -1 /opt/local/share/perl5.20/siteman/man3/Perl\:\:Critic\:\:Policy\:\:* | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')" -- $cur ) )
+
+    return 0
+}
+complete -F _explain_perlcritic explain_perlcritic
 
 # Tell tidy to use a config file if it's there
 if command_exists tidy; then
