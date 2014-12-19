@@ -823,11 +823,10 @@ function update()
     cask doutdated
 
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}Homebrew${Color_zOff}..."
-    brew cleanup -n
-    brew cleanup
+    brew cleanup -ns
+    brew cleanup -s
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}casks${Color_zOff}..."
-    brew cask cleanup -s
-    brew cask cleanup
+    brew cask cleanup --verbose
 
     echo -e "${Color_Cyan}Checking ${Color_Red_Intense}Mac OSX software updates${Color_zOff}..."
     # sudo softwareupdate -iva;
