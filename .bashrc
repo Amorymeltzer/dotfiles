@@ -776,6 +776,9 @@ function update()
     # Call sudo early, before the first output
     sudo -v
 
+    # Need a way to deal with large, long installs like imagemagick and ffmpeg
+    # Also need to find a way to do things it suggests, like port select and
+    # so on ;;;;;; ##### FIXME TODO
     echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
     sudo port selfupdate;
     port echo outdated;
