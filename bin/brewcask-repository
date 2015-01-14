@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-
+#
+# Simple external command to show the default homebrew-cask location
 
 
 set -e;                # exit on uncaught error
