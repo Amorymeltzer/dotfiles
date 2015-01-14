@@ -82,9 +82,6 @@
   (let ((backend (ignore-errors (vc-responsible-backend default-directory)))
         (def-dir default-directory)
         (buffer (current-buffer))
-        (contents (cl-loop for file in (directory-files default-directory)
-                           unless (member file '("." ".." ".hg"))
-                           collect file))
         dirs-alist files-alist)
     (when backend
       (diff-hl-dired-clear)
@@ -96,11 +93,12 @@
       (with-current-buffer diff-hl-dired-process-buffer
         (setq default-directory (expand-file-name def-dir))
         (erase-buffer)
-        (vc-call-backend
-         backend 'dir-status-files def-dir
+        (diff-hl-dired-status-files
+         backend def-dir
          (when diff-hl-dired-extra-indicators
-           contents)
-         nil
+           (cl-loop for file in (directory-files def-dir)
+                    unless (member file '("." ".." ".hg"))
+                    collect file))
          (lambda (entries &optional more-to-come)
            (when (buffer-live-p buffer)
              (with-current-buffer buffer
@@ -127,6 +125,13 @@
                  (diff-hl-dired-highlight-items
                   (append dirs-alist files-alist))))))
          )))))
+
+(defun diff-hl-dired-status-files (backend dir files update-function)
+   "Using version control BACKEND, return list of (FILE STATE EXTRA) entries
+for DIR containing FILES. Call UPDATE-FUNCTION as entries are added."
+  (if (version< "25" emacs-version)
+      (vc-call-backend backend 'dir-status-files dir files update-function)
+    (vc-call-backend backend 'dir-status-files dir files nil update-function)))
 
 (when (version< emacs-version "24.4.51.5")
   ;; Work around http://debbugs.gnu.org/19386

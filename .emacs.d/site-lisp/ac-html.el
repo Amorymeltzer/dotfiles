@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014 Zhang Kai Yu
 
 ;; Author: Zhang Kai Yu <yeannylam@gmail.com>
-;; Version: 0.21
+;; Version: 0.22
 ;; Keywords: html, auto-complete, rails, ruby
 ;; Package-Requires: ((auto-complete "1.4"))
 ;; URL: https://github.com/cheunghy/ac-html
@@ -113,12 +113,15 @@ If not nil no need 'ac-source-css-property in web-mode-ac-sources-alist for web-
 
 (defun ac-html--load-list-from-file (filepath)
   "Return a list separated by \\n from FILEPATH."
-  (with-current-buffer (find-file-noselect filepath)
-    (split-string (save-restriction
-                    (widen)
-                    (buffer-substring-no-properties
-                     (point-min) (point-max)))
-                  "\n" t)))
+  (let (list)
+    (with-current-buffer (find-file-noselect filepath)
+      (setq list (split-string (save-restriction
+                                 (widen)
+                                 (buffer-substring-no-properties
+                                  (point-min) (point-max)))
+                               "\n" t))
+      (kill-buffer)
+      list)))
 
 (defvar ac-html-all-element-list
   (ac-html--load-list-from-file (expand-file-name "html-tag-list"
@@ -286,25 +289,28 @@ Those files may have documantation delimited by \" \" symbol."
   (if (re-search-backward "\\w=[\"]\\([^\"]+[ ]\\|\\)\\(.*\\)" nil t)
       (match-beginning 2)))
 
+;;;###autoload
 (defvar ac-source-html-tag
   '((candidates . ac-source-html-tag-candidates)
     (prefix . "<\\(.*\\)")
     (symbol . "t")
     (document . ac-source--html-tag-documentation)))
 
+;;;###autoload
 (defvar ac-source-html-attribute
   '((candidates . ac-source-html-attribute-candidates)
     (prefix . "<\\w[^>]*[[:space:]]+\\(.*\\)")
     (symbol . "a")
     (document . ac-source-html-attribute-documentation)))
 
+;;;###autoload
 (defvar ac-source-html-attribute-value
   '((candidates . ac-source-html-attribute-value-candidates)
     (prefix . ac-html-value-prefix)
     (document . ac-source-html-attribute-value-document)
-    (symbol . "v")
-))
+    (symbol . "v")))
 
+;;;###autoload
 (defun ac-html-enable ()
   "Add ac-html sources into ac-sources and enable auto-comple-mode."
   (interactive)

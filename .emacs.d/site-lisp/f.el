@@ -4,7 +4,7 @@
 
 ;; Author: Johan Andersson <johan.rejeep@gmail.com>
 ;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
-;; Version: 0.17.1
+;; Version: 0.17.2
 ;; Keywords: files, directories
 ;; URL: http://github.com/rejeep/f.el
 ;; Package-Requires: ((s "1.7.0") (dash "2.2.0"))
@@ -104,7 +104,12 @@ If PATH is not allowed to be modified, throw error."
         (setq paths (-map 'cdr paths))
         (push common re)
         (setq common (caar paths)))
-      (if re (concat (apply 'f-join (nreverse re)) "/") "")))))
+      (cond
+       ((null re) "")
+       ((and (= (length re) 1) (f-root? (car re)))
+        (f-root))
+       (:otherwise
+        (concat (apply 'f-join (nreverse re)) "/")))))))
 
 (defun f-ext (path)
   "Return the file extension of PATH."
@@ -483,7 +488,7 @@ RECURSIVE - Search for files and directories recursive."
         parent
       (if (funcall fn dir)
           dir
-        (f-up fn parent)))))
+	(with-no-warnings (f-up fn parent))))))
 
 (defmacro f--traverse-upwards (body &optional path)
   "Anaphoric version of `f-traverse-upwards'."
