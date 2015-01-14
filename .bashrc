@@ -831,9 +831,9 @@ function update()
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}casks${Color_zOff}..."
     brew cask cleanup --verbose
 
-    echo -e "${Color_Cyan}Checking ${Color_Red_Intense}Mac OSX software updates${Color_zOff}..."
+    # echo -e "${Color_Cyan}Checking ${Color_Red_Intense}Mac OSX software updates${Color_zOff}..."
     # sudo softwareupdate -iva;
-    softwareupdate -l;
+    # softwareupdate -l;
 }
 
 # Quickly open and make a new perl file executable and with headers
