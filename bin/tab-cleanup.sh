@@ -6,5 +6,6 @@
 today=$(date +%-j)		# %- removes padding 0 in day of year %j
 tabs=$((181+14-$today))
 
-printf %s "$(date +"%d %b %Y - ")"
+echo -n "Today ("
+printf %s "$(date +"%d %b %Y) - ")"
 echo $tabs tabs required
