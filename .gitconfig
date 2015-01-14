@@ -28,6 +28,8 @@ helper = osxkeychain
 h = help
 cfg = config --global
 
+home = browse
+
 c = commit
 cm = commit -m
 a = add
