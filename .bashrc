@@ -818,12 +818,11 @@ function update()
     brew outdated
     brew upgrade
 
-    # I'll eventually wrap this into a larger install and upgrade script (some
-    # ideas in 309, 4678, and automation.md) but for now this will at least
-    # tell me what is out of date
-    # ;;;;;; ##### FIXME TODO
-    echo -e "${Color_Cyan}Out-of-date ${Color_Red_Intense}casks${Color_zOff}..."
-    cask doutdated
+    # Not perfect, but uses the external brewcask-doutdated.rb command to grab
+    # a list of outdated casks, then --force reinstalls them
+    echo -e "${Color_Cyan}Updating ${Color_Red_Intense}casks${Color_zOff}..."
+    brew cask doutdated
+    brew cask doutdated | xargs brew cask install --force
 
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}Homebrew${Color_zOff}..."
     brew cleanup -ns
