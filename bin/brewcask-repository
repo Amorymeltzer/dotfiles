@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
 
+
+
+set -e;                # exit on uncaught error
+set +o histexpand;     # don't expand history expressions
+
+
 echo -n "$(brew --repository)/Library/Taps/caskroom/homebrew-cask/"
