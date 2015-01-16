@@ -7,4 +7,4 @@ set -e;                # exit on uncaught error
 set +o histexpand;     # don't expand history expressions
 
 
-echo -n "$(brew --repository)/Library/Taps/caskroom/homebrew-cask/"
+echo "$(brew --repository)/Library/Taps/caskroom/homebrew-cask/"
