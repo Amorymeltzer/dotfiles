@@ -5,11 +5,12 @@
 
 export DAY=$(date +'%Y-%m-%d_%H%M%S')
 export FOLDERPATH='/Users/Amory/Dropbox/twitter_backup/'$DAY
+twitname='@amorymeltzer'
 
 mkdir "$FOLDERPATH"
 
 echo "Backing up tweets..."
-t timeline @jphpsf --csv --number 3000 > $FOLDERPATH/tweets-$DAY.csv
+t timeline $twitname --csv --number 3000 > $FOLDERPATH/tweets-$DAY.csv
 echo "Backing up retweets..."
 t retweets --csv --number 3000 > $FOLDERPATH/retweets-$DAY.csv
 echo "Backing up favorites..."
