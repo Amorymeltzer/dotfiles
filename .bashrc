@@ -60,6 +60,7 @@ alias tree='tree -Csuh'
 # Alias hub as git for github https://github.com/github/hub
 alias git='hub'
 alias g='git'
+alias gb='git b '
 alias gs='git s'
 alias ga='git add '
 alias gaa='git aa '
