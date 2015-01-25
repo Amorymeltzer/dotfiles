@@ -1101,9 +1101,14 @@ function uc {
     fi;
 }
 
+# Backup file
+function backup-file()
+{
+    local filename=$1
+    cp ${filename} ${filename}.bak
+}
 # Backup file with timestamp
-# Should option/version for just .bak ;;;;;; ##### FIXME TODO
-function backup_with_timestamp()
+function backup-file-with-timestamp()
 {
     local filename=$1
     local filetime=$(date +%Y%m%d_%H%M%S)
