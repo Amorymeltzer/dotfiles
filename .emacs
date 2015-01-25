@@ -1282,10 +1282,6 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; I hate this
 ;; (highlight-changes-mode 1)
 
-;; compare text in current window with text in next window
-;; Huh? FIXME TODO ;;;;;;;;; #########
-;; (global-set-key (kbd "C-c =") 'compare-windows)
-
 ;; Turn off git
 ;; Same thing, first one safer?  But not just git?
 ;; (eval-after-load "vc" '(remove-hook 'find-file-hooks 'vc-find-file-hook))
