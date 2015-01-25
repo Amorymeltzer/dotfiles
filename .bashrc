@@ -1582,8 +1582,6 @@ function remind() {
 }
 
 
-# Add in -d -a flags for if
-# ;;;;;; ##### FIXME TODO
 function bashtips() {
     echo "
 DIRECTORIES
