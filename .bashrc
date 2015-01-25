@@ -672,7 +672,7 @@ alias growl='growlnotify -t Terminal -m "Done" && tput bel' # Red badge? and pop
 alias beep='tput bel'
 
 # Enhanced WHOIS
-# Busted as of mid-2014 ;;;;;; ##### FIXME TODO
+# Busted as of mid-2014
 # alias whois='whois -h whois-servers.net'
 
 # Use colordiff if it exists
@@ -967,7 +967,7 @@ alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/R
 #sudo ln -s /path/to/your/image /System/Library/CoreServices/DefaultDesktop.jpg
 
 # Lock the screen (when going AFK)
-# Better as just starting screensaver ;;;;;;; ###### FIXME TODO
+# Better as just starting screensaver
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
 # Stopwatch
