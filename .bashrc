@@ -1650,7 +1650,6 @@ ______________________
 
 
 ###### holiday greeting
-# Place properly, etc. TODO FIXME ##################
 # from Jonathan's .bashrc file (by ~71KR117)
 # http://dotshare.it/dots/516/
 # get current day (Month-Day Format)
