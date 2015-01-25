@@ -578,7 +578,7 @@ function pf() {
 }
 alias perlcheat='man perlcheat'
 
-# Enable aliases to be sudo’ed
+# Enable aliases to be sudo'ed
 # http://www.gnu.org/software/bash/manual/bashref.html#Aliases says: "If the
 # last character of the alias value is a space or tab character, then the next
 # command word following the alias is also checked for alias expansion."
@@ -1123,7 +1123,7 @@ function backup-file-with-timestamp()
     done
 }
 
-# PlistBuddy alias, because sometimes `defaults` just doesn’t cut it
+# PlistBuddy alias, because sometimes `defaults` just doesn't cut it
 alias plistbuddy="/usr/libexec/PlistBuddy"
 
 # Hide/show all desktop icons (useful when presenting)
@@ -1274,17 +1274,17 @@ EOF
 function escape()
 {
     printf "\\\x%s" $(printf "$@" | xxd -p -c1 -u)
-    # print a newline unless we’re piping the output to another program
+    # print a newline unless we're piping the output to another program
     if [ -t 1 ]; then
 	echo # newline
     fi
 }
 
-# Get a character’s Unicode code point
+# Get a character's Unicode code point
 function codepoint()
 {
     perl -e "use utf8; print sprintf('U+%04X', ord(\"$@\"))"
-    # print a newline unless we’re piping the output to another program
+    # print a newline unless we're piping the output to another program
     if [ -t 1 ]; then
 	echo # newline
     fi
