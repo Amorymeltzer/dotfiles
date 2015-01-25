@@ -616,10 +616,7 @@ function mkcd() {
 	mkdir $1 && cd $1
     fi
 }
-# Better? ;;;;;; ##### FIXME TODO
-function mkd() {
-    mkdir "$@" && cd "$@";
-}
+alias mkd='mkcd '
 
 # Make a directory and move a file into it
 function mkmv() {
