@@ -47,8 +47,7 @@ alias lsr='ls -lrS'
 alias lasr='lsr -A'
 alias las='lss -A'
 alias lass='las'
-# Turn into function so flags get passed to ls not grep?
-# ;;;;;;; ###### FIXME TODO
+# Note: flags get passed to grep, not ls
 alias ld='ls -l | grep "^d"'
 alias lad='ls -Al | grep "^d"'
 alias lda='lad'
