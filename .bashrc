@@ -1104,15 +1104,23 @@ function uc {
 # Backup file
 function backup-file()
 {
-    local filename=$1
-    cp ${filename} ${filename}.bak
+    local filename=$@
+
+    for i in $filename
+    do
+	cp $i $i.bak
+    done
 }
 # Backup file with timestamp
 function backup-file-with-timestamp()
 {
-    local filename=$1
+    local filename=$@
     local filetime=$(date +%Y%m%d_%H%M%S)
-    cp ${filename} ${filename}_${filetime}
+
+    for i in $filename
+    do
+	cp ${i} ${i}_${filetime}
+    done
 }
 
 # PlistBuddy alias, because sometimes `defaults` just doesn’t cut it
