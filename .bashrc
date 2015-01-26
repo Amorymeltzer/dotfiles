@@ -728,7 +728,7 @@ alias pout='port echo outdated '
 alias pug='sudo port upgrade outdated '
 alias puo='pug '
 alias pleaves='port echo leaves '
-alias pclean='sudo port clean --all installed'
+alias pclean='sudo port clean -v --all installed'
 alias pactive='port echo active '
 alias pinactive='port echo inactive '
 alias pinfo='port info '
@@ -783,17 +783,17 @@ function update()
     # Also need to find a way to do things it suggests, like port select and
     # so on ;;;;;; ##### FIXME TODO
     echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
-    sudo port selfupdate;
-    port echo outdated;
+    sudo port -v selfupdate;
+    port echo -v outdated;
     whatsnew;
     sudo -v			# Just in case
-    sudo port upgrade outdated;
+    sudo port -v upgrade outdated;
     sudo -v			# Just in case
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
-    sudo port uninstall inactive;
+    sudo port -v uninstall inactive;
     echo -e "${Color_Green}Logging leaves${Color_zOff}..."
     port echo leaves >> ~/port_leaves_log.txt;
-    sudo port uninstall leaves;
+    sudo port -v uninstall leaves;
     pclean;
 
     sudo -v			# Just in case
