@@ -26,8 +26,8 @@ close $ossGH;
 
 foreach my $key (sort keys %oss) {
   print "$key\n";
-  system "brew cask cat $key";
-  system "brew cask home $key";
+  # system "brew cask cat $key";
+  # system "brew cask home $key";
 
   print "What is the license for this cask?\n";
   print "oss, gpl, mit, mpl, [S]kip or [Q]uit\n";
