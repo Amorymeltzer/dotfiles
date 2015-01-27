@@ -8,8 +8,8 @@ use strict;
 use warnings;
 use diagnostics;
 
-my $infile = '/Users/Amory/oss_gh.txt';
-my $outfile = '/Users/Amory/oss_gh.out.txt';
+my $infile  = '/Users/Amory/oss_gh.txt';
+my $outfile = '/Users/Amory/oss_gh.txt';
 my %oss;
 
 # Build hash for later parsing, etc.
