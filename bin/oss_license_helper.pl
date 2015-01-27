@@ -35,7 +35,7 @@ foreach my $key (sort keys %oss) {
   my $lic = <>;
   chomp $lic;
 
-  if ($lic =~ /^q$/i || $lic =~/[Qq]uit$/i) {
+  if ($lic =~ /^q$/i || $lic =~ /[Qq]uit$/i) {
     open my $ossGHout, '>', "$outfile" or die $!;
 
     foreach my $hurry (sort keys %oss) {
@@ -43,5 +43,13 @@ foreach my $key (sort keys %oss) {
     }
     close $ossGHout;
     exit;
+  }
+
+  elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
+    next;
+  }
+
+  else {
+    $oss{$key} = $lic;
   }
 }
