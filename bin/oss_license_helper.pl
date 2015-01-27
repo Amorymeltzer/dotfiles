@@ -9,6 +9,7 @@ use warnings;
 use diagnostics;
 
 my $infile = '/Users/Amory/oss_gh.txt';
+my $outfile = '/Users/Amory/oss_gh.out.txt';
 my %oss;
 
 # Build hash for later parsing, etc.
@@ -29,12 +30,18 @@ foreach my $key (sort keys %oss) {
   system "brew cask home $key";
 
   print "What is the license for this cask?\n";
-  print "oss, gpl, mit, mpl, [S]kip or [Q]uit";
+  print "oss, gpl, mit, mpl, [S]kip or [Q]uit\n";
 
   my $lic = <>;
   chomp $lic;
 
-  if ($lic =~ /^q$/i) {
-    print "asdasd\n";
+  if ($lic =~ /^q$/i || $lic =~/[Qq]uit$/i) {
+    open my $ossGHout, '>', "$outfile" or die $!;
+
+    foreach my $hurry (sort keys %oss) {
+      print $ossGHout "$hurry\t$oss{$hurry}\n";
+    }
+    close $ossGHout;
+    exit;
   }
 }
