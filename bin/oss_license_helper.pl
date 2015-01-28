@@ -1,7 +1,6 @@
 #!/usr/bin/env perl
 # license_helper.pl by Amory Meltzer
-# Script to help automate license updating of hombrew-cask casks
-## Need to add note-taking functionality
+# Script to help automate license updating of oss hombrew-cask casks
 
 use strict;
 use warnings;
@@ -51,7 +50,7 @@ foreach my $key (sort keys %oss) {
   }
 
   system 'clear';
-  print "$key\n";
+  print "$key...\n";
   system "brew cask cat $key";
   system "brew cask home $key";
 
@@ -65,7 +64,7 @@ foreach my $key (sort keys %oss) {
 
   if ($lic =~ /^q$/i || $lic =~ /[Qq]uit$/i) {
     $quit = 1;
-    print "\nOne moment please\n";
+    print "One moment please\n";
     print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
