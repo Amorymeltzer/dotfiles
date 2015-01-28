@@ -32,10 +32,20 @@ while (<$ossGH>) {
 }
 close $ossGH;
 
+my $quit = 0;			# Are we trying to quit and save nicely?
+
+open my $ossGHout, '>', "$outfile" or die $!;
 foreach my $key (sort keys %oss) {
+  # Get me outta here!
+  if ($quit == 1) {
+    print $ossGHout "$key\t$oss{$key}\n";
+    next;
+  }
+
   print "$key\n";
   # system "brew cask cat $key";
   # system "brew cask home $key";
+
 
   print "What is the license for this cask?\n";
   print "oss, gpl, mit, mpl, [S]kip or [Q]uit\n";
@@ -44,22 +54,22 @@ foreach my $key (sort keys %oss) {
   chomp $lic;
 
   if ($lic =~ /^q$/i || $lic =~ /[Qq]uit$/i) {
-    open my $ossGHout, '>', "$outfile" or die $!;
-
-    foreach my $hurry (sort keys %oss) {
-      print $ossGHout "$hurry\t$oss{$hurry}\n";
-    }
-    close $ossGHout;
-    exit;
+    $quit = 1;
+    print $ossGHout "$key\t$oss{$key}\n";
+    next;
   } elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
     next;
   } elsif (!$licenses{$lic}) {
     print "$lic is not a valid license, skipping\n";
+    print $ossGHout "$key\t$oss{$key}\n";
     next;
   } else {
     $oss{$key} = $lic;
+    print $ossGHout "$key\t$oss{$key}\n";
+    next;
   }
 }
+close $ossGHout;
 
 
 
