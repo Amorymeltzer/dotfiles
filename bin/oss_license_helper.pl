@@ -58,6 +58,7 @@ foreach my $key (sort keys %oss) {
 
   if ($lic =~ /^q$/i || $lic =~ /[Qq]uit$/i) {
     $quit = 1;
+    print "\nOne moment please\n";
     print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
