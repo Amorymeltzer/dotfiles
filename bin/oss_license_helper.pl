@@ -1,8 +1,6 @@
 #!/usr/bin/env perl
 # license_helper.pl by Amory Meltzer
 # Script to help automate license updating of hombrew-cask casks
-## Use dedicated list to save time?
-## Ask first?
 
 use strict;
 use warnings;
@@ -43,8 +41,8 @@ foreach my $key (sort keys %oss) {
   }
 
   print "$key\n";
-  # system "brew cask cat $key";
-  # system "brew cask home $key";
+  system "brew cask cat $key";
+  system "brew cask home $key";
 
 
   print "What is the license for this cask?\n";
