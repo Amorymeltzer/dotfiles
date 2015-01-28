@@ -8,6 +8,14 @@ use strict;
 use warnings;
 use diagnostics;
 
+
+my %licenses;			# Hash to old license from DATA
+while (<DATA>) {
+  chomp;
+  $licenses{$_} = 1;
+}
+
+
 my $infile  = '/Users/Amory/oss_gh.txt';
 my $outfile = '/Users/Amory/oss_gh.txt';
 my %oss;
@@ -49,7 +57,43 @@ foreach my $key (sort keys %oss) {
     next;
   }
 
+  elsif (!$licenses{$lic}) {
+    print "$lic is not a valid license, skipping\n";
+    next;
+  }
+
   else {
     $oss{$key} = $lic;
   }
 }
+
+
+
+
+
+
+## The lines below do not represent Perl code, and are not examined by the
+## compiler.  Rather, they are the accepted :license stanza values;
+__END__
+oss
+  closed
+  gratis
+  commercia
+  freemium
+  affero
+  apache
+  arphic
+  artistic
+  bsd
+  cc
+  eclipse
+  gpl
+  isc
+  lppl
+  ncsa
+  mit
+  mpl
+  ofl
+  public_domain
+  ubuntu_font
+  x11
