@@ -50,9 +50,10 @@ foreach my $key (sort keys %oss) {
     next;
   }
 
+  system 'clear';
   print "$key\n";
-  # system "brew cask cat $key";
-  # system "brew cask home $key";
+  system "brew cask cat $key";
+  system "brew cask home $key";
 
   print color 'bright_cyan';
   print "What is the license for this cask?\n";
@@ -76,6 +77,8 @@ foreach my $key (sort keys %oss) {
     print color 'reset';
 
     print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
+
+    sleep 1;			# Allow for the message to be seen
     next;
   } else {
     $oss{$key}[0] = $lic;
