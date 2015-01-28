@@ -16,10 +16,6 @@ while (<DATA>) {
   $licenses{$tmp[0]} = 1;
 }
 
-foreach my $key (sort keys %licenses) {
-  print "$key\n";
-}
-
 my $infile  = '/Users/Amory/oss_gh.txt';
 my $outfile = '/Users/Amory/oss_gh.txt';
 my %oss;
