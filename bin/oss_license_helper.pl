@@ -44,6 +44,12 @@ foreach my $key (sort keys %oss) {
     next;
   }
 
+  # Skip if there's already a license value here
+  if ($oss{$key}[0]) {
+    print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
+    next;
+  }
+
   print "$key\n";
   # system "brew cask cat $key";
   # system "brew cask home $key";
@@ -62,6 +68,7 @@ foreach my $key (sort keys %oss) {
     print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
+    print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } elsif (!$licenses{$lic}) {
     print color 'bright_red';
