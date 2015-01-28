@@ -52,7 +52,7 @@ foreach my $key (sort keys %oss) {
   print "What is the license for this cask?\n";
   print "oss, gpl, mit, mpl, [S]kip or [Q]uit\n";
   print color 'reset';
-  
+
   my $lic = <>;
   chomp $lic;
 
@@ -63,13 +63,19 @@ foreach my $key (sort keys %oss) {
   } elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
     next;
   } elsif (!$licenses{$lic}) {
+    print color 'bright_red';
     print "$lic is not a valid license, skipping\n";
+    print color 'reset';
+
     print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } else {
     $oss{$key}[0] = $lic;
 
+    print color 'bright_cyan';
     print "Notes?  Link to license, etc.\n";
+    print color 'reset';
+
     my $note = <>;
     chomp $note;
     $oss{$key}[1] = $note;
