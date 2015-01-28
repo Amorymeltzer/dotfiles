@@ -12,9 +12,13 @@ use diagnostics;
 my %licenses;			# Hash to old license from DATA
 while (<DATA>) {
   chomp;
-  $licenses{$_} = 1;
+  my @tmp = split;		# Stupid hack to deal with spaces in DATA
+  $licenses{$tmp[0]} = 1;
 }
 
+foreach my $key (sort keys %licenses) {
+  print "$key\n";
+}
 
 my $infile  = '/Users/Amory/oss_gh.txt';
 my $outfile = '/Users/Amory/oss_gh.txt';
@@ -51,18 +55,12 @@ foreach my $key (sort keys %oss) {
     }
     close $ossGHout;
     exit;
-  }
-
-  elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
+  } elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
     next;
-  }
-
-  elsif (!$licenses{$lic}) {
+  } elsif (!$licenses{$lic}) {
     print "$lic is not a valid license, skipping\n";
     next;
-  }
-
-  else {
+  } else {
     $oss{$key} = $lic;
   }
 }
@@ -78,7 +76,7 @@ __END__
 oss
   closed
   gratis
-  commercia
+  commercial
   freemium
   affero
   apache
