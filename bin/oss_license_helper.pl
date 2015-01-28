@@ -1,10 +1,13 @@
 #!/usr/bin/env perl
 # license_helper.pl by Amory Meltzer
 # Script to help automate license updating of hombrew-cask casks
+## Need to add note-taking functionality
 
 use strict;
 use warnings;
 use diagnostics;
+
+use Term::ANSIColor;
 
 
 my %licenses;			# Hash to old license from DATA
@@ -25,8 +28,9 @@ while (<$ossGH>) {
 
   my @tmp = split /\t/;
   $tmp[1] ||= q{};		# Original value if defined, empty if not
+  $tmp[2] ||= q{};		# Original value if defined, empty if not
 
-  $oss{$tmp[0]} = $tmp[1];
+  $oss{$tmp[0]} = [$tmp[1],$tmp[2]];
 }
 close $ossGH;
 
@@ -36,34 +40,41 @@ open my $ossGHout, '>', "$outfile" or die $!;
 foreach my $key (sort keys %oss) {
   # Get me outta here!
   if ($quit == 1) {
-    print $ossGHout "$key\t$oss{$key}\n";
+    print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   }
 
   print "$key\n";
-  system "brew cask cat $key";
-  system "brew cask home $key";
+  # system "brew cask cat $key";
+  # system "brew cask home $key";
 
-
+  print color 'bright_cyan';
   print "What is the license for this cask?\n";
   print "oss, gpl, mit, mpl, [S]kip or [Q]uit\n";
-
+  print color 'reset';
+  
   my $lic = <>;
   chomp $lic;
 
   if ($lic =~ /^q$/i || $lic =~ /[Qq]uit$/i) {
     $quit = 1;
-    print $ossGHout "$key\t$oss{$key}\n";
+    print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
     next;
   } elsif (!$licenses{$lic}) {
     print "$lic is not a valid license, skipping\n";
-    print $ossGHout "$key\t$oss{$key}\n";
+    print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } else {
-    $oss{$key} = $lic;
-    print $ossGHout "$key\t$oss{$key}\n";
+    $oss{$key}[0] = $lic;
+
+    print "Notes?  Link to license, etc.\n";
+    my $note = <>;
+    chomp $note;
+    $oss{$key}[1] = $note;
+
+    print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   }
 }
