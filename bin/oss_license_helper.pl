@@ -51,8 +51,8 @@ foreach my $key (sort keys %oss) {
 
   system 'clear';
   print "$key...\n";
-  system "brew cask cat $key";
   system "brew cask home $key";
+  system "brew cask cat $key";
 
   print color 'bright_cyan';
   print "What is the license for this cask?\n";
