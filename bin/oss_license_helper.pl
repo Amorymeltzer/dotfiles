@@ -68,7 +68,6 @@ foreach my $key (sort keys %oss) {
     print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } elsif ($lic =~ /^s$/i || $lic =~ /[Ss]kip$/i) {
-    print $ossGHout "$key\t$oss{$key}[0]\t$oss{$key}[1]\n";
     next;
   } elsif (!$licenses{$lic}) {
     print color 'bright_red';
