@@ -16,8 +16,8 @@ while (<DATA>) {
   $licenses{$tmp[0]} = 1;
 }
 
-my $infile  = '/Users/Amory/oss_gh.txt';
-my $outfile = '/Users/Amory/oss_gh.txt';
+my $infile  = '/Users/Amory/oss_sf.txt';
+my $outfile = '/Users/Amory/oss_sf.txt';
 my %oss;
 
 # Build hash for later parsing, etc.
