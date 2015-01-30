@@ -2409,18 +2409,18 @@ project root if possible."
 
 ;; Avoid reaching for shift for common symbols
 ;; http://endlessparentheses.com/banishing-the-shift-key-with-key-chord-in-emacs.html
-(key-chord-define-global "0o" ")")
-(key-chord-define-global "1q" "!")
-(key-chord-define-global "2w" "@")
-(key-chord-define-global "3e" "#")
-(key-chord-define-global "4r" "$")
-(key-chord-define-global "5r" "%")
-(key-chord-define-global "5t" "%")
-(key-chord-define-global "6y" "^")
-(key-chord-define-global "6t" "^")
-(key-chord-define-global "7y" "&")
-(key-chord-define-global "8u" "*")
-(key-chord-define-global "9i" "(")
+;; (key-chord-define-global "0o" ")")
+;; (key-chord-define-global "1q" "!")
+;; (key-chord-define-global "2w" "@")
+;; (key-chord-define-global "3e" "#")
+;; (key-chord-define-global "4r" "$")
+;; (key-chord-define-global "5r" "%")
+;; (key-chord-define-global "5t" "%")
+;; (key-chord-define-global "6y" "^")
+;; (key-chord-define-global "6t" "^")
+;; (key-chord-define-global "7y" "&")
+;; (key-chord-define-global "8u" "*")
+;; (key-chord-define-global "9i" "(")
 ;; (key-chord-define-global "-p" "_") ;; Gets annoying since works both ways
 
 (key-chord-define-global "<<" 'smart-shift-left)
