@@ -747,7 +747,6 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # export HOMEBREW_VERBOSE=1
 # Symlink in /Applications
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-
 alias ball='brew update && brew outdated && brew upgrade'
 alias bclean='brew cleanup -n && brew cleanup && brew cleanup -s && brew cask cleanup'
 alias bsearch='brew search'
@@ -832,10 +831,6 @@ function update()
     brew cleanup -s
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}casks${Color_zOff}..."
     brew cask cleanup --verbose
-
-    # echo -e "${Color_Cyan}Checking ${Color_Red_Intense}Mac OSX software updates${Color_zOff}..."
-    # sudo softwareupdate -iva;
-    # softwareupdate -l;
 }
 
 # Quickly open and make a new perl file executable and with headers
@@ -863,7 +858,6 @@ alias python3='python3.4 '
 complete -F _python python3.4
 
 # Recompile all elisp files, with proper warnings/output
-# alias recompile_emacs='emacs -batch -f batch-byte-compile ~/.emacs.d/**/*.el'
 function recompile_emacs() {
     emacs -batch --eval '(byte-recompile-directory "~/.emacs.d/" 0)'
 }
@@ -904,16 +898,6 @@ alias pause='itunes pause'
 # Track who is listening to your iTunes music
 alias whotunes='lsof -r 2 -n -P -F n -c iTunes -a -i TCP@Durandal.local:3689'
 
-#for use with old script
-#alias next='itunes next track;itunes get artist of current track;itunes get name of current track'
-#function itunes() {
-#    if [ -z "$1" -o "$1" = '-h' -o "$1" = '--help' ]; then
-#	itunes-hints
-#    else
-#	osascript -e 'tell app "iTunes" to '"$*"
-#    fi
-#}
-
 # Stuff I never use but can't delete because of http://xkcd.com/530/
 alias stfu="osascript -e 'set volume output muted true'"
 alias pumpitup="osascript -e 'set volume 7'"
@@ -944,8 +928,8 @@ alias pandora='pianobar'
 alias mplayer='mplayer -msgcolor'
 
 
-# Show most used commands, from: http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
-# Fixed by doing $4 instead of $2
+# Show most used commands, fixed by doing $4 instead of $2, from:
+# http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
 alias profileme="history | awk '{print \$4}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
 
 alias which='type -a'
