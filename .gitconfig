@@ -123,7 +123,7 @@ fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen 
 ui = auto
 
 [color "branch"]
-current = yellow reverse
+current = cyan reverse
 local = yellow
 remote = green
 
