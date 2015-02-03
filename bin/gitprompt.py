@@ -46,6 +46,11 @@ def check(dirname):
             clean = False
             # p = re.search("Your branch is ahead of .* by (\d+) commit", out)
             # messages.append(p.group(1))
+        # Internal regex is faster than git rev-parse --abbrev-ref HEAD
+        if 'On branch ' in out:
+            branch = re.search('^On branch (.*)\n', out)
+            messages.insert(0, ' ')
+            messages.insert(0, branch.group(1))
 
     else:
         messages = ["-"]
