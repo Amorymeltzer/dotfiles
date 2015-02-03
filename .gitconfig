@@ -1,3 +1,5 @@
+[hub]
+	protocol = https
 [user]
 name = Amory Meltzer
 email = Amorymeltzer@gmail.com
