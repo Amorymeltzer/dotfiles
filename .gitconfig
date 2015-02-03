@@ -1,5 +1,5 @@
 [hub]
-	protocol = https
+protocol = https
 [user]
 name = Amory Meltzer
 email = Amorymeltzer@gmail.com
@@ -118,6 +118,10 @@ fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen 
 # Find commits by commit message
 fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
+# If there's only suggestion from a typo, automatically call it
+[help]
+autocorrect = 1
+
 [color]
 # Use colors in Git commands that are capable of colored output when outputting to the terminal
 ui = auto
@@ -162,6 +166,6 @@ pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
 insteadOf = "gist:"
 [filter "media"]
-	required = true
-	clean = git media clean %f
-	smudge = git media smudge %f
+required = true
+clean = git media clean %f
+smudge = git media smudge %f
