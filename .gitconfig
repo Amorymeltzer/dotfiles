@@ -36,6 +36,7 @@ c = commit
 cm = commit -m
 a = add
 aa = add -A
+all = add -A
 aas = "!git aa; git s"
 
 scan = "!~/bin/gscan"
@@ -79,6 +80,7 @@ sub = submodule
 suba = submodule add
 subu = submodule update --init
 
+# Push and Pull
 pom = push origin master
 # Use rebase to prevent unnecessary commits
 pum = pull --rebase origin master
