@@ -938,6 +938,7 @@ alias which='type -a'
 
 # Pretty-print PATH
 alias path='echo -e ${PATH//:/\\n}'
+alias manpath="manpath | tr ':' '\n'"
 
 # Matrix-esque screensaver-esque; man tr for different options
 alias matrix='tr -c "[:print:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=lcase,unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
