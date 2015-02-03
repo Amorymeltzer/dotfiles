@@ -542,8 +542,8 @@ alias j="jobs"
 alias h='history 15'
 alias cl='clear'
 alias cls='clear'
-alias em='emacs'
-alias e='emacs'
+alias em='emacs '
+alias e='exec $EDITOR '
 alias count='wc -l '
 
 # http://linux.die.net/man/1/pygmentize
