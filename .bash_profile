@@ -8,9 +8,8 @@ export PATH="/opt/local/bin:/opt/local/sbin:$HOME/bin:$PATH"
 #     export PATH=~/bin:$PATH  # add bin folder to the path, if I've got it.
 # fi
 
-# Add macport man, unloved perl modules
-export MANPATH="/opt/local/man:/opt/local/share/perl5.20/siteman:/opt/local/share/perl5.20/man:$MANPATH"
-
+# Add unloved perl modules
+export MANPATH="/opt/local/share/perl5.20/siteman:/opt/local/share/perl5.20/man:$MANPATH"
 
 # emacs > vim
 export EDITOR="emacs"
