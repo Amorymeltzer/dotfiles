@@ -762,19 +762,6 @@ alias cinfo='brew cask info'
 alias clist='brew cask list'
 alias cdoctor='brew cask doctor'
 
-# Delete build/*, sources/authors/id; http://www.perlmonks.org/?node_id=906580
-function cpanclean() {
-    sudo cpan -c
-    sudo \rm -vr ~/.cpan/build/*
-    sudo \rm -vr ~/.cpan/sources/authors/id/*
-}
-# Upgrade all pip modules, via http://stackoverflow.com/a/3452888/2521092
-function pipupgrade()
-{
-    pip list | grep -v '^\-e' | grep -v bonjour-py | grep -v pip | cut -d ' ' -f 1 | xargs sudo pip install -U
-}
-
-
 # Quickly open and make a new perl file executable and with headers
 function newperl() {
     if [ -a $1 ]; then
