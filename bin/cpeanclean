@@ -3,6 +3,6 @@
 # Delete build/*, sources/authors/id
 # http://www.perlmonks.org/?node_id=906580
 
-sudo cpan -c
-sudo \rm -vr ~/.cpan/build/*
-sudo \rm -vr ~/.cpan/sources/authors/id/*
+cpan -c
+\rm -vr ~/.cpan/build/*
+\rm -vr ~/.cpan/sources/authors/id/*
