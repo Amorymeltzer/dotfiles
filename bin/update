@@ -9,22 +9,16 @@ sudo -v
 # Also need to find a way to do things it suggests, like port select and
 # so on ;;;;;; ##### FIXME TODO
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
-sudo port -v selfupdate;
-port echo -v outdated;
-whatsnew;
-sudo -v			# Just in case
-sudo port -v upgrade outdated;
-sudo -v			# Just in case
+sudo pall
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
 sudo port -v uninstall inactive;
 echo -e "${Color_Green}Logging leaves${Color_zOff}..."
 port echo leaves >> ~/port_leaves_log.txt;
 sudo port -v uninstall leaves;
-pclean;
+sudo port clean -v --all installed
 
-sudo -v			# Just in case
 echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}pip python packages${Color_zOff}..."
-pipupgrade;
+sudo pipupgrade;
 
 echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}gems${Color_zOff}..."
 sudo gem update --system
@@ -37,9 +31,9 @@ echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}CPAN modules${Color_zOff}...
 sudo -v			# Just in case
 cpan-outdated --verbose
 cpan-outdated | xargs sudo cpan -i
-sudo -v			# Just in case
+
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}CPAN directories${Color_zOff}..."
-cpanclean;
+sudo cpanclean;
 
 # Should probably make this verbose or something
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
