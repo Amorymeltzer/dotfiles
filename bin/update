@@ -2,6 +2,33 @@
 # update by Amory Meltzer
 # UPDATE ALL THE THINGS!!!
 
+
+function help {
+  cat <<END_HELP
+Usage: $1 [-b INTEGER] [-c] [-C] [-h]
+
+  -c			check for cpan updates but don't upgrade
+  -C			skip all cpan actions
+  -h			this help
+
+END_HELP
+}
+
+# Parse commandline options
+while getopts "cCh" opt; do
+    case $opt in
+	c ) cpan_flag="1";;
+	C ) cpan_flag="2";;
+	h ) help $0
+	    exit 0;;
+	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
+            exit 1;;
+	: ) printf "Option -"$opt" requires an argument, try $0 -h\n" >&2
+            exit 1;;
+    esac
+done
+
+
 # Need to find a way to do things it suggests, like port select and so on
 # ;;;;;; ##### FIXME TODO
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
