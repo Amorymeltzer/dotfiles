@@ -76,10 +76,13 @@ sudo -k
 # Should probably make this verbose or something
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
 brew update
-# Should make upgtrade contingent on upgrade
-echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
-brew outdated
-brew upgrade
+if [ $(brew outdated) ]; then
+    echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
+    brew outdated
+    brew upgrade
+else
+    echo -e "${Color_Green}Homebrew packages and taps already up-to-date${Color_zOff}..."
+fi
 
 # Not perfect, but uses the external brewcask-doutdated.rb command to grab
 # a list of outdated casks, then --force reinstalls them
