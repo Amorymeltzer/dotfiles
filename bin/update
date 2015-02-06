@@ -34,32 +34,37 @@ sudo -v
 
 # Need to find a way to do things it suggests, like port select and so on
 # ;;;;;; ##### FIXME TODO
-echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
+echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts base${Color_zOff}..."
 port selfupdate
+echo -e "${Color_Green}Checking ${Color_Red_Intense}MacPorts${Color_zOff}..."
 port echo -v outdated
 whatsnew
+echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
 port -v upgrade outdated
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
 port -v uninstall inactive;
 echo -e "${Color_Green}Logging leaves${Color_zOff}..."
 port echo leaves >> ~/port_leaves_log.txt;
+echo -e "${Color_White}Removing ${Color_Red_Intense}leaves${Color_zOff}..."
 port -v uninstall leaves;
+echo -e "${Color_White}Cleaning ${Color_Red_Intense}ports${Color_zOff}..."
 port clean -v --all installed
 
-echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}pip python packages${Color_zOff}..."
+echo -e "${Color_Cyan}Updating ${Color_Red_Intense}pip python packages${Color_zOff}..."
 pipupgrade;
 
-echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}gems${Color_zOff}..."
+echo -e "${Color_Cyan}Updating ${Color_Red_Intense}gem ruby manager${Color_zOff}..."
 gem update --system
+echo -e "${Color_Cyan}Updating ${Color_Red_Intense}ruby gems${Color_zOff}..."
 gem update
-echo -e "${Color_White}Cleaning ${Color_Red_Intense}gems${Color_zOff}..."
+echo -e "${Color_White}Cleaning ${Color_Red_Intense}ruby gems${Color_zOff}..."
 gem cleanup;
 
 if [ $cpan_flag < 2 ]; then
-    echo -e "${Color_Cyan}Checking ${Color_Red_Intense}CPAN modules${Color_zOff}..."
+    echo -e "${Color_Green}Checking ${Color_Red_Intense}CPAN modules${Color_zOff}..."
     cpan-outdated --verbose
     if [ $cpan_flag < 1 ]; then
-	echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}CPAN modules${Color_zOff}..."
+	echo -e "${Color_Cyan}Updating ${Color_Red_Intense}CPAN modules${Color_zOff}..."
 	cpan-outdated | xargs cpan -i
     fi
     echo -e "${Color_White}Cleaning ${Color_Red_Intense}CPAN directories${Color_zOff}..."
@@ -71,13 +76,16 @@ sudo -k
 # Should probably make this verbose or something
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
 brew update
+# Should make upgtrade contingent on upgrade
+echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
 brew outdated
 brew upgrade
 
 # Not perfect, but uses the external brewcask-doutdated.rb command to grab
 # a list of outdated casks, then --force reinstalls them
-echo -e "${Color_Cyan}Updating ${Color_Red_Intense}casks${Color_zOff}..."
+echo -e "${Color_Green}Checking ${Color_Red_Intense}casks${Color_zOff}..."
 brew cask doutdated
+echo -e "${Color_Cyan}Updating ${Color_Red_Intense}casks${Color_zOff}..."
 brew cask doutdated | xargs brew cask install --force
 
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}Homebrew${Color_zOff}..."
