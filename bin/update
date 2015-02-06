@@ -4,7 +4,7 @@
 
 
 function help {
-  cat <<END_HELP
+    cat <<END_HELP
 Usage: $1 [-b INTEGER] [-c] [-C] [-h]
 
   -c			check for cpan updates but don't upgrade
@@ -28,32 +28,33 @@ while getopts "cCh" opt; do
     esac
 done
 
-
 # Need to find a way to do things it suggests, like port select and so on
 # ;;;;;; ##### FIXME TODO
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
-sudo pall
+pall
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
-sudo port -v uninstall inactive;
+port -v uninstall inactive;
 echo -e "${Color_Green}Logging leaves${Color_zOff}..."
 port echo leaves >> ~/port_leaves_log.txt;
-sudo port -v uninstall leaves;
-sudo port clean -v --all installed
+port -v uninstall leaves;
+port clean -v --all installed
 
 echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}pip python packages${Color_zOff}..."
-sudo pipupgrade;
+pipupgrade;
 
 echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}gems${Color_zOff}..."
-sudo gem update --system
-sudo gem update
+gem update --system
+gem update
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}gems${Color_zOff}..."
-sudo gem cleanup;
+gem cleanup;
 
 echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}CPAN modules${Color_zOff}..."
 cpan-outdated --verbose
-cpan-outdated | xargs sudo cpan -i
+cpan-outdated | xargs cpan -i
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}CPAN directories${Color_zOff}..."
-sudo cpanclean;
+cpanclean;
+
+sudo -k
 
 # Should probably make this verbose or something
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
