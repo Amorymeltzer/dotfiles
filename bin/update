@@ -40,7 +40,7 @@ echo -e "${Color_Green}Checking ${Color_Red_Intense}MacPorts${Color_zOff}..."
 port echo -v outdated
 whatsnew
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
-port -v upgrade outdated
+port upgrade outdated
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
 port -v uninstall inactive;
 echo -e "${Color_Green}Logging leaves${Color_zOff}..."
