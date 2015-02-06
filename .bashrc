@@ -725,7 +725,6 @@ alias chrome="open -a google\ chrome"
 alias pecho='port echo '
 alias psync='sudo port sync '
 alias pself='sudo port selfupdate '
-alias pall='sudo port selfupdate && port echo outdated && sudo port upgrade outdated'
 alias pout='port echo outdated '
 alias pug='sudo port upgrade outdated '
 alias puo='pug '

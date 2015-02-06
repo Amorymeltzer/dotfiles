@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# pall by Amory Meltzer
+# Do everything to update macports
+
+port selfupdate
+port echo outdated
+sudo port upgrade outdated
