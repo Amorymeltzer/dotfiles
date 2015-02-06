@@ -60,10 +60,10 @@ gem update
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}ruby gems${Color_zOff}..."
 gem cleanup;
 
-if [ $cpan_flag < 2 ]; then
+if [ $cpan_flag -lt 2 ]; then
     echo -e "${Color_Green}Checking ${Color_Red_Intense}CPAN modules${Color_zOff}..."
     cpan-outdated --verbose
-    if [ $cpan_flag < 1 ]; then
+    if [ $cpan_flag -lt 1 ]; then
 	echo -e "${Color_Cyan}Updating ${Color_Red_Intense}CPAN modules${Color_zOff}..."
 	cpan-outdated | xargs cpan -i
     fi
