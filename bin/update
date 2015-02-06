@@ -14,6 +14,7 @@ Usage: $1 [-b INTEGER] [-c] [-C] [-h]
 END_HELP
 }
 
+cpan_flag="0"
 # Parse commandline options
 while getopts "cCh" opt; do
     case $opt in
@@ -48,11 +49,16 @@ gem update
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}gems${Color_zOff}..."
 gem cleanup;
 
-echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}CPAN modules${Color_zOff}..."
-cpan-outdated --verbose
-cpan-outdated | xargs cpan -i
-echo -e "${Color_White}Cleaning ${Color_Red_Intense}CPAN directories${Color_zOff}..."
-cpanclean;
+if [ $cpan_flag < 2 ]; then
+    echo -e "${Color_Cyan}Checking ${Color_Red_Intense}CPAN modules${Color_zOff}..."
+    cpan-outdated --verbose
+    if [ $cpan_flag < 1 ]; then
+	echo -e "${Color_Cyan}Upgrading ${Color_Red_Intense}CPAN modules${Color_zOff}..."
+	cpan-outdated | xargs cpan -i
+    fi
+    echo -e "${Color_White}Cleaning ${Color_Red_Intense}CPAN directories${Color_zOff}..."
+    cpanclean;
+fi
 
 sudo -k
 
