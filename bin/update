@@ -29,6 +29,9 @@ while getopts "cCh" opt; do
     esac
 done
 
+# Ask for sudo early
+sudo -v
+
 # Need to find a way to do things it suggests, like port select and so on
 # ;;;;;; ##### FIXME TODO
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
