@@ -35,7 +35,10 @@ sudo -v
 # Need to find a way to do things it suggests, like port select and so on
 # ;;;;;; ##### FIXME TODO
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
-pall
+port selfupdate
+port echo -v outdated
+whatsnew
+port -v upgrade outdated
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
 port -v uninstall inactive;
 echo -e "${Color_Green}Logging leaves${Color_zOff}..."
