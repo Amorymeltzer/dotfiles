@@ -589,7 +589,8 @@ alias perlcheat='man perlcheat'
 #  alias sudo='sudo '
 # Hook lock-quote scripts into sudo.  Not ideal but fits the right profile:
 # uses sudo, not overly common but often enough to change moderately frequently
-alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo '
+# -E preserves environment, eg colors
+alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
 # sudo aliases
 alias motherfucker,='sudo '
 alias fuckyou,='sudo '
