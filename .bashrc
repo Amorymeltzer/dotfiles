@@ -592,7 +592,6 @@ alias perlcheat='man perlcheat'
 # -E preserves environment, eg colors
 alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
 # sudo aliases
-alias motherfucker,='sudo '
 alias fuckyou,='sudo '
 
 # Prompt before overwrite, be vocal about it
