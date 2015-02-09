@@ -24,6 +24,7 @@ echo "Backing up DM sent..."
 t direct_messages_sent --csv --number 3000 > $FOLDERPATH/dm_sent-$DAY.csv
 echo "Backing up followers..."
 t followers --csv > $FOLDERPATH/followers-$DAY.csv
+t followers > $FOLDERPATH/followers-$DAY.txt
 echo "Backing up followings..."
 t followings --csv > $FOLDERPATH/followings-$DAY.csv
 echo "Backing up lists..."
