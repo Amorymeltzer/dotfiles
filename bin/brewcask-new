@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+# External command to show what casks have been changed in homebrew-cask
+# By @alebcay https://github.com/caskroom/homebrew-cask/issues/5839
+
+checkNew() {
+while read line; do
+if [[ $line == A* ]]
+then
+word=$(echo $line | cut -d \  -f 2)
+word=${word##*/}
+word=${word%.*}
+echo $word
+fi
+done < /tmp/git-difftree-log.txt
+}
+
+checkDeleted() {
+while read line; do
+if [[ $line == D* ]]
+then
+word=$(echo $line | cut -d \  -f 2)
+word=${word##*/}
+word=${word%.*}
+echo $word
+fi
+done < /tmp/git-difftree-log.txt
+}
+
+checkModified() {
+while read line; do
+if [[ $line == M* ]]
+then
+word=$(echo $line | cut -d \  -f 2)
+word=${word##*/}
+word=${word%.*}
+echo $word
+fi
+done < /tmp/git-difftree-log.txt
+}
+
+checkRenamed() {
+while read line; do
+if [[ $line == R* ]]
+then
+word=$(echo $line | cut -d \  -f 2)
+word=${word##*/}
+word=${word%.*}
+echo -n $word
+echo -ne " → "
+newword=$(echo $line | cut -d \  -f 3)
+newword=${newword##*/}
+newword=${newword%.*}
+echo $newword
+echo "|"
+fi
+done < /tmp/git-difftree-log.txt
+}
+
+cd $(brew --prefix)/Library/Taps/caskroom/homebrew-cask
+OLDREV=$(git rev-parse -q --short --verify HEAD)
+brew update
+NEWREV=$(git rev-parse -q --short --verify HEAD)
+if [ "$OLDREV" = "$NEWREV" ]
+then
+echo "Already up to date ($NEWREV)."
+exit 0
+fi
+echo "Updated Homebrew-Cask from $OLDREV to $NEWREV."
+git diff-tree --name-status -r --diff-filter=AMDR -M10% $OLDREV $NEWREV Casks/ > /tmp/git-difftree-log.txt
+
+NEWRESULT=$(checkNew)
+if [[ -n $NEWRESULT ]]; then
+echo "New Casks:"
+printf "%-40s %-40s\n" $(echo $NEWRESULT)
+echo -e "\n"
+fi
+
+DELRESULT=$(checkDeleted)
+if [[ -n $DELRESULT ]]; then
+echo "Deleted Casks:"
+printf "%-40s %-40s\n" $(echo $DELRESULT)
+echo -e "\n"
+fi
+
+MODRESULT=$(checkModified)
+if [[ -n $MODRESULT ]]; then
+echo "Updated Casks:"
+printf "%-40s %-40s\n" $(echo $MODRESULT)
+echo -e "\n"
+fi
+
+RNMRESULT=$(checkRenamed)
+if [[ -n $RNMRESULT ]]; then
+echo "Renamed Casks:"
+echo $RNMRESULT | perl -pe 's/\s*\|\s*/\n/g'
+fi
+rm /tmp/git-difftree-log.txt
