@@ -8,7 +8,7 @@ _cask() {
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     acts="audit cat cleanup create doctor edit fetch home info install list search uninstall update zap"
-    acts=$acts" doutdated github repository"
+    acts=$acts" doutdated github new repository"
 
     COMPREPLY=( $(compgen -W "${acts}" -- ${cur})
 	      )
