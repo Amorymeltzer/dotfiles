@@ -76,7 +76,11 @@ sudo -k
 
 # Should probably make this verbose or something
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
-brew update
+# This should properly be 'brew update', but I like seeing what's changed in
+# homebrew-cask, and the two are inextricably linked, so for now this must
+# do.  I suppose I could do a version of 'git up' in each respective
+# repository, but that sort of seems excessive
+brew cask new
 if [ $(brew outdated) ]; then
     echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
     brew outdated
