@@ -7,8 +7,8 @@ set +o histexpand;     # don't expand history expressions
 
 if [[ $# -lt 1 ]]; then
     open 'https://github.com/caskroom/homebrew-cask/'
-elif [[ $1 -eq 'pr' || $1 -eq 'p' ]]; then
+elif [[ $1 == 'pr' || $1 == 'p' ]]; then
     open 'https://github.com/caskroom/homebrew-cask/pulls'
-elif [[ $1 -eq 'i' ]]; then
+elif [[ $1 == 'i' ]]; then
     open 'https://github.com/caskroom/homebrew-cask/issues'
 fi
