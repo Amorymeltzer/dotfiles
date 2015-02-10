@@ -104,4 +104,4 @@ else
 fi
 
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}casks${Color_zOff}..."
-brew cask cleanup --verbose
+brew cask cleanup
