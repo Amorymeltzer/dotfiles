@@ -39,7 +39,8 @@ echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts base${Color_zOff}...
 port selfupdate
 echo -e "${Color_Green}Checking ${Color_Red_Intense}MacPorts${Color_zOff}..."
 port echo -v outdated
-whatsnew
+echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
+port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}MacPorts${Color_zOff}..."
 port upgrade outdated
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}MacPorts${Color_zOff}..."
