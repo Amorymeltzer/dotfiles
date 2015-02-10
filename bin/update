@@ -6,12 +6,11 @@
 
 function help {
     cat <<END_HELP
-Usage: $1 [-b INTEGER] [-c] [-C] [-h]
+Usage: $1 [-c] [-C] [-h]
 
-  -c			check for cpan updates but don't upgrade
-  -C			skip all cpan actions
-  -h			this help
-
+  -c		check for cpan updates but don't upgrade
+  -C		skip all cpan actions
+  -h		this help
 END_HELP
 }
 
