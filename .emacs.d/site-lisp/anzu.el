@@ -1,10 +1,10 @@
 ;;; anzu.el --- Show number of matches in mode-line while searching -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014 by Syohei YOSHIDA
+;; Copyright (C) 2015 by Syohei YOSHIDA
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-anzu
-;; Version: 0.48
+;; Version: 0.49
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -636,7 +636,13 @@
     (cl-loop with curbuf = (current-buffer)
              with search-func = (if use-regexp 're-search-forward 'search-forward)
              while (funcall search-func from end t)
-             do (anzu--set-marker (match-beginning 0) curbuf))))
+             do
+             (progn
+               (anzu--set-marker (match-beginning 0) curbuf)
+               (when (= (match-beginning 0) (match-end 0))
+                 (if (eobp)
+                     (cl-return nil)
+                   (forward-char 1)))))))
 
 (cl-defun anzu--query-replace-common (use-regexp &key at-cursor thing prefix-arg (query t))
   (anzu--cons-mode-line 'replace-query)
