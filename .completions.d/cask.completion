@@ -27,7 +27,7 @@ _cask() {
 	    return 0
 	    ;;
 	github)
-	    COMPREPLY=('pr i')
+	    COMPREPLY=('d i pr')
 	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
     esac
 }

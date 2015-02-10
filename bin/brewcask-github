@@ -11,4 +11,6 @@ elif [[ $1 == 'pr' || $1 == 'p' ]]; then
     open 'https://github.com/caskroom/homebrew-cask/pulls'
 elif [[ $1 == 'i' ]]; then
     open 'https://github.com/caskroom/homebrew-cask/issues'
+elif [[ $1 == 'd' ]]; then
+    open 'https://github.com/orgs/caskroom/dashboard'
 fi
