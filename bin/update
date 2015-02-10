@@ -72,36 +72,34 @@ if [ $cpan_flag -lt 2 ]; then
     cpanclean;
 fi
 
-sudo -k
-
 # Should probably make this verbose or something
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
 # This should properly be 'brew update', but I like seeing what's changed in
 # homebrew-cask, and the two are inextricably linked, so for now this must
 # do.  I suppose I could do a version of 'git up' in each respective
 # repository, but that sort of seems excessive
-brew cask new
+sudo -u $SUDO_USER brew cask new
 if [ $(brew outdated) ]; then
     echo -e "${Color_Cyan}Updating ${Color_Red_Intense}Homebrew${Color_zOff}..."
-    brew outdated
-    brew upgrade
+    sudo -u $SUDO_USER brew outdated
+    sudo -u $SUDO_USER brew upgrade
 else
     echo -e "${Color_Green}Homebrew packages and taps already up-to-date${Color_zOff}..."
 fi
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}Homebrew${Color_zOff}..."
-brew cleanup -ns
-brew cleanup -s
+sudo -u $SUDO_USER brew cleanup -ns
+sudo -u $SUDO_USER brew cleanup -s
 
 # Not perfect, but uses the external brewcask-doutdated.rb command to grab
 # a list of outdated casks, then --force reinstalls them
 echo -e "${Color_Green}Checking ${Color_Red_Intense}casks${Color_zOff}..."
-brew cask doutdated
 if [ $(brew cask doutdated) ]; then
-echo -e "${Color_Cyan}Updating ${Color_Red_Intense}casks${Color_zOff}..."
-    brew cask doutdated | xargs brew cask install --force
+    sudo -u $SUDO_USER brew cask doutdated
+    echo -e "${Color_Cyan}Updating ${Color_Red_Intense}casks${Color_zOff}..."
+    sudo -u $SUDO_USER "brew cask doutdated | xargs brew cask install --force"
 else
     echo -e "${Color_Green}brew-cask already up-to-date${Color_zOff}..."
 fi
 
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}casks${Color_zOff}..."
-brew cask cleanup
+sudo -u $SUDO_USER brew cask cleanup
