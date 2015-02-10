@@ -88,6 +88,9 @@ if [ $(brew outdated) ]; then
 else
     echo -e "${Color_Green}Homebrew packages and taps already up-to-date${Color_zOff}..."
 fi
+echo -e "${Color_White}Cleaning ${Color_Red_Intense}Homebrew${Color_zOff}..."
+brew cleanup -ns
+brew cleanup -s
 
 # Not perfect, but uses the external brewcask-doutdated.rb command to grab
 # a list of outdated casks, then --force reinstalls them
@@ -100,8 +103,5 @@ else
     echo -e "${Color_Green}brew-cask already up-to-date${Color_zOff}..."
 fi
 
-echo -e "${Color_White}Cleaning ${Color_Red_Intense}Homebrew${Color_zOff}..."
-brew cleanup -ns
-brew cleanup -s
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}casks${Color_zOff}..."
 brew cask cleanup --verbose
