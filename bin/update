@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # update by Amory Meltzer
 # UPDATE ALL THE THINGS!!!
-## Deal with sudo and colors
-## pipupgrade not allowed?
+## brew/cask sudo deescalation
+## fix doutdated
 
 function help {
     cat <<END_HELP
