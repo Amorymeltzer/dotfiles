@@ -58,6 +58,13 @@ echo -e "${Color_Cyan}Updating ${Color_Red_Intense}gem ruby manager${Color_zOff}
 gem update --system
 echo -e "${Color_Cyan}Updating ${Color_Red_Intense}ruby gems${Color_zOff}..."
 gem update
+
+# Delete more recent versions of psych, stupid stupid bug that kills jekyll
+# use.  See https://github.com/dtao/safe_yaml/issues/72 and
+# https://github.com/jekyll/jekyll/issues/3201 for more info
+psych_bad_version=$(gem list | grep -i psych |sed 's/psych .\(.*\),.*/\1/g')
+gem uninstall psych -v $psych_bad_version
+
 echo -e "${Color_White}Cleaning ${Color_Red_Intense}ruby gems${Color_zOff}..."
 gem cleanup;
 
