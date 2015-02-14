@@ -1,6 +1,9 @@
 [hub]
 protocol = https
 
+[github]
+user = Amorymeltzer
+
 [user]
 name = Amory Meltzer
 email = Amorymeltzer@gmail.com
