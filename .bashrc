@@ -53,6 +53,7 @@ alias lad='ls -Al | grep "^d"'
 alias lda='lad'
 
 # Colorized, recursive ls-like tree
+alias treed='tree -aC -I ".git" --dirsfirst "$@" | less -FRNX'
 alias tree='tree -Csuh'
 
 # Git stuff
