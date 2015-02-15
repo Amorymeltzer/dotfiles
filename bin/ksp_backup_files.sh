@@ -9,7 +9,8 @@ kacpath=$ksppath'/GameData/TriggerTech/PluginData/KerbalAlarmClock'
 
 mkdir "$folderpath"
 
-cp "$ksppath/saves/McJohn/persistent.sfs" "$folderpath/"
+cp "$ksppath/saves/McJohn/persistent.sfs" "$folderpath/McJohn.persistent.sfs"
+cp "$ksppath/saves/Kergarin/persistent.sfs" "$folderpath/Kergarin.persistent.sfs"
 #cp "$kacpath/config.xml" "$folderpath/"
 #cp "$kacpath/Alarms-McJohn (CAREER).txt" "$folderpath/"
 
