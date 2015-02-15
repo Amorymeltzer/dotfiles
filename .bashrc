@@ -515,6 +515,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+alias ~="cd ~"
 alias -- -='cd -' # go back a directory, -- means end of options
 alias -- --='cd -' # go back a directory
 
