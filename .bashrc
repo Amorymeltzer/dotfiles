@@ -990,6 +990,9 @@ command -v sha256sum > /dev/null || alias sha256sum="shasum -a 256 "
 # OS X has no `sha512sum`, so use `shasum` as a fallback
 command -v sha512sum > /dev/null || alias sha512sum="shasum -a 512 "
 
+# Canonical hex dump; some systems have this symlinked
+command -v hd > /dev/null || alias hd="hexdump -C"
+
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
