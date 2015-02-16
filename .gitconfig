@@ -102,10 +102,14 @@ pum = pull --rebase origin master
 fam = "!git fetch origin -v; git fetch upstream -v; git merge upstream/master"
 
 d = diff --word-diff
+df = diff --word-diff
 # Show the staged changes.
 dc = diff --cached --word-diff
 # Use icdiff tool https://github.com/jeffkaufman/icdiff
 icdiff = "!git difftool --no-prompt --extcmd icdiff | less"
+icd = "!git difftool --no-prompt --extcmd icdiff | less"
+icdiff-cached = "!git difftool --no-prompt --extcmd icdiff --cached | less"
+icdc = "!git difftool --no-prompt --extcmd icdiff --cached | less"
 h = rev-parse HEAD
 
 unstage = reset HEAD --
