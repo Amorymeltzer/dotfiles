@@ -60,11 +60,16 @@ alias tree='tree -Csuh'
 # Alias hub as git for github https://github.com/github/hub
 if [[ -f `command -v hub` ]] ; then alias git='hub' ; fi
 function g {
-    if [[ $# > 0 ]]; then
-        git "$@"
+    ref=$(git symbolic-ref HEAD 2> /dev/null)
+    if [[ $ref ]]; then
+	if [[ $# > 0 ]]; then
+            git "$@"
+	else
+            git-time-since-last-commit
+	    git status --short --branch
+	fi
     else
-        git-time-since-last-commit
-	git status --short --branch
+	echo "Not a git repository"
     fi
 }
 alias gb='git b '
