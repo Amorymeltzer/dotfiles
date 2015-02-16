@@ -75,7 +75,12 @@ cl = clone
 
 b = branch
 br = branch
+
+# Show verbose output about tags, branches or remotes
+tags = tag -l
 branches = branch -a
+remotes = remote -v
+
 # Switch to a branch, creating it if necessary
 go = checkout -B
 # Remove branches that have already been merged with master
@@ -93,8 +98,6 @@ pum = pull --rebase origin master
 # Fetch and merge better than pull?
 fam = "!git fetch origin -v; git fetch upstream -v; git merge upstream/master"
 
-remotes = remote -v
-
 d = diff --word-diff
 # Show the staged changes.
 dc = diff --cached --word-diff
@@ -103,9 +106,6 @@ icdiff = "!git difftool --no-prompt --extcmd icdiff | less"
 h = rev-parse HEAD
 
 unstage = reset HEAD --
-
-# Show verbose output about tags, branches or remotes
-tags = tag -l
 
 # Assume/Unassume changes
 assume = update-index --assume-unchanged
