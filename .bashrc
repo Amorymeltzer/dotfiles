@@ -59,7 +59,14 @@ alias tree='tree -Csuh'
 # Git stuff
 # Alias hub as git for github https://github.com/github/hub
 if [[ -f `command -v hub` ]] ; then alias git='hub' ; fi
-alias g='git'
+function g {
+    if [[ $# > 0 ]]; then
+        git "$@"
+    else
+        git-time-since-last-commit
+	git status --short --branch
+    fi
+}
 alias gb='git b '
 alias gcb='git copy-branch-name'
 alias gco='git co '

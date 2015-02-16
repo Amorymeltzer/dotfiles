@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+ref=$(git symbolic-ref HEAD 2> /dev/null)
+if [[ $ref ]]; then
+    echo "Last commit: $(git log -1 --pretty=format:"%ar")"
+fi
