@@ -110,7 +110,9 @@ icdiff = "!git difftool --no-prompt --extcmd icdiff | less"
 icd = "!git difftool --no-prompt --extcmd icdiff | less"
 icdiff-cached = "!git difftool --no-prompt --extcmd icdiff --cached | less"
 icdc = "!git difftool --no-prompt --extcmd icdiff --cached | less"
-h = rev-parse HEAD
+# Get short SHA-1 for object
+h = rev-parse --short HEAD
+hash = rev-parse HEAD
 
 unstage = reset HEAD --
 
