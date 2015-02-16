@@ -674,7 +674,7 @@ function memstat {
 # Tweak for Mavericks-style info, color ;;;;;; ##### FIXME TODO
 
 # Show five most recently modified files.
-alias last_modified='ls -t $* 2> /dev/null | head -n 5 '
+alias last-modified='ls -t $* 2> /dev/null | head -n 5 '
 
 # growlnotify: add after to show when done
 # Maybe other options...
