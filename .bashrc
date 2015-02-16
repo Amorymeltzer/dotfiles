@@ -58,7 +58,7 @@ alias tree='tree -Csuh'
 
 # Git stuff
 # Alias hub as git for github https://github.com/github/hub
-alias git='hub'
+if [[ -f `command -v hub` ]] ; then alias git='hub' ; fi
 alias g='git'
 alias gb='git b '
 alias gcb='git copy-branch-name'
