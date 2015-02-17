@@ -120,8 +120,10 @@ fam = "!git fetch origin -v; git fetch upstream -v; git merge upstream/master"
 
 d = diff --word-diff
 df = diff --word-diff
-# Show the staged changes.
 dc = diff --cached --word-diff
+ds = diff --patch-with-stat
+dsc = diff --cached --patch-with-stat
+dcs = diff --cached --patch-with-stat
 # Use icdiff tool https://github.com/jeffkaufman/icdiff
 icdiff = "!git difftool --no-prompt --extcmd icdiff | less"
 icd = "!git difftool --no-prompt --extcmd icdiff | less"
