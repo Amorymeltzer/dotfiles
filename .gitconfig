@@ -96,6 +96,10 @@ go = checkout -B
 remove-merged-branches = "!git branch --merged | grep -v '\\*master' | xargs -n 1 git branch -d"
 
 rb = rebase
+reb = rebase
+# Interactive rebase with the selected number of latest commits
+rebi = "!r() { git rebase -i HEAD~$1; }; r"
+
 
 sub = submodule
 suba = submodule add
