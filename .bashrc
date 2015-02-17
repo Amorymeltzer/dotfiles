@@ -1033,6 +1033,7 @@ function uc {
 	tr '[:lower:]' '[:upper:]' <<< "$@";
     fi;
 }
+alias shout='uc'
 
 # Backup file
 function backup-file()
@@ -1347,6 +1348,11 @@ function fs() {
     fi
 }
 alias filesize='fs'
+
+# Pipe to then give command to invoked on every line from stdin
+# from @nvie https://coderwall.com/p/4tkkpq
+# ls **/*.sh | map dirname
+alias map="xargs -n1"
 
 # Repeat n times command.
 function repeat()
