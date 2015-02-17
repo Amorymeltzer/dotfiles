@@ -34,7 +34,13 @@ helper = osxkeychain
 h = help
 cfg = config --global
 
+# Depends on hub
 home = browse
+pulls = browse -- pulls
+issues = browse -- issues
+mypulls = browse -- pulls/amorymeltzer
+commits = browse -- commits
+notifications = browse /notifications
 
 c = commit
 cm = commit -m
@@ -188,4 +194,4 @@ required = true
 clean = git media clean %f
 smudge = git media smudge %f
 [log]
-	date = local
+date = local
