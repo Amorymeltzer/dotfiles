@@ -618,6 +618,11 @@ alias rm='rm -v'
 function trash() {
     mv $1 ~/.Trash
 }
+function emptyalltrashes() {
+    sudo rm -rfv /Volumes/*/.Trashes;
+    sudo rm -rfv ~/.Trash;
+}
+
 # Make intermediate directories and be verbose about it
 alias mkdir='mkdir -pv'
 # Deleting intermediate directories not as logical
