@@ -91,7 +91,7 @@ branchdata = branch -a -vv
 brd = branch -a -vv
 
 # Switch to a branch, creating it if necessary
-go = checkout -B
+go = checkout -b
 # Remove branches that have already been merged with master
 remove-merged-branches = "!git branch --merged | grep -v '\\*master' | xargs -n 1 git branch -d"
 
