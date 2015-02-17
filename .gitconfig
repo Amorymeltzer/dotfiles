@@ -71,8 +71,8 @@ showlast = log -n 1 -p
 # View abbreviated SHA, description, and history graph of the latest 20 commits
 graph = log --pretty=oneline -n 20 --graph --abbrev-commit --decorate
 # List contributors with number of commits
-contributors = --no-pager shortlog --summary --numbered
-count = --no-pager shortlog --summary --numbered
+contributors = "!git --no-pager shortlog --summary --numbered"
+count = "!git --no-pager shortlog --summary --numbered"
 filelog = log -u
 fl = log -u
 rl = reflog --decorate
