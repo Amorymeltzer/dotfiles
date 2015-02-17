@@ -131,6 +131,9 @@ assumed = "!git ls-files -v | grep ^h | cut -c 3-"
 assumeall = "!git st -s | awk {'print $2'} | xargs git assume"
 unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 
+# Show list of files in a conflict state.
+conflicts = "!git ls-files -u | awk '{print $4}' | sort -u"
+
 # List all aliases
 aliases = "!git config -l | grep alias | cut -c 7-"
 # Find branches containing commit
