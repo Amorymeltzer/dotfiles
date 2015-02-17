@@ -1177,6 +1177,14 @@ function sunrise()
     curl -s http://weather.yahooapis.com/forecastrss?w=$loc | grep astronomy | awk -F\" '{print $2 "\n" $4;}'
 }
 
+function thisforthat {
+    curl "http://itsthisforthat.com/api.php?text"
+    if [ -t 1 ]; then
+	echo
+    fi
+}
+alias sobasically='thisforthat'
+
 # Print the given text in the center of the screen.
 function center {
     width=$(tput cols);
@@ -1225,11 +1233,11 @@ function codepoint()
 
 # Create a data URL from a file
 function dataurl() {
-	local mimeType=$(file -b --mime-type "$1");
-	if [[ $mimeType == text/* ]]; then
-		mimeType="${mimeType};charset=utf-8";
-	fi
-	echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
+    local mimeType=$(file -b --mime-type "$1");
+    if [[ $mimeType == text/* ]]; then
+	mimeType="${mimeType};charset=utf-8";
+    fi
+    echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
 }
 
 # Show all the names (CNs and SANs) listed in the SSL certificate
@@ -1311,7 +1319,9 @@ function writetest() {
 
 # Find a file with a pattern in name:
 # Excluding a bunch of useless locations
-function ff() { find . -path './.cpan' -prune -o -path './.config' -prune -o -path './Library' -prune -o -path './.fseventsd' -prune -o -path './.Spotlight-V100' -prune -o -path './.Trashes' -prune -o -type f -iname '*'$*'*' -ls; }
+function ff() {
+    find . -path './.cpan' -prune -o -path './.config' -prune -o -path './Library' -prune -o -path './.fseventsd' -prune -o -path './.Spotlight-V100' -prune -o -path './.Trashes' -prune -o -type f -iname '*'$*'*' -ls;
+}
 
 # Remove empty directories under and including <path>s.
 alias prunedirs='find "$@" -type d -empty -depth | xargs rmdir'
