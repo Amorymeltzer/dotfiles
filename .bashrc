@@ -974,6 +974,10 @@ alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 # Which processes are listening on ports
 alias listen='lsof -iTCP -sTCP:LISTEN -P "$@" '
 
+for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
+	alias "$method"="lwp-request -m '$method'"
+done
+
 alias quicklook="qlmanage -p "
 
 alias pbc='pbcopy '
