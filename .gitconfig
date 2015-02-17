@@ -89,6 +89,8 @@ go = checkout -B
 # Remove branches that have already been merged with master
 remove-merged-branches = "!git branch --merged | grep -v '\\*master' | xargs -n 1 git branch -d"
 
+rb = rebase
+
 sub = submodule
 suba = submodule add
 subu = submodule update --init
