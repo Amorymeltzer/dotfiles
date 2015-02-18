@@ -139,8 +139,13 @@ icdc = "!git difftool --no-prompt --extcmd icdiff --cached | less"
 icc = "!git difftool --no-prompt --extcmd icdiff --cached | less"
 
 # Goodness (summary of diff lines added/removed/total)
+# FIXME TODO: Colorize
 gn = goodness
 gnc = goodness --cached
+
+# Divergence (commits we added and commits remote added)
+# FIXME TODO: Colorize
+div = divergence
 
 # Get short SHA-1 for object
 h = rev-parse --short HEAD
