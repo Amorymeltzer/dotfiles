@@ -704,14 +704,15 @@ alias beep='tput bel'
 # Use colordiff if it exists
 if [ -a /opt/local/bin/colordiff ]; then
     alias diff='colordiff ';
-    # Make wdiff colorful.  Consdier cwdiff? ;;;;;; ##### FIXME TODO
-    if [ -a /opt/local/bin/wdiff ]; then
-	function wcolordiff() {
-	    wdiff -n "$@" | colordiff
-	}
-	alias diffc='wcolordiff '
-    fi
 fi
+# Make wdiff colorful.  Consdier cwdiff? ;;;;;; ##### FIXME TODO
+if [ -a /opt/local/bin/cwdiff ]; then
+    alias wcolordiff='cwdiff '
+    elif [ -a /opt/local/bin/wdiff ]; then
+    alias wcolordiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
+fi
+alias diffc='wcolordiff '
+alias diffw='wcolordiff '
 # But for real?  Just use dwdiff: git-like giff
 # Use -3 option to only show changes
 alias dwdiff='dwdiff -sc '
@@ -979,7 +980,7 @@ alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 alias listen='lsof -iTCP -sTCP:LISTEN -P "$@" '
 
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-	alias "$method"="lwp-request -m '$method'"
+    alias "$method"="lwp-request -m '$method'"
 done
 
 alias quicklook="qlmanage -p "
