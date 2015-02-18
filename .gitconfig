@@ -48,6 +48,8 @@ mypulls = browse -- pulls/amorymeltzer
 commits = browse -- commits
 notifications = browse /notifications
 
+open = "!github-open "
+
 c = commit
 cm = commit -m
 amend = commit --amend
