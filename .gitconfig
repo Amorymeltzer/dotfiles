@@ -137,6 +137,11 @@ ic = "!git difftool --no-prompt --extcmd icdiff | less"
 icdiff-cached = "!git difftool --no-prompt --extcmd icdiff --cached | less"
 icdc = "!git difftool --no-prompt --extcmd icdiff --cached | less"
 icc = "!git difftool --no-prompt --extcmd icdiff --cached | less"
+
+# Goodness (summary of diff lines added/removed/total)
+gn = goodness
+gnc = goodness --cached
+
 # Get short SHA-1 for object
 h = rev-parse --short HEAD
 hash = rev-parse HEAD
