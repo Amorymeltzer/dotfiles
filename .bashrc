@@ -702,13 +702,12 @@ alias beep='tput bel'
 # alias whois='whois -h whois-servers.net'
 
 # Use colordiff if it exists
-if [ -a /opt/local/bin/colordiff ]; then
+if [[ -f `command -v colordiff` ]]; then
     alias diff='colordiff ';
 fi
-# Make wdiff colorful.  Consdier cwdiff? ;;;;;; ##### FIXME TODO
-if [ -a /opt/local/bin/cwdiff ]; then
+if [[ -f `command -v cwdiff` ]]; then
     alias wcolordiff='cwdiff '
-    elif [ -a /opt/local/bin/wdiff ]; then
+    elif [[ -f `command -v wdiff` ]]; then
     alias wcolordiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
 fi
 alias diffc='wcolordiff '
