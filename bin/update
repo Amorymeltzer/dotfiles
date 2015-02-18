@@ -3,6 +3,8 @@
 # UPDATE ALL THE THINGS!!!
 ## brew/cask sudo deescalation
 ## fix doutdated
+## Need to exit if not run as 'sudo update'
+## Better color management
 
 function help {
     cat <<END_HELP
