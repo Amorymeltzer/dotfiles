@@ -68,6 +68,8 @@ function g {
             git-time-since-last-commit
 	    git status --short --branch
 	fi
+    elif [[ $1 = 'scan' || $1 = 'help' ]]; then
+	git "$@"
     else
 	echo "Not a git repository"
     fi
@@ -707,7 +709,7 @@ if [[ -f `command -v colordiff` ]]; then
 fi
 if [[ -f `command -v cwdiff` ]]; then
     alias wcolordiff='cwdiff '
-    elif [[ -f `command -v wdiff` ]]; then
+elif [[ -f `command -v wdiff` ]]; then
     alias wcolordiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
 fi
 alias diffc='wcolordiff '
