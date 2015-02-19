@@ -68,7 +68,7 @@ function g {
             git-time-since-last-commit
 	    git status --short --branch
 	fi
-    elif [[ $1 = 'scan' || $1 = 'help' ]]; then
+    elif [[ $1 = 'scan' || $1 = 'help' || $1 = 'browse' || $1 = 'grab' ]]; then
 	git "$@"
     else
 	echo "Not a git repository"
