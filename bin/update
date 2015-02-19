@@ -34,7 +34,7 @@ done
 # Efficiently colorize
 updating () {
     echo -e "${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
-    }
+}
 cleaning () {
     echo -e "${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
@@ -58,10 +58,14 @@ updating 'Macports'
 port upgrade outdated
 cleaning 'Macports'
 port -v uninstall inactive;
-echo -e "${Color_Green}Logging leaves${Color_zOff}..."
-port echo leaves >> ~/port_leaves_log.txt;
-cleaning 'leaves'
-port -v uninstall leaves;
+if [ $(port echo leaves) ]; then
+    echo -e "${Color_Green}Logging leaves${Color_zOff}..."
+    port echo leaves >> ~/port_leaves_log.txt;
+    cleaning 'leaves'
+    port -v uninstall leaves;
+else
+    echo -e "${Color_Green}No leaves to clean!${Color_zOff}"
+fi
 cleaning 'ports'
 port clean -v --all installed
 
