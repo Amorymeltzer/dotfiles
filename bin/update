@@ -51,23 +51,27 @@ sudo -v
 updating 'Macports base'
 port selfupdate
 checking 'Macports'
-port echo -v outdated
-echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
-port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh
-updating 'Macports'
-port upgrade outdated
-cleaning 'Macports'
-port -v uninstall inactive;
-if [ $(port echo leaves) ]; then
-    echo -e "${Color_Green}Logging leaves${Color_zOff}..."
-    port echo leaves >> ~/port_leaves_log.txt;
-    cleaning 'leaves'
-    port -v uninstall leaves;
+if [ $(port echo outdated) ]; then
+    port echo -v outdated
+    echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
+    port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh
+    updating 'Macports'
+    port upgrade outdated
+    cleaning 'Macports'
+    port -v uninstall inactive;
+    if [ $(port echo leaves) ]; then
+	echo -e "${Color_Green}Logging leaves${Color_zOff}..."
+	port echo leaves >> ~/port_leaves_log.txt;
+	cleaning 'leaves'
+	port -v uninstall leaves;
+    else
+	echo -e "${Color_Green}No leaves to clean!${Color_zOff}"
+    fi
+    cleaning 'ports'
+    port clean -v --all installed
 else
-    echo -e "${Color_Green}No leaves to clean!${Color_zOff}"
+    echo -e "${Color_Green}Ports already up-to-date!${Color_zOff}"
 fi
-cleaning 'ports'
-port clean -v --all installed
 
 updating 'pip python packages'
 pipupgrade;
@@ -105,7 +109,7 @@ if [ $(brew outdated) ]; then
     sudo -u $SUDO_USER brew cleanup -ns
     sudo -u $SUDO_USER brew cleanup -s
 else
-    echo -e "${Color_Green}Homebrew packages and taps already up-to-date${Color_zOff}..."
+    echo -e "${Color_Green}Homebrew packages and taps already up-to-date!${Color_zOff}..."
 fi
 
 # Not perfect, but uses the external brewcask-doutdated.rb command to grab
@@ -119,5 +123,5 @@ if [ $(brew cask doutdated) ]; then
     cleaning 'casks'
     sudo -u $SUDO_USER brew cask cleanup
 else
-    echo -e "${Color_Green}casks already up-to-date${Color_zOff}..."
+    echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
 fi
