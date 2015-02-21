@@ -333,7 +333,7 @@ function prompt_command {
     # Test user type
     # Doesn't auto work with root ;;;;;; ##### FIXME TODO
     # see also `id -un` instead(?) og `logname`
-    if [[ $UID -eq 0 ]]; then
+    if [[ $(whoami) == "root" ]]; then
 	SUD=${Color_Red}           # User is root
     elif [[ ${USER} != $(logname) ]]; then
 	SUD=${Color_Red_zBackground} # User is not login user
