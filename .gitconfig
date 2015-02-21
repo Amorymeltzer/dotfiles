@@ -86,8 +86,8 @@ graph = log --pretty=oneline -n 20 --graph --abbrev-commit --decorate
 # List contributors with number of commits
 contributors = "!git --no-pager shortlog --summary --numbered"
 count = "!git --no-pager shortlog --summary --numbered"
-filelog = log -u
-fl = log -u
+
+difflog = log -u
 rl = reflog --decorate
 
 cl = clone
