@@ -16,7 +16,7 @@ set gdefault
 set encoding=utf-8 nobomb
 " Change mapleader
 let mapleader=","
-" Don’t add empty newlines at the end of files
+" Don't add empty newlines at the end of files
 set binary
 set noeol
 " Centralize backups, swapfiles and undo history
@@ -40,7 +40,7 @@ syntax on
 set cursorline
 " Make tabs as wide as two spaces
 set tabstop=2
-" Show “invisible” characters
+" Show "invisible" characters
 set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
 set list
 " Highlight searches
@@ -55,17 +55,17 @@ set laststatus=2
 set mouse=a
 " Disable error bells
 set noerrorbells
-" Don’t reset cursor to start of line when moving around.
+" Don't reset cursor to start of line when moving around.
 set nostartofline
 " Show the cursor position
 set ruler
-" Don’t show the intro message when starting Vim
+" Don't show the intro message when starting Vim
 set shortmess=atI
 " Show the current mode
 set showmode
 " Show the filename in the window titlebar
 set title
-" Show the (partial) command as it’s being typed
+" Show the (partial) command as it's being typed
 set showcmd
 " Use relative line numbers
 if exists("&relativenumber")
