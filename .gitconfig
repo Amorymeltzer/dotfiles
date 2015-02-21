@@ -113,7 +113,6 @@ reb = rebase
 # Interactive rebase with the selected number of latest commits
 rebi = "!r() { git rebase -i HEAD~$1; }; r"
 
-
 sub = submodule
 suba = submodule add
 subu = submodule update --init
@@ -210,6 +209,9 @@ default = simple
 # Include summaries of merged commits in newly created merge commit messages
 log = true
 
+[log]
+date = local
+
 # URL shorthands
 [url "git@github.com:"]
 insteadOf = "gh:"
@@ -223,9 +225,8 @@ pushInsteadOf = "gist:"
 pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
 insteadOf = "gist:"
+
 [filter "media"]
 required = true
 clean = git media clean %f
 smudge = git media smudge %f
-[log]
-date = local
