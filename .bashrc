@@ -326,13 +326,12 @@ function prompt_command {
 	CNX=${Color_Green}
     fi
 
-    # Test user type
-    # Doesn't auto work with root ;;;;;; ##### FIXME TODO
+    # Test user type FIXME TODO
     # see also `id -un` instead(?) og `logname`
-    if [[ $(whoami) == "root" ]]; then
-	SUD=${Color_Red}           # User is root
-    elif [[ ${USER} != $(logname) ]]; then
+    if [[ $USER != $(logname) ]]; then
 	SUD=${Color_Red_zBackground} # User is not login user
+    elif [[ $USER == "root" ]]; then
+	SUD=${Color_Red}           # User is root
     else
 	SUD=${Color_Green} # User is normal (mostly)
     fi
