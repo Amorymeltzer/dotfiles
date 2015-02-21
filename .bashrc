@@ -4,10 +4,6 @@
 # man sysctl
 # cp file{,.bk} to copy to backup
 
-# Used in prompt, set here rather than .bash_profile
-# to avoid weirdness when calling bash from within bash
-ITSME=$(hostname -s)
-
 # I see this around, seems good?  ;;;;;; ##### FIXME TODO
 # if not running interactively, don't do anything
 if [ -z "$PS1" ]; then
@@ -322,12 +318,12 @@ function prompt_command {
 	ERRORS=0
     fi
 
-    #    if [[ $ITSME == $(hostname -s) ]]; then
-    # Deal with stupid Durandal != durandal shit at work
-    if [ `echo $ITSME | tr [:upper:] [:lower:]` == `hostname -s | tr [:upper:] [:lower:]` ]; then
-	CNX=${Color_Red} # Connected on local machine
+    # Highlight hostname when connected via SSH
+    # FIXME TODO Better color?
+    if [[ ! $SSH_TTY ]]; then
+	CNX=${Color_Red}
     else
-	CNX=${Color_Green} # Connected on remote machine (ssh, presumably)
+	CNX=${Color_Green}
     fi
 
     # Test user type
