@@ -319,11 +319,11 @@ function prompt_command {
     fi
 
     # Highlight hostname when connected via SSH
-    # FIXME TODO Better color?
     if [[ ! $SSH_TTY ]]; then
 	CNX=${Color_Red}
     else
-	CNX=${Color_Green}
+	#  CNX=${Color_Green_Bold_Intense}
+	CNX=${Color_Black}${Color_Green_zBackground}
     fi
 
     # Test user type FIXME TODO
