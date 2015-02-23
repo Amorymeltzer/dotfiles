@@ -51,10 +51,10 @@ sudo -v
 updating 'Macports base'
 port selfupdate
 checking 'Macports'
-if [ $(port echo outdated) ]; then
+if [ $(port outdated &> /dev/null) ]; then
     port outdated
     echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
-    port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh
+    port echo outdated | cut -f 1 -d " " | xargs -n 1 ~/bin/port-whatsnew.sh
     updating 'Macports'
     port upgrade outdated
     cleaning 'Macports'
