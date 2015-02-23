@@ -22,7 +22,7 @@ def check(dirname):
     messages = []
     if run('git rev-parse --is-inside-work-tree 2>/dev/null'):
         clean = True
-        out = run('cd "%s"; LC_ALL=C git status' % dirname)
+        out = run('LC_ALL=C git status')
         if re.search(r'nothing to commit.?.?working directory clean.?', out):
             messages.append("=")
         # Check for untracked files
@@ -48,7 +48,6 @@ def check(dirname):
             branch = re.search('^On branch (.*)\n', out)
             messages.insert(0, ' ')
             messages.insert(0, branch.group(1))
-        run('cd ../')
     else:
         messages = ["-"]
 
