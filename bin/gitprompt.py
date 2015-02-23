@@ -32,24 +32,19 @@ def check(dirname):
     messages = []
     out = run('LC_ALL=C git status 2>/dev/null')
     if out:
-        clean = True
         if re.search(r'nothing to commit.?.?working directory clean.?', out):
             messages.append("=")
         if 'Changes not staged for commit' in out:
             messages.append("+")
-            clean = False
         if 'Untracked files' in out:
             messages.append("?")
-            clean = False
         if 'Changes to be committed' in out:
             messages.append("!")
-            clean = False
         if 'Your branch is ahead of' in out:
             # Output
             # ⚡ → ↑ ↓ ↕ ○ ☿ ± ✘ ¤ « ¬ ¼ ½ ¾ × ƴ ˃ ˧ ૦ ᐅ ᗆ ᗌ ᗒ ᗘ ↀ ⇛ ⇒ ⇨ ↝ ∇ ⋕
             #  ⌁ ⌇ ⎋ ⏆ ▶ ▷ ▸ ▹ ► ▻ ◆ ◇ ◈ ◊ ☇ ☈ ✈ ➤ ➙ ⨠ 𝆓
             messages.append("→")
-            clean = False
         # p = re.search("Your branch is ahead of .* by (\d+) commit", out)
         # messages.append(p.group(1))
         if 'On branch ' in out:
