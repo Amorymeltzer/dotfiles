@@ -35,7 +35,6 @@ def check(dirname):
         out = run('LC_ALL=C git status')
         if re.search(r'nothing to commit.?.?working directory clean.?', out):
             messages.append("=")
-        # Check for untracked files
         if 'Changes not staged for commit' in out:
             messages.append("+")
             clean = False
@@ -53,7 +52,6 @@ def check(dirname):
             clean = False
         # p = re.search("Your branch is ahead of .* by (\d+) commit", out)
         # messages.append(p.group(1))
-        # Internal regex is faster than git rev-parse --abbrev-ref HEAD
         if 'On branch ' in out:
             branch = re.search('^On branch (.*)\n', out)
             messages.insert(0, ' ')
@@ -61,9 +59,7 @@ def check(dirname):
     else:
         messages = ["-"]
 
-
     sys.stdout.write("".join(messages))
-
 
 #-------------------
 # Now, onto the main event!
