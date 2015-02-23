@@ -30,9 +30,9 @@ def check(dirname):
     """
 
     messages = []
-    if run('git rev-parse --is-inside-work-tree 2>/dev/null'):
+    out = run('LC_ALL=C git status 2>/dev/null')
+    if out:
         clean = True
-        out = run('LC_ALL=C git status')
         if re.search(r'nothing to commit.?.?working directory clean.?', out):
             messages.append("=")
         if 'Changes not staged for commit' in out:
