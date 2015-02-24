@@ -85,7 +85,7 @@ showlast = log -n 1 -p
 graph = log --pretty=oneline -n 20 --graph --abbrev-commit --decorate
 # List contributors with number of commits
 contributors = "!git --no-pager shortlog --summary --numbered"
-count = "!git --no-pager shortlog --summary --numbered"
+count-commits = "!git --no-pager shortlog --summary --numbered"
 
 difflog = log -u
 rl = reflog --decorate
