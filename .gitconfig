@@ -71,18 +71,17 @@ l = log --decorate --graph
 l1 = log --oneline --decorate
 l15 = log --oneline --decorate -5
 
-ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
-ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
-lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
-ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+lf = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+
+# View abbreviated SHA, description, and history graph of the latest 20 commits
+graph = log --pretty=oneline --graph --abbrev-commit --decorate
 
 # TODO
 #ls = ls-files
 
 # Like "git show myfile", but uses the last commit that changed "myfile".
 showlast = log -n 1 -p
-# View abbreviated SHA, description, and history graph of the latest 20 commits
-graph = log --pretty=oneline --graph --abbrev-commit --decorate
 # List contributors with number of commits
 contributors = "!git --no-pager shortlog --summary --numbered"
 count-commits = "!git --no-pager shortlog --summary --numbered"
