@@ -61,7 +61,7 @@ function g {
 	if [[ $# > 0 ]]; then
             git "$@"
 	else
-            git-time-since-last-commit
+            git time-since-last-commit
 	    git status --short --branch
 	fi
     elif [[ $1 = 'scan' || $1 = 'help' || $1 = 'browse' || $1 = 'grab' ]]; then
