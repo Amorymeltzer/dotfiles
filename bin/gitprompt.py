@@ -34,16 +34,17 @@ def check(dirname):
     if out:
         if re.search(r'nothing to commit.?.?working directory clean.?', out):
             messages.append("=")
-        if 'Changes not staged for commit' in out:
-            messages.append("+")
-        if 'Untracked files' in out:
-            messages.append("?")
-        if 'Changes to be committed' in out:
-            messages.append("!")
+        else:
+            if 'Changes not staged for commit' in out:
+                messages.append("+")
+            if 'Untracked files' in out:
+                messages.append("?")
+            if 'Changes to be committed' in out:
+                messages.append("!")
         if 'Your branch is ahead of' in out:
             # Output
             # ⚡ → ↑ ↓ ↕ ○ ☿ ± ✘ ¤ « ¬ ¼ ½ ¾ × ƴ ˃ ˧ ૦ ᐅ ᗆ ᗌ ᗒ ᗘ ↀ ⇛ ⇒ ⇨ ↝ ∇ ⋕
-            #  ⌁ ⌇ ⎋ ⏆ ▶ ▷ ▸ ▹ ► ▻ ◆ ◇ ◈ ◊ ☇ ☈ ✈ ➤ ➙ ⨠ 𝆓
+            # ⌁ ⌇ ⎋ ⏆ ▶ ▷ ▸ ▹ ► ▻ ◆ ◇ ◈ ◊ ☇ ☈ ✈ ➤ ➙ ⨠ 𝆓
             messages.append("→ ")
             p = re.search("Your branch is ahead of .* by (\d+) commit", out)
             messages.append(p.group(1))
