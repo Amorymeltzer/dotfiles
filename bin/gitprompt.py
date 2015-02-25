@@ -52,6 +52,12 @@ def check(dirname):
                 messages.append("→ ")
                 p = re.search("Your branch is ahead of .* by (\d+) commit", out)
                 messages.append(p.group(1))
+        elif 'HEAD detached' in out:
+            messages.insert(0, ' ')
+            messages.insert(0, "!!ERROR - DETACHED HEAD!!")
+        else:
+            messages.insert(0, ' ')
+            messages.insert(0, "!!ERROR - NOT ON A BRANCH!!")
     else:
         messages = ["-"]
 
