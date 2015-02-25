@@ -59,7 +59,7 @@ if [ $(port echo outdated) ]; then
     port upgrade outdated
     cleaning 'Macports'
     port -v uninstall inactive;
-    if [[ $(port echo leaves 2> /dev/null) ]]; then
+    if [ $(port echo leaves) ]; then
 	echo -e "${Color_Green}Logging leaves${Color_zOff}..."
 	port echo leaves >> ~/port_leaves_log.txt;
 	cleaning 'leaves'
