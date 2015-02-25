@@ -51,7 +51,7 @@ sudo -v
 updating 'Macports base'
 port selfupdate
 checking 'Macports'
-if [ $(port echo outdated) ]; then
+if [[ -n $(port echo outdated) ]]; then
     port outdated
     echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
     port echo outdated | cut -f 1 -d " " | xargs -n 1 ~/bin/port-whatsnew.sh
@@ -59,7 +59,7 @@ if [ $(port echo outdated) ]; then
     port upgrade outdated
     cleaning 'Macports'
     port -v uninstall inactive;
-    if [ $(port echo leaves) ]; then
+    if [[ -n $(port echo leaves) ]]; then
 	echo -e "${Color_Green}Logging leaves${Color_zOff}..."
 	port echo leaves >> ~/port_leaves_log.txt;
 	cleaning 'leaves'
@@ -124,5 +124,5 @@ if [[ $(brew cask doutdated &> /dev/null) ]]; then
     sudo -u $SUDO_USER brew cask cleanup
 else
     #  echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
-    echo -e "${Color_Red}cask updating currently nonfunctional${Color_zOff}"
+    echo -e "${Color_Red}cask updates currently nonfunctional${Color_zOff}"
 fi
