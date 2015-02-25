@@ -10,6 +10,7 @@ function help {
     cat <<END_HELP
 Usage: $1 [-c] [-C] [-h]
 
+  -b		don't update macports base, but 'port sync' to update tree
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
   -m		check for macports updates but don't upgrade
@@ -22,8 +23,9 @@ END_HELP
 
 cpan_flag="0"
 # Parse commandline options
-while getopts "cCmMpPrRhH" opt; do
+while getopts "bcCmMpPrRhH" opt; do
     case $opt in
+	b) base_flag="1";;
 	c) cpan_flag="1";;
 	C) cpan_flag="2";;
 	m) macports_flag="1";;
@@ -31,7 +33,7 @@ while getopts "cCmMpPrRhH" opt; do
 	p|P) python_flag="1";;
 	r|R) ruby_flag="1";;
 	h|H) help $0
-	   exit 0;;
+	     exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
             exit 1;;
 	:) printf "Option -"$opt" requires an argument, try $0 -h\n" >&2
@@ -54,11 +56,15 @@ checking () {
 # Ask for sudo early
 sudo -v
 
-# Need to find a way to do things it suggests, like port select and so on
-# ;;;;;; ##### FIXME TODO
+# Do things it suggests, like port select and so on ;;;;;; ##### FIXME TODO
 if [ $macports_flag -lt 2 ]; then
-    updating 'Macports base'
-    port selfupdate
+    if [ $base_flag -lt 1 ]; then
+	updating 'Macports base'
+	port selfupdate
+    else
+	updating 'Macports tree'
+	port sync
+    fi
     checking 'Macports'
     if [[ -n $(port echo outdated) ]]; then
 	port outdated
