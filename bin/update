@@ -8,15 +8,15 @@
 
 function help {
     cat <<END_HELP
-Usage: $1 [-c] [-C] [-h]
+Usage: $1 [-bcCmMpPrRhH]]
 
   -b		don't update macports base, but 'port sync' to update tree
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
   -m		check for macports updates but don't upgrade
   -M		skip all macports actions
-  -P -p		skip all python actions
-  -R -r		skip all ruby actions
+  -p -P		skip all python actions
+  -r -R		skip all ruby actions
   -h -H		this help
 END_HELP
 }
