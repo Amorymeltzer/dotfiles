@@ -12,21 +12,25 @@ Usage: $1 [-c] [-C] [-h]
 
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
+  -Pp		skip all python actions
+  -Rr		skip all ruby actions
   -h		this help
 END_HELP
 }
 
 cpan_flag="0"
 # Parse commandline options
-while getopts "cCh" opt; do
+while getopts "cCpPrRh" opt; do
     case $opt in
-	c ) cpan_flag="1";;
-	C ) cpan_flag="2";;
-	h ) help $0
+	c) cpan_flag="1";;
+	C) cpan_flag="2";;
+	p|P) python_flag="1";;
+	r|R) ruby_flag="1";;
+	h) help $0
 	    exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
             exit 1;;
-	: ) printf "Option -"$opt" requires an argument, try $0 -h\n" >&2
+	:) printf "Option -"$opt" requires an argument, try $0 -h\n" >&2
             exit 1;;
     esac
 done
@@ -73,15 +77,19 @@ else
     echo -e "${Color_Green}Ports already up-to-date!${Color_zOff}"
 fi
 
-updating 'pip python packages'
-pipupgrade;
+if [ $python_flag -lt 1 ]; then
+    updating 'pip python packages'
+    pipupgrade;
+fi
 
-updating 'gem ruby manager'
-gem update --system
-updating 'ruby gems'
-gem update
-cleaning 'ruby gems'
-gem cleanup;
+if [ $ruby_flag -lt 1 ]; then
+    updating 'gem ruby manager'
+    gem update --system
+    updating 'ruby gems'
+    gem update
+    cleaning 'ruby gems'
+    gem cleanup;
+fi
 
 if [ $cpan_flag -lt 2 ]; then
     checking 'CPAN modules'
