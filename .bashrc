@@ -294,9 +294,6 @@ bind "set history-preserve-point on"
 #export PS1="\033[0;32m\u@\h\033[0m:\033[0;36m\A\033[0m:\`if [ \$? = 0 ]; then echo '\033[1;30m^_^\033[0m'; else echo '\033[0;33m>_>\033[0m' ; fi\`:\033[1;34m\w\033[0m>\033[0m "
 #export PS1="\`if [ \$? = 0 ]; then echo \[\e[34m\]^_^\[\e[0m\]; else echo \[\e[31m\]O_O\[\e[0m\]; fi\`[\u@\h:\w]\\$ "
 
-# Display name in red if error
-#export PROMPT_COMMAND='if (($? > 0)); then export PS1="${Color_Cyan}\t \#_${Color_Red_Bold_Intense}\u${Color_Cyan}:\w> ${Color_zOff}"; else export PS1="${Color_Cyan}\t \#_\u:\w> ${Color_zOff}"; fi'
-
 # Neater, no errors?
 fill="--- " # Why the space?
 
@@ -376,29 +373,11 @@ function prompt_command {
     #   PS1="${Color_Black}"'$fill \t\n'"${Color_Cyan}"'${debian_chroot:+($debian_chroot)}\u@\h:\w\$'"${Color_zOff} "
 
     psbegin="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
-    #psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
     psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
 
     if ((${ERRORS} > 0)); then
-	#	export PS1="${Color_Cyan}\t \#_${Color_Red_Bold_Intense}\u${Color_Cyan}:\w> ${Color_Cyan}";
-	#	export PS1="${Color_Black}"'$fill \t\n'"${Color_Cyan}\t \#_${Color_Red_Bold_Intense}\u${Color_Cyan}:\w> ${Color_zOff}"
-	#	export PS1="${Color_Black}"'$fill\n'"${Color_Cyan}\t \#_${Color_Red}\u${Color_Cyan}:\w> ${Color_zOff}"
-	#	export PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]\h\[$Color_Cyan\]]-[\[$Color_zOff\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$Color_Red_Bold_Intense\]->\[$Color_zOff\] "
-
-	#  export PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
-	#  PS1+="[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
-	#  PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
 	PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$"
     else
-	#	export PS1="${Color_Cyan}\t \#_\u:\w> ${Color_zOff}";
-	#	export PS1="${Color_Black}"'$fill \t\n'"${Color_Cyan}\t \#_\u:\w> ${Color_zOff}"
-	#	export PS1="${Color_Black}"'$fill\n'"${Color_Cyan}\t \#_\u:\w> ${Color_zOff}"
-
-	#	export PS1="\n\[$Color_Cyan\]┌─[\[$Color_Green\]\u\[$Color_Blue\]@\[$Color_Red\]\h\[$Color_Cyan\]]-[\[$Color_zOff\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Magenta\]\$\[$Color_Cyan\]]->\[$Color_zOff\] "
-	#	export PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─[\[$Color_Green\]\u\[$Color_Blue\]@\[$Color_Red\]\h\[$Color_Cyan\]]-[\[$Color_zOff\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Magenta\]\#\[$Color_Cyan\]]->\[$Color_zOff\] "
-
-	#  PS1+="[\[${SUD}\]\u\[$Color_Blue\]@\[${CNX}\]\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─[\[$Color_Magenta\]\#\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
-	#  PS1="$psbegin[\[${SUD}\]\u\[$Color_Blue\]@\[${CNX}\]$psmiddle[\[$Color_Magenta\]\#\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
 	PS1="$psbegin[\[${SUD}\]\u\[$Color_Blue\]@\[${CNX}\]$psmiddle[\[$Color_Magenta\]\#"
     fi
 
@@ -410,8 +389,7 @@ function prompt_command {
 
     # create a $fill of all screen width minus the time string and a space:
     # let fillsize=${COLUMNS} # fullscreen
-    # let fillsize=${COLUMNS}-9 # fit the date in
-    # Room for the date and battery charge via battery.py
+    # let fillsize=${COLUMNS}-11 # room for battery charge via battery.py
     let fillsize=${COLUMNS}-11
     fill=""
 
@@ -424,11 +402,19 @@ function prompt_command {
 }
 
 
-export PS2="\[$Color_Cyan\]→\[$Color_zOff\] "    # Secondary prompt, multiline commands
-export PS3='#? '   # Tertiary prompt, select menus
-export PS4='+ '    # Quaternary prompt, ???
+export PS2="\[$Color_Cyan\]→\[$Color_zOff\] " # Secondary prompt, multiline commands
+export PS3='#? '			      # Tertiary prompt, select menus
+export PS4='+ '				      # Quaternary prompt, ???
 
 PROMPT_COMMAND=prompt_command
+
+# Function to run upon exit of shell
+function _exit()
+{
+    echo -e "${Color_Red_Bold_Intense}Thanks for playing${Color_zOff}"
+}
+trap _exit EXIT
+
 
 ## Sourcin'
 # Advanced bash completion (http://www.caliban.org/bash/index.shtml#completion)
@@ -462,13 +448,6 @@ complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | g
 # if [ -f ~/bin/bash-ido ]; then
 #     . ~/bin/bash-ido
 # fi
-
-# Function to run upon exit of shell
-function _exit()
-{
-    echo -e "${Color_Red_Bold_Intense}Thanks for playing${Color_zOff}"
-}
-trap _exit EXIT
 
 # ;;;;;; ##### FIXME TODO
 # Make CPAN always select the default option
@@ -528,11 +507,8 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ~="cd ~"
-alias -- -='cd -' # go back a directory, -- means end of options
-alias -- --='cd -' # go back a directory
-
-# Always be able to cd here
-#export CDPATH=".:~:~/Documents/perl"
+alias -- -='cd -'		# go back a directory, -- means end of options
+alias -- --='cd -'
 
 # Shortcuts
 alias dt="cd ~/dotfiles"
@@ -1389,24 +1365,6 @@ function wiki() {
 function yotsuba() {
     curl $1 | grep -i "File<a href" | awk -F '<a href="' '{print $4}' | awk -F '" ' '{print $1}' | xargs wget
 }
-
-# Simple calculator
-# function calc() {
-#     local result=""
-#     result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
-#     #                       └─ default (when `--mathlib` is used) is 20
-#     #
-#     if [[ "$result" == *.* ]]; then
-#	# improve the output for decimal numbers
-#	printf "$result" |
-#	    sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
-#		-e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
-#		-e 's/0*$//;s/\.$//'   # remove trailing zeros
-#     else
-#	printf "$result"
-#     fi
-#     printf "\n"
-# }
 
 # Using Rscript allows more complex constructions, wrap () in quotes
 # http://www.compbiome.com/2010/06/r-command-line-calculator-using-rscript.html
