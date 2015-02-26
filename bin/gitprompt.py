@@ -54,9 +54,8 @@ def check(dirname):
                 messages.append(p.group(1))
             elif 'Your branch is behind' in out:
                 # Of course the left unicode arrow is different than the right
-                messages.append("← ")
+                messages.append("← (")
                 p = re.search("Your branch is behind .* by (\d+) commit", out)
-                messages.append("(")
                 messages.append(p.group(1))
                 messages.append(")")
         elif 'HEAD detached' in out:
