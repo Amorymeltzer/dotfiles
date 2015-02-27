@@ -36,17 +36,16 @@ def check(dirname):
             messages.append("=")
         else:
             if 'Changes not staged for commit' in out:
-                messages.append("+")
+                messages.append("\033[0;32m+\033[0m")
             if 'Untracked files' in out:
-                messages.append("?")
+                messages.append("\033[0;36m?\033[0m")
             if 'Changes to be committed' in out:
-                messages.append("!")
+                messages.append("\033[0;35m!\033[0m")
         if 'On branch ' in out:
             branch = re.search('^On branch (.*)\n', out)
             messages.insert(0, ' ')
             messages.insert(0, branch.group(1))
             if 'Your branch is ahead of' in out:
-                # Output
                 # ⚡ → ↑ ↓ ↕ ○ ☿ ± ✘ ¤ « ¬ ¼ ½ ¾ × ƴ ˃ ˧ ૦ ᐅ ᗆ ᗌ ᗒ ᗘ ↀ ⇛ ⇒ ⇨ ↝ ∇ ⋕
                 # ⌁ ⌇ ⎋ ⏆ ▶ ▷ ▸ ▹ ► ▻ ◆ ◇ ◈ ◊ ☇ ☈ ✈ ➤ ➙ ⨠ 𝆓
                 messages.append("→ ")

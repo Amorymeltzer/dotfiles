@@ -198,7 +198,7 @@ old = red bold
 new = green bold
 
 [color "status"]
-added = yellow
+added = magenta
 changed = green
 untracked = cyan
 
