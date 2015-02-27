@@ -128,9 +128,6 @@ pum = pull --rebase origin master
 pam = push Amorymeltzer master
 pa = push Amorymeltzer 
 
-# Fetch and merge better than pull?
-fam = "!git fetch origin -v; git fetch upstream -v; git merge upstream/master"
-
 d = diff --word-diff
 df = diff --word-diff
 dc = diff --cached --word-diff
