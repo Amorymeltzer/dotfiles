@@ -111,6 +111,8 @@ list-large-files = big-object-report
 
 rb = rebase
 reb = rebase
+rbm = rebase master
+rebm = rebase master
 # Interactive rebase with the selected number of latest commits
 rebi = "!r() { git rebase -i HEAD~$1; }; r"
 
