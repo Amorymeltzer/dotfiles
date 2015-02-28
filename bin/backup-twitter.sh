@@ -46,4 +46,6 @@ echo -e "- "`wc -l $FOLDERPATH/followings-$DAY.csv|cut -d" " -f 1`" followings"
 echo -e "- "`wc -l $FOLDERPATH/followers-$DAY.csv|cut -d" " -f 1`" followings"
 echo -e "- "`wc -l $FOLDERPATH/list-*-$DAY.csv|cut -d" " -f 1`" lists"
 
+echo -e `t followers | wc -l`" followers"
+
 echo -e "\nDone\n"
