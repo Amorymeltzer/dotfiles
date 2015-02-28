@@ -36,11 +36,11 @@ def check(dirname):
             messages.append("=")
         else:
             if 'Changes not staged for commit' in out:
-                messages.append("\033[0;32m+\033[0m")
+                messages.append("\033[0;32m+\033[0;33m")
             if 'Untracked files' in out:
-                messages.append("\033[0;36m?\033[0m")
+                messages.append("\033[0;36m?\033[0;33m")
             if 'Changes to be committed' in out:
-                messages.append("\033[0;35m!\033[0m")
+                messages.append("\033[0;35m!\033[0;33m")
         if 'On branch ' in out:
             branch = re.search('^On branch (.*)\n', out)
             messages.insert(0, ' ')
@@ -56,13 +56,13 @@ def check(dirname):
                 messages.append("← (")
                 p = re.search("Your branch is behind .* by (\d+) commit\033[0;31m", out)
                 messages.append(p.group(1))
-                messages.append("\033[0m)")
+                messages.append("\033[0;33m)")
         elif 'HEAD detached' in out:
             messages.insert(0, ' ')
-            messages.insert(0, "\033[0;31m!!ERROR - DETACHED HEAD!!\033[0m")
+            messages.insert(0, "\033[0;31m!!ERROR - DETACHED HEAD!!\033[0;33m")
         else:
             messages.insert(0, ' ')
-            messages.insert(0, "\033[0;31m!!ERROR - NOT ON A BRANCH!!\033[0m")
+            messages.insert(0, "\033[0;31m!!ERROR - NOT ON A BRANCH!!\033[0;33m")
     else:
         messages = ["-"]
 
