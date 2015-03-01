@@ -41,7 +41,6 @@ if tester == "Yes":
 else:
     charging = "○"
 
-
 # Output
 # ⚡ → ↑ ↓ ↕ ○ ☿ ± ✘ ¤ « ¬ ¼ ½ ¾ × ƴ ˃ ˧ ૦ ᐅ ᗆ ᗌ ᗒ ᗘ ↀ ⇛ ⇒ ⇨ ↝ ∇ ⋕ ⌁ ⌇ ⎋ ⏆
 # ▶ ▷ ▸ ▹ ► ▻ ◆ ◇ ◈ ◊ ☇ ☈ ✈ ➤ ➙ ⨠ 𝆓
@@ -50,21 +49,18 @@ total_slots, slots = 10, []
 filled = int(math.ceil(charge_threshold * (total_slots / 10.0))) * u'▸'
 empty = (total_slots - len(filled)) * u'▹'
 
+if len(filled) > 7:
+    color_out = '\033[0;32m'
+elif len(filled) > 4:
+    color_out = '\033[0;93m'
+elif len(filled) > 2:
+    color_out = '\033[0;31m'
+else:
+    color_out = '\033[5;31m'
+color_reset = '\033[0m'
 
 out = (filled + empty).encode('utf-8')
-import sys
-
-color_green = '\033[0;32m'
-color_yellow_intense = '\033[0;93m'
-color_red = '\033[0;31m'
-color_red_blink = '\033[5;31m'
-color_reset = '\033[0m'
-color_out = (
-    color_green if len(filled) > 7
-    else color_yellow_intense if len(filled) > 4
-    else color_red if len(filled) > 2
-    else color_red_blink
-)
-
 out = color_out + charging + out + color_reset
+
+import sys
 sys.stdout.write(out)
