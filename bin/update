@@ -21,7 +21,11 @@ Usage: $1 [-bcCmMpPrRhH]]
 END_HELP
 }
 
+base_flag="0"
 cpan_flag="0"
+macports_flag="0"
+python_flag="0"
+ruby_flag="0"
 # Parse commandline options
 while getopts "bcCmMpPrRhH" opt; do
     case $opt in
