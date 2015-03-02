@@ -1,6 +1,6 @@
 ;;; window-numbering.el --- Numbered window shortcuts
 ;;
-;; Copyright (C) 2006-2007, 2013 Nikolaj Schumacher <bugs * nschum , de>
+;; Copyright (C) 2006-2007, 2013, 2015 Nikolaj Schumacher <bugs * nschum , de>
 ;;
 ;; Author: Nikolaj Schumacher <bugs * nschum de>
 ;; Version: 1.1.2
@@ -36,6 +36,8 @@
 ;;       (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
 ;;
 ;;; Changes Log:
+;;
+;;    Fix numbering of minibuffer for recent Emacs versions.
 ;;
 ;; 2013-03-23 (1.1.2)
 ;;    Fix numbering in terminal mode with menu bar visible.
@@ -202,12 +204,14 @@ windows to numbers."
         (save-excursion
           (setq window-numbering-table (make-hash-table :size 16))
           (window-numbering-install-mode-line)
+          (add-hook 'minibuffer-setup-hook 'window-numbering-update)
           (add-hook 'window-configuration-change-hook
                     'window-numbering-update)
           (dolist (frame (frame-list))
             (select-frame frame)
             (window-numbering-update))))
     (window-numbering-clear-mode-line)
+    (remove-hook 'minibuffer-setup-hook 'window-numbering-update)
     (remove-hook 'window-configuration-change-hook
                  'window-numbering-update)
     (setq window-numbering-table nil)))
