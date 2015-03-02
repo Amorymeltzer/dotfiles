@@ -61,6 +61,7 @@ aas = "!git aa; git s"
 scan = "!~/bin/gscan"
 
 co = checkout
+com = checkout master
 wc = whatchanged
 
 stat = status
