@@ -4,5 +4,5 @@
 # http://www.perlmonks.org/?node_id=906580
 
 cpan -c
-\rm -vr ~/.cpan/build/*
+\rm -r ~/.cpan/build/*
 \rm -vr ~/.cpan/sources/authors/id/*
