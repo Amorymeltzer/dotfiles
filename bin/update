@@ -23,25 +23,25 @@ Usage: $1 [-bcCekmMpPrRhH]]
 END_HELP
 }
 
-base_flag="0"
-cpan_flag="0"
-macports_flag="0"
-python_flag="0"
-ruby_flag="0"
-homebrew_flag="0"
-brewcask_flag="0"
+base_flag='0'
+cpan_flag='0'
+macports_flag='0'
+python_flag='0'
+ruby_flag='0'
+homebrew_flag='0'
+brewcask_flag='0'
 # Parse commandline options
-while getopts "bcCekmMpPrRhH" opt; do
+while getopts 'bcCekmMpPrRhH' opt; do
     case $opt in
-	b) base_flag="1";;
-	c) cpan_flag="1";;
-	C) cpan_flag="2";;
-	e) homebrew_flag="1";;
-	k) brewcask_flag="1";;
-	m) macports_flag="1";;
-	M) macports_flag="2";;
-	p|P) python_flag="1";;
-	r|R) ruby_flag="1";;
+	b) base_flag='1';;
+	c) cpan_flag='1';;
+	C) cpan_flag='2';;
+	e) homebrew_flag='1';;
+	k) brewcask_flag='1';;
+	m) macports_flag='1';;
+	M) macports_flag='2';;
+	p|P) python_flag='1';;
+	r|R) ruby_flag='1';;
 	h|H) help $0
 	     exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
@@ -79,7 +79,7 @@ if [ $macports_flag -lt 2 ]; then
     if [[ -n $(port echo outdated) ]]; then
 	port outdated
 	echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
-	port echo outdated | cut -f 1 -d " " | xargs -n 1 ~/bin/port-whatsnew.sh
+	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [ $macports_flag -lt 1 ]; then
 	    updating 'Macports'
 	    port upgrade outdated
