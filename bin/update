@@ -8,11 +8,13 @@
 
 function help {
     cat <<END_HELP
-Usage: $1 [-bcCmMpPrRhH]]
+Usage: $1 [-bcCekmMpPrRhH]]
 
   -b		don't update macports base, but 'port sync' to update tree
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
+  -e		skip all homebrew updates
+  -k		skip all homebrew-cask updates
   -m		check for macports updates but don't upgrade
   -M		skip all macports actions
   -p -P		skip all python actions
@@ -26,12 +28,16 @@ cpan_flag="0"
 macports_flag="0"
 python_flag="0"
 ruby_flag="0"
+homebrew_flag="0"
+brewcask_flag="0"
 # Parse commandline options
-while getopts "bcCmMpPrRhH" opt; do
+while getopts "bcCekmMpPrRhH" opt; do
     case $opt in
 	b) base_flag="1";;
 	c) cpan_flag="1";;
 	C) cpan_flag="2";;
+	e) homebrew_flag="1";;
+	k) brewcask_flag="1";;
 	m) macports_flag="1";;
 	M) macports_flag="2";;
 	p|P) python_flag="1";;
@@ -126,29 +132,33 @@ fi
 # do.  I suppose I could do a version of 'git up' in each respective
 # repository, but that sort of seems excessive
 sudo -u $SUDO_USER brew cask new
-if [[ $(brew outdated 2> /dev/null) ]]; then
-    updating 'Homebrew'
-    sudo -u $SUDO_USER brew outdated
-    sudo -u $SUDO_USER brew upgrade
+if [ $homebrew_flag -lt 1 ]; then
+    if [[ $(brew outdated 2> /dev/null) ]]; then
+	updating 'Homebrew'
+	sudo -u $SUDO_USER brew outdated
+	sudo -u $SUDO_USER brew upgrade
 
-    cleaning 'Homebrew'
-    sudo -u $SUDO_USER brew cleanup -ns
-    sudo -u $SUDO_USER brew cleanup -s
-else
-    echo -e "${Color_Green}Homebrew packages and taps already up-to-date!${Color_zOff}..."
+	cleaning 'Homebrew'
+	sudo -u $SUDO_USER brew cleanup -ns
+	sudo -u $SUDO_USER brew cleanup -s
+    else
+	echo -e "${Color_Green}Homebrew packages and taps already up-to-date!${Color_zOff}..."
+    fi
 fi
 
 # Not perfect, but uses the external brewcask-doutdated.rb command to grab
 # a list of outdated casks, then --force reinstalls them
-if [[ $(brew cask doutdated &> /dev/null) ]]; then
-    checking 'casks'
-    sudo -u $SUDO_USER brew cask doutdated
-    updating 'casks'
-    sudo -u $SUDO_USER "brew cask doutdated | xargs brew cask install --force"
+if [ $brewcask_flag -lt 1 ]; then
+    if [[ $(brew cask doutdated &> /dev/null) ]]; then
+	checking 'casks'
+	sudo -u $SUDO_USER brew cask doutdated
+	updating 'casks'
+	sudo -u $SUDO_USER "brew cask doutdated | xargs brew cask install --force"
 
-    cleaning 'casks'
-    sudo -u $SUDO_USER brew cask cleanup
-else
-    #  echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
-    echo -e "${Color_Red}cask updates currently nonfunctional${Color_zOff}"
+	cleaning 'casks'
+	sudo -u $SUDO_USER brew cask cleanup
+    else
+	#  echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
+	echo -e "${Color_Red}cask updates currently nonfunctional${Color_zOff}"
+    fi
 fi
