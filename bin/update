@@ -131,8 +131,8 @@ fi
 # homebrew-cask, and the two are inextricably linked, so for now this must
 # do.  I suppose I could do a version of 'git up' in each respective
 # repository, but that sort of seems excessive
-sudo -u $SUDO_USER brew cask new
 if [ $homebrew_flag -lt 1 ]; then
+    sudo -u $SUDO_USER brew cask new
     if [[ $(brew outdated 2> /dev/null) ]]; then
 	updating 'Homebrew'
 	sudo -u $SUDO_USER brew outdated
