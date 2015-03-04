@@ -10,7 +10,7 @@ function help {
     cat <<END_HELP
 Usage: $1 [-bcCekmMpPrRhH]]
 
-  -b		don't update macports base, but 'port sync' to update tree
+  -b		skip updating macports base, but 'port sync' to update tree
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
   -e		skip all homebrew updates
