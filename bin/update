@@ -17,7 +17,8 @@ Usage: $1 [-bcCekmMpPrRhH]]
   -k		skip all homebrew-cask updates
   -m		check for macports updates but don't upgrade
   -M		skip all macports actions
-  -p -P		skip all python actions
+  -p		check for python updates but don't upgrade
+  -P		skip all python actions
   -r -R		skip all ruby actions
   -h -H		this help
 END_HELP
@@ -40,7 +41,8 @@ while getopts 'bcCekmMpPrRhH' opt; do
 	k) brewcask_flag='1';;
 	m) macports_flag='1';;
 	M) macports_flag='2';;
-	p|P) python_flag='1';;
+	p) python_flag='1';;
+	P) python_flag='2';;
 	r|R) ruby_flag='1';;
 	h|H) help $0
 	     exit 0;;
@@ -101,9 +103,13 @@ if [ $macports_flag -lt 2 ]; then
     fi
 fi
 
-if [ $python_flag -lt 1 ]; then
-    updating 'pip python packages'
-    pipupgrade;
+if [ $python_flag -lt 2 ]; then
+    checking 'pip python packages'
+    pip list -o
+    if [ $python_flag -lt 1 ]; then
+	updating 'pip python packages'
+	pipupgrade;
+    fi
 fi
 
 if [ $ruby_flag -lt 1 ]; then
@@ -128,9 +134,9 @@ fi
 
 ## Should probably make this verbose or something
 # This should properly be 'brew update', but I like seeing what's changed in
-# homebrew-cask, and the two are inextricably linked, so for now this must
-# do.  I suppose I could do a version of 'git up' in each respective
-# repository, but that sort of seems excessive
+# homebrew-cask, and the two are inextricably linked, so for now this must do.
+# I suppose I could do a version of 'git up' in each respective repository,
+# but that sort of seems excessive
 if [ $homebrew_flag -lt 1 ]; then
     sudo -u $SUDO_USER brew cask new
     if [[ $(brew outdated 2> /dev/null) ]]; then
