@@ -1007,6 +1007,7 @@ function lc {
 	tr '[:upper:]' '[:lower:]' <<< "$@";
     fi;
 }
+alias whisper='lc'
 
 # Convert to uppercase.
 function uc {
