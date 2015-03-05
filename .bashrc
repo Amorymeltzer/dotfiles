@@ -797,9 +797,6 @@ function leela() {
 function amory() {
     ssh iggatucdavis@amorymeltzer.org
 }
-function wedding() {
-    ssh amoryandjarra@amoryandjarra.com
-}
 function twinmos() {
     diskutil umount /Volumes/TWINMOS
 }
