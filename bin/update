@@ -105,7 +105,7 @@ fi
 
 if [ $python_flag -lt 2 ]; then
     checking 'pip python packages'
-    pip list -o
+    sudo -u $SUDO_USER pip list -o
     if [ $python_flag -lt 1 ]; then
 	updating 'pip python packages'
 	pipupgrade;
