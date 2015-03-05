@@ -486,11 +486,9 @@ alias eb='emacs ~/.bashrc'
 alias bashprofile='emacs ~/.bash_profile'
 alias bp='emacs ~/.bash_profile'
 alias ep='emacs ~/.bash_profile'
-#  alias reload="exec $SHELL -l"
-alias reload='. ~/.bashrc'
 alias ee='emacs ~/.emacs'
-alias gitconfig='emacs ~/.gitconfig'
 alias eg='emacs ~/.gitconfig'
+alias gitconfig='emacs ~/.gitconfig'
 function gitignore() {
     ignore=".gitignore"
     if [[ ! -f $ignore ]]; then
@@ -500,6 +498,8 @@ function gitignore() {
     fi
     emacs $ignore
 }
+#  alias reload="exec $SHELL -l"
+alias reload='. ~/.bashrc'
 
 # Navigation -------------------------------------------------------
 alias ..='cd ..'
@@ -507,7 +507,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ~="cd ~"
-alias -- -='cd -'		# go back a directory, -- means end of options
+alias -- -='cd -'	# go back a directory, -- means end of options
 alias -- --='cd -'
 
 # Shortcuts
