@@ -123,12 +123,16 @@ if [ $ruby_flag -lt 2 ]; then
 	gem update --system
     fi
     checking 'ruby gems'
-    gem outdated
-    if [ $ruby_flag -lt 1 ]; then
-	updating 'ruby gems'
-	gem update
-	cleaning 'ruby gems'
-	gem cleanup;
+    if [[ -n $(gem outdated) ]]; then
+	gem outdated
+	if [ $ruby_flag -lt 1 ]; then
+	    updating 'ruby gems'
+	    gem update
+	    cleaning 'ruby gems'
+	    gem cleanup;
+	fi
+    else
+	echo -e "${Color_Green}ruby gems already up-to-date!${Color_zOff}"
     fi
 fi
 
