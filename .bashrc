@@ -957,7 +957,7 @@ alias quicklook="qlmanage -p "
 alias pbc='pbcopy '
 alias pbp='pbpaste '
 # Trim new lines and copy to clipboard
-alias copy="tr -d '\n' | pbcopy"
+alias clipboard="tr -d '\n' | pbcopy"
 
 alias uniqsort='sort $* | uniq -u | sort'
 # quicksort in three lines from http://git.io/UzwyWQ
