@@ -83,8 +83,9 @@ if [ $macports_flag -lt 2 ]; then
 	port sync
     fi
     checking 'Macports'
-    if [[ -n $(port echo outdated) ]]; then
-	port outdated
+    port_todo=$(port echo outdated)
+    if [[ -n $port_todo ]]; then
+	echo ${port_todo}
 	echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
 	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [ $macports_flag -lt 1 ]; then
