@@ -110,8 +110,9 @@ fi
 
 if [ $python_flag -lt 2 ]; then
     checking 'pip python packages'
-    if [[ $(sudo -u $SUDO_USER pip list -o) ]]; then
-	sudo -u $SUDO_USER pip list -o
+    python_todo=$(sudo -u $SUDO_USER pip list -o)
+    if [[ -n $python_todo ]]; then
+	echo $python_todo
 	if [ $python_flag -lt 1 ]; then
 	    updating 'pip python packages'
 	    pipupgrade;
@@ -127,8 +128,9 @@ if [ $ruby_flag -lt 2 ]; then
 	gem update --system
     fi
     checking 'ruby gems'
-    if [[ -n $(gem outdated) ]]; then
-	gem outdated
+    ruby_todo=$(gem outdated)
+    if [[ -n $ruby_todo ]]; then
+	echo $ruby_todo
 	if [ $ruby_flag -lt 1 ]; then
 	    updating 'ruby gems'
 	    gem update
