@@ -85,7 +85,7 @@ if [ $macports_flag -lt 2 ]; then
     checking 'Macports'
     port_todo=$(port echo outdated)
     if [[ -n $port_todo ]]; then
-	echo ${port_todo}
+	echo "$port_todo"
 	echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
 	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [ $macports_flag -lt 1 ]; then
@@ -113,7 +113,7 @@ if [ $python_flag -lt 2 ]; then
     checking 'pip python packages'
     python_todo=$(sudo -u $SUDO_USER pip list -o)
     if [[ -n $python_todo ]]; then
-	echo $python_todo
+	echo "$python_todo"
 	if [ $python_flag -lt 1 ]; then
 	    updating 'pip python packages'
 	    pipupgrade;
@@ -131,7 +131,7 @@ if [ $ruby_flag -lt 2 ]; then
     checking 'ruby gems'
     ruby_todo=$(gem outdated)
     if [[ -n $ruby_todo ]]; then
-	echo $ruby_todo
+	echo "$ruby_todo"
 	if [ $ruby_flag -lt 1 ]; then
 	    updating 'ruby gems'
 	    gem update
