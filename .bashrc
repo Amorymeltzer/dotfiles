@@ -653,11 +653,11 @@ function psu {
 alias topm='top -o vsize'
 # Top always sorted by cpu, in delta mode
 alias top='top -d -o cpu'
+# See memory_pressure for Mavericks-style-ish output
+# Tweak for Mavericks-style info, color ;;;;;; ##### FIXME TODO
 function memstat {
     vm_stat | cut -d ":" -f 2 | tr -d '. ' | tr '\n' ' ' | awk '{printf("U:%.1fG|F:%.1fG\n", (($3 + $4 + $6) * 4)/(1024*1024), (($2+$5) * 4)/(1024*1024))}'
 }
-# See memory_pressure for Mavericks-style-ish output
-# Tweak for Mavericks-style info, color ;;;;;; ##### FIXME TODO
 
 # Show five most recently modified files.
 alias last-modified='ls -t $* 2> /dev/null | head -n 5 '
