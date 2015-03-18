@@ -472,7 +472,16 @@ _explain_perlcritic()
     return 0
 }
 complete -F _explain_perlcritic explain_perlcritic
+# shorthand for perlfunc
+function pf() {
+    if [ $# -eq 0 ]; then
+	perldoc perlfunc
+    else
+	perldoc -f "$@"
+    fi
+}
 alias perlsecret='man perlsecret'
+alias perlcheat='man perlcheat'
 
 # Tell tidy to use a config file if it's there
 if command_exists tidy; then
@@ -563,15 +572,6 @@ function peek() {
     (cd "$1" && perl "$2");
 }
 
-# shorthand for perlfunc
-function pf() {
-    if [ $# -eq 0 ]; then
-	perldoc perlfunc
-    else
-	perldoc -f "$@"
-    fi
-}
-alias perlcheat='man perlcheat'
 
 # Enable aliases to be sudo'ed
 # http://www.gnu.org/software/bash/manual/bashref.html#Aliases says: "If the
