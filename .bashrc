@@ -472,6 +472,7 @@ _explain_perlcritic()
     return 0
 }
 complete -F _explain_perlcritic explain_perlcritic
+alias perlsecret='man perlsecret'
 
 # Tell tidy to use a config file if it's there
 if command_exists tidy; then
