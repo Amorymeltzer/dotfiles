@@ -47,6 +47,8 @@ def check(dirname):
                 p = re.search("Your branch is behind .* by (\d+) commit\033[0;31m", out)
                 messages.append(p.group(1))
                 messages.append("\033[0;33m)")
+            elif 'Your branch is up-to-date with ' in out:
+                messages.append("=")
         elif 'HEAD detached' in out:
             messages.insert(0, ' ')
             messages.insert(0, "\033[0;31m!!ERROR - DETACHED HEAD!!\033[0;33m")
