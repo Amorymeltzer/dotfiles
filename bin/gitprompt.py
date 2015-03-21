@@ -44,7 +44,7 @@ def check(dirname):
             elif 'Your branch is behind' in out:
                 # Of course the left unicode arrow is different than the right
                 messages.append("← (")
-                p = re.search("Your branch is behind .* by (\d+) commit\033[0;31m", out)
+                p = re.search("Your branch is behind .* by (\d+) commit", out)
                 messages.append(p.group(1))
                 messages.append("\033[0;33m)")
             elif 'Your branch is up-to-date with ' in out:
