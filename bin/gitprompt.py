@@ -36,8 +36,6 @@ def check(dirname):
             messages.insert(0, ' ')
             messages.insert(0, branch.group(1))
             if 'Your branch is ahead of ' in out:
-                # ⚡ → ↑ ↓ ↕ ○ ☿ ± ✘ ¤ « ¬ ¼ ½ ¾ × ƴ ˃ ˧ ૦ ᐅ ᗆ ᗌ ᗒ ᗘ ↀ ⇛ ⇒ ⇨ ↝ ∇ ⋕
-                # ⌁ ⌇ ⎋ ⏆ ▶ ▷ ▸ ▹ ► ▻ ◆ ◇ ◈ ◊ ☇ ☈ ✈ ➤ ➙ ⨠ 𝆓
                 messages.append("→ ")
                 p = re.search("Your branch is ahead of .* by (\d+) commit", out)
                 messages.append(p.group(1))
