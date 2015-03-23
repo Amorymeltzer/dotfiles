@@ -7,10 +7,15 @@ folderpath='/Users/Amory/Dropbox/KSP stuff/KSP saves backups/'$dateandtime
 ksppath='/Applications/KSP_osx'
 kacpath=$ksppath'/GameData/TriggerTech/PluginData/KerbalAlarmClock'
 
+userlist=$(ls -1 $ksppath'/saves' | grep -v scenarios | grep -v training)
+
 mkdir "$folderpath"
 
-cp "$ksppath/saves/McJohn/persistent.sfs" "$folderpath/McJohn.persistent.sfs"
-cp "$ksppath/saves/Kergarin/persistent.sfs" "$folderpath/Kergarin.persistent.sfs"
+for i in $userlist
+do
+    cp "$ksppath/saves/$i/persistent.sfs" "$folderpath/$i.persistent.sfs"
+done
+
 #cp "$kacpath/config.xml" "$folderpath/"
 #cp "$kacpath/Alarms-McJohn (CAREER).txt" "$folderpath/"
 
