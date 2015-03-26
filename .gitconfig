@@ -122,12 +122,13 @@ suba = submodule add
 subu = submodule update --init
 
 # Push and Pull
+po = push origin
 pom = push origin master
 # Use rebase to prevent unnecessary commits
 pum = pull --rebase origin master
 # Personal remote
 pam = push Amorymeltzer master
-pa = push Amorymeltzer 
+pa = push Amorymeltzer
 
 d = diff --word-diff
 df = diff --word-diff
