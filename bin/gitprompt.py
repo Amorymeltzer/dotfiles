@@ -33,12 +33,9 @@ def check(dirname):
                 messages.append("\033[0;35m!\033[0;33m")
         if 'On branch ' in out:
             branch = re.search('^On branch (.*)\n', out)
-            messages.insert(0, ' ')
-            if re.search('^master$', branch.group(1)):
-                messages.insert(0, branch.group(1))
-            else:
-                messages.insert(0, "\033[0;33m")
-                messages.insert(0, branch.group(1))
+            messages.insert(0, '\033[0;33m ')
+            messages.insert(0, branch.group(1))
+            if not re.search('^master$', branch.group(1)):
                 messages.insert(0, "\033[0m")
             if 'Your branch is ahead of ' in out:
                 messages.append("→ ")
