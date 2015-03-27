@@ -49,6 +49,8 @@ def check(dirname):
                 messages.append("\033[0;33m)")
             elif 'Your branch is up-to-date with ' in out:
                 messages.append("=")
+            elif re.search(r'Your branch and .* have diverged.?', out):
+                messages.append("?")
         elif 'HEAD detached' in out:
             messages.insert(0, ' ')
             messages.insert(0, "\033[0;31m!!ERROR - DETACHED HEAD!!\033[0;33m")
