@@ -787,6 +787,7 @@ complete -F _python python3.4
 function recompile_emacs() {
     emacs -batch --eval '(byte-recompile-directory "~/.emacs.d/" 0)'
 }
+alias ii=recompile_emacs
 
 alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 
