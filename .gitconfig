@@ -166,7 +166,7 @@ assumed = "!git ls-files -v | grep ^h | cut -c 3-"
 assumeall = "!git st -s | awk {'print $2'} | xargs git assume"
 unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 
-ignored = status -s --ignored
+ignored = "!git clean -ndX | sed 's/Would remove //g'"
 
 # Show list of files in a conflict state.
 conflicts = "!git ls-files -u | awk '{print $4}' | sort -u"
