@@ -1,6 +1,6 @@
 ;;; diff-hl-margin.el --- Highlight buffer changes on margins -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012-2014  Free Software Foundation, Inc.
+;; Copyright (C) 2012-2015  Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -37,6 +37,8 @@
 (require 'cl-lib)
 (require 'diff-hl)
 (require 'diff-hl-dired)
+
+(defvar diff-hl-margin-side)
 
 (defvar diff-hl-margin-old-highlight-function nil)
 

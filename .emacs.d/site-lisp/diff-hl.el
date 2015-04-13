@@ -1,6 +1,6 @@
 ;;; diff-hl.el --- Highlight uncommitted changes -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012-2014  Free Software Foundation, Inc.
+;; Copyright (C) 2012-2015  Free Software Foundation, Inc.
 
 ;; Author:   Dmitry Gutov <dgutov@yandex.ru>
 ;; URL:      https://github.com/dgutov/diff-hl
@@ -59,7 +59,8 @@
   (require 'cl-lib)
   (require 'vc-git)
   (require 'vc-hg)
-  (require 'face-remap))
+  (require 'face-remap)
+  (declare-function smartrep-define-key 'smartrep))
 
 (defgroup diff-hl nil
   "VC diff highlighting on the side of a window"
