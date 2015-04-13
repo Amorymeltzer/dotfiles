@@ -878,8 +878,21 @@ alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/R
 #sudo ln -s /path/to/your/image /System/Library/CoreServices/DefaultDesktop.jpg
 
 # Lock the screen (when going AFK)
-# Better as just starting screensaver
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+# Better as just starting screensaver
+# Stolen from @cowboy - https://github.com/cowboy/dotfiles/commit/28a3fd898f93c602080e3c3112b0f04854b66f22
+function lock-screen()
+{
+    sleep 0.5
+
+    if [[ "$(ioreg -c AppleSmartBattery | grep '"ExternalConnected" = Yes')" ]]; then
+	# Plugged in: start screensaver.
+	open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app
+    else
+	# Battery power: go to lock menu.
+	/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend
+    fi
+}
 
 # Stopwatch
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
