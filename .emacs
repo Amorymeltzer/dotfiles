@@ -429,9 +429,6 @@
 ;; Markdown mode
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
-;; (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-;; (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-;; (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
 
@@ -513,10 +510,8 @@ current buffer" t)
 (wrap-region-global-mode t)
 (wrap-region-add-wrappers
  '(
-   ;; ("$" "$")
-   ;; ("{-" "-}" "#")
-   ;; ("/" "/" nil ruby-mode)
-   ;; ("/* " " */" "#" (java-mode javascript-mode css-mode))
+   ("/" "/" nil ruby-mode)
+   ("/* " " */" "#" (java-mode javascript-mode css-mode))
    ("`" "`" nil (markdown-mode ruby-mode))))
 
 
