@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# brewcask-clean by Amory Meltzer
+# Alias for cleanup
+
+set -e;                # exit on uncaught error
+set +o histexpand;     # don't expand history expressions
+
+brew cask cleanup
