@@ -8,6 +8,9 @@ user = Amorymeltzer
 name = Amory Meltzer
 email = Amorymeltzer@gmail.com
 
+[credential]
+helper = osxkeychain
+
 [core]
 editor = emacs
 # Use custom `.gitignore`
@@ -15,9 +18,8 @@ excludesfile = ~/.global-gitignore
 
 # Treat spaces before tabs, lines that are indented with 8 or more spaces,
 # and all kinds of trailing whitespace as an error
-# [default] trailing-space: looks for spaces at the end of a line
-# [default] space-before-tab: looks for spaces before tabs at the beginning of
-# a line
+# [default] trailing-space: look for spaces at the end of a line
+# [default] space-before-tab: look for spaces before tabs at beginning of line
 whitespace = space-before-tab,indent-with-non-tab,trailing-space
 
 # Make `git rebase` safer on OS X 10.7 with autosave/versions
@@ -32,9 +34,6 @@ precomposeunicode = false
 # http://blog.cuviper.com/2013/11/10/how-short-can-git-abbreviate/
 # Via: http://git.io/QXnAqw
 # abbrev = 12
-
-[credential]
-helper = osxkeychain
 
 [alias]
 h = help
@@ -75,11 +74,11 @@ l15 = log --oneline --decorate -5
 ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
 lf = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
 
-# View abbreviated SHA, description, and history graph of the latest 20 commits
-graph = log --pretty=oneline --graph --abbrev-commit --decorate
-
 # TODO
 #ls = ls-files
+
+# View abbreviated SHA, description, and history graph of the latest 20 commits
+graph = log --pretty=oneline --graph --abbrev-commit --decorate
 
 # Like "git show myfile", but uses the last commit that changed "myfile".
 showlast = log -n 1 -p
@@ -103,7 +102,8 @@ remotes = remote -v
 branchdata = branch -a -vv
 brd = branch -a -vv
 
-# Switch to a branch, creating it if necessary
+# Create and go to a branch
+# Could be improved FIXME
 go = checkout -b
 
 # Easily rememberable
@@ -127,8 +127,8 @@ pom = push origin master
 # Use rebase to prevent unnecessary commits
 pum = pull --rebase origin master
 # Personal remote
-pam = push Amorymeltzer master
 pa = push Amorymeltzer
+pam = push Amorymeltzer master
 
 d = diff --word-diff
 df = diff --word-diff
@@ -173,6 +173,7 @@ conflicts = "!git ls-files -u | awk '{print $4}' | sort -u"
 
 # List all aliases
 aliases = "!git config -l | grep alias | cut -c 7-"
+
 # Find branches containing commit
 fb = "!f() { git branch -a --contains $1; }; f"
 # Find tags containing commit
