@@ -1287,10 +1287,10 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (require 'find-file-in-project)
 ;; (global-set-key (kbd "C-x f") 'find-file-in-project)
 
-;; Highlight ( and ) Highlight phrase if no matching paren.  Mixed is annoying
-;; if sibling is off-screen
+;; Highlight ( and ) Highlight phrase if no matching paren.
 (show-paren-mode t)
-;; (setq show-paren-style 'mixed)
+(setq show-paren-style 'expression
+      show-paren-delay 0.5)
 
 ;; Highlight parens currently between
 ;; https://github.com/nschum/highlight-parentheses.el
