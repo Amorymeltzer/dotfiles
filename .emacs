@@ -295,9 +295,6 @@
 ;; Highlight TODOs, FIXMEs, etc.
 ;; https://github.com/lewang/fic-mode
 (require 'fic-mode)
-;; (add-hook 'emacs-lisp-mode-hook 'fic-mode)
-;; (add-hook 'sh-mode-hook 'fic-mode)
-;; (add-hook 'perl-mode-hook 'fic-mode)
 (add-hook 'prog-mode-hook 'fic-mode)
 
 ;; Really should figure out and group font-lock stuff ;;;;; #### FIXME TODO
@@ -873,9 +870,6 @@ current buffer" t)
 (ido-load-history)
 ;; No .DS files
 (add-to-list 'ido-ignore-files "\\.DS_Store")
-
-;; Get rid of errors in large directories
-;;(setq ido-max-directory-size 100000)
 
 ;; Sort ido filelist by modified time instead of alphabetically, buries .
 (defun ido-sort-mtime ()
