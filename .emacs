@@ -2040,7 +2040,8 @@ This checks in turn:
      (set-face-attribute 'cperl-hash-face nil :background "nil" :foreground
 			 "red" :underline t) ; hashes
      (set-face-attribute 'cperl-nonoverridable-face nil :background "nil"
-			 :foreground "nil"))) ; `print`, anything else?
+			 :foreground "nil")
+     (define-key cperl-mode-map (kbd "C-c C-y") nil))) ; `print`, anything else?
 
 ;; Sets face just for cperl-mode, to return magenta to use strict/warnings
 ;; From https://stackoverflow.com/a/17630877/2521092
