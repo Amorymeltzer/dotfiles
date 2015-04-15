@@ -1942,7 +1942,6 @@ idle for SECS seconds." t)
 
 ;; In case I ever want to screencast Emacs
 ;; https://github.com/lewang/command-log-mode
-;; (require 'command-log-mode)
 (autoload 'clm/open-command-log-buffer "command-log-mode" "Log
 keyboard commands to a buffer.  Useful for screencasting Emacs."
   t)
