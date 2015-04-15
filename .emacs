@@ -1352,6 +1352,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (define-key my/ctrl-q-map (kbd "a") 'align)
 (define-key my/ctrl-q-map (kbd ".") 'highlight-symbol-at-point)
 (define-key my/ctrl-q-map (kbd "?") 'highlight-symbol-remove-all)
+(define-key my/ctrl-q-map (kbd "/") 'highlight-symbol-remove-all)
 
 
 ;; https://github.com/nflath/hungry-delete
