@@ -447,7 +447,7 @@
 ;; Generate README.md markdown from header of elisp file for github
 ;; checkdoc might be useful beforehand
 ;; https://github.com/thomas11/md-readme
-(require 'md-readme)
+(autoload 'mdr-generate "md-readme" "Generate markdown READMEs from elisp" t)
 
 (defun markdown-linkify ()
   "Make region or current word into a link to itself."
@@ -1679,11 +1679,11 @@ round to ones, tens, etc."
 
 ;; Guess keybindings game
 ;; Maybe tweak to get a list for studying?
-(require 'keywiz)
+(autoload 'keywiz "keywiz" "Keywiz keybindings guessing game" t)
 ;; Poker
-(require 'poker)
+(autoload 'poker-play "poker" "Play some hands of poker" t)
 ;; Mandelbrot set
-(require 'u-mandelbrot)
+(autoload 'u-mandelbrot "u-mandelbrot" "Make a mandelbrot fractal" t)
 
 
 ;; From https://github.com/purcell/emacs-xkcd
