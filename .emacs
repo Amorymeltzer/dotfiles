@@ -532,7 +532,7 @@ current buffer" t)
 
 ;; Reveal file or folder in finder
 ;; https://github.com/kaz-yos/elisp/blob/master/reveal-in-finder.el
-(require 'reveal-in-finder)
+(autoload 'reveal-in-finder "reveal-in-finder" "Reveal file/folder in finder" t)
 (global-set-key (kbd "C-c z") 'reveal-in-finder)
 
 ;; Save a list of open files in ~/.emacs.d/.emacs.desktop(.lock)
@@ -1691,8 +1691,7 @@ round to ones, tens, etc."
 ;; (require 'xkcd); or this?
 
 ;; Requires howdoi to be installed (python)
-(require 'howdoi)
-
+(autoload 'howdoi "howdoi" "Instant SX answers" t)
 
 ;; Locate takes forever...
 (setq locate-command "mdfind")
@@ -2074,13 +2073,14 @@ This checks in turn:
 ;;; Should probably figure out a way to diminish these fuckers
 ;; Colors numbers
 ;; https://github.com/Fanael/number-font-lock-mode
-(require 'number-font-lock-mode)
+(autoload 'number-font-lock-mode "number-font-lock-mode" "Syntax highlighting of numeric literals" t)
 ;; Color identifiers based on their name
 ;; https://github.com/Fanael/rainbow-identifiers
-(require 'rainbow-identifiers)
+(autoload 'rainbow-identifiers-mode "rainbow-identifiers" "Color identifiers based on their name" t)
 ;; Color identifies uniquely
+;; Redundant and broken? ;;;;;; ##### FIXME TODO
 ;; https://github.com/ankurdave/color-identifiers-mode
-(require 'color-identifiers-mode)
+(autoload 'color-identifiers-mode "color-identifiers-mode" "Color identifiers uniquely" t)
 
 ;; Get perldoc after C-h via P
 (define-key 'help-command "P" 'perldoc)
@@ -2368,7 +2368,7 @@ project root if possible."
 ;; https://github.com/browse-kill-ring/browse-kill-ring
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
-(require 'kill-ring-ido)
+(autoload 'kill-ring-ido "kill-ring-ido" "Kill-ring browsing with ido" t)
 (global-set-key (kbd "M-y") 'kill-ring-ido)
 
 
