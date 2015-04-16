@@ -311,6 +311,9 @@
 ;;           1 '((:foreground "pink") (:weight bold)) t))))
 ;; (add-hook 'prog-mode-hook 'my/add-watchwords)
 
+(font-lock-add-keywords 'emacs-lisp-mode
+			'(("autoload" . font-lock-keyword-face)))
+
 ;; https://github.com/dgutov/highlight-escape-sequences
 ;; (require 'highlight-escape-sequences)
 ;; (setq hes-simple-modes '(emacs-lisp-mode))
