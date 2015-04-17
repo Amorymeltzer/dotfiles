@@ -1288,15 +1288,16 @@ when in source code modes such as python-mode or perl-mode" t)
 (show-paren-mode t)
 (setq show-paren-style 'expression
       show-paren-delay 0.5)
-
 ;; Highlight parens currently between
 ;; https://github.com/nschum/highlight-parentheses.el
 (require 'highlight-parentheses)
 (highlight-parentheses-mode t)
 ;; Bold 'em, Color mismatched differently
+;; These guys share faces
 (progn
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
-  (set-face-attribute 'show-paren-match-face nil :background "red")
+  (set-face-attribute 'show-paren-match-face nil :background "blue"
+		      :foreground "magenta")
   (set-face-attribute 'show-paren-mismatch-face nil :background "red")
   (setq hl-paren-colors (quote ("red" "white" "green" "cyan"
 				"red" "white" "green" "cyan"))))
