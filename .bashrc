@@ -584,7 +584,7 @@ function peek() {
 # -E preserves environment, eg colors
 alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
 # sudo aliases
-alias fuckyou,='sudo '
+alias fuckyou='sudo $(history -p \!\!)'
 
 # Prompt before overwrite, be vocal about it
 alias mv='mv -vi' # add -f to override, or \ before command
