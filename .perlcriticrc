@@ -12,6 +12,10 @@ minimum_regex_length_to_complain_about = 30
 # until when unless when while also available
 [ControlStructures::ProhibitPostfixControls]
 allow = for if
+# Allow more time before closing filehandles
+# Presumably should use more subroutines.  Default is 5.
+[InputOutput::RequireBriefOpen]
+lines = 20
 
 # Bump these up from level 1 to level 2
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
