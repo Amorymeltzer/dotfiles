@@ -2526,7 +2526,7 @@ project root if possible."
 (defun fixme-insert ()
   "Signal something that needs to be dealt with."
   (interactive)
-  (insert "\;\;\;\;\;\; \#\#\#\#\# F\IXME T\ODO"))
+  (insert "F\IXME T\ODO"))
 (defalias 'insert-fixme 'fixme-insert)
 
 (defun lorem ()
