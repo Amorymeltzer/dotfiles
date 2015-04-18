@@ -2661,20 +2661,6 @@ instead."
 	       extension mode))
     mode))
 
-(defun ted-next-warning ()
-  "Advance to the next buffer location in `font-lock-warning-face'."
-  (interactive)
-  (let ((here (point)))
-    (condition-case nil
-	(progn
-	  (goto-char (next-property-change (point)))
-	  (while (not (memq (get-text-property (point) 'face)
-			    '(font-lock-warning-face
-			      js2-error-face js2-warning-face)))
-	    (goto-char (next-property-change (point)))))
-      (error (goto-char here)
-	     (error "There are no more warnings in the buffer!")))))
-
 
 
 ;; ;; use setq-default to set it for /all/ modes
