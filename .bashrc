@@ -822,11 +822,6 @@ alias pause='itunes pause'
 # Track who is listening to your iTunes music
 alias whotunes='lsof -r 2 -n -P -F n -c iTunes -a -i TCP@Durandal.local:3689'
 
-# Stuff I never use but can't delete because of http://xkcd.com/530/
-alias stfu="osascript -e 'set volume output muted true'"
-alias pumpitup="osascript -e 'set volume 7'"
-alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
-
 # Volume control, potentially using osxutils
 if [ ! -x /opt/local/bin/setvolume ]; then
     function setvolume() {
@@ -840,11 +835,16 @@ if [ ! -x /opt/local/bin/setvolume ]; then
 	fi
     }
 fi
+alias mutevolume='setvolume 0'
 alias quartervolume='setvolume 25'
 alias middlevolume='setvolume 50'
 alias threequartervolume='setvolume 75'
 alias maxvolume='setvolume 100'
-alias mutevolume='setvolume 0'
+
+# Stuff I never use but can't delete because of http://xkcd.com/530/
+alias stfu='mutevolume'
+alias pumpitup='maxvolume'
+alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
 # Seriously though, just use pianobar/pandora
 alias pandora='pianobar'
