@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 GITPAGER=$(git config --get core.pager)
 
 if [ -z "$GITPAGER" ]; then
