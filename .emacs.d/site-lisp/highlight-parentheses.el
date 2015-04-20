@@ -96,6 +96,10 @@ Color attributes might be overriden by `hl-paren-colors' and
 This is used to prevent analyzing the same context over and over.")
 (make-variable-buffer-local 'hl-paren-last-point)
 
+(defvar hl-paren-timer nil
+  "A timer initiating the movement of the `hl-paren-overlays'.")
+(make-variable-buffer-local 'hl-paren-timer)
+
 (defun hl-paren-highlight ()
   "Highlight the parentheses around point."
   (unless (= (point) hl-paren-last-point)
@@ -109,12 +113,26 @@ This is used to prevent analyzing the same context over and over.")
                         (cdr overlays))
               (move-overlay (pop overlays) pos1 (1+ pos1))
               (when (setq pos2 (scan-sexps pos1 1))
-                (move-overlay (pop overlays) (1- pos2) pos2)
-                ))
+                (move-overlay (pop overlays) (1- pos2) pos2)))
           (error nil))
         (goto-char pos))
       (dolist (ov overlays)
         (move-overlay ov 1 1)))))
+
+(defcustom hl-paren-delay 0.137
+  "Fraction of seconds after which the `hl-paren-overlays' are adjusted.
+In general, this should at least be larger than your keyboard
+repeat rate in order to prevent excessive movements of the
+overlays when scrolling or moving point by pressing and holding
+\\[next-line], \\[scroll-up-command] and friends."
+  :type 'number
+  :group 'highlight-parentheses)
+
+(defun hl-paren-initiate-highlight ()
+  "Move the `hl-paren-overlays' after a `hl-paren-delay' secs."
+  (when hl-paren-timer
+    (cancel-timer hl-paren-timer))
+  (setq hl-paren-timer (run-at-time hl-paren-delay nil #'hl-paren-highlight)))
 
 ;;;###autoload
 (define-minor-mode highlight-parentheses-mode
@@ -123,10 +141,10 @@ This is used to prevent analyzing the same context over and over.")
   (mapc 'delete-overlay hl-paren-overlays)
   (kill-local-variable 'hl-paren-overlays)
   (kill-local-variable 'hl-paren-last-point)
-  (remove-hook 'post-command-hook 'hl-paren-highlight t)
+  (remove-hook 'post-command-hook 'hl-paren-initiate-highlight t)
   (when highlight-parentheses-mode
     (hl-paren-create-overlays)
-    (add-hook 'post-command-hook 'hl-paren-highlight nil t)))
+    (add-hook 'post-command-hook 'hl-paren-initiate-highlight nil t)))
 
 ;;;###autoload
 (define-globalized-minor-mode global-highlight-parentheses-mode
@@ -148,7 +166,7 @@ This is used to prevent analyzing the same context over and over.")
         (setq attributes (plist-put attributes :background (car bg))))
       (pop bg)
       (dotimes (i 2) ;; front and back
-        (push (make-overlay 0 0) hl-paren-overlays)
+        (push (make-overlay 0 0 nil t) hl-paren-overlays)
         (overlay-put (car hl-paren-overlays) 'face attributes)))
     (setq hl-paren-overlays (nreverse hl-paren-overlays))))
 
