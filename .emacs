@@ -77,6 +77,16 @@
 		(with-output-to-string (call-process "hostname"
 						     nil standard-output))))
 
+;; UTF-8 always, please
+(setq locale-coding-system 'utf-8) ; please
+(set-terminal-coding-system 'utf-8) ; pretty
+(set-keyboard-coding-system 'utf-8) ; pretty
+(set-selection-coding-system 'utf-8) ; please
+(prefer-coding-system 'utf-8) ; with sugar on top
+(set-language-environment "UTF-8")
+;; (setq-default buffer-file-coding-system 'utf-8-unix)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Auto complete
 ;; http://cx4a.org/software/auto-complete/manual.html#Configuration
@@ -193,16 +203,6 @@
 ;; Whinewhinewhine
 ;; (load-library "whine")
 ;; (whinify)
-
-
-;; UTF-8 always, please
-(setq locale-coding-system 'utf-8) ; please
-(set-terminal-coding-system 'utf-8) ; pretty
-(set-keyboard-coding-system 'utf-8) ; pretty
-(set-selection-coding-system 'utf-8) ; please
-(prefer-coding-system 'utf-8) ; with sugar on top
-(set-language-environment "UTF-8")
-;; (setq-default buffer-file-coding-system 'utf-8-unix)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
