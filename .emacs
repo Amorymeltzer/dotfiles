@@ -2599,10 +2599,6 @@ project root if possible."
 (add-to-list 'minor-mode-alist '(follow-mode " follow"))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(smex-initialize)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defun ted-read-major-mode ()
   "Read a major mode from the user, and return it.
 Based on Kevin Rogers' `edit-region' interactive spec."
@@ -2646,6 +2642,11 @@ instead."
       (message "A file with extension .%s would be opened with mode %s"
 	       extension mode))
     mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(smex-initialize)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
