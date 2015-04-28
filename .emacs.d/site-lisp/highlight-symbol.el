@@ -1,9 +1,9 @@
 ;;; highlight-symbol.el --- automatic and manual symbol highlighting
 ;;
-;; Copyright (C) 2007-2009, 2013 Nikolaj Schumacher
+;; Copyright (C) 2007-2009, 2013-2015 Nikolaj Schumacher
 ;;
 ;; Author: Nikolaj Schumacher <bugs * nschum de>
-;; Version: 1.2
+;; Version: 1.3
 ;; Keywords: faces, matching
 ;; URL: http://nschum.de/src/emacs/highlight-symbol/
 ;; Compatibility: GNU Emacs 22.x, GNU Emacs 23.x, GNU Emacs 24.x
@@ -27,12 +27,12 @@
 ;;
 ;; Add the following to your .emacs file:
 ;; (require 'highlight-symbol)
-;; (global-set-key [(control f3)] 'highlight-symbol-at-point)
+;; (global-set-key [(control f3)] 'highlight-symbol)
 ;; (global-set-key [f3] 'highlight-symbol-next)
 ;; (global-set-key [(shift f3)] 'highlight-symbol-prev)
 ;; (global-set-key [(meta f3)] 'highlight-symbol-query-replace)
 ;;
-;; Use `highlight-symbol-at-point' to toggle highlighting of the symbol at
+;; Use `highlight-symbol' to toggle highlighting of the symbol at
 ;; point throughout the current buffer.  Use `highlight-symbol-mode' to keep the
 ;; symbol at point highlighted.
 ;;
@@ -47,6 +47,10 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2015-04-22 (1.3)
+;;    Added `highlight-symbol-count'.
+;;    Renamed `highlight-symbol-at-point' to `highlight-symbol' because
+;;      hi-lock took that name.
 ;;    Added `highlight-symbol-nav-mode'.  (thanks to Sebastian Wiesner)
 ;;    Added `highlight-symbol-foreground-color'.  (thanks to rubikitch)
 ;;
@@ -135,7 +139,7 @@ disabled for all buffers."
 (defcustom highlight-symbol-colors
   '("yellow" "DeepPink" "cyan" "MediumPurple1" "SpringGreen1"
     "DarkOrange" "HotPink1" "RoyalBlue1" "OliveDrab")
-  "Colors and/or faces used by `highlight-symbol-at-point'.
+  "Colors and/or faces used by `highlight-symbol'.
 highlighting the symbols will use these colors/faces in order."
   :type '(repeat (choice color face))
   :group 'highlight-symbol)
@@ -180,16 +184,22 @@ Highlighting takes place after `highlight-symbol-idle-delay'."
     (kill-local-variable 'highlight-symbol)))
 
 ;;;###autoload
-(defun highlight-symbol-at-point ()
+(defalias 'highlight-symbol-at-point 'highlight-symbol)
+
+;;;###autoload
+(defun highlight-symbol (&optional symbol quiet)
   "Toggle highlighting of the symbol at point.
 This highlights or unhighlights the symbol at point using the first
 element in of `highlight-symbol-faces'."
   (interactive)
-  (let ((symbol (highlight-symbol-get-symbol)))
-    (unless symbol (error "No symbol at point"))
+  (let ((symbol (or symbol
+                    (highlight-symbol-get-symbol)
+                    (error "No symbol at point"))))
     (if (highlight-symbol-symbol-highlighted-p symbol)
         (highlight-symbol-remove-symbol symbol)
-      (highlight-symbol-add-symbol symbol))))
+      (highlight-symbol-add-symbol symbol)
+      (unless quiet
+        (highlight-symbol-count symbol)))))
 
 (defun highlight-symbol-symbol-highlighted-p (symbol)
   "Test if the a symbol regexp is currently highlighted."
@@ -246,6 +256,17 @@ element in of `highlight-symbol-faces'."
     (propertize (substring symbol prefix-length
                            (- (length symbol) suffix-length))
                 'face (assoc symbol (highlight-symbol-uncompiled-keywords)))))
+
+;;;###autoload
+(defun highlight-symbol-count (&optional symbol)
+  "Print the number of occurrences of symbol at point."
+  (interactive)
+  (message "%d occurrences in buffer"
+           (let ((case-fold-search nil))
+             (how-many (or symbol
+                           (highlight-symbol-get-symbol)
+                           (error "No symbol at point"))
+                       (point-min) (point-max)))))
 
 ;;;###autoload
 (defun highlight-symbol-next ()
@@ -343,7 +364,8 @@ before if NLINES is negative."
         (when symbol
           (setq highlight-symbol symbol)
           (highlight-symbol-add-symbol-with-face symbol 'highlight-symbol-face)
-          (font-lock-fontify-buffer))))))
+          (font-lock-fontify-buffer)
+          (highlight-symbol-count))))))
 
 (defun highlight-symbol-mode-remove-temp ()
   "Remove the temporary symbol highlighting."

@@ -4,7 +4,7 @@
 
 ;; Author: Ryan C. Thompson
 ;; URL: https://github.com/DarwinAwardWinner/ido-ubiquitous
-;; Version: 3.0
+;; Version: 3.1
 ;; Created: 2011-09-01
 ;; Keywords: convenience, completion, ido
 ;; EmacsWiki: InteractivelyDoThings
@@ -351,7 +351,9 @@ You can restore these using the command `ido-ubiquitous-restore-default-override
     (disable exact "tmm-menubar")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/58
     ;; https://github.com/mooz/js2-mode/issues/181
-    (enable exact "imenu--completion-buffer"))
+    (enable exact "imenu--completion-buffer")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/74
+    (enable-old exact "auto-insert"))
   "Default value of `ido-ubiquitous-function-overrides'.
 
 You can restore these using the command `ido-ubiquitous-restore-default-overrides'.")
