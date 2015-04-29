@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# mlb by Amory Meltzer
+# Format output from the mlb-standings gem
+# https://github.com/spraints/mlb-standings
+# https://rubygems.org/gems/mlb-standings
+
+
+if [[ $# -lt 1 ]]; then
+    #  mlb-standings | perl -p -e 's/-+\n//g'
+    mlb-standings | more
+elif [[ $1 == 'al' || $1 == 'a' ]]; then
+    mlb-standings | tail +2 | head -n 25
+elif [[ $1 == 'nl' || $1 == 'n' ]]; then
+    mlb-standings | tail -n 25
+fi
