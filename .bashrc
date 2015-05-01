@@ -551,7 +551,7 @@ alias count='wc -l '
 
 # http://linux.die.net/man/1/pygmentize
 # Colorized cat
-alias cot='pygmentize -O bg=light -g '
+alias cot='pygmentize-3.4 -O bg=light -g '
 
 # o with no args opens current directory, otherwise opens the given location
 function o() {
@@ -583,9 +583,9 @@ function peek() {
 # uses sudo, not overly common but often enough to change moderately frequently
 # -E preserves environment, eg colors
 alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
-# sudo aliases
-alias fuckyou='sudo $(history -p \!\!)'
 
+
+alias fuckyou='sudo $(history -p \!\!)'
 # thefuck https://github.com/nvbn/thefuck
 alias fuck='eval $(thefuck $(fc -ln -1))'
 
