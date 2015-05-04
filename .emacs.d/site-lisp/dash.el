@@ -226,6 +226,50 @@ Alias: `-reject'"
 (defalias '-reject '-remove)
 (defalias '--reject '--remove)
 
+(defun -remove-first (pred list)
+  "Return a new list with the first item matching PRED removed.
+
+Alias: `-reject-first'
+
+See also: `-remove', `-map-first'"
+  (let (front)
+    (while (and list (not (funcall pred (car list))))
+      (push (car list) front)
+      (!cdr list))
+    (if list
+        (-concat (nreverse front) (cdr list))
+      (nreverse front))))
+
+(defmacro --remove-first (form list)
+  "Anaphoric form of `-remove-first'."
+  (declare (debug (form form)))
+  `(-remove-first (lambda (it) ,form) ,list))
+
+(defalias '-reject-first '-remove-first)
+(defalias '--reject-first '--remove-first)
+
+(defun -remove-last (pred list)
+  "Return a new list with the last item matching PRED removed.
+
+Alias: `-reject-last'
+
+See also: `-remove', `-map-last'"
+  (nreverse (-remove-first pred (nreverse list))))
+
+(defmacro --remove-last (form list)
+  "Anaphoric form of `-remove-last'."
+  (declare (debug (form form)))
+  `(-remove-last (lambda (it) ,form) ,list))
+
+(defalias '-reject-last '-remove-last)
+(defalias '--reject-last '--remove-last)
+
+(defun -remove-item (item list)
+  "Remove all occurences of ITEM from LIST.
+
+Comparison is done with `equal'."
+  (--remove (equal it item) list))
+
 (defmacro --keep (form list)
   "Anaphoric form of `-keep'."
   (declare (debug (form form)))
@@ -236,7 +280,9 @@ Alias: `-reject'"
        (nreverse ,r))))
 
 (defun -keep (fn list)
-  "Return a new list of the non-nil results of applying FN to the items in LIST."
+  "Return a new list of the non-nil results of applying FN to the items in LIST.
+
+If you want to select the original items satisfying a predicate use `-filter'."
   (--keep (funcall fn it) list))
 
 (defun -non-nil (list)
@@ -279,6 +325,32 @@ See also: `-update-at'"
 (defalias '-replace-where '-map-when)
 (defalias '--replace-where '--map-when)
 
+(defun -map-first (pred rep list)
+  "Replace first item in LIST satisfying PRED with result of REP called on this item.
+
+See also: `-map-when', `-replace-first'"
+  (let (front)
+    (while (and list (not (funcall pred (car list))))
+      (push (car list) front)
+      (!cdr list))
+    (if list
+        (-concat (nreverse front) (cons (funcall rep (car list)) (cdr list)))
+      (nreverse front))))
+
+(defmacro --map-first (pred rep list)
+  "Anaphoric form of `-map-first'."
+  `(-map-first (lambda (it) ,pred) (lambda (it) ,rep) ,list))
+
+(defun -map-last (pred rep list)
+  "Replace first item in LIST satisfying PRED with result of REP called on this item.
+
+See also: `-map-when', `-replace-last'"
+  (nreverse (-map-first pred rep (nreverse list))))
+
+(defmacro --map-last (pred rep list)
+  "Anaphoric form of `-map-last'."
+  `(-map-last (lambda (it) ,pred) (lambda (it) ,rep) ,list))
+
 (defun -replace (old new list)
   "Replace all OLD items in LIST with NEW.
 
@@ -286,6 +358,22 @@ Elements are compared using `equal'.
 
 See also: `-replace-at'"
   (--map-when (equal it old) new list))
+
+(defun -replace-first (old new list)
+  "Replace the first occurence of OLD with NEW in LIST.
+
+Elements are compared using `equal'.
+
+See also: `-map-first'"
+  (--map-first (equal old it) new list))
+
+(defun -replace-last (old new list)
+  "Replace the last occurence of OLD with NEW in LIST.
+
+Elements are compared using `equal'.
+
+See also: `-map-last'"
+  (--map-last (equal old it) new list))
 
 (defmacro --mapcat (form list)
   "Anaphoric form of `-mapcat'."
@@ -351,7 +439,7 @@ See also: `-splice-list', `-insert-at'"
 See also: `-splice', `-insert-at'"
   (-splice pred (lambda (_) new-list) list))
 
-(defun --splice-list (pred new-list list)
+(defmacro --splice-list (pred new-list list)
   "Anaphoric form of `-splice-list'."
   `(-splice-list (lambda (it) ,pred) ,new-list ,list))
 
@@ -390,6 +478,24 @@ Alias: `-find'"
 
 (defalias '-find '-first)
 (defalias '--find '--first)
+
+(defmacro --some (form list)
+  "Anaphoric form of `-some'."
+  (declare (debug (form form)))
+  (let ((n (make-symbol "needle")))
+    `(let (,n)
+       (--each-while ,list (not ,n)
+         (setq ,n ,form))
+       ,n)))
+
+(defun -some (pred list)
+  "Return (PRED x) for the first LIST item where (PRED x) is non-nil, else nil.
+
+Alias: `-any'"
+  (--some (funcall pred it) list))
+
+(defalias '-any '-some)
+(defalias '--any '--some)
 
 (defmacro --last (form list)
   "Anaphoric form of `-last'."
@@ -1110,6 +1216,16 @@ sorts it in descending order."
          (-sort comp)
          (-map 'cdr))))
 
+(defvar dash--source-counter 0
+  "Monotonic counter for generated symbols.")
+
+(defun dash--match-make-source-symbol ()
+  "Generate a new dash-source symbol.
+
+All returned symbols are guaranteed to be unique."
+  (prog1 (make-symbol (format "--dash-source-%d--" dash--source-counter))
+    (setq dash--source-counter (1+ dash--source-counter))))
+
 (defun dash--match-ignore-place-p (symbol)
   "Return non-nil if SYMBOL is a symbol and starts with _."
   (and (symbolp symbol)
@@ -1121,9 +1237,8 @@ sorts it in descending order."
    ((= skip-cdr 0)
     `(pop ,source))
    (t
-    `(progn
-       (setq ,source (nthcdr ,skip-cdr ,source))
-       (pop ,source)))))
+    `(prog1 ,(dash--match-cons-get-car skip-cdr source)
+       (setq ,source ,(dash--match-cons-get-cdr (1+ skip-cdr) source))))))
 
 (defun dash--match-cons-get-car (skip-cdr source)
   "Helper function generating idiomatic code to get nth car."
@@ -1147,15 +1262,16 @@ sorts it in descending order."
 
 (defun dash--match-cons (match-form source)
   "Setup a cons matching environment and call the real matcher."
-  (let ((s (make-symbol "--dash-source--"))
+  (let ((s (dash--match-make-source-symbol))
         (n 0)
         (m match-form))
     (while (and (consp m)
-                (symbolp (car m))
-                (eq (aref (symbol-name (car m)) 0) ?_))
+                (dash--match-ignore-place-p (car m)))
       (setq n (1+ n)) (!cdr m))
     (cond
-     ;; handle improper lists
+     ;; when we only have one pattern in the list, we don't have to
+     ;; create a temporary binding (--dash-source--) for the source
+     ;; and just use the input directly
      ((and (consp m)
            (not (cdr m)))
       (dash--match (car m) (dash--match-cons-get-car n source)))
@@ -1215,11 +1331,14 @@ SOURCE is a proper or improper list."
 
 (defun dash--match-vector (match-form source)
   "Setup a vector matching environment and call the real matcher."
-  (let ((s (make-symbol "--dash-source--")))
+  (let ((s (dash--match-make-source-symbol)))
     (cond
      ;; don't bind `s' if we only have one sub-pattern
      ((= (length match-form) 1)
       (dash--match (aref match-form 0) `(aref ,source 0)))
+     ;; if the source is a symbol, we don't need to re-bind it
+     ((symbolp source)
+      (dash--match-vector-1 match-form source))
      ;; don't bind `s' if we only have one sub-pattern which is not ignored
      ((let* ((ignored-places (mapcar 'dash--match-ignore-place-p match-form))
              (ignored-places-n (length (-remove 'null ignored-places))))
@@ -1273,10 +1392,13 @@ is discarded."
   "Setup a kv matching environment and call the real matcher.
 
 kv can be any key-value store, such as plist, alist or hash-table."
-  (let ((s (make-symbol "--dash-source--")))
+  (let ((s (dash--match-make-source-symbol)))
     (cond
      ;; don't bind `s' if we only have one sub-pattern (&type key val)
      ((= (length match-form) 3)
+      (dash--match-kv-1 (cdr match-form) source (car match-form)))
+     ;; if the source is a symbol, we don't need to re-bind it
+     ((symbolp source)
       (dash--match-kv-1 (cdr match-form) source (car match-form)))
      (t
       (cons (list s source) (dash--match-kv-1 (cdr match-form) s (car match-form)))))))
@@ -1330,13 +1452,28 @@ Key-value stores are disambiguated by placing a token &plist,
     (dash--match-symbol match-form source))
    ((consp match-form)
     (cond
+     ;; Handle the "x &as" bindings first.
+     ((and (consp (cdr match-form))
+           (symbolp (car match-form))
+           (eq '&as (cadr match-form)))
+      (let ((s (car match-form)))
+        (cons (list s source)
+              (dash--match (cddr match-form) s))))
      ((memq (car match-form) '(&plist &alist &hash))
       (dash--match-kv match-form source))
      ((eq (car match-form) '&keys)
       (dash--match-kv (cons '&plist (cdr match-form)) source))
      (t (dash--match-cons match-form source))))
    ((vectorp match-form)
-    (dash--match-vector match-form source))))
+    ;; We support the &as binding in vectors too
+    (cond
+     ((and (> (length match-form) 2)
+           (symbolp (aref match-form 0))
+           (eq '&as (aref match-form 1)))
+      (let ((s (aref match-form 0)))
+        (cons (list s source)
+              (dash--match (dash--vector-tail match-form 2) s))))
+     (t (dash--match-vector match-form source))))))
 
 (defmacro -let* (varlist &rest body)
   "Bind variables according to VARLIST then eval BODY.
@@ -1443,8 +1580,50 @@ plist-like key-value pairs, similarly to &keys keyword of
   (a1 a2 ... aN &keys key1 b1 ... keyN bK)
 
 This binds N values from the list to a1 ... aN, then interprets
-the cdr as a plist (see key/value matching above)."
-  (declare (debug ((&rest (sexp form)) body))
+the cdr as a plist (see key/value matching above).
+
+You can name the source using the syntax SYMBOL &as PATTERN.
+This syntax works with lists (proper or improper), vectors and
+all types of maps.
+
+  (list &as a b c) (list 1 2 3)
+
+binds A to 1, B to 2, C to 3 and LIST to (1 2 3).
+
+Similarly:
+
+  (bounds &as beg . end) (cons 1 2)
+
+binds BEG to 1, END to 2 and BOUNDS to (1 . 2).
+
+  (items &as first . rest) (list 1 2 3)
+
+binds FIRST to 1, REST to (2 3) and ITEMS to (1 2 3)
+
+  [vect &as _ b c] [1 2 3]
+
+binds B to 2, C to 3 and VECT to [1 2 3] (_ avoids binding as usual).
+
+  (plist &as &plist :b b) (list :a 1 :b 2 :c 3)
+
+binds B to 2 and PLIST to (:a 1 :b 2 :c 3).  Same for &alist and &hash.
+
+This is especially useful when we want to capture the result of a
+computation and destructure at the same time.  Consider the
+form (function-returning-complex-structure) returning a list of
+two vectors with two items each.  We want to capture this entire
+result and pass it to another computation, but at the same time
+we want to get the second item from each vector.  We can achieve
+it with pattern
+
+  (result &as [_ a] [_ b]) (function-returning-complex-structure)
+
+Note: Clojure programmers may know this feature as the \":as
+binding\".  The difference is that we put the &as at the front
+because we need to support improper list binding."
+  (declare (debug ([&or (&rest (sexp form))
+                        (vector [&rest [sexp form]])]
+                   body))
            (indent 1))
   (if (vectorp varlist)
       `(let* ,(dash--match (aref varlist 0) (aref varlist 1))
@@ -1965,6 +2144,15 @@ structure such as plist or alist."
                              "--remove"
                              "-reject"
                              "--reject"
+                             "-remove-first"
+                             "--remove-first"
+                             "-reject-first"
+                             "--reject-first"
+                             "-remove-last"
+                             "--remove-last"
+                             "-reject-last"
+                             "--reject-last"
+                             "-remove-item"
                              "-non-nil"
                              "-keep"
                              "--keep"
@@ -1978,7 +2166,13 @@ structure such as plist or alist."
                              "--map-when"
                              "-replace-where"
                              "--replace-where"
+                             "-map-first"
+                             "--map-first"
+                             "-map-last"
+                             "--map-last"
                              "-replace"
+                             "-replace-first"
+                             "-replace-last"
                              "-flatten"
                              "-flatten-n"
                              "-concat"
@@ -1991,6 +2185,10 @@ structure such as plist or alist."
                              "--first"
                              "-find"
                              "--find"
+                             "-some"
+                             "--some"
+                             "-any"
+                             "--any"
                              "-last"
                              "--last"
                              "-first-item"
