@@ -164,7 +164,7 @@ if [ $homebrew_flag -lt 1 ]; then
     if [[ $(brew outdated 2> /dev/null) ]]; then
 	updating 'Homebrew'
 	sudo -u $SUDO_USER brew outdated
-	sudo -u $SUDO_USER brew upgrade
+	sudo -u $SUDO_USER brew upgrade --all
 
 	cleaning 'Homebrew'
 	sudo -u $SUDO_USER brew cleanup -ns
