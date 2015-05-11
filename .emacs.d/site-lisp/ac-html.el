@@ -3,9 +3,9 @@
 ;; Copyright (C) 2014 Zhang Kai Yu
 
 ;; Author: Zhang Kai Yu <yeannylam@gmail.com>
-;; Version: 0.3
+;; Version: 0.32
 ;; Keywords: html, auto-complete, rails, ruby
-;; Package-Requires: ((auto-complete "1.4"))
+;; Package-Requires: ((auto-complete "1.4") (dash "2.8.0") (web-completion-data "0.1"))
 ;; URL: https://github.com/cheunghy/ac-html
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -46,7 +46,9 @@
 (require 'auto-complete)
 (require 'auto-complete-config)
 (require 'cl)
-(require 'ac-html-complete-data)
+(require 'dash)
+(require 'web-completion-data)
+
 ;;; Customization
 
 (defgroup auto-complete-html nil
@@ -116,7 +118,7 @@
 
 (defun ac-html--all-files-named (file-name)
   "Get a list of file named FILE-NAME in all directory specified by
- `ac-html-source-dirs'.
+ `web-completion-data-sources'.
 
 Returns an alist. car is source name, cdr is the file path."
   (let (return-files source-dir-path)
@@ -129,21 +131,14 @@ Returns an alist. car is source name, cdr is the file path."
                          (symbol-value source-dir-path))
                         (t
                          (error "[ac-html] invalid element %s in\
- `ac-html-source-dirs'" source-dir-path))))
+ `web-completion-data-sources'" source-dir-path))))
             (when source-dir-path
               (setq source-dir-path (expand-file-name file-name source-dir-path))
               (when (file-exists-p source-dir-path)
                 (add-to-list 'return-files (cons (car name-dir-cons-cell) source-dir-path))
                 )))
-          ac-html-source-dirs)
+          web-completion-data-sources)
     return-files))
-
-(defun ac-html--flatten (wtf)
-  "Flatten WTF, into a list."
-  (cond ((null wtf) nil)
-        ((atom wtf) (list wtf))
-        (t (append (ac-html--flatten (car wtf))
-                   (ac-html--flatten (cdr wtf))))))
 
 (defun ac-html--make-popup-items (summary items documentation)
   "Make popup-item for each item with SUMMARY.
@@ -172,7 +167,7 @@ DOCUMENTATION is string or function."
             items)))
 
 (defun ac-html--read-file (file-in-source-dir)
-  "Return string content of FILE-IN-SOURCE-DIR from `ac-html-source-dirs'."
+  "Return string content of FILE-IN-SOURCE-DIR from `web-completion-data-sources'."
   (let ((file (cdr (nth 0 (ac-html--all-files-named file-in-source-dir)))))
     ;; Just read from the first file.
     (when file
@@ -181,7 +176,7 @@ DOCUMENTATION is string or function."
         (buffer-string)))))
 
 (defun ac-html--tags ()
-  (ac-html--flatten
+  (-flatten
    (mapcar (lambda (source-name-and-file-path)
              (ac-html--make-popup-items
               (car source-name-and-file-path)
@@ -205,22 +200,6 @@ DOCUMENTATION is string or function."
         (if doc
             doc
           "Currently not documented.")))))
-
-(defvar ac-html-all-element-list
-  (ac-html--load-list-from-file (expand-file-name "html-tag-list"
-                                                  ac-html-basic-source-dir)))
-
-(defun ac-source--html-tag-documentation (symbol)
-  (let* ((where-to-find
-          (expand-file-name "html-tag-short-docs"
-                            ac-html-basic-source-dir))
-         (doc-file (expand-file-name symbol where-to-find)))
-    (if (file-exists-p doc-file)
-        (progn
-          (with-temp-buffer
-            (insert-file-contents doc-file)
-            (buffer-string)))
-      "Currently not documented.")))
 
 (defun ac-html--check-string-face ()
   "t if text's face(s) at point is in `ac-html-string-check-faces'."
@@ -252,7 +231,7 @@ DOCUMENTATION is string or function."
                               ))
                            (ac-html--all-files-named
                             (concat "html-attributes-list/" tag-string))))
-      (ac-html--flatten items))))
+      (-flatten items))))
 
 (defun ac-source--html-values-internal (tag-string attribute-string)
   "Read html-stuff/html-attributes-complete/global-<ATTRIBUTE>
@@ -278,7 +257,7 @@ Those files may have documantation delimited by \" \" symbol."
                          (ac-html--all-files-named
                           (format "html-attributes-complete/%s-%s" tag-string
                                   attribute-string))))
-    (ac-html--flatten items)))
+    (-flatten items)))
 
 (defun ac-source--html-attribute-values (tag-string attribute-string)
   (if (and ac-html-complete-css
