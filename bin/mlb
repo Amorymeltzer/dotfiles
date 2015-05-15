@@ -4,6 +4,8 @@
 # https://github.com/spraints/mlb-standings
 # https://rubygems.org/gems/mlb-standings
 
+## I'm losing the L10 column, not sure why FIXME TODO
+
 
 if [[ $# -lt 1 ]]; then
     #  mlb-standings | perl -p -e 's/-+\n//g'
