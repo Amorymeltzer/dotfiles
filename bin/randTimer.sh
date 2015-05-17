@@ -10,8 +10,8 @@ elif [[ $# -gt 0 ]]; then
     echo "Please provide two numbers"
     exit
 else
-    low=1
-    high=4
+    low=10
+    high=60
 fi
 
 while true; do
@@ -20,7 +20,7 @@ while true; do
     minutes=$(echo $time*60 | bc)
     sleep $minutes
 
-    echo -e "$minutues minutes have elapsed\007"
+    echo -e "$time minutes have elapsed\007"
     sleep .25
     echo -en "\007"
     sleep .25
