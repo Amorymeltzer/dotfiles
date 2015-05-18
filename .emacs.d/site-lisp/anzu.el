@@ -4,7 +4,7 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-anzu
-;; Version: 0.52
+;; Version: 0.53
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -511,6 +511,8 @@
                (query-replace-descr (cdar anzu--query-defaults)) use-regexp))
       (add-to-history query-replace-from-history-variable from nil t)
       (when use-regexp
+        (unless (anzu--validate-regexp from)
+          (error "'%s' is invalid regexp." from))
         (anzu--query-validate-from-regexp from))
       from)))
 
@@ -557,7 +559,7 @@
 (defsubst anzu--replaced-literal-string (ov replaced from)
   (let ((str (buffer-substring-no-properties
               (overlay-start ov) (overlay-end ov))))
-    (when (string-match str from)
+    (when (string-match (regexp-quote str) from)
       (replace-match replaced (not case-fold-search) nil str))))
 
 (defun anzu--append-replaced-string (content buf beg end use-regexp overlay-limit from)
