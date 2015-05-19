@@ -20,7 +20,7 @@ while true; do
     minutes=$(echo $time*60 | bc)
     sleep $minutes
 
-    date
+    echo -n $(date)
     echo -e "$time minutes have elapsed\007"
     sleep .25
     echo -en "\007"
