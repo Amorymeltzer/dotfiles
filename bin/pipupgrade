@@ -3,4 +3,4 @@
 # Upgrade all pip modules
 # http://stackoverflow.com/a/3452888/2521092
 
-pip list -o | grep -v '^\-e' | grep -v bonjour-py | grep -v pip | cut -d ' ' -f 1 | xargs sudo -H pip install -U
+sudo -H pip list -o | grep -v '^\-e' | grep -v bonjour-py | grep -v pip | cut -d ' ' -f 1 | xargs sudo -H pip install -U
