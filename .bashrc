@@ -587,7 +587,7 @@ alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
 
 alias fuckyou='sudo $(history -p \!\!)'
 # thefuck https://github.com/nvbn/thefuck
-alias fuck='eval $(thefuck $(fc -ln -1))'
+alias fuck='eval $(thefuck $(fc -ln -1)); history -r'
 
 # Prompt before overwrite, be vocal about it
 alias mv='mv -vi' # add -f to override, or \ before command
