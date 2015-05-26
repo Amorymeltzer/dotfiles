@@ -3,8 +3,8 @@
 ;; Copyright (C) 2012-2013 Artur Malabarba <bruce.connor.am@gmail.com>
 
 ;; Author: Artur Malabarba <bruce.connor.am@gmail.com>
-;; URL: http://github.com/Bruce-Connor/emacs-google-this
-;; Version: 1.9
+;; URL: http://github.com/Malabarba/emacs-google-this
+;; Version: 1.10
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: convenience hypermedia
 ;; Prefix: google-this
@@ -107,11 +107,11 @@
 
 (defgroup google-this '()
   "Customization group for `google-this-mode'."
-  :link '(url-link "http://github.com/Bruce-Connor/emacs-google-this")
+  :link '(url-link "http://github.com/Malabarba/emacs-google-this")
   :group 'convenience
   :group 'comm)
 
-(defconst google-this-version "1.9"
+(defconst google-this-version "1.10"
   "Version string of the `google-this' package.")
 (defcustom google-this-wrap-in-quotes nil
   "If not nil, searches are wrapped in double quotes.
@@ -460,21 +460,6 @@ BEFORE activating the function `google-this-mode' and BEFORE `require'ing the
   :global t
   :group 'google-this)
 ;; (setq google-this-keybind (kbd \"C-x g\"))
-
-
-(define-obsolete-variable-alias 'google-error-regexp 'google-this-error-regexp "1.9")
-(define-obsolete-variable-alias 'google-location-suffix 'google-this-location-suffix "1.9")
-(define-obsolete-variable-alias 'google-base-url 'google-this-base-url "1.9")
-(define-obsolete-variable-alias 'google-wrap-in-quotes 'google-this-wrap-in-quotes "1.9")
-
-(dolist (it '("-do-lucky-search" "lucky-search-url" "string" "pick-term"
-              "url" "translate-query-or-region" "cpp-reference" "forecast"
-              "error" "line" "symbol" "word" "lucky-and-insert-url"
-              "lucky-search" "region" "search"))
-  (define-obsolete-function-alias
-    (intern (concat "google-" it))
-    (intern (concat "google-this-" it))
-    "1.9"))
 
 (provide 'google-this)
 
