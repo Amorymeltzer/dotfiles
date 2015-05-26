@@ -2,20 +2,40 @@
 
 """ run git commands on multiple git clones https://github.com/mnagel/clustergit """
 
-
-# Grab some libraries
+from __future__ import print_function
 import re
 import sys
 import os
-import commands
-from optparse import OptionParser
+try:
+    from argcomplete import autocomplete
+    use_argcomplete = True
+except Exception:
+    use_argcomplete = False
+    # print('Notice: install "argcomplete" to automatic complete the arguments')
+try:
+    from argparse import ArgumentParser
+except Exception:
+    # python3
+    from ArgParse import ArgumentParser
+try:
+    import commands
+except Exception:
+    # python3
+    import subprocess as commands
+    commands.get_output = commands.check_output
 
 def colorize(color, message):
     return "%s%s%s" % (color, message, Colors.ENDC)
 def colorize_off(color, message):
+    for color in [Colors.BOLD, Colors.UNDERLINE, Colors.HEADER,
+                  Colors.OKBLUE, Colors.OKGREEN,
+                  Colors.WARNING, Colors.FAIL, Colors.ENDC]:
+        message = message.replace(color, '')
     return message
 
 class Colors:
+    BOLD = '\033[1m'     # unused
+    UNDERLINE = '\033[4m'# unused
     HEADER = '\033[95m'  # unused
     OKBLUE = '\033[94m'  # write operation succeeded
     OKGREEN = '\033[92m' # readonly operation succeeded
@@ -24,132 +44,142 @@ class Colors:
     ENDC = '\033[0m'     # reset color
 
 def read_arguments(args):
-    parser = OptionParser(description="""
+    parser = ArgumentParser(description="""
     clustergit will scan through all subdirectories looking for a .git directory.
     When it finds one it'll look to see if there are any changes and let you know.
     If there are no changes it can also push and pull to/from a remote location.
     """.strip())
-    parser.add_option("-d", "--dir",
+    parser.add_argument("-d", "--dir",
                     dest    = "dirname",
                     action  = "store",
                     help    = "The directory to parse sub dirs from",
                     default = "."
                     )
 
-    parser.add_option("-v", "--verbose",
+    parser.add_argument("-v", "--verbose",
                   action    = "store_true",
                   dest      = "verbose",
                   default   = False,
                   help      = "Show the full detail of git status"
                   )
 
-    parser.add_option("-a", "--align",
+    parser.add_argument("-a", "--align",
                   action    = "store",
                   dest      = "align",
                   default   = 40,
-                  type      = "int",
+                  type      = int,
                   help      = "Repo name align (space padding)"
                   )
 
-    parser.add_option("-r", "--remote",
+    parser.add_argument("-r", "--remote",
                 action      = "store",
                 dest        = "remote",
                 default     = "",
                 help        = "Set the remote name (remotename:branchname)"
                 )
 
-    parser.add_option("--push",
+    parser.add_argument("--push",
                 action      = "store_true",
                 dest        = "push",
                 default     = False,
                 help        = "Do a 'git push' if you've set a remote with -r it will push to there"
                 )
 
-    parser.add_option("-p", "--pull",
+    parser.add_argument("-p", "--pull",
                 action      = "store_true",
                 dest        = "pull",
                 default     = False,
                 help        = "Do a 'git pull' if you've set a remote with -r it will pull from there"
                 )
 
-    parser.add_option("-c", "--clear",
+    parser.add_argument("--exec", "--execute",
+                action      = "store",
+                dest        = "command",
+                type        = str,
+                default     = "",
+                help        = "Execute a shell command in each repository"
+                )
+
+    parser.add_argument("-c", "--clear",
                 action      = "store_true",
                 dest        = "clear",
                 default     = False,
                 help        = "Clear screen on startup"
                 )
 
-    parser.add_option("-C", "--count-dirty",
+    parser.add_argument("-C", "--count-dirty",
                 action      = "store_true",
                 dest        = "count",
                 default     = False,
                 help        = "Only display a count of not-clean repos"
                 )
 
-    parser.add_option("-q", "--quiet",
+    parser.add_argument("-q", "--quiet",
                 action      = "store_true",
                 dest        = "quiet",
                 default     = False,
                 help        = "Skip startup info"
                 )
 
-    parser.add_option("-H", "--hide-clean",
+    parser.add_argument("-H", "--hide-clean",
                 action      = "store_true",
                 dest        = "hide_clean",
                 default     = False,
                 help        = "Hide clean repos"
                 )
 
-    parser.add_option("-R", "--relative",
+    parser.add_argument("-R", "--relative",
                 action      = "store_true",
                 dest        = "relative",
                 default     = False,
                 help        = "Print relative paths"
                 )
 
-    parser.add_option("-n", "--no-colors",
+    parser.add_argument("-n", "--no-colors",
                 action      = "store_false",
                 dest        = "colors",
                 default     = True,
                 help        = "Disable ANSI color output"
                 )
 
-    parser.add_option("-b", "--branch",
+    parser.add_argument("-b", "--branch",
                 action      = "store",
                 dest        = "branch",
                 default     = "master",
                 help        = "Warn if not on this branch"
                 )
 
-    parser.add_option("--recursive",
+    parser.add_argument("--recursive",
                 action      = "store_true",
                 dest        = "recursive",
                 default     = False,
                 help        = "Recursively search for git repos"
                 )
 
-    parser.add_option("-e", "--exclude",
+    parser.add_argument("-e", "--exclude",
                 action      = "append",
                 dest        = "exclude",
                 default     = [],
                 help        = "Regex to exclude directories"
                 )
 
-    parser.add_option("-B", "--checkout-branch",
+    parser.add_argument("-B", "--checkout-branch",
                 action      = "store",
                 dest        = "cbranch",
                 default     = [],
                 help        = "Checkout branch"
                 )
 
-    parser.add_option("--warn-unversioned",
+    parser.add_argument("--warn-unversioned",
                 action      = "store_true",
                 dest        = "unversioned",
                 default     = False,
                 help        = "Prints a warning if a directory is not under git version control"
                 )
 
-    (options, args) = parser.parse_args(args)
+    if use_argcomplete:
+        autocomplete(parser)
+    options = parser.parse_args(args)
     return options
 
 def show_error(error="Undefined Error!"):
@@ -161,14 +191,14 @@ def is_excluded(path, options):
     for ex in options.exclude:
         if re.search(ex, path):
             if options.verbose:
-                print "skipping %s" % (path)
+                print("skipping %s" % (path))
             return True
     return False
 
 def run(command, options):
     if options.verbose:
-        print "running %s" % (command)
-    return commands.getoutput(command)
+        print("running %s" % (command))
+    return commands.getstatusoutput(command)
 
 def check(dirname, options):
     """
@@ -197,7 +227,7 @@ def check(dirname, options):
 
             # OK, contains a .git file. Let's descend into it
             # and ask git for a status
-            out = run('cd "%s"; LC_ALL=C git status' % infile, options)
+            status, out = run('cd "%s"; LC_ALL=C git status' % infile, options)
             if options.verbose:
                 sys.stdout.write(out + "\n")
 
@@ -240,7 +270,7 @@ def check(dirname, options):
 
             if can_push and options.push:
                 # Push to the remote
-                push = run(
+                status, push = run(
                     'cd "%s"; LC_ALL=C git push %s'
                         % (infile, ' '.join(options.remote.split(":"))), options
                 )
@@ -253,7 +283,7 @@ def check(dirname, options):
 
             if can_pull and options.pull:
                 # Pull from the remote
-                pull = run(
+                status, pull = run(
                     'cd "%s"; LC_ALL=C git pull %s'
                         % (infile, ' '.join(options.remote.split(":"))), options
                 )
@@ -271,8 +301,22 @@ def check(dirname, options):
                 else:
                     messages.append(colorize(Colors.OKBLUE, "Pulled"))
 
+            if options.command:
+                exit_status, output = run(
+                    'cd "%s"; LC_ALL=C %s'% (infile, options.command),
+                    options
+                )
+                if not options.colors:
+                    output = colorize_off('', output)
+                if not options.quiet:
+                    messages.append('\n' + output)
+                    if exit_status != 0:
+                        show_error(colorize(Colors.FAIL,
+                                            "The command exited with status {s} in {r}".format(s=exit_status, r=infile) +
+                                            "\nThe output was:" + output))
+
             if options.cbranch:
-                checkoutbranch = run(
+                status, checkoutbranch = run(
                     'cd "%s"; LC_ALL=C git checkout %s'
                         % (infile, options.cbranch), options
                 )
