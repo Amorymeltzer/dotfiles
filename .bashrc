@@ -782,7 +782,6 @@ function newbash() {
 }
 alias nbash='newbash'
 
-alias python3='python3.4 '
 # Completion weird, but give some of it to 3.4?  ;;;;;; ##### FIXME TODO
 complete -F _python python3.4
 
