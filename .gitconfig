@@ -181,8 +181,17 @@ fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen 
 # Find commits by commit message
 fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-# If there's only suggestion from a typo, automatically call it
+# https://gist.github.com/phinze/83387035c233db7c521e by @phinze
+# git timespan FROMREF [TOREF] [FORMAT]
+# TOREF: defaults to HEAD
+# FORMAT: defaults to %mm%dd
+# uses `ddiff` from the `dateutils` package
+# available via: brew install dateutils, apt-get install dateutils, etc
+timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --format=%ai ${2:-HEAD}); ddiff -f ${3:-%mm%dd} \"$one\" \"$two\"; }; f"
+
+
 [help]
+# If there's only suggestion from a typo, automatically call it
 autocorrect = 1
 
 [color]
