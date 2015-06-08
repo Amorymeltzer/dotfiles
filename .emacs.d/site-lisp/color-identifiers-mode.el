@@ -62,7 +62,7 @@
     (setq color-identifiers:timer nil)
     (font-lock-remove-keywords nil '((color-identifiers:colorize . default)))
     (ad-deactivate 'enable-theme))
-  (font-lock-fontify-buffer))
+  (color-identifiers:refontify))
 
 ;;;###autoload
 (define-global-minor-mode global-color-identifiers-mode
@@ -301,13 +301,15 @@ For Emacs Lisp support within color-identifiers-mode."
       (goto-char (point-min))
       (condition-case nil
           (while t
-            (let* ((sexp (read (current-buffer)))
-                   (ids (color-identifiers:elisp-declarations-in-sexp sexp))
-                   (strs (-filter 'identity
-                                  (mapcar (lambda (id)
-                                            (when (symbolp id) (symbol-name id)))
-                                          ids))))
-              (setq result (append strs result))))
+            (condition-case nil
+                (let* ((sexp (read (current-buffer)))
+                       (ids (color-identifiers:elisp-declarations-in-sexp sexp))
+                       (strs (-filter 'identity
+                                      (mapcar (lambda (id)
+                                                (when (symbolp id) (symbol-name id)))
+                                              ids))))
+                  (setq result (append strs result)))
+              (invalid-read-syntax nil)))
         (end-of-file nil)))
     (delete-dups result)
     result))
@@ -545,7 +547,15 @@ The index refers to `color-identifiers:colors'.")
              (point-max)
              (lambda () (if (input-pending-p) (throw 'input-pending nil) t)))
             (setq color-identifiers:color-index-for-identifier result)))))
-    (font-lock-fontify-buffer)))
+    (color-identifiers:refontify)))
+
+(defun color-identifiers:refontify ()
+  "Refontify the buffer using font-lock."
+  (if (fboundp 'font-lock-flush)
+      (font-lock-flush)
+    (when font-lock-mode
+      (with-no-warnings
+        (font-lock-fontify-buffer)))))
 
 (defun color-identifiers:color-identifier (identifier)
   "Look up or generate the hex color for IDENTIFIER.
