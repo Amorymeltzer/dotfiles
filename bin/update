@@ -8,20 +8,20 @@
 
 function help {
     cat <<END_HELP
-Usage: $1 [-bcCegkmMpPrRhH]]
+Usage: $1 [-bmMpPgrRcCekhH]]
 
   -b		skip updating macports base, but 'port sync' to update tree
-  -c		check for cpan updates but don't upgrade
-  -C		skip all cpan actions
-  -e		skip all homebrew updates
-  -g		skip updating gem itself
-  -k		skip all homebrew-cask updates
   -m		check for macports updates but don't upgrade
   -M		skip all macports actions
   -p		check for python updates but don't upgrade
   -P		skip all python actions
+  -g		skip updating gem itself
   -r		check for ruby updates but don't upgrade
   -R		skip all ruby actions
+  -c		check for cpan updates but don't upgrade
+  -C		skip all cpan actions
+  -e		skip all homebrew updates
+  -k		skip all homebrew-cask updates
   -h -H		this help
 END_HELP
 }
@@ -38,17 +38,17 @@ brewcask_flag='0'
 while getopts 'bcCegkmMpPrRhH' opt; do
     case $opt in
 	b) base_flag='1';;
-	c) cpan_flag='1';;
-	C) cpan_flag='2';;
-	e) homebrew_flag='1';;
-	g) gem_flag='1';;
-	k) brewcask_flag='1';;
 	m) macports_flag='1';;
 	M) macports_flag='2';;
 	p) python_flag='1';;
 	P) python_flag='2';;
+	g) gem_flag='1';;
 	r) ruby_flag='1';;
 	R) ruby_flag='2';;
+	c) cpan_flag='1';;
+	C) cpan_flag='2';;
+	e) homebrew_flag='1';;
+	k) brewcask_flag='1';;
 	h|H) help $0
 	     exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
