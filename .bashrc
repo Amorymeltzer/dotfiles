@@ -867,8 +867,13 @@ alias path-man="manpath | tr ':' '\n'"
 # Matrix-esque screensaver-esque; man tr for different options
 alias matrix='tr -c "[:print:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=lcase,unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
 # Star Wars
-# C-] to exit
-alias starwars='telnet towel.blinkenlights.nl'
+function starwars()
+{
+    echo "Loading Star Wars..."
+    echo "Use C-] to exit"
+    sleep 1
+    telnet towel.blinkenlights.nl
+}
 
 # Screensaver as wallpaper, ctrl-c or cmd-. to quit
 alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background"
