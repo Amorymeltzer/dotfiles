@@ -5,7 +5,7 @@
 ;; Filename: ido-completing-read+.el
 ;; Author: Ryan Thompson
 ;; Created: Sat Apr  4 13:41:20 2015 (-0700)
-;; Version: 3.3
+;; Version: 3.5
 ;; Package-Requires: ((emacs "24.1"))
 ;; URL: https://github.com/DarwinAwardWinner/ido-ubiquitous
 ;; Keywords: ido, completion, convenience
@@ -41,13 +41,14 @@
 ;;
 ;;; Code:
 
-(defconst ido-ubiquitous-version "3.3"
+(defconst ido-completing-read+-version "3.5"
   "Currently running version of ido-ubiquitous.
 
-Note that when you update ido-ubiquitous, this variable may not
-be updated until you restart Emacs.")
+Note that when you update ido-completing-read+, this variable may
+not be updated until you restart Emacs.")
 
 (require 'ido)
+(require 'cl-macs)
 
 ;;; Debug messages
 
@@ -59,20 +60,12 @@ be updated until you restart Emacs.")
   `(when ido-cr+-debug-mode
      (message (concat "ido-completing-read+: " ,format-string) ,@args)))
 
-(defun ido-cr+--explain-fallback (arg)
-  ;; This function accepts a string, or an ido-cr+-fallback
-  ;; signal.
-  (when ido-cr+-debug-mode
-    (when (and (listp arg)
-               (eq (car arg) 'ido-cr+-fallback))
-      (setq arg (cdr arg)))
-    (ido-cr+--debug-message "Falling back to `%s' because %s."
-                                   ido-cr+-fallback-function arg)))
-
 ;;; Core code
 
+;;;###autoload
 (defvar ido-cr+-enable-next-call nil
   "If non-nil, then the next call to `ido-completing-read' is by `ido-completing-read+'.")
+;;;###autoload
 (defvar ido-cr+-enable-this-call nil
   "If non-nil, then the current call to `ido-completing-read' is by `ido-completing-read+'")
 
@@ -122,6 +115,7 @@ disable fallback based on collection size, set this to nil."
                         widget)))))
   :group 'ido-completing-read-plus)
 
+;;;###autoload
 (defcustom ido-cr+-replace-completely nil
   "If non-nil, replace `ido-completeing-read' completely with ido-cr+.
 
@@ -134,6 +128,16 @@ https://github.com/DarwinAwardWinner/ido-ubiquitous/issues"
 ;; Signal used to trigger fallback
 (put 'ido-cr+-fallback 'error-conditions '(ido-cr+-fallback error))
 (put 'ido-cr+-fallback 'error-message "ido-cr+-fallback")
+
+(defun ido-cr+--explain-fallback (arg)
+  ;; This function accepts a string, or an ido-cr+-fallback
+  ;; signal.
+  (when ido-cr+-debug-mode
+    (when (and (listp arg)
+               (eq (car arg) 'ido-cr+-fallback))
+      (setq arg (cdr arg)))
+    (ido-cr+--debug-message "Falling back to `%s' because %s."
+                                   ido-cr+-fallback-function arg)))
 
 ;;;###autoload
 (defun ido-completing-read+ (prompt collection &optional predicate
@@ -239,6 +243,12 @@ advice completely replaces `ido-completing-read' with
     (setq ad-return-value (apply #'ido-completing-read+ (ad-get-args 0))))))
 
 ;; Fallback on magic C-f and C-b
+
+;; Need to defvar this to avoid bytecomp warnings. This makes sense
+;; since we are relying on ido dynamically let-binding it.
+;;;###autoload
+(defvar ido-context-switch-command)
+
 (defadvice ido-magic-forward-char (before ido-cr+-fallback activate)
   "Allow falling back in ido-completing-read+."
   (when ido-cr+-enable-this-call

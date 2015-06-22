@@ -47,7 +47,7 @@
 ;;
 ;;; Change Log:
 ;;
-;; 2015-04-30
+;;    Added `highlight-symbol-ignore-list'.
 ;;    Added `highlight-symbol-print-occurrence-count'.
 ;;
 ;; 2015-04-22 (1.3)
@@ -151,6 +151,11 @@ highlighting the symbols will use these colors/faces in order."
   "Whether or not to temporarily highlight the symbol when using
 `highlight-symbol-jump' family of functions."
   :type 'boolean
+  :group 'highlight-symbol)
+
+(defcustom highlight-symbol-ignore-list '()
+  "List of regexp rules that specifies what symbols should not be highlighted."
+  :type '(repeat string)
   :group 'highlight-symbol)
 
 (defvar highlight-symbol-color-index 0)
@@ -367,9 +372,13 @@ before if NLINES is negative."
 (defun highlight-symbol-get-symbol ()
   "Return a regular expression identifying the symbol at point."
   (let ((symbol (thing-at-point 'symbol)))
-    (when symbol (concat (car highlight-symbol-border-pattern)
-                         (regexp-quote symbol)
-                         (cdr highlight-symbol-border-pattern)))))
+    (when (and symbol
+               (not (member 0 (mapcar
+                               (lambda (e) (string-match e symbol))
+                               highlight-symbol-ignore-list))))
+      (concat (car highlight-symbol-border-pattern)
+              (regexp-quote symbol)
+              (cdr highlight-symbol-border-pattern)))))
 
 (defun highlight-symbol-temp-highlight ()
   "Highlight the current symbol until a command is executed."

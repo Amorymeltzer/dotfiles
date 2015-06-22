@@ -4,7 +4,7 @@
 
 ;; Author: Ryan C. Thompson
 ;; URL: https://github.com/DarwinAwardWinner/ido-ubiquitous
-;; Version: 3.3
+;; Version: 3.5
 ;; Created: 2011-09-01
 ;; Keywords: convenience, completion, ido
 ;; EmacsWiki: InteractivelyDoThings
@@ -70,7 +70,7 @@
 ;;
 ;;; Code:
 
-(defconst ido-ubiquitous-version "3.3"
+(defconst ido-ubiquitous-version "3.5"
   "Currently running version of ido-ubiquitous.
 
 Note that when you update ido-ubiquitous, this variable may not
@@ -321,6 +321,7 @@ using overrides and disable it for everything else."
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/79
     ;; BBDB uses old-style default
     (enable-old prefix "bbdb-")
+    (enable-old exact "where-is")
     )
   "Default value of `ido-ubiquitous-command-overrides'.
 
@@ -420,21 +421,28 @@ See `ido-ubiquitous-command-overrides' for valid override types."
   "Set the override property on FUNC to OVERRIDE and set up advice to apply the override."
   (setq func (ido-ubiquitous--as-symbol func)
         override (ido-ubiquitous--as-symbol override))
-  (put func 'ido-ubiquitous-override override)
-  (when override
-    (let ((docstring
-           (format "Override ido-ubiquitous behavior in %s if its `ido-ubiquitous-override' property is non-nil." func)))
-      (eval
-       `(defadvice ,func (around ido-ubiquitous-override activate)
-          ,docstring
-          (let* ((func ',func)
-                 (override (get func 'ido-ubiquitous-override)))
-            (when override
-              (ido-ubiquitous--debug-message
-               "Using override `%s' for function `%s'"
-               override func))
-            (ido-ubiquitous-with-override override
-              ad-do-it)))))))
+  (if (memq override '(disable enable enable-old nil))
+      (progn
+        (put func 'ido-ubiquitous-override override)
+        (when override
+          (let ((docstring
+                 (format "Override ido-ubiquitous behavior in %s if its `ido-ubiquitous-override' property is non-nil." func)))
+            (eval
+             `(defadvice ,func (around ido-ubiquitous-override activate)
+                ,docstring
+                (let* ((func ',func)
+                       (override (get func 'ido-ubiquitous-override)))
+                  (when override
+                    (ido-ubiquitous--debug-message
+                     "Using override `%s' for function `%s'"
+                     override func))
+                  (ido-ubiquitous-with-override override
+                    ad-do-it)))))))
+    (display-warning
+     'ido-ubiquitous
+     (format "Ignoring invalid override action `%s' for function `%s' found in `ido-ubiquitous-function-overrides'."
+             override func)
+     :warning)))
 
 (defun ido-ubiquitous-set-function-overrides (sym newval)
   "Custom setter function for `ido-ubiquitous-function-overrides'.
@@ -453,8 +461,16 @@ each function to apply the appropriate override."
                                (ido-ubiquitous--as-string func))))
   (set-default sym newval)
   ;; set new overrides
-  (cl-loop for (action _match-type func) in (eval sym)
-           do (ido-ubiquitous-apply-function-override func action)))
+  (cl-loop for override in (eval sym)
+           for (action match-type func) = override
+           if (eq match-type 'exact)
+           do (ido-ubiquitous-apply-function-override func action)
+           else
+           do (display-warning
+               'ido-ubiquitous
+               (format
+                "Ignoring invalid function override match-type `%s' for function `%s'; only match-type `exact' is supported in `ido-ubiquitous-function-overrides'."
+                match-type func))))
 
 (defcustom ido-ubiquitous-function-overrides ido-ubiquitous-default-function-overrides
   "List of function override specifications for ido-ubiquitous
@@ -759,15 +775,24 @@ future sessions."
 (defun ido-ubiquitous-spec-match (spec symbol)
   "Returns t if SPEC matches SYMBOL (which should be a function name).
 
-See `ido-ubiquitous-command-overrides'."
-  (when (and symbol (symbolp symbol))
-    (cl-destructuring-bind (type text) spec
-      (let ((matcher (cdr (assoc type ido-ubiquitous-spec-matchers)))
-            (text (ido-ubiquitous--as-string text))
-            (symname (ido-ubiquitous--as-string symbol)))
-        (when (null matcher)
-          (error "ido-ubiquitous: Unknown match spec type \"%s\". See `ido-ubiquitous-spec-matchers' for valid types." type))
-        (funcall matcher text symname)))))
+See `ido-ubiquitous-command-overrides'. If the match spec is
+invalid or any other error occurs, the error is demoted to a
+warning and the function returns nil."
+  (condition-case err
+      (when (and symbol (symbolp symbol))
+        (cl-destructuring-bind (type text) spec
+          (let ((matcher (cdr (assoc type ido-ubiquitous-spec-matchers)))
+                (text (ido-ubiquitous--as-string text))
+                (symname (ido-ubiquitous--as-string symbol)))
+            (if matcher
+                (funcall matcher text symname)
+              ;; If the matcher is invalid, issue a warning and return
+              ;; nil.
+              (error "Unknown match spec type \"%s\". See `ido-ubiquitous-spec-matchers' for valid types." type)
+              nil))))
+    (error
+     (display-warning 'ido-ubiquitous "Error during ido-ubiquitous spec matching: %S" err)
+     nil)))
 
 (defun ido-ubiquitous-get-command-override (cmd)
   "Return the override associated with the command CMD.
@@ -775,10 +800,22 @@ See `ido-ubiquitous-command-overrides'."
 If there is no override set for CMD in
 `ido-ubiquitous-command-overrides', return nil."
   (when (and cmd (symbolp cmd))
-    (cl-loop for (action . spec) in ido-ubiquitous-command-overrides
-             when (memq action '(disable enable enable-old nil))
-             when (ido-ubiquitous-spec-match spec cmd)
+    (cl-loop for override in ido-ubiquitous-command-overrides
+             for (action . spec) = override
+             for valid-action = (and (memq action '(disable enable enable-old nil))
+                                     (assoc (car spec) ido-ubiquitous-spec-matchers))
+             unless valid-action
+             do (progn
+                  (display-warning
+                   'ido-ubiquitous
+                   (format "Removing invalid override `%S' from `ido-ubiquitous-command-overrides'"
+                           (cons action spec) action)
+                   :warning)
+                  (setq ido-ubiquitous-command-overrides
+                        (remove override ido-ubiquitous-command-overrides)))
+             when (and valid-action (ido-ubiquitous-spec-match spec cmd))
              return action
+
              finally return nil)))
 
 ;;; Workaround for https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/24
@@ -933,6 +970,7 @@ This advice completely overrides the original definition."
 
 ;; This is defined at the end so it goes at the bottom of the
 ;; customization group
+;;;###autoload
 (define-minor-mode ido-ubiquitous-debug-mode
   "If non-nil, ido-ubiquitous will print debug info.
 
