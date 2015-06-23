@@ -158,6 +158,9 @@ h = rev-parse --short HEAD
 hash = rev-parse HEAD
 
 unstage = reset HEAD --
+re = reset
+reh = reset --hard
+res = reset --soft
 
 # Assume/Unassume changes
 assume = update-index --assume-unchanged
