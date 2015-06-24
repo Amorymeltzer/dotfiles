@@ -154,7 +154,7 @@ gnc = goodness --cached
 div = divergence
 
 # Get short SHA-1 for object
-h = rev-parse --short HEAD
+sha = rev-parse --short HEAD
 hash = rev-parse HEAD
 
 unstage = reset HEAD --
