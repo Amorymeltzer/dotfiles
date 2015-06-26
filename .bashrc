@@ -481,6 +481,9 @@ function pf() {
 	perldoc -f "$@"
     fi
 }
+function pq() {
+    perldoc -q "$@"
+}
 alias perlsecret='man perlsecret'
 alias perlcheat='man perlcheat'
 
