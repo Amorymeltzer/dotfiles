@@ -119,10 +119,6 @@ rebm = rebase master
 # Interactive rebase with the selected number of latest commits
 rebi = "!r() { git rebase -i HEAD~$1; }; r"
 
-sub = submodule
-suba = submodule add
-subu = submodule update --init
-
 # Push and Pull
 po = push origin
 pom = push origin master
