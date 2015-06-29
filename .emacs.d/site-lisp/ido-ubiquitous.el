@@ -79,7 +79,7 @@ be updated until you restart Emacs.")
 (eval-when-compile
   (when (or (not (boundp 'completing-read-function))
             (< emacs-major-version 24))
-    (error "Could not find required variable `completing-read-function'. Are you using Emacs version 24 or higher? If you have Emacs 23 or lower, please downgrade to ido-ubiquitous version 1.7.")))
+    (error "Could not find required variable `completing-read-function'. Are you using Emacs version 24 or higher? If you have Emacs 23 or lower, please downgrade to ido-ubiquitous version 1.7 (or upgrade Emacs).")))
 
 (require 'ido)
 (require 'advice)
@@ -319,10 +319,16 @@ using overrides and disable it for everything else."
     ;; theme functions don't need old-style compatibility
     (enable regexp "\\`\\(load\\|enable\\|disable\\|describe\\|custom-theme-visit\\)-theme\\'")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/79
-    ;; BBDB uses old-style default
     (enable-old prefix "bbdb-")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/83
     (enable-old exact "where-is")
-    )
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/85
+    (enable prefix "xref-")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/60
+    (disable exact "todo-add-category")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/51
+    (enable exact "find-tag")
+    ) ; Close paren on separate line for better VC diffs
   "Default value of `ido-ubiquitous-command-overrides'.
 
 You can restore these using the command `ido-ubiquitous-restore-default-overrides'.")
