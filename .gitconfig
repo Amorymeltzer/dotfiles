@@ -68,6 +68,7 @@ s = status --short --branch
 sn = status --untracked=no
 # Do something more interesting/useful/unified with these
 l = log --decorate --graph
+l5 = log --decorate --graph -5
 l1 = log --oneline --decorate
 l15 = log --oneline --decorate -5
 
