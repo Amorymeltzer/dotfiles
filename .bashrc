@@ -121,15 +121,15 @@ export Color_Magenta_Bold="\033[1;35m"     # Magenta
 export Color_Cyan_Bold="\033[1;36m"        # Cyan
 export Color_White_Bold="\033[1;37m"       # White
 
-# Underline
-export Color_Black_Underline="\033[4;30m"       # Black
-export Color_Red_Underline="\033[4;31m"         # Red
-export Color_Green_Underline="\033[4;32m"       # Green
-export Color_Yellow_Underline="\033[4;33m"      # Yellow
-export Color_Blue_Underline="\033[4;34m"        # Blue
-export Color_Magenta_Underline="\033[4;35m"     # Magenta
-export Color_Cyan_Underline="\033[4;36m"        # Cyan
-export Color_White_Underline="\033[4;37m"       # White
+# # Underline
+# export Color_Black_Underline="\033[4;30m"       # Black
+# export Color_Red_Underline="\033[4;31m"         # Red
+# export Color_Green_Underline="\033[4;32m"       # Green
+# export Color_Yellow_Underline="\033[4;33m"      # Yellow
+# export Color_Blue_Underline="\033[4;34m"        # Blue
+# export Color_Magenta_Underline="\033[4;35m"     # Magenta
+# export Color_Cyan_Underline="\033[4;36m"        # Cyan
+# export Color_White_Underline="\033[4;37m"       # White
 
 # # Blinking
 # export Color_Black_Blink="\033[5;30m"       # Black
