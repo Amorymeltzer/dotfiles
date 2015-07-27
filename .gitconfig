@@ -196,6 +196,10 @@ timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --for
 # If there's only suggestion from a typo, automatically call it
 autocorrect = 1
 
+# Special diffs for special cases
+[diff "bin"]
+textconv = hexdump -v -C
+
 [color]
 # Use colors in Git commands that are capable of colored output when outputting to the terminal
 ui = auto
