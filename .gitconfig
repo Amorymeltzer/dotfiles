@@ -200,6 +200,9 @@ autocorrect = 1
 [diff "bin"]
 textconv = hexdump -v -C
 
+[diff "zip"]
+textconv = unzip -v
+
 [color]
 # Use colors in Git commands that are capable of colored output when outputting to the terminal
 ui = auto
