@@ -203,6 +203,18 @@ textconv = hexdump -v -C
 [diff "zip"]
 textconv = unzip -v
 
+[diff "png"]
+binary = true
+textconv = hexdump -v -C
+
+[diff "jpg"]
+binary = true
+textconv = hexdump -v -C
+
+[diff "jpeg"]
+binary = true
+textconv = hexdump -v -C
+
 [color]
 # Use colors in Git commands that are capable of colored output when outputting to the terminal
 ui = auto
