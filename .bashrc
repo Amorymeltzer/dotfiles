@@ -1118,6 +1118,7 @@ pass ()
 }
 
 
+# FIXME TODO with ticker.sh, finance, etc.
 # Stock prices, use ~/bin/finance script for historical or current indices
 function stockmarket() {
     for quote in $@;
