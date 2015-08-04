@@ -534,9 +534,9 @@ current buffer" t)
 (global-set-key (kbd "C-x C-r") 'visit-most-recent-file)
 
 ;; Reveal file or folder in finder
-;; https://github.com/kaz-yos/elisp/blob/master/reveal-in-finder.el
-(autoload 'reveal-in-finder "reveal-in-finder" "Reveal file/folder in finder" t)
-(global-set-key (kbd "C-c z") 'reveal-in-finder)
+;; https://github.com/kaz-yos/reveal-in-osx-finder
+(autoload 'reveal-in-osx-finder "reveal-in-osx-finder" "Reveal file/folder in finder" t)
+(global-set-key (kbd "C-c z") 'reveal-in-osx-finder)
 
 ;; Save a list of open files in ~/.emacs.d/.emacs.desktop(.lock)
 (desktop-save-mode t)
