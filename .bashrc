@@ -1400,6 +1400,13 @@ function =() {
     calc $@
 }
 
+# Calculate factors
+# https://twitter.com/climagic/status/550355281415503872
+function factors {
+    num=$1;
+    seq $(($num/2)) | awk '"'$num'"%$0==0'
+}
+
 alias sumup="perl -MList::Util=sum -alne 'push @S,@F; END { print sum @S }'"
 
 # 39 digits each
