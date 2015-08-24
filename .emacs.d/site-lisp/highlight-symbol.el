@@ -47,8 +47,9 @@
 ;;
 ;;; Change Log:
 ;;
+;;    Added `highlight-symbol-highlight-single-occurrence'.
 ;;    Added `highlight-symbol-ignore-list'.
-;;    Added `highlight-symbol-print-occurrence-count'.
+;;    Added `highlight-symbol-occurrence-message'.
 ;;
 ;; 2015-04-22 (1.3)
 ;;    Added `highlight-symbol-count'.
@@ -139,6 +140,13 @@ disabled for all buffers."
   :set 'highlight-symbol-set
   :group 'highlight-symbol)
 
+(defcustom highlight-symbol-highlight-single-occurrence t
+  "Determines if `highlight-symbol-mode' highlights single occurrences.
+If nil, `highlight-symbol-mode' will only highlight a symbol if there are
+more occurrences in this buffer."
+  :type 'boolean
+  :group 'highlight-symbol)
+
 (defcustom highlight-symbol-colors
   '("yellow" "DeepPink" "cyan" "MediumPurple1" "SpringGreen1"
     "DarkOrange" "HotPink1" "RoyalBlue1" "OliveDrab")
@@ -176,17 +184,20 @@ highlighting the symbols will use these colors/faces in order."
                  (const :tag "Keep original text color" nil))
   :group 'highlight-symbol)
 
-(defcustom highlight-symbol-print-occurrence-count 'explicit
-  "*If t, message the number of occurrences of the current symbol.
-If nil, don't message the number of occurrences.  If `explicit',
-message only when `highlight-symbol' is called explicitly.  If
-`temporary', message only when the symbol under point is
-temporarily highlighted by `highlight-symbol-mode'."
-  :type '(choice
-          (const :tag "Don't message occurrences count" nil)
-          (const :tag "Always message occurrences count" t)
-          (const :tag "Message only for explicit highlighting" explicit)
-          (const :tag "Message only for temporary highlighting" temporary))
+(defcustom highlight-symbol-occurrence-message '(explicit navigation)
+  "*When to print the occurrence count of the current symbol.
+A list.
+If containing `explicit',
+message after `highlight-symbol' is called explicitly.
+If containing `temporary',
+message after the symbol under point is temporarily highlighted by
+`highlight-symbol-mode'.
+If containing `navigation',
+message after navigation commands."
+  :type '(set
+          (const :tag "Message after explicit highlighting" explicit)
+          (const :tag "Message after temporary highlighting" temporary)
+          (const :tag "Message after navigation commands" navigation))
   :group 'highlight-symbol)
 
 ;;;###autoload
@@ -219,13 +230,17 @@ element in of `highlight-symbol-faces'."
     (if (highlight-symbol-symbol-highlighted-p symbol)
         (highlight-symbol-remove-symbol symbol)
       (highlight-symbol-add-symbol symbol)
-      (when (or (eq highlight-symbol-print-occurrence-count t)
-                (eq highlight-symbol-print-occurrence-count 'explicit))
-        (highlight-symbol-count symbol)))))
+      (when (member 'explicit highlight-symbol-occurrence-message)
+        (highlight-symbol-count symbol t)))))
 
 (defun highlight-symbol-symbol-highlighted-p (symbol)
   "Test if the a symbol regexp is currently highlighted."
   (member symbol highlight-symbol-list))
+
+(defun highlight-symbol-should-auto-highlight-p (symbol)
+  "Test if SYMBOL should be highlighted automatically."
+  (or highlight-symbol-highlight-single-occurrence
+      (> (highlight-symbol-count symbol) 1)))
 
 (defun highlight-symbol-add-symbol (symbol)
   (unless (highlight-symbol-symbol-highlighted-p symbol)
@@ -244,15 +259,22 @@ element in of `highlight-symbol-faces'."
       (highlight-symbol-add-symbol-with-face symbol color)
       (push symbol highlight-symbol-list))))
 
+(defun highlight-symbol-flush ()
+  (if (fboundp 'font-lock-flush)
+      (font-lock-flush)
+    ;; Emacs < 25
+    (with-no-warnings
+      (font-lock-fontify-buffer))))
+
 (defun highlight-symbol-add-symbol-with-face (symbol face)
   (font-lock-add-keywords nil `((,symbol 0 ',face prepend)) 'append)
-  (font-lock-fontify-buffer))
+  (highlight-symbol-flush))
 
 (defun highlight-symbol-remove-symbol (symbol)
   (setq highlight-symbol-list (delete symbol highlight-symbol-list))
   (let ((keywords (assoc symbol (highlight-symbol-uncompiled-keywords))))
     (font-lock-remove-keywords nil (list keywords))
-    (font-lock-fontify-buffer)))
+    (highlight-symbol-flush)))
 
 (defun highlight-symbol-uncompiled-keywords ()
   (if (eq t (car font-lock-keywords))
@@ -280,15 +302,21 @@ element in of `highlight-symbol-faces'."
                 'face (assoc symbol (highlight-symbol-uncompiled-keywords)))))
 
 ;;;###autoload
-(defun highlight-symbol-count (&optional symbol)
+(defun highlight-symbol-count (&optional symbol message-p)
   "Print the number of occurrences of symbol at point."
-  (interactive)
-  (message "%d occurrences in buffer"
-           (let ((case-fold-search nil))
-             (how-many (or symbol
-                           (highlight-symbol-get-symbol)
-                           (error "No symbol at point"))
-                       (point-min) (point-max)))))
+  (interactive '(nil t))
+  (let* ((symbol (or symbol
+                     (highlight-symbol-get-symbol)
+                     (error "No symbol at point")))
+         (case-fold-search nil)
+         (count (how-many symbol (point-min) (point-max))))
+    (when message-p
+      (if (= count 0)
+          (message "Only occurrence in buffer")
+        (message "Occurrence %d/%d in buffer"
+                 (1+ (how-many symbol (point-min) (1- (point))))
+                 count)))
+    count))
 
 ;;;###autoload
 (defun highlight-symbol-next ()
@@ -387,13 +415,12 @@ before if NLINES is negative."
       (unless (or (equal symbol highlight-symbol)
                   (highlight-symbol-symbol-highlighted-p symbol))
         (highlight-symbol-mode-remove-temp)
-        (when symbol
+        (when (and symbol (highlight-symbol-should-auto-highlight-p symbol))
           (setq highlight-symbol symbol)
           (highlight-symbol-add-symbol-with-face symbol 'highlight-symbol-face)
-          (font-lock-fontify-buffer)
-          (when (or (eq highlight-symbol-print-occurrence-count t)
-                    (eq highlight-symbol-print-occurrence-count 'temporary))
-            (highlight-symbol-count)))))))
+          (highlight-symbol-flush)
+          (when (member 'temporary highlight-symbol-occurrence-message)
+            (highlight-symbol-count symbol t)))))))
 
 (defun highlight-symbol-mode-remove-temp ()
   "Remove the temporary symbol highlighting."
@@ -419,6 +446,7 @@ DIR has to be 1 or -1."
   (let ((symbol (highlight-symbol-get-symbol)))
     (if symbol
         (let* ((case-fold-search nil)
+               (msg (member 'navigation highlight-symbol-occurrence-message))
                (bounds (bounds-of-thing-at-point 'symbol))
                (offset (- (point) (if (< 0 dir) (cdr bounds) (car bounds)))))
           (unless (eq last-command 'highlight-symbol-jump)
@@ -428,9 +456,12 @@ DIR has to be 1 or -1."
           (let ((target (re-search-forward symbol nil t dir)))
             (unless target
               (goto-char (if (< 0 dir) (point-min) (point-max)))
-              (message "Continued from beginning of buffer")
+              (unless msg
+                (message "Continued from beginning of buffer"))
               (setq target (re-search-forward symbol nil nil dir)))
             (goto-char (+ target offset)))
+          (when msg
+            (highlight-symbol-count symbol t))
           (setq this-command 'highlight-symbol-jump))
       (error "No symbol at point"))))
 
