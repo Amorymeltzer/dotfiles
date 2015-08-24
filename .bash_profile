@@ -53,7 +53,7 @@ shopt -s histreedit;
 source ~/.bashrc
 
 # Welcome Messsage --------------------------------------------------
-echo -ne "Welcome to ${Color_Green}$ITSME"; echo -e "${Color_Off} on" `sw_vers -productName` `sw_vers -productVersion` "("`uname -m`")"
+echo -ne "Welcome to${Color_Green}" `hostname -s`; echo -e "${Color_Off} on" `sw_vers -productName` `sw_vers -productVersion` "("`uname -m`")"
 #echo -e "${COLOR_RED}`bash --version`"
 if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; then
     echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_Off}" # only short ones
