@@ -987,7 +987,9 @@ alias pbp='pbpaste '
 # Trim new lines and copy to clipboard
 alias clipboard="tr -d '\n' | pbcopy"
 
-alias uniqsort='sort $* | uniq -u | sort'
+function uniqsort() {
+    sort $1 | uniq -u | sort
+}
 # quicksort in three lines from http://git.io/UzwyWQ
 qsort()
 {
