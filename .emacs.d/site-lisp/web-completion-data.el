@@ -1,9 +1,9 @@
-;;; web-completion-data.el --- Shared completion data for ac-html and company-web 
+;;; web-completion-data.el --- Shared completion data for ac-html and company-web
 
 ;; Copyright (C) 2015 Zhang Kai Yu, Olexandr Sydorchuk
 
 ;; Author: Olexandr Sydorchuk <olexandr.syd@gmail.com>
-;; Version: 0.1
+;; Version: 0.2
 ;; Keywords: html, auto-complete, company
 ;; URL: https://github.com/osv/web-completion-data
 
@@ -38,24 +38,24 @@
 ;; If you decide extend with own completion data, let say "Bootstrap" data:
 ;;
 ;; (unless (assoc "Bootstrap" web-completion-data-sources)
-;;   (setq web-completion-data-sources 
+;;   (setq web-completion-data-sources
 ;;         (cons (cons "Bootstrap" "/path/to/complete/data")
 ;;               web-completion-data-sources)))
 
 ;;; Code:
 
 
- (defconst web-completion-data-package-dir
+(defconst web-completion-data-package-dir
   (file-name-directory (or load-file-name (buffer-file-name)))
   "The directory where `web-completion-data' package exists.")
 
 (defconst web-completion-data-html-source-dir
-  (expand-file-name "html-stuff" web-completion-data-package-dir)
+  (expand-file-name "completion-data" web-completion-data-package-dir)
   "The directory where basic completion source of `web-completion-data' exists.")
 
 (defcustom web-completion-data-sources
   '(("html" . web-completion-data-html-source-dir))
-  "Alist of source directories. 
+  "Alist of source directories.
 car is source name, cdr is source location."
   :type 'alist)
 
