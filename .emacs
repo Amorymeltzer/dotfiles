@@ -499,6 +499,23 @@ current buffer" t)
 (defalias 'tidy-indent 'tidy-then-indent)
 
 
+;; auto-insert mode skeletons
+(eval-after-load 'autoinsert
+'(progn
+  ;; Perl
+  (define-auto-insert '("\\.pl\\'" . "Perl skeleton") '(nil "#!/usr/bin/env perl" \n _ ))
+
+  ;; Python
+  (define-auto-insert '("\\.py\\'" . "Python skeleton") '(nil "#!/usr/bin/env python" \n _ ))
+
+  ;; Ruby
+  (define-auto-insert '("\\.rb\\'" . "Ruby skeleton") '(nil "#!/usr/bin/env ruby" \n _ ))
+
+  ;; shell script
+  (define-auto-insert '("\\.\\(ba\\)?sh\\'" . "Bash skeleton") '(nil "#!/usr/bin/env bash" \n _ ))))
+
+
+
 ;; If a region selected, typing replaces it
 (delete-selection-mode t)
 
