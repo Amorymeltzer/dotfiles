@@ -61,7 +61,7 @@
 ;; but when I became a man, I put away childish things.
 ;;   -- 1 Corinthians, 13:11
 ;; No menu bar
-(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
   (when (fboundp mode) (funcall mode -1)))
 
 ;; Load everybody proper-like
