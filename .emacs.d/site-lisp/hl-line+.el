@@ -3,19 +3,19 @@
 ;; Filename: hl-line+.el
 ;; Description: Extensions to hl-line.el.
 ;; Author: Drew Adams
-;; Maintainer: Drew Adams
-;; Copyright (C) 2006-2013, Drew Adams, all rights reserved.
+;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
+;; Copyright (C) 2006-2015, Drew Adams, all rights reserved.
 ;; Created: Sat Aug 26 18:17:18 2006
 ;; Version: 0
 ;; Package-Requires: ()
-;; Last-Updated: Tue Jul 23 14:31:03 2013 (-0700)
+;; Last-Updated: Sun Jan  4 14:21:55 2015 (-0800)
 ;;           By: dradams
-;;     Update #: 484
+;;     Update #: 498
 ;; URL: http://www.emacswiki.org/hl-line+.el
 ;; Doc URL: http://www.emacswiki.org/HighlightCurrentLine
 ;; Doc URL: http://www.emacswiki.org/CrosshairHighlighting
 ;; Keywords: highlight, cursor, accessibility
-;; Compatibility: GNU Emacs: 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -115,6 +115,10 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2014/05/17 dadams
+;;     hl-line-overlay-priority: Set default value to -50 (work around Emacs bug #16192 fix).
+;; 2014/05/20 dadams
+;;     (global-)hl-line-highlight: No-op if in the minibuffer (update for Emacs 24.4+).
 ;; 2013/06/08 dadams
 ;;     hl-line-inhibit-highlighting-for-modes: Corrected :type.
 ;;     global-hl-line-highlight defadvice: Respect in hl-line-inhibit-highlighting-for-modes.
@@ -201,13 +205,13 @@ A list of `major-mode' values (symbols)."
   :group 'hl-line)
 
 ;;;###autoload
-(defcustom hl-line-overlay-priority 300
+(defcustom hl-line-overlay-priority -50
   "*Priority to use for `hl-line-overlay' and `global-hl-line-overlay'.
 A higher priority can make the hl-line highlighting appear on top of
 other overlays that might exist."
   :type '(choice
           (const   :tag "No priority (default priority)"  nil)
-          (integer :tag "Priority"  300))
+          (integer :tag "Priority"  -50))
   :group 'hl-line)
 
 (defvar hl-line-idle-interval 5
@@ -230,13 +234,15 @@ Do NOT change this yourself; instead, use `\\[toggle-hl-line-when-idle]'.")
 
 (defadvice hl-line-highlight (after set-priority activate)
   "Set the overlay priority to `hl-line-overlay-priority'."
-  (overlay-put hl-line-overlay 'priority hl-line-overlay-priority))
+  (unless (window-minibuffer-p)
+    (overlay-put hl-line-overlay 'priority hl-line-overlay-priority)))
 
 (defadvice global-hl-line-highlight (around set-priority-+respect-mode-inhibit activate)
   "Set hl-line overlay priority and inhibit for specific modes.
 Set the overlay to `hl-line-overlay-priority'.
 Respect option `hl-line-inhibit-highlighting-for-modes'."
-  (unless (member major-mode hl-line-inhibit-highlighting-for-modes)
+  (unless (or (window-minibuffer-p)
+              (member major-mode hl-line-inhibit-highlighting-for-modes))
     ad-do-it
     (overlay-put global-hl-line-overlay 'priority hl-line-overlay-priority)))
 
@@ -282,6 +288,7 @@ use `\\[toggle-hl-line-when-idle]."
 (defun hl-line-unhighlight-now ()
   "Turn off `global-hl-line-mode' and unhighlight current line now."
   (global-hl-line-mode -1)
+  ;; $$$$$$ Do we need to worry about `global-hl-line-unhighlight-all' here?
   (global-hl-line-unhighlight)
   (remove-hook 'pre-command-hook 'hl-line-unhighlight-now))
 
