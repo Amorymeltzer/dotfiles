@@ -753,7 +753,7 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # Make homebrew verbose by defaults
 # export HOMEBREW_VERBOSE=1
 # Symlink in /Applications
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook"
 alias ball='brew update && brew outdated && brew upgrade'
 alias bclean='brew cleanup -n && brew cleanup && brew cleanup -s && brew cask cleanup'
 alias bsearch='brew search'
