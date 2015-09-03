@@ -870,6 +870,8 @@ alias which='type -a'
 alias path='echo -e ${PATH//:/\\n}'
 alias path-man="manpath | tr ':' '\n'"
 
+# Don't change path with nyancat
+alias nyancat='nyancat -s'
 # Matrix-esque screensaver-esque; man tr for different options
 alias matrix='tr -c "[:print:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=lcase,unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
 # Star Wars
