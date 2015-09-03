@@ -542,6 +542,7 @@ alias dp="cd ~/Documents/perl"
 alias dps="cd ~/Documents/perl/sandbox"
 alias dpk="cd ~/Documents/perl/ksp"
 alias dpw="cd ~/Documents/perl/website"
+alias dk="cd ~/Dropbox/R/kinship/"
 alias eds="cd ~/.emacs.d/site-lisp/"
 alias bin="cd ~/bin"
 alias m='more'
