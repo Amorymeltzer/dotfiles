@@ -1395,6 +1395,15 @@ function yotsuba() {
     curl $1 | grep -i "File<a href" | awk -F '<a href="' '{print $4}' | awk -F '" ' '{print $1}' | xargs wget
 }
 
+
+# Generate family tree without polutting current directory
+function family()
+{
+    cd ~/Dropbox/R/kinship/
+    Rscript ~/Dropbox/R/kinship/family_tree.R
+    cd -
+}
+
 # Using Rscript allows more complex constructions, wrap () in quotes
 # http://www.compbiome.com/2010/06/r-command-line-calculator-using-rscript.html
 alias calc='Rscript -e "eval( parse( text=commandArgs( TRUE ) ) )"'
