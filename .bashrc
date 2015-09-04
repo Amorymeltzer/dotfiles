@@ -1402,9 +1402,8 @@ function yotsuba() {
 # Generate family tree without polutting current directory
 function family()
 {
-    cd ~/Dropbox/R/kinship/
     Rscript ~/Dropbox/R/kinship/family_tree.R
-    cd -
+    rm Rplots.pdf
 }
 
 # Using Rscript allows more complex constructions, wrap () in quotes
