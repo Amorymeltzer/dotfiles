@@ -216,8 +216,6 @@ function colordump() {
     echo
 }
 
-# more is less
-alias more='less '
 # Set less as default manpager, screen won't clear after quitting man
 # -F, quit-if-one-screen, if it fits then print it and quit it
 # -X, no-init, don't clear screen first
@@ -247,6 +245,9 @@ export LESS_TERMCAP_so=$'\033[0;31m' # begin standout-mode - info box
 export LESS_TERMCAP_se=$'\033[0m'    # end standout-mode
 export LESS_TERMCAP_ue=$'\033[0m'    # end underline
 export LESS_TERMCAP_us=$'\033[4;35m' # begin underline
+
+# more is less
+alias more='less '
 
 # Open the manual page for the last command you executed.
 function lman {
