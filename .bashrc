@@ -869,7 +869,7 @@ alias which='type -a'
 
 # Pretty-print PATH
 alias path='echo -e ${PATH//:/\\n}'
-alias path-man="manpath | tr ':' '\n'"
+alias pretty-manpath="manpath | tr ':' '\n'"
 
 # Don't change path with nyancat
 alias nyancat='nyancat -s'
