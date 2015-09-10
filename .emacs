@@ -2414,10 +2414,10 @@ project root if possible."
 (key-chord-define-global "jj" 'whitespace-cleanup)
 (key-chord-define-global "hh" 'indent-buffer)
 (key-chord-define-global "ii" 'byte-compile-init-dir)
-(key-chord-define-global "uu" 'undo-tree-undo)
-(key-chord-define-global "rr" 'undo-tree-redo)
 (key-chord-define-global "yy" 'browse-kill-ring)
 (key-chord-define-global "xx" 'er/expand-region)
+(key-chord-define-global "uu" 'undo-tree-undo)
+(key-chord-define prog-mode-map "rr" 'undo-tree-redo) ;not in text
 
 ;; Avoid reaching for shift for common symbols
 ;; http://endlessparentheses.com/banishing-the-shift-key-with-key-chord-in-emacs.html
