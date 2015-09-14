@@ -328,6 +328,8 @@ using overrides and disable it for everything else."
     (disable exact "todo-add-category")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/51
     (enable exact "find-tag")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/89
+    (enable prefix "etags-select-")
     ) ; Close paren on separate line for better VC diffs
   "Default value of `ido-ubiquitous-command-overrides'.
 
@@ -778,6 +780,9 @@ future sessions."
                  "ido-ubiquitous: Restored default command and function overrides and saved for future sessions."
                "ido-ubiquitous: Restored default command and function overrides for current session only. Call again with prefix to save for future sessions."))))
 
+;; TODO: Add notification message for new overrides, and a preference
+;; to disable it. https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/90
+
 (defun ido-ubiquitous-spec-match (spec symbol)
   "Returns t if SPEC matches SYMBOL (which should be a function name).
 
@@ -898,7 +903,7 @@ the stack."
              unless skipping-until collect frame)))
 
 (defsubst ido-ubiquitous--interactive-internal ()
-  "Eqivalent of the INTERACTIVE macro in the Emacs C source.
+  "Equivalent of the INTERACTIVE macro in the Emacs C source.
 
 This is an internal function that should never be called
 directly.

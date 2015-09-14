@@ -24,7 +24,8 @@
 ;;; Code:
 
 (require 'auto-complete)
-(require 'cl)
+(require 'cl-lib)
+(require 'dash)
 
 ;;; Customization
 

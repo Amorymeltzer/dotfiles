@@ -1,7 +1,6 @@
 ;;; ac-slim.el --- auto complete source for html tag and attributes
 
-;; Copyright (C) 2014  Zhang Kai Yu, Olexandr Sydorchuck
-;;               2015  Zhang Kai Yu
+;; Copyright (C) 2015  Zhang Kai Yu
 
 ;; Author: Zhang Kai Yu <yeannylam@gmail.com>
 ;; Keywords: html, auto-complete, slim, ruby
@@ -28,7 +27,7 @@
 
 (require 'ac-html-core)
 
-(require 'dash)
+(require 's)
 
 (defun ac-slim-inside-ruby-code ()
   "Return t if inside ruby code."
@@ -100,7 +99,7 @@
 (defun ac-slim-attrv-prefix ()
   (and (not (ac-slim-inside-ruby-code))
        (not (ac-slim-inside-non-slim-block))
-       (let (mb2)
+       (let (mb2 me2)
          (save-excursion
            (save-match-data
              (if (re-search-backward
@@ -142,7 +141,6 @@
   (save-excursion (re-search-backward "[^a-z-]\\([a-z-]+\\) *=" nil t))
   (match-string 1))
 
-;;;###autoload
 (ac-html-define-ac-source "slim"
   :tag-prefix ac-slim-tag-prefix
   :attr-prefix ac-slim-attr-prefix
