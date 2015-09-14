@@ -1,6 +1,6 @@
 # Path ------------------------------------------------------------
 # MacPorts on OS X, add ~/bin
-export PATH="/opt/local/bin:/opt/local/sbin:$HOME/bin:$PATH"
+export PATH="/opt/local/bin:/opt/local/sbin:$HOME/bin:/usr/local/bin:$PATH"
 #export PATH=~/bin/msdir:$PATH  # add ms to command line
 #export PATH=~/Documents/perl/sandbox:$PATH # add some perl
 
