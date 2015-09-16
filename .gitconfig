@@ -107,9 +107,8 @@ remotes = remote -v
 branchdata = branch -a -vv
 brd = branch -a -vv
 
-# Create and go to a branch
-# Could be improved FIXME
-go = checkout -b
+# Create and/or go to a branch
+go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
 
 # Easily rememberable
 remove-merged-branches = delete-merged-branches
