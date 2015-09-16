@@ -331,9 +331,9 @@ function prompt_command {
     if [[ $USER != $(logname) ]]; then
 	SUD=${Color_Red_zBackground} # User is not login user
     elif [[ $USER == "root" ]]; then
-	SUD=${Color_Red}           # User is root
+	SUD=${Color_Red}	# User is root
     else
-	SUD=${Color_Green} # User is normal (mostly)
+	SUD=${Color_Green}	# User is normal (mostly)
     fi
 
     NCPU=$(sysctl -n hw.ncpu) # Number of CPUs
@@ -435,6 +435,7 @@ complete -F _git hub
 complete -F _git g
 
 # whois, etc. auto-completion based on entries in known_hosts.
+# [[ -e "$HOME/.ssh/config" ]] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
 if [[ -e ~/.ssh/known_hosts ]]; then
     # This completely supersedes the above-sourced ssh.completion file, need
     # to stop that from happening. ;;;;;; ##### FIXME TODO
