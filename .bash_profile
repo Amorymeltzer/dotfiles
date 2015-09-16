@@ -33,11 +33,11 @@ shopt -s cmdhist
 # Autofix transposed/missing/extra characters in cd.  Not too useful but hey
 shopt -s cdspell
 # Try to correct directory names when tab-completing
-# Not in this bash version
-# shopt -s dirspell
+shopt -s dirspell
 # Type 'dir' instead of 'cd dir'
-# Not in this bash version
-# shopt -s autocd
+shopt -s autocd
+# Use ** for recursive glob
+shopt -s globstar
 # Check window size after each command, update values of lines/columns
 shopt -s checkwinsize
 # Case-insensitive globbing (used in pathname expansion)
