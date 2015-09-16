@@ -523,8 +523,8 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ~="cd ~"
-alias -- -='cd -'	# go back a directory, -- means end of options
-alias -- --='cd -'
+alias -- --='cd -'		# go back a directory, -- means end of options
+alias -- -='cd -'
 
 # Shortcuts
 alias dt="cd ~/dotfiles"
