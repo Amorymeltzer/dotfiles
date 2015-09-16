@@ -884,6 +884,9 @@ function starwars()
     sleep 1
     telnet towel.blinkenlights.nl
 }
+# Hackers script https://twitter.com/paultag/status/644160355409752065
+# 2>&1 | less -S for chunks
+alias zerocool='nc z.ero.cool 1337'
 
 # Screensaver as wallpaper, ctrl-c or cmd-. to quit
 alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background"
