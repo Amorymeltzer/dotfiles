@@ -273,6 +273,8 @@ bind "set show-all-if-unmodified on"
 bind "set completion-prefix-display-length 2"
 # show all autocomplete results at once???
 bind "set page-completions off"
+# be more intellgigent about autocompleting in the middle of word
+bind "set skip-completed-text on"
 # ask if sure for >125 items intead of 100
 bind "set completion-query-items 125"
 # only if start with .
