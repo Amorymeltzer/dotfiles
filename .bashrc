@@ -4,8 +4,8 @@
 # man sysctl
 # cp file{,.bk} to copy to backup
 
-# I see this around, seems good?  ;;;;;; ##### FIXME TODO
 # if not running interactively, don't do anything
+# I see this around, seems good?  ;;;;;; ##### FIXME TODO
 if [ -z "$PS1" ]; then
     return
 fi
@@ -680,9 +680,8 @@ alias last-modified='ls -t $* 2> /dev/null | head -n 5 '
 # growlnotify: add after to show when done
 # Maybe other options...
 # Just use terminal-notifier...
-# Also checkout boxcar
+# Also checkout boxcar, notify-send
 alias growl='growlnotify -t Terminal -m "Done" && tput bel' # Red badge? and popping only in 10.7+
-
 alias beep='tput bel'
 
 # Enhanced WHOIS
@@ -802,6 +801,16 @@ function recompile_emacs() {
 alias ii=recompile_emacs
 
 alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
+
+# Start an HTTP server from a directory, optionally specifying the port
+function server() {
+    local port="${1:-8000}"
+    sleep 1 && open "http://localhost:${port}/" &
+    # Set the default Content-Type to `text/plain` instead of
+    # `application/octet-stream` And serve everything as UTF-8 (although not
+    # technically correct, this doesn't break anything for binary files)
+    python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
+}
 
 function durandal() {
     ssh Amory@Durandal.local
