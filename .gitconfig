@@ -152,6 +152,9 @@ gnc = goodness --cached
 # FIXME TODO: Colorize
 div = divergence
 
+# Credit an author on the latest commit
+credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
 # Get short SHA-1 for object
 sha = rev-parse --short HEAD
 hash = rev-parse HEAD
