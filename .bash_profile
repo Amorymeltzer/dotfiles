@@ -16,7 +16,7 @@ export EDITOR="emacs"
 # Ignore sequential duplicates in history
 export HISTCONTROL=ignoreboth
 # Up history size
-export HISTSIZE=50000
+export HISTSIZE=500000
 export HISTFILESIZE=$HISTSIZE
 # Display timestamp
 # export HISTTIMEFORMAT='[%D %H:%M] '
