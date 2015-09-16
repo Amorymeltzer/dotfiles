@@ -44,8 +44,8 @@ alias lasr='lsr -A'
 alias las='lss -A'
 alias lass='las'
 # Note: flags get passed to grep, not ls
-alias ld='ls -l | grep "^d"'
-alias lad='ls -Al | grep "^d"'
+alias ld='ls -l | grep "^d" --color=never'
+alias lad='ls -Al | grep "^d" --color=never'
 alias lda='lad'
 
 # Colorized, recursive ls-like tree
