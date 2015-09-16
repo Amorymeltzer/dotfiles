@@ -21,7 +21,7 @@ export HISTFILESIZE=$HISTSIZE
 # Display timestamp
 # export HISTTIMEFORMAT='[%D %H:%M] '
 export HISTTIMEFORMAT='[%F %T] '
-export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cdl:btc:clear:exit:logout:history*:h:pg'
+export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cd:cd -:cdl:pwd:* --help:* -h:btc:clear:exit:logout:history*:h:pg'
 #  export HISTIGNORE='clear:exit:logout:h:profileme:btc'
 
 
