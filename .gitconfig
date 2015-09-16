@@ -22,9 +22,9 @@ excludesfile = ~/.global-gitignore
 # [default] space-before-tab: look for spaces before tabs at beginning of line
 whitespace = space-before-tab,indent-with-non-tab,trailing-space
 
-# Make `git rebase` safer on OS X 10.7 with autosave/versions
+# Make `git rebase` safer on OS X 10.7+ with autosave/versions
 # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
-# trustctime = false
+trustctime = false
 
 # Prevent showing files whose names contain non-ASCII symbols as unversioned.
 # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
