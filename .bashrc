@@ -67,6 +67,8 @@ function g {
 	fi
     elif [[ $1 = 'scan' || $1 = 'help' || $1 = 'browse' || $1 = 'grab' ]]; then
 	git "$@"
+    elif [[ $1 = 'config' || $1 = 'version' ]]; then
+	git "$@"
     else
 	echo "Not a git repository"
     fi
