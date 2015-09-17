@@ -46,7 +46,7 @@ pulls = browse -- pulls
 issues = browse -- issues
 mypulls = browse -- pulls/amorymeltzer
 commits = browse -- commits
-notifications = browse /notifications
+notifications = "!browser https://github.com/notifications"
 
 open = "!github-open "
 
