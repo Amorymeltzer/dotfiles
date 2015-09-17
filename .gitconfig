@@ -41,6 +41,7 @@ cfg = config --global
 
 # Depends on hub
 home = browse
+repo = browse
 pulls = browse -- pulls
 issues = browse -- issues
 mypulls = browse -- pulls/amorymeltzer
