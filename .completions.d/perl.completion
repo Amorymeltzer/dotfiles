@@ -3,7 +3,7 @@
 _perlmodules()
 {
     COMPREPLY=( $( compgen -P "$prefix" -W \
-        "$( ${1:-perl} ${BASH_SOURCE[0]%/*}/../helpers/perl modules $cur )" \
+        "$( ${1:-perl} /opt/local/share/bash-completion/helpers/perl modules $cur )" \
         -- "$cur" ) )
     __ltrim_colon_completions "$prefix$cur"
 }
@@ -11,7 +11,7 @@ _perlmodules()
 _perlfunctions()
 {
     COMPREPLY=( $( compgen -P "$prefix" -W \
-        "$( ${1:-perl} ${BASH_SOURCE[0]%/*}/../helpers/perl functions $cur )" \
+        "$( ${1:-perl} /opt/local/share/bash-completion/helpers/perl functions $cur )" \
         -- "$cur" ) )
 }
 
