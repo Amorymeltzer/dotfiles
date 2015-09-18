@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/env perl
 
 # $Id: excel2txt 19 2010-07-21 15:55:47Z kyclark $
 
