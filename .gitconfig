@@ -65,6 +65,7 @@ scan = "!~/bin/gscan"
 
 co = checkout
 com = checkout master
+coh = checkout gh-pages
 wc = whatchanged
 
 stat = status
