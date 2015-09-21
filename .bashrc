@@ -1151,6 +1151,7 @@ function stockmarket() {
 	curl -s "http://download.finance.yahoo.com/d/quotes.csv?s=$quote&f=l1";
     done
 }
+alias mu='marketupdate.sh'
 
 # Calculate netBenefits stuff, uses ~/bin/ticker.sh, which just curls the website to get end-of-day quote
 alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
