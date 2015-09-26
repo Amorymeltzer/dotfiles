@@ -210,9 +210,10 @@
 ;; otherwise Require flymake. ;;;;;; ##### FIXME TODO
 (require 'flymake)
 
-;; Deal with stupid jshint/javascript stuff
+;; Deal with stupid jshint/javascript/csslint stuff
 ;; I really need to migrate to flycheck
 (delete '("\\.js\\'" flymake-javascript-init) flymake-allowed-file-name-masks)
+(delete '("\\.css\\'" flymake-css-init) flymake-allowed-file-name-masks)
 
 ;; Static analysis can be slow, so only run flymake if I've not been typing for 5 seconds.
 ;; It will still run on save or hitting return.
@@ -2417,7 +2418,7 @@ project root if possible."
 (key-chord-define-global "yy" 'browse-kill-ring)
 (key-chord-define-global "xx" 'er/expand-region)
 (key-chord-define-global "uu" 'undo-tree-undo)
-(key-chord-define prog-mode-map "rr" 'undo-tree-redo) ;not in text
+(key-chord-define prog-mode-map "rr" 'undo-tree-redo) ; not in text
 
 ;; Avoid reaching for shift for common symbols
 ;; http://endlessparentheses.com/banishing-the-shift-key-with-key-chord-in-emacs.html
