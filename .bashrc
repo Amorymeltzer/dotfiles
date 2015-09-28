@@ -594,7 +594,8 @@ function peek() {
 # Hook lock-quote scripts into sudo.  Not ideal but fits the right profile:
 # uses sudo, not overly common but often enough to change moderately frequently
 # -E preserves environment, eg colors
-alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
+# -H preserves home?  Or something?
+alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -EH '
 
 
 alias fuckyou='sudo $(history -p \!\!)'
