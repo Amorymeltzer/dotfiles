@@ -595,7 +595,7 @@ function peek() {
 # uses sudo, not overly common but often enough to change moderately frequently
 # -E preserves environment, eg colors
 # -H preserves home?  Or something?
-alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -H '
+alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
 
 
 alias fuckyou='sudo $(history -p \!\!)'
