@@ -58,19 +58,23 @@
      (varField . (:slant italic))
      (valField . (:foreground "#9876aa" :slant italic))
      (functionCall . (:foreground "#a9b7c6"))
+     (implicitConversion . (:underline (:color "#808080")))
+     (implicitParams . (:underline (:color "#808080")))
      (operator . (:foreground "#cc7832"))
      (param . (:foreground "#a9b7c6"))
      (class . (:foreground "#4e807d"))
      (trait . (:foreground "#4e807d" :slant italic))
      (object . (:foreground "#6897bb" :slant italic))
-     (package . (:foreground "#cc7832")))))
+     (package . (:foreground "#cc7832"))
+     (deprecated . (:strike-through "#a9b7c6"))
+     )))
 
 (custom-theme-set-faces
  'darcula
  '(default ((t (:inherit nil :stipple nil :background "#2B2B2B" :foreground "#a9b7c6"
                          :inverse-video nil :box nil :strike-through nil :overline nil
                          :underline nil :slant normal :weight normal :height 120
-                         :width normal :foundry nil :family "Inconsolata"))))
+                         :width normal :foundry nil))))
  '(cursor ((t (:foreground "#042028" :background "#708183"))))
  '(error ((t (:inherit 'default :underline (:style wave :color "red")))))
  '(compilation-error ((t (:inherit 'default :foreground "red" :underline "red"))))
@@ -78,8 +82,7 @@
  '(sbt:error ((t (:inherit 'default :foreground "red"))))
  '(maker:error ((t (:inherit 'default :foreground "red"))))
  '(ensime-warnline-highlight ((t (:inherit 'font-lock-warning-face))))
- '(fixed-pitch ((t (:family "Inconsolata"))))
- '(variable-pitch ((t (:family "Liberation Serif"))))
+ '(ensime-compile-infoline ((t (:foreground "#404040" :inherit 'default))))
  ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Faces-for-Font-Lock.html
  '(font-lock-warning-face ((t (:underline (:style wave :color "orange" :inherit 'default)))))
                                         ;for a construct that is peculiar, or that greatly changes the meaning of other text.
@@ -121,7 +124,7 @@
  '(link-visited ((t (:weight normal :slant normal :underline (:color foreground-color :style line) :inverse-video nil :foreground "#c61b6e" :inherit (link)))))
  '(fringe ((t (:background nil :foreground nil))))
  '(header-line ((t (:weight normal :slant normal :underline nil :box nil :inverse-video t :foreground "#708183" :background "#0a2832" :inherit (mode-line)))))
- '(tooltip ((((class color)) (:inherit (variable-pitch) :foreground "black" :background "lightyellow")) (t (:inherit (variable-pitch)))))
+ '(tooltip ((((class color)) (:foreground "black" :background "lightyellow"))))
  '(mode-line ((t (:weight normal :slant normal :underline nil :box nil :inverse-video t :foreground "#3c3f41" :background "#a9b7c6"))))
  '(mode-line-inactive ((t (:weight normal :slant normal :underline nil :box nil :inverse-video t :foreground "#3c3f41" :background "#313335" :inherit (mode-line)))))
  '(mode-line-buffer-id ((t (:weight bold))))
