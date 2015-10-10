@@ -16,6 +16,9 @@ allow = for if
 # Presumably should use more subroutines.  Default is 5.
 [InputOutput::RequireBriefOpen]
 lines = 20
+# Don't whine for numbers above 0, 1, and 2
+[ValuesAndExpressions::ProhibitMagicNumbers]
+allowed_values = all_integers
 
 # Bump these up from level 1 to level 2
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
