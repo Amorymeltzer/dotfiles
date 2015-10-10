@@ -36,7 +36,7 @@ def check(dirname):
             messages.insert(0, '\033[0;33m ')
             messages.insert(0, branch.group(1))
             if not re.search('^master$', branch.group(1)):
-                messages.insert(0, "\033[0m")
+                messages.insert(0, "\033[0;37m")
             if 'Your branch is ahead of ' in out:
                 messages.append("→ ")
                 p = re.search("Your branch is ahead of .* by (\d+) commit", out)
