@@ -4,7 +4,7 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-anzu
-;; Version: 0.57
+;; Version: 0.58
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -38,6 +38,8 @@
 
 (require 'cl-lib)
 (require 'thingatpt)
+
+(declare-function migemo-forward 'migemo)
 
 (defgroup anzu nil
   "Show searched position in mode-line"

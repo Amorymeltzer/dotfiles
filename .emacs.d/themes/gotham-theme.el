@@ -4,7 +4,7 @@
 
 ;; Author: Vasilij Schneidermann <v.schneidermann@gmail.com>
 ;; URL: https://github.com/wasamasa/gotham-theme
-;; Version: 1.1.3
+;; Version: 1.1.4
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -38,6 +38,7 @@
 
 (defgroup gotham nil
   "A very dark Emacs theme"
+  :group 'themes
   :prefix "gotham-")
 
 (deftheme gotham "The Gotham color theme")
@@ -261,6 +262,18 @@ depending on DISPLAY for keys which are either :foreground or
 
    ;; makefile
    (makefile-space :background magenta)
+
+   ;; message-mode
+   (message-cited-text :foreground blue)
+   (message-header-cc :foreground base5)
+   (message-header-name :foreground orange)
+   (message-header-newsgroups :inherit shadow)
+   (message-header-other :foreground base5)
+   (message-header-subject :foreground base5)
+   (message-header-to :foreground base5)
+   (message-header-xheader :inherit shadow)
+   (message-mml :foreground yellow)
+   (message-separator :foreground blue)
 
    ;; outline
    (outline-1 :foreground red)
@@ -580,6 +593,10 @@ depending on DISPLAY for keys which are either :foreground or
    (markdown-header-face-4 :background base2)
    (markdown-header-face-5 :background base3)
    (markdown-header-face-6 :background base4)
+
+   ;; mu4e
+   (mu4e-header-highlight-face :inherit hl-line)
+   (mu4e-region-code :inherit region)
 
    ;; org-mode
    (org-agenda-dimmed-todo-face :inherit shadow)
