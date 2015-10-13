@@ -1216,6 +1216,19 @@ function sunrise()
     curl -s http://weather.yahooapis.com/forecastrss?w=$loc | grep astronomy | awk -F\" '{print $2 "\n" $4;}'
 }
 
+# From https://gist.github.com/komasaru/9635884
+function metar()
+{
+    if [[ ! "$1" =~ [0-9A-Z]{4} ]]; then
+	echo "Please enter an appropriate METAR code"
+	exit
+    fi
+
+    URL="http://weather.noaa.gov/pub/data/observations/metar/decoded/"
+
+    wget -q -O - "${URL}${1}.TXT"
+}
+
 function thisforthat {
     curl "http://itsthisforthat.com/api.php?text"
     if [ -t 1 ]; then
