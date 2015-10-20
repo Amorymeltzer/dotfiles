@@ -52,7 +52,7 @@
 ;;
 ;;     M-x linum-mode
 ;;
-;; Relative line numbering should already be enabled by default (by installing this package), following *linum-on* or enabling *linum-mode*. One can also use the *lineum-relative-toggle* interactive function to switch between relative and non-relative line numbering:
+;; Relative line numbering should already be enabled by default (by installing this package), following *linum-on* or enabling *linum-mode*. One can also use the *linum-relative-toggle* interactive function to switch between relative and non-relative line numbering:
 ;;
 ;;     M-x linum-relative-toggle
 ;;
@@ -91,6 +91,11 @@ linum-releative will show the real line number at current line."
   :type 'string
   :group 'linum-relative)
 
+(defcustom linum-relative-with-helm nil
+  "Set t if you want to integrate with linum-relative and helm-mode."
+  :type 'boolean
+  :group 'linum-relative)
+
 ;;;; Internal Variables
 
 (defvar linum-relative-last-pos 0
@@ -99,25 +104,60 @@ linum-releative will show the real line number at current line."
 (defvar linum-relative-user-format linum-format
   "Store the users linum-format")
 
+;;;; helm support
+(defvar helm-buffer)
+(defvar helm-candidate-separator)
+(defvar helm-alive-p)
+(declare-function with-helm-buffer "ext:helm-lib.el" (&rest body))
+(declare-function helm-candidate-number-at-point "ext:helm.el")
+(declare-function helm-pos-header-line-p "ext:helm.el")
+
+(defun linum-relative-enable-helm-support ()
+  "Return t if user want to integrate linum-relative with helm."
+  (and (bound-and-true-p helm-alive-p) linum-relative-with-helm))
+
+(defun linum-relative-for-helm ()
+  (when linum-relative-with-helm
+    (with-helm-buffer
+      (make-local-variable 'linum-relative-last-pos))
+    (linum-update helm-buffer)))
+
+(add-hook 'helm-move-selection-after-hook 'linum-relative-for-helm)
+
 ;;;; Advices
 (defadvice linum-update (before relative-linum-update activate)
   "This advice get the last position of linum."
-  (setq linum-relative-last-pos (line-number-at-pos)))
+  (if (linum-relative-enable-helm-support)
+      (setq linum-relative-last-pos (helm-candidate-number-at-point))
+    (setq linum-relative-last-pos (line-number-at-pos))))
 
 ;;;; Functions
 (defun linum-relative (line-number)
+  (when (linum-relative-enable-helm-support)
+    (with-helm-buffer
+      (if (looking-at helm-candidate-separator)
+          (setq line-number (save-excursion
+                              (forward-line 1) (helm-candidate-number-at-point)))
+        (setq line-number (helm-candidate-number-at-point)))))
   (let* ((diff1 (abs (- line-number linum-relative-last-pos)))
-	 (diff (if (minusp diff1)
-		   diff1
-		 (+ diff1 linum-relative-plusp-offset)))
-	 (current-p (= diff linum-relative-plusp-offset))
-	 (current-symbol (if (and linum-relative-current-symbol current-p)
-			     (if (string= "" linum-relative-current-symbol)
-				 (number-to-string line-number)
-			       linum-relative-current-symbol)
-			   (number-to-string diff)))
-	 (face (if current-p 'linum-relative-current-face 'linum)))
-    (propertize (format linum-relative-format current-symbol) 'face face)))
+         (diff (if (minusp diff1)
+                   diff1
+                 (+ diff1 linum-relative-plusp-offset)))
+         (current-p (= diff linum-relative-plusp-offset))
+         (current-symbol (if (and linum-relative-current-symbol current-p)
+                             (if (string= "" linum-relative-current-symbol)
+                                 (number-to-string line-number)
+                               linum-relative-current-symbol)
+                           (number-to-string diff)))
+         (face (if current-p 'linum-relative-current-face 'linum)))
+    (if (and (linum-relative-enable-helm-support)
+             (with-helm-buffer
+               (or (looking-at helm-candidate-separator)
+                   (eq (point-at-bol) (point-at-eol))
+                   (helm-pos-header-line-p))))
+        (propertize (format linum-relative-format current-symbol) 'invisible t)
+      (propertize (format linum-relative-format current-symbol) 'face face))))
+
 
 (defun linum-relative-on ()
   "Turn ON linum-relative."
@@ -136,7 +176,19 @@ linum-releative will show the real line number at current line."
       (linum-relative-off)
     (linum-relative-on)))
 
-(setq linum-format 'linum-relative)
+;;;###autoload
+(define-minor-mode linum-relative-mode
+  "Display relative line numbers for current buffer."
+  :group 'linum-relative
+  :global t
+  :lighter " LR"
+  (if linum-relative-mode
+      (progn
+        (linum-relative-on)
+        (global-linum-mode 1))
+    (linum-relative-off)
+    (global-linum-mode -1)))
+
 
 (provide 'linum-relative)
 ;;; linum-relative.el ends here.
