@@ -69,6 +69,7 @@ cog = checkout gh-pages
 wc = whatchanged
 
 stat = status
+st = status
 s = status --short --branch
 sn = status --untracked=no
 # Do something more interesting/useful/unified with these
