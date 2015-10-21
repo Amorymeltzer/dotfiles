@@ -232,14 +232,14 @@ ui = auto
 
 [color "branch"]
 current = cyan reverse
-local = yellow
+local = normal
 remote = green
 
 [color "diff"]
-meta = yellow bold
+meta = white
 frag = magenta bold
-old = red bold
-new = green bold
+old = red
+new = green
 
 [color "status"]
 added = magenta
