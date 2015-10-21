@@ -1459,6 +1459,9 @@ alias sumup="perl -MList::Util=sum -alne 'push @S,@F; END { print sum @S }'"
 # 39 digits each
 alias pi="perl -Mbignum=PI -le 'print PI'"
 alias E="perl -Mbignum=e -le 'print e'"
+function exp {
+    perl -Mbignum=bexp -le "print bexp($1,39)"
+}
 
 # Extract most types of compressed files
 function extract {
