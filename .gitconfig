@@ -149,6 +149,8 @@ ic = icdiff
 icdc = icdiff --cached
 icc = icdiff --cached
 
+patience = diff --patience
+
 # Goodness (summary of diff lines added/removed/total)
 # FIXME TODO: Colorize
 gn = goodness
