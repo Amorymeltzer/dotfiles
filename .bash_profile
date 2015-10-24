@@ -27,7 +27,7 @@ export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cdl:pwd:* --help:* -h:b
 #  export HISTIGNORE='clear:exit:logout:h:profileme:btc'
 
 
-# Append all history to same file
+# Append all history to same file, don't overwrite
 # Still doesn't get it perfectly unified across logins
 shopt -s histappend
 # Attempt to save all lines of multi-line commands in one line
@@ -67,4 +67,4 @@ echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $3"
 # Meaning dates before the 10th get two spaces, that bugs me
 # First line ("last login...") gone with .hushlogin
 #echo -ne "${Color_Red}Local time: " ; date
-echo -ne "${Color_Red}Local time: " ; date +'%a %b %d %H:%M:%S %Z %Y'
+echo -ne "${Color_Red}Local time: ${Color_zOff}" ; date +'%a %b %d %H:%M:%S %Z %Y'
