@@ -1196,6 +1196,8 @@ function weather() {
     # Maybe use curl instead?
     lynx -dump "http://www.weather.com/weather/print/$zip" | sed -n '/%$/s/\[.*\]//p' | sed -n 's/ \%/\%/p' | sed 's/^             //g';
 }
+# Stopgap
+alias today='weather | head -n 2 | tail -n 1'
 
 function sunrise()
 {
