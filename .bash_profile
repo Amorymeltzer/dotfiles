@@ -61,10 +61,11 @@ if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; th
     echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_Off}" # only short ones
 fi
 echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $3" "$4}'
-#echo -ne "${Color_Blue}" ; weather | head -n 2 | tail -n 1
+if [[ ! `pg &>/dev/null` ]]; then
+    echo -ne "${Color_Cyan}" ; weather | head -n 2 | tail -n 1
+fi
 
 # Default designed to always take up same space without leading zero for day
 # Meaning dates before the 10th get two spaces, that bugs me
 # First line ("last login...") gone with .hushlogin
-#echo -ne "${Color_Red}Local time: " ; date
 echo -ne "${Color_Red}Local time: ${Color_zOff}" ; date +'%a %b %d %H:%M:%S %Z %Y'
