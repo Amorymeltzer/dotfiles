@@ -8,7 +8,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $1 [-bmMpPgrRcCekhH]]
+Usage: $1 [-bmMpPgrRcCekhH]
 
   -b		skip updating macports base, but 'port sync' to update tree
   -m		check for macports updates but don't upgrade
