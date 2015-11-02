@@ -4,7 +4,7 @@
 
 ;; Author: Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/Bruce-Connor/html-to-markdown
-;; Version: 1.5
+;; Version: 1.5.1
 ;; Keywords: tools wp languages
 ;; Prefix: htm
 ;; Separator: -
@@ -69,8 +69,8 @@
 ;;; Code:
 (require 'thingatpt)
 
-(defconst html-to-markdown-version "1.5" "Version of the html-to-markdown.el package.")
-(defconst html-to-markdown-version-int 8 "Version of the html-to-markdown.el package, as an integer.")
+(defconst html-to-markdown-version "1.5.1" "Version of the html-to-markdown.el package.")
+(defconst html-to-markdown-version-int 9 "Version of the html-to-markdown.el package, as an integer.")
 (defun htm-bug-report ()
   "Opens github issues page in a web browser. Please send any bugs you find.
 Please include your emacs and html-to-markdown versions."
@@ -380,7 +380,8 @@ the formatting will be lost."
       (delete-region opoint (point)))))
 
 (defcustom htm-entities-alist
-  '( ;; ("#62" . ">") ("gt"  . ">") ;; The > is a little dangerous
+  '( ;; ("#62" . ">") ("gt"  . ">") ;; The > is a little dangerous.
+    ;; ("lt"     . "<") ("#60"    . "<") ;; The < too.
     ("#160"   . " ") ("#161"   . "¡") ("#162"   . "¢") ("#163"   . "£")
     ("#164"   . "¤") ("#165"   . "¥") ("#166"   . "¦") ("#167"   . "§")
     ("#168"   . "¨") ("#169"   . "©") ("#170"   . "ª") ("#171"   . "«")
@@ -405,7 +406,7 @@ the formatting will be lost."
     ("#244"   . "ô") ("#245"   . "õ") ("#246"   . "ö") ("#247"   . "÷")
     ("#248"   . "ø") ("#249"   . "ù") ("#250"   . "ú") ("#251"   . "û")
     ("#252"   . "ü") ("#253"   . "ý") ("#254"   . "þ") ("#255"   . "ÿ")
-    ("#34"    . "\"") ("#38"    . "&") ("#39"    . "'") ("#60"    . "<")
+    ("#34"    . "\"") ("#38"    . "&") ("#39"    . "'")
     ("AElig"  . "Æ") ("Aacute" . "Á") ("Acirc"  . "Â") ("Agrave" . "À")
     ("Aring"  . "Å") ("Atilde" . "Ã") ("Auml"   . "Ä") ("Ccedil" . "Ç")
     ("ETH"    . "Ð") ("Eacute" . "É") ("Ecirc"  . "Ê") ("Egrave" . "È")
@@ -421,7 +422,7 @@ the formatting will be lost."
     ("eacute" . "é") ("ecirc"  . "ê") ("egrave" . "è") ("eth"    . "ð")
     ("euml"   . "ë") ("frac12" . "½") ("frac14" . "¼") ("frac34" . "¾")
     ("iacute" . "í") ("icirc"  . "î") ("iexcl"  . "¡") ("igrave" . "ì")
-    ("iquest" . "¿") ("iuml"   . "ï") ("laquo"  . "«") ("lt"     . "<")
+    ("iquest" . "¿") ("iuml"   . "ï") ("laquo"  . "«")
     ("macr"   . "¯") ("micro"  . "µ") ("middot" . "·") ("nbsp"   . " ")
     ("not"    . "¬") ("ntilde" . "ñ") ("oacute" . "ó") ("ocirc"  . "ô")
     ("ograve" . "ò") ("ordf"   . "ª") ("ordm"   . "º") ("oslash" . "ø")

@@ -5,7 +5,7 @@
 ;; Author:   Dmitry Gutov <dgutov@yandex.ru>
 ;; URL:      https://github.com/dgutov/diff-hl
 ;; Keywords: vc, diff
-;; Version:  1.8.0
+;; Version:  1.8.1
 ;; Package-Requires: ((cl-lib "0.2"))
 
 ;; This file is part of GNU Emacs.
@@ -391,7 +391,8 @@ in the source file, or the last line of the hunk above it."
               (when (eobp)
                 (with-current-buffer ,buffer (diff-hl-remove-overlays))
                 (error "Buffer is up-to-date"))
-              (diff-hl-diff-skip-to ,line)
+              (let (diff-auto-refine-mode)
+                (diff-hl-diff-skip-to ,line))
               (save-excursion
                 (while (looking-at "[-+]") (forward-line 1))
                 (setq end-line (line-number-at-pos (point)))
@@ -406,6 +407,8 @@ in the source file, or the last line of the hunk above it."
                 (if (>= wbh (- end-line beg-line))
                     (recenter (/ (+ wbh (- beg-line end-line) 2) 2))
                   (recenter 1)))
+              (when diff-auto-refine-mode
+                (diff-refine-hunk))
               (unless (yes-or-no-p (format "Revert current hunk in %s?"
                                            ,(cl-caadr fileset)))
                 (error "Revert canceled"))
