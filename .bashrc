@@ -731,8 +731,9 @@ alias preview='open -a preview '
 alias finder='open -a Finder '
 alias textedit='open -a TextEdit '
 alias safari='open -a safari '
-alias firefox='open -a firefox'
+alias firefox='open -a firefox '
 alias chrome='open -a google\ chrome '
+alias vlc='open -a vlc '
 
 # Macports
 alias pecho='port echo '
