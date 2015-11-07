@@ -1369,6 +1369,10 @@ function available() {
 function slashdot() {
     curl -s "http://rss.slashdot.org/Slashdot/slashdot" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;'
 }
+# HN mainpage stories
+function hackernews() {
+    curl -s "https://news.ycombinator.com/news" | perl -ne 'print "$1\n" if /<span class=\"deadmark\"><\/span><a href=\".*\">(.*)<\/a><span class=\"sitebit comhead\">/;'
+}
 
 # Test how fast the machine is, 32GB
 function writetest() {
