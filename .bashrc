@@ -1365,9 +1365,9 @@ function available() {
 }
 
 # /. headlines, turn into shell script to option output?
-########## Broken after update FIXME TODO ########
+# Not perfect but good enough
 function slashdot() {
-    curl -s "http://rss.slashdot.org/Slashdot/slashdot" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<item><(title|name)>(.*)<\/\1>/;'
+    curl -s "http://rss.slashdot.org/Slashdot/slashdot" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;'
 }
 
 # Test how fast the machine is, 32GB
