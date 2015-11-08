@@ -1340,11 +1340,6 @@ function unquarantine() {
 }
 ##############################################################################
 
-# Print members of the House of Representatives
-##### BROKEN TODO FIXME #####
-#function housemembers() { curl -s "http://www.house.gov/representatives/" | sed -e :a -e 's/<[^>]*>//g;/</N;//ba' | perl -nle 's/^\t\t(.*$)/ $1/ and print;' ;}
-function housemembers() { curl -s "http://www.house.gov/representatives/" | sed -e :a -e 's/<[^>]*>//g;/</N;//ba' | perl -nle 's/^\t\t(.*$)/ $1/ and print;' ;}
-
 # Monitor file live with tail
 function monitor() {
     tail -f $1 | while read line; do printf "$(date '+%F %T')\t$line\n"; done;
