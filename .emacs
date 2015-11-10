@@ -1718,6 +1718,8 @@ round to ones, tens, etc."
 ;; Mandelbrot set
 (autoload 'u-mandelbrot "u-mandelbrot" "Make a mandelbrot fractal" t)
 
+;; Typing game https://github.com/lujun9972/el-typing-game
+(autoload 'typing-game "typing-game" "Typing game" t)
 
 ;; From https://github.com/purcell/emacs-xkcd
 ;; (require 'emacs-xkcd)
