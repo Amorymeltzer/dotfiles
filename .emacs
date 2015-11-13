@@ -1800,11 +1800,6 @@ idle for SECS seconds." t)
 ;; (message "Emacs loaded at %s." (wm-format-time-string "%T %a %d %b %y"))
 
 
-;; Should figure out an autoload or eval-after-load for this
-;; ;;;;;;; ###### FIXME TODO
-;; (require '1000-words)
-
-
 ;;; Maybe set up a modemap for definitions?  ;;;;;; ##### FIXME TODO
 ;; Thesaurus
 ;; (require 'thesaurus)
