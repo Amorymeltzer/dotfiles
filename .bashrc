@@ -597,7 +597,8 @@ function peek() {
 # -E preserves environment, eg colors
 # -H preserves home?  Or something?
 alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
-
+# Get current quote
+alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist LoginwindowText'
 
 alias fuckyou='sudo $(history -p \!\!)'
 # thefuck https://github.com/nvbn/thefuck
