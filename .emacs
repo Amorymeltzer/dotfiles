@@ -2267,8 +2267,7 @@ This checks in turn:
 	  (message "File '%s' successfully renamed to '%s'"
 		   name (file-name-nondirectory new-name)))))))
 
-;; What does this do? ;;;; ##### FIXME TODO
-;; Don't use ido for this.
+;; Don't use ido for this, would defeat the purpose
 (put 'rename-current-buffer-file 'ido 'ignore)
 
 (defun delete-current-buffer-file ()
