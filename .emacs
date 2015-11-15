@@ -144,7 +144,7 @@
 	(last-command last-command)
 	(buffer-modified (buffer-modified-p))
 	(hippie-expand-function (or hippie-expand-function 'hippie-expand)))
-    (flet ((ding)) ; avoid the (ding) when hippie-expand exhausts its options.
+    (cl-flet ((ding)) ; avoid the (ding) when hippie-expand exhausts its options.
       (while (progn
 	       (funcall hippie-expand-function nil)
 	       (setq last-command 'my-hippie-expand-completions)
