@@ -266,8 +266,8 @@
 		    :foreground "black")
 (set-face-attribute 'flymake-warnline nil
 		    :foreground "black")
-;; Should show all but doesnt? ;;;;;; ##### FIXME TODO
-(setq flymake-number-of-errors-to-display nil)
+;; Show all errors, pointless with one-line mode-line
+;; (setq flymake-number-of-errors-to-display nil)
 
 ;; Perltidy, also exists as stand-alone command line program
 ;; Uses ~/.perltidyrc
