@@ -353,10 +353,15 @@
       kept-old-versions 3
       version-control t)
 
-;; Allow diff/ediff with backups
-;; Do something to alias diff, etc. ;;;;; ######## TODO FIXME
+;; Allow diff/ediff with specific backup files
 ;; https://github.com/emacsmirror/pick-backup
-(require 'pick-backup)
+(autoload 'pick-backup-and-diff "pick-backup" "Run Ediff on FILE and one of
+its backups." t)
+(autoload 'pick-backup-and-ediff "pick-backup" "Diff FILE with
+one of its backups." t)
+(autoload 'pick-backup-and-revert "pick-backup" "Replace FILE with one of its
+backups." t)
+(autoload 'pick-backup-and-view "pick-backup" "View one of FILE's backups." t)
 
 ;; Default -c, similar to u
 (setq diff-switches "-u -w")
