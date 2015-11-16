@@ -1739,18 +1739,17 @@ round to ones, tens, etc."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Idling stuff
 
-;; Random emacs usage quote in minibuffer when idle.  Probably better if these
-;; don't clog up *messages*, maybe via popwin ;;;;;; ##### FIXME TODO
-;; (require 'random-idle-quote)
+;; Random emacs usage quote in minibuffer when idle.  Clogs up  *messages*
+(autoload 'random-idle-quote "random-idle-quote" "Display emacs usage quote" t)
 ;; (random-idle-quote)
 
-
-;; Zone after 3 idle minutes
+;; Zone out
 (autoload 'zone "zone" "Zone out, completely" t)
 (autoload 'zone-when-idle "zone" "Zone out when Emacs has been
 idle for SECS seconds." t)
-;; (setq zone-idle (* 60 3))
+;; After 3 idle minutes
 ;; (zone-when-idle zone-idle)
+;; (setq zone-idle (* 60 3))
 
 ;; Zone-choose to select a specific zoning method
 (defun zone-choose (pgm)
@@ -1790,6 +1789,7 @@ idle for SECS seconds." t)
 	   (vconcat zone-programs [zone-pgm-md5]))))
 
 
+
 (defun wm-format-time-string (format &optional time)
   "Like format-time-string except that %a gives a 2-char abbreviation."
   ;; Under GNU 19.34 (format-time-string "%2a") returns "2a".
@@ -1800,9 +1800,6 @@ idle for SECS seconds." t)
 		(substring (format-time-string "%a" time) 0 2)
 		(wm-format-time-string (substring format i) time)))
     (format-time-string format time)))
-
-;; Moved to bottom (duh)
-;; (message "Emacs loaded at %s." (wm-format-time-string "%T %a %d %b %y"))
 
 
 ;;; Maybe set up a modemap for definitions?  ;;;;;; ##### FIXME TODO
