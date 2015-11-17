@@ -4,7 +4,7 @@
 
 ;; Author: Johan Andersson <johan.rejeep@gmail.com>
 ;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
-;; Version: 0.17.2
+;; Version: 0.17.3
 ;; Keywords: files, directories
 ;; URL: http://github.com/rejeep/f.el
 ;; Package-Requires: ((s "1.7.0") (dash "2.2.0"))
@@ -100,7 +100,7 @@ If PATH is not allowed to be modified, throw error."
     (let* ((paths (-map 'f-split paths))
            (common (caar paths))
            (re nil))
-      (while (--all? (equal (car it) common) paths)
+      (while (and (not (null (car paths))) (--all? (equal (car it) common) paths))
         (setq paths (-map 'cdr paths))
         (push common re)
         (setq common (caar paths)))
