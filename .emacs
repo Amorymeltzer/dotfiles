@@ -1953,15 +1953,16 @@ idle for SECS seconds." t)
 
 ;; Google translate interface
 ;; https://github.com/atykhonov/google-translate
-(require 'google-translate)
-(require 'google-translate-default-ui)
-;; Override default through C-u prefix
-;; (setq google-translate-default-target-language "en")
-;; Always detect
+(autoload 'google-translate-query-translate "google-translate" "Query a text
+(a word or a phrase), and pop up a buffer named *Google Translate* displaying
+available translations of the text." t)
+(autoload 'google-translate-at-point "google-translate" "Translate the word at
+point or the words in the active region." t)
+;; Always detect, override default through C-u prefix
 (setq google-translate-default-source-language "auto"
+      google-translate-default-target-language "en"
       google-translate-enable-ido-completion 1
       google-translate-show-phonetic 1)
-;; (global-set-key "\C-ct" 'google-translate-at-point)
 (global-set-key "\C-ct" 'google-translate-query-translate)
 
 
