@@ -1182,7 +1182,7 @@ current buffer" t)
 
 ;; Cleaner, more meaningful narrow-to-region
 ;; https://github.com/Bruce-Connor/fancy-narrow
-(require 'fancy-narrow)
+;; (require 'fancy-narrow)
 
 ;; Allows hiding of comments
 (autoload 'hide/show-comments-toggle "hide-comnt"
@@ -2381,10 +2381,9 @@ project root if possible."
 ;; Just in case
 (setq warning-suppress-types nil)
 
-;; Display browse kill ring, set key to auto-complete with ido
-;; Kinda weird
+;; Browse kill ring, set key to auto-complete with ido
 ;; https://github.com/browse-kill-ring/browse-kill-ring
-(require 'browse-kill-ring)
+(autoload 'browse-kill-ring "browse-kill-ring" "Browse kill ring" t)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 (autoload 'kill-ring-ido "kill-ring-ido" "Kill-ring browsing with ido" t)
 (global-set-key (kbd "M-y") 'kill-ring-ido)
