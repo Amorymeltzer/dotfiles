@@ -2611,7 +2611,7 @@ project root if possible."
 (diminish 'anzu-mode)
 (diminish 'ace-jump-mode "Ace")
 (diminish 'guide-key-mode)
-(diminish 'fancy-narrow-mode)
+;;(diminish 'fancy-narrow-mode)
 (diminish 'subword-mode)
 ;; Diminish doesn't work here??  Dumb
 (setq eldoc-minor-mode-string nil)
