@@ -504,6 +504,10 @@ buffer or region to mardown and display it in a separate window."
 current buffer" t)
 (defalias 'tidy-indent 'tidy-then-indent)
 
+;; Bug hunter
+;; https://github.com/Malabarba/elisp-bug-hunter
+(autoload 'bug-hunter-init-file "bug-hunter" "Find bugs in your init file" t)
+
 
 ;; Auto-insert mode
 (auto-insert-mode)
