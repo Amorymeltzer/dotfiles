@@ -1204,8 +1204,7 @@ current buffer" t)
 
 
 ;; I can't tell if this does anything different from M-q but the author
-;; certain seems to think so... https://snarfed.org/fillcode
-;; (require 'fillcode)
+;; certainly seems to think so... https://snarfed.org/fillcode
 (autoload 'fillcode-mode "fillcode" "A minor mode to enhance fill functions
 when in source code modes such as python-mode or perl-mode" t)
 
