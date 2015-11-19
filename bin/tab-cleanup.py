@@ -7,8 +7,8 @@
 
 # 18 Nov 2015 - 292 tabs
 from datetime import date as D
-start_date = D(2015, 1, 14)
-start_tabs = int(181)
+start_date = D(2015, 11, 18)
+start_tabs = int(292)
 
 # Today (18 Nov 2015) - -127 tabs required
 import sys
