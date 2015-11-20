@@ -10,9 +10,9 @@ from datetime import date as D
 start_date = D(2015, 11, 18)
 start_tabs = int(292)
 
-# Today (18 Nov 2015) - -127 tabs required
 import sys
 sys.stdout.write('Today (')
 print D.today(),
 sys.stdout.write('): ')
-print start_tabs-(D.today() - start_date).days
+print (start_tabs-(D.today() - start_date).days),
+print 'tabs required'
