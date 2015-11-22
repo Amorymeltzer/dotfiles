@@ -53,6 +53,8 @@ allissues = "!browser https://github.com/issues"
 
 open = "!github-open "
 
+first-commit = "!git init && git commit --alow-empty -m 'Initial commit'"
+
 c = commit
 cm = commit -m
 amend = commit --amend
