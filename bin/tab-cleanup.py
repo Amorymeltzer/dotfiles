@@ -14,5 +14,5 @@ import sys
 sys.stdout.write('Today (')
 print D.today(),
 sys.stdout.write('): ')
-print (start_tabs-(D.today() - start_date).days),
+print start_tabs-(D.today() - start_date).days,
 print 'tabs required'
