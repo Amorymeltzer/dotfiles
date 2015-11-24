@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-FILES="^DJI ^IXIC ^GSPC ^TNX"
+FILES="^DJI ^IXIC ^GSPC ^NYA ^TNX"
 
 # Only show investments if after market close or weekend
 # Based on DST, correct using Eastern time??
