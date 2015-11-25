@@ -1934,13 +1934,11 @@ idle for SECS seconds." t)
 (global-set-key (kbd "C-c e") 'emacswiki)
 
 
-;; When editing web stuff (CGI scripts, html) I may want to quickly check it.
 ;; browse-url-of-buffer will render the url assigned to a buffer.  This tells
-;; Emacs how to map a given filename to a url
-;; Check out skewer https://github.com/skeeto/skewer-mode
+;; Emacs how to map a given filename to a url. Check out skewer
+;; https://github.com/skeeto/skewer-mode
 (setq browse-url-filename-alist
-      '(("/Users/Amory/Documents/perl/website/" . "http://amorymeltzer.org/cgi-bin/")
-	("^/\(ftp@\|anonymous@\)?\([^:]+\):/*" . "ftp://\2/")
+      '(("^/\(ftp@\|anonymous@\)?\([^:]+\):/*" . "ftp://\2/")
 	("^/\([^:@]+@\)?\([^:]+\):/*" . "ftp://\1\2")
 	("^/+" . "file:/")))
 
