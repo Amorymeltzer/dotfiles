@@ -2300,15 +2300,12 @@ This checks in turn:
 		(window-buffer (minibuffer-selected-window))
 	      (current-buffer))))))
 
-;; ;;;;;; ##### FIXME TODO
 (defun copy-current-file-path ()
-  "Add current file path to kill ring. Limits the filename to
-project root if possible."
+  "Add current file path to kill ring."
   (interactive)
   (let ((filename (buffer-file-name)))
-    (kill-new (if eproject-mode
-		  (s-chop-prefix (eproject-root) filename)
-		filename))))
+    (kill-new filename)
+    (message "'%s' copied to kill ring" filename)))
 ;; Copy file path to kill ring, probably not the best keys for this
 (global-set-key (kbd "C-x M-w") 'copy-current-file-path)
 
