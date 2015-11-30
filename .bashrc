@@ -1149,17 +1149,22 @@ pass ()
 }
 
 
-# Stock prices, use ticker for current data and stockclose for latst close
-alias stockmarket='ticker'
-function stockmarket() {
-    for quote in $@;
+# Dashboard stock prices, use ticker for price, stockclose for last close
+function marketupdate() {
+    FILES="^DJI ^IXIC ^GSPC ^NYA ^TNX"
+
+    # Only show investments if after market close or weekend
+    # Based on DST, correct using Eastern time??
+    if ((`date -u '+%H'` < 13)) || ((`date -u '+%u'` > 5)); then
+	FILES="FGCKX FDIKX CCPIX VSCPX VGSNX SSO VOOG QLD QQQ VFFVX RDITX $FILES"
+    fi
+    for ticker in $FILES
     do
-	printf "$quote\t";
-	curl -s "http://download.finance.yahoo.com/d/quotes.csv?s=$quote&f=l1";
+	ticker $ticker
     done
 }
-alias mu='marketupdate.sh'
-# Calculate netBenefits stuff, uses ~/bin/ticker.sh, which just curls the website to get end-of-day quote
+alias mu='marketupdate'
+alias stockmarket='ticker'
 alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
 
 function btc() {
