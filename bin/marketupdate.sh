@@ -9,5 +9,5 @@ if ((`date -u '+%H'` < 13)) || ((`date -u '+%u'` > 5)); then
 fi
 for ticker in $FILES
 do
-    finance $ticker
+    ticker $ticker
 done

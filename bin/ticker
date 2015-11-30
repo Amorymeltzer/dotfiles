@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# ticker by Amory Meltzer
+# Grab current price of stock or index.  Avoids proper API since ^DJI is
+# blocked:
+# curl -s "http://download.finance.yahoo.com/d/quotes.csv?s=$quote&f=l1";
+
+quote=`echo $1`;
+curl -s "http://finance.yahoo.com/q?s=$quote" | perl -ne 'print uc($1)."\t$2\t$3 $4 ($5)\n" if /time_rtq_ticker\"\>\<span id=\"yfs_.*?_(.*?)\"\>(\d+,?\d*.\d*).*?_arrow\" alt=\"(\w*)\"\>   (\d*.\d*).*?\((\d*.\d*%)/;';

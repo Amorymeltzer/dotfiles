@@ -1149,8 +1149,8 @@ pass ()
 }
 
 
-# FIXME TODO with ticker.sh, finance, etc.
-# Stock prices, use ~/bin/finance script for historical or current indices
+# Stock prices, use ticker for current data and stockclose for latst close
+alias stockmarket='ticker'
 function stockmarket() {
     for quote in $@;
     do
@@ -1159,7 +1159,6 @@ function stockmarket() {
     done
 }
 alias mu='marketupdate.sh'
-
 # Calculate netBenefits stuff, uses ~/bin/ticker.sh, which just curls the website to get end-of-day quote
 alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
 
