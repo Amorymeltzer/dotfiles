@@ -2418,6 +2418,7 @@ This checks in turn:
 (key-chord-define-global "ii" 'byte-compile-init-dir)
 (key-chord-define-global "yy" 'browse-kill-ring)
 (key-chord-define-global "xx" 'er/expand-region)
+(key-chord-define-global "cc" 'er/contract-region)
 (key-chord-define-global "uu" 'undo-tree-undo)
 (key-chord-define prog-mode-map "rr" 'undo-tree-redo) ; not in text
 
