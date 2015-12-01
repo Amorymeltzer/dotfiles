@@ -1830,7 +1830,6 @@ idle for SECS seconds." t)
 (global-set-key (kbd "C-c C-m") 'dictionary-match-words)
 
 
-;; Format to display in a buffer? ;;;;;;;; ###### FIXME TODO
 (defvar open-dictionary-hist)
 (defun open-dictionary (the-word)
   "Open Dictionary.app for the-word"
@@ -1841,7 +1840,6 @@ idle for SECS seconds." t)
 			   nil nil nil 'open-dictionary-hist)))
 		  (if (zerop (length w)) wap w))))
   (start-process "dict" nil "open" (concat "dict:///" the-word)))
-
 
 
 ;; JUST USE WEBJUMP!!!!
@@ -1943,7 +1941,6 @@ idle for SECS seconds." t)
 	("^/+" . "file:/")))
 
 (global-set-key (kbd "C-c C-v") 'browse-url-of-buffer)
-
 (global-set-key (kbd "C-c v") 'browse-url)
 
 (defun view-url ()
@@ -1953,7 +1950,6 @@ idle for SECS seconds." t)
 	 (url (read-from-minibuffer "URL: " default)))
     (switch-to-buffer (url-retrieve-synchronously url))
     (rename-buffer url t)
-    ;; TODO: switch to nxml/nxhtml mode
     (cond ((search-forward "<?xml" nil t) (xml-mode))
 	  ((search-forward "<html" nil t) (html-mode)))))
 
