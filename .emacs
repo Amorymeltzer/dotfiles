@@ -1720,7 +1720,7 @@ return an integer (with a 0 in the tenths place), while negative numbers will
 round to ones, tens, etc."
   (interactive "nValue: \nnPlace: ")
   (let ((multiplier (* 1.0 (expt 10 place))))
-    (message "%s asd" (/ (round (* multiplier value)) multiplier))))
+    (message "%s" (/ (round (* multiplier value)) multiplier))))
 
 
 ;; Guess keybindings game
