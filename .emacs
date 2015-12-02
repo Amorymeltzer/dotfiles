@@ -1842,6 +1842,11 @@ idle for SECS seconds." t)
   (start-process "dict" nil "open" (concat "dict:///" the-word)))
 
 
+;; writegood-mode, apparently autoload doesn't work. eval-after-load??
+;; https://github.com/bnbeckwith/writegood-mode
+(require 'writegood-mode)
+
+
 ;; JUST USE WEBJUMP!!!!
 (global-set-key (kbd "C-x g") 'webjump)
 ;; Add some missing items to the webjump catalog ;;;;; #### FIXME TODO
