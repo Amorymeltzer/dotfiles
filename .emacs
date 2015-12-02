@@ -2143,13 +2143,16 @@ This checks in turn:
 ;; https://github.com/kbkbkbkb1/guide-key
 ;; https://github.com/m2ym/popwin-el
 (require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x" "C-c" "C-q")
+;; (setq guide-key/guide-key-sequence '("C-x" "C-c" "C-q")
+(setq guide-key/guide-key-sequence t
       guide-key/idle-delay 0.5 ; quicker
       guide-key/recursive-key-sequence-flag t
       guide-key/popup-window-position 'bottom
       guide-key/recursive-key-sequence-flag t
       guide-key/popup-window-position 'bottom)
 (guide-key-mode 1)
+
+(require 'which-key)
 
 
 ;; Display what function block if I'm in in certain modes
