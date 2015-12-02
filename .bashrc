@@ -821,6 +821,26 @@ function server() {
     python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
 }
 
+# https://transfer.sh function
+# Modified slightly
+function transfer() {
+    if [ $# -eq 0 ]; then
+	echo "No arguments specified. Usage:"
+	echo "transfer /tmp/test.md"
+	echo "cat /tmp/test.md | transfer test.md"
+	return 1
+    fi
+
+    if [ `tty -s` ]; then
+	basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
+	tmp=$(curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile")
+    else
+	tmp=$(curl --progress-bar --upload-file "$1" "https://transfer.sh/$1")
+    fi
+    echo -n $tmp | pbcopy
+    echo $tmp
+}
+
 function durandal() {
     ssh Amory@Durandal.local
 }
