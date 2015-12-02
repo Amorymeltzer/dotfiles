@@ -48,7 +48,7 @@
        mode-line-position
        '((amory-lc-mode
 	  ;; (3 (:eval (format " %d" ;; Space only really important on lines >10k
-	  (2 (:eval (format " %d"
+	  (2 (:eval (format " L: %d"
 			    ;; (point-max)
 			    ;; (count-words-region (point-min) (point-max))
 			    (line-number-at-pos (point-max)))))

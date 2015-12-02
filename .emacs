@@ -2498,8 +2498,7 @@ This checks in turn:
 
 ;; wc-mode to display chars, words, lines in mode-line
 (autoload 'wc-mode "wc-mode" "Toggle word-count mode." t)
-;; Define something else that shows total lines count in the modeline,
-;; probably via count-lines-page ;;;;;;;;;; ####### FIXME TODO
+;; Show total line count in the modeline
 (autoload 'amory-lc-mode "amory-lc-mode" "Toggle line-count mode." t)
 
 
