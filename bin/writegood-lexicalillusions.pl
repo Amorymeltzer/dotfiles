@@ -21,17 +21,17 @@ while (1) {
   # Exit code = number of duplicates found.
   exit $DupCount if (!$FileName);
 
-  open FILE, $FileName or die $!;
+  open my $file, '<', "$FileName" or die $!;
 
-  my $LastWord = "";
+  my $LastWord = q{};
   my $LineNum = 0;
 
-  while (<FILE>) {
+  while (<$file>) {
     chomp;
 
     $LineNum ++;
 
-    my @words = split (/(\W+)/);
+    my @words = split /(\W+)/;
 
     foreach my $word (@words) {
 
@@ -40,12 +40,12 @@ while (1) {
 
       # Skip punctuation:
       if ($word =~ /^\W+$/) {
-	$LastWord = "";
+	$LastWord = q{};
 	next;
       }
 
       # Found a dup?
-      if (lc($word) eq lc($LastWord)) {
+      if (lc $word eq lc $LastWord) {
 	print "$FileName:$LineNum $word\n";
 	$DupCount ++;
       }				# Thanks to Sean Cronin for tip on case.
@@ -55,5 +55,5 @@ while (1) {
     }
   }
 
-  close FILE;
+  close $file or die $!;
 }
