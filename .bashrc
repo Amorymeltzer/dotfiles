@@ -202,6 +202,7 @@ alias colorslist="set | egrep '^Color_\w*' | sort"
 # Lists colors in their actual color, on one line
 alias colors="echo -e \`colorslist | sed 's/\(.*\)=\(.*\)/\2 \1/'\`"
 
+# See also 256-colors.sh and colors_and_formatting.sh
 function colordump() {
     # One column
     # for i in {0..255} ; do
