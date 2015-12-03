@@ -1735,6 +1735,7 @@ round to ones, tens, etc."
 (autoload 'typing-game "typing-game" "Typing game" t)
 
 ;; Stop unicode trolls https://github.com/camsaul/emacs-unicode-troll-stopper
+;; MELPA help FIXME TODO
 (autoload 'unicode-troll-stopper-mode "unicode-troll-stopper" "Stop unicode
 trolls" t)
 
@@ -1846,9 +1847,9 @@ idle for SECS seconds." t)
   (start-process "dict" nil "open" (concat "dict:///" the-word)))
 
 
-;; writegood-mode, apparently autoload doesn't work. eval-after-load??
-;; https://github.com/bnbeckwith/writegood-mode
-(require 'writegood-mode)
+;; writegood-mode https://github.com/bnbeckwith/writegood-mode
+(autoload 'writegood-mode "writegood-mode" "Colorize issues with the writing
+in the buffer." t)
 
 
 ;; JUST USE WEBJUMP!!!!
