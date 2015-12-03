@@ -1612,6 +1612,11 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Might remember this better
 (defalias 'reload-buffer 'revert-buffer)
+(global-set-key (kbd "C-x M-r") '(lambda ()
+				   "Revert buffer without asking"
+				   (interactive)
+				   (reload-buffer 0 1)
+				   (message "Buffer reverted")))
 
 ;; insert a time stamp string
 ;; ADD PREFIX FOR date, %R, OR ALL ;;;;;;;;;;; FIXME TODO ##########
