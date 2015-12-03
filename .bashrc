@@ -1250,6 +1250,7 @@ function sunrise()
 }
 
 # From https://gist.github.com/komasaru/9635884
+# KEDU KSMF KSAC KNYC
 function metar()
 {
     if [[ ! "$1" =~ [0-9A-Z]{4} ]]; then
@@ -1257,9 +1258,11 @@ function metar()
 	exit
     fi
 
-    URL="http://weather.noaa.gov/pub/data/observations/metar/decoded/"
+    # Convert to all caps
+    code=$(echo -n $1|tr '[a-z]' '[A-Z]')
 
-    wget -q -O - "${URL}${1}.TXT"
+    URL="http://weather.noaa.gov/pub/data/observations/metar/decoded/"
+    wget -q -O - "${URL}${code}.TXT" 2>/dev/null
 }
 
 function thisforthat {
