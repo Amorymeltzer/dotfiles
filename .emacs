@@ -1734,6 +1734,10 @@ round to ones, tens, etc."
 ;; Typing game https://github.com/lujun9972/el-typing-game
 (autoload 'typing-game "typing-game" "Typing game" t)
 
+;; Stop unicode trolls https://github.com/camsaul/emacs-unicode-troll-stopper
+(autoload 'unicode-troll-stopper-mode "unicode-troll-stopper" "Stop unicode
+trolls" t)
+
 ;; From https://github.com/purcell/emacs-xkcd
 ;; (require 'emacs-xkcd)
 ;; (require 'xkcd); or this?
