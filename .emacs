@@ -1570,8 +1570,8 @@ when in source code modes such as python-mode or perl-mode" t)
 	   (kill-buffer buffer)) ad-do-it))
 (ad-activate 'term-sentinel)
 
-;; Always use /bin/bash, don't ask
-(defvar my-term-shell "/bin/bash")
+;; Always use /opt/local/bin/bash, don't ask
+(defvar my-term-shell "/opt/local/bin/bash")
 (defadvice ansi-term (before force-bash)
   (interactive (list my-term-shell)))
 (ad-activate 'ansi-term)
