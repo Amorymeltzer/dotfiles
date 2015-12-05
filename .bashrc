@@ -1219,7 +1219,7 @@ function weather() {
     echo "Forecast for $zip";
     curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip" | perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';
 }
-# Stopgap
+# Just today
 alias today='weather | head -n 2 | tail -n 1'
 
 function sunrise()

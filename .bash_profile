@@ -64,7 +64,7 @@ if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; th
 fi
 echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $3" "$4}'
 if [[ ! `pg &>/dev/null` ]]; then
-    echo -ne "${Color_Cyan}" ; weather | head -n 2 | tail -n 1
+    echo -ne "${Color_Cyan}" ; today
 fi
 
 # Default designed to always take up same space without leading zero for day
