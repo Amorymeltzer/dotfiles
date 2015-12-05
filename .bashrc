@@ -1218,11 +1218,6 @@ function weather() {
     fi
     echo "Forecast for $zip";
     curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip" | perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';
-    echo
-    # Needs some fixing, tweaking ####### FIXME TODO #######
-    # Odd spacing, degree symbol, visual appearance
-    # Maybe use curl instead?
-    lynx -dump "http://www.weather.com/weather/print/$zip" | sed -n '/%$/s/\[.*\]//p' | sed -n 's/ \%/\%/p' | sed 's/^             //g';
 }
 # Stopgap
 alias today='weather | head -n 2 | tail -n 1'
