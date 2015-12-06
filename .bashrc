@@ -604,7 +604,7 @@ alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist L
 
 alias fuckyou='sudo $(history -p \!\!)'
 # thefuck https://github.com/nvbn/thefuck
-alias fuck='eval $(thefuck $(fc -ln -1)); history -r'
+eval "$(thefuck --alias)"
 
 # Prompt before overwrite, be vocal about it
 alias mv='mv -vi' # add -f to override, or \ before command
