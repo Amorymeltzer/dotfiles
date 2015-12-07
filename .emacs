@@ -1373,7 +1373,7 @@ when in source code modes such as python-mode or perl-mode" t)
   ;; highlight on modeline?
   (set-face-attribute 'mode-line-highlight nil :background "red")
   ;; other window, fringe lines
-  (set-face-attribute 'mode-line-inactive nil :background "blue"))
+  (set-face-attribute 'mode-line-inactive nil :background "black"))
 
 ;; Display depth indicator, kind of weird but may be useful
 (setq minibuffer-depth-indicate-mode t)
