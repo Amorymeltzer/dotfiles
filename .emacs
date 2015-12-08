@@ -2152,8 +2152,10 @@ This checks in turn:
       guide-key/popup-window-position 'bottom)
 (guide-key-mode 1)
 
-(require 'which-key)
-
+;; which-key also nice.  Sorting is better
+;; (require 'which-key)
+;; (which-key-mode)
+;; (which-key-setup-side-window-bottom)
 
 ;; Display what function block if I'm in in certain modes
 ;; (set-face-attribute 'which-func nil
