@@ -2140,18 +2140,36 @@ This checks in turn:
 
 ;; Pop-up with completions for prefixes, uses 'popwin
 ;; https://github.com/kbkbkbkb1/guide-key
-(require 'guide-key)
-(setq guide-key/guide-key-sequence t
-      guide-key/idle-delay 0.5 ; quicker
-      guide-key/recursive-key-sequence-flag t
-      guide-key/popup-window-position 'bottom)
-(guide-key-mode 1)
+;; (require 'guide-key)
+;; (setq guide-key/guide-key-sequence t
+;;       guide-key/idle-delay 0.5 ; quicker
+;;       guide-key/recursive-key-sequence-flag t
+;;       guide-key/popup-window-position 'bottom)
+;; (guide-key-mode 1)
 
 ;; which-key also nice.  Sorting is better
 ;; https://github.com/justbur/emacs-which-key
-;; (require 'which-key)
-;; (which-key-mode)
-;; (which-key-setup-side-window-bottom)
+(require 'which-key)
+(eval-after-load "which-key"
+  '(progn
+     ;; (set-face-attribute 'which-key-key-face nil :foreground "magenta")
+     (set-face-attribute 'which-key-separator-face nil :foreground "green")
+     (set-face-attribute 'which-key-note-face nil :foreground "black")
+     ;; (set-face-attribute 'which-key-special-key-face nil :foreground "red")
+     ;; color of prefx command
+     (set-face-attribute 'which-key-group-description-face nil :foreground "blue" :bold nil)
+     ;; Basic keys
+     (set-face-attribute 'which-key-command-description-face nil :inherit nil)
+     (setq which-key-sort-order 'which-key-key-order-alpha)
+     (setq which-key-side-window-max-height 0.5) ; default 0.25
+     (setq which-key-idle-delay 0.5)		 ; qdefault 1.0
+     ))
+(which-key-mode)
+(which-key-setup-side-window-bottom)
+(progn
+  (setq which-key-show-prefix 'top)
+  (setq which-key-show-remaining-keys t)
+  )
 
 ;; Display what function block if I'm in in certain modes
 ;; (set-face-attribute 'which-func nil
@@ -2624,8 +2642,8 @@ This checks in turn:
 (diminish 'volatile-highlights-mode)
 (diminish 'anzu-mode)
 (diminish 'ace-jump-mode "Ace")
-(diminish 'guide-key-mode)
-;;(diminish 'fancy-narrow-mode)
+;; (diminish 'guide-key-mode)
+;; (diminish 'fancy-narrow-mode)
 (diminish 'subword-mode)
 ;; Diminish doesn't work here??  Dumb
 (setq eldoc-minor-mode-string nil)
