@@ -2139,11 +2139,8 @@ This checks in turn:
 
 
 ;; Pop-up with completions for prefixes, uses 'popwin
-;; Would be nice to get working for M-g ;;;;;; ##### FIXME TODO
 ;; https://github.com/kbkbkbkb1/guide-key
-;; https://github.com/m2ym/popwin-el
 (require 'guide-key)
-;; (setq guide-key/guide-key-sequence '("C-x" "C-c" "C-q")
 (setq guide-key/guide-key-sequence t
       guide-key/idle-delay 0.5 ; quicker
       guide-key/recursive-key-sequence-flag t
@@ -2153,6 +2150,7 @@ This checks in turn:
 (guide-key-mode 1)
 
 ;; which-key also nice.  Sorting is better
+;; https://github.com/justbur/emacs-which-key
 ;; (require 'which-key)
 ;; (which-key-mode)
 ;; (which-key-setup-side-window-bottom)
