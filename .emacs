@@ -1419,17 +1419,16 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key (kbd "C-x C-x") 'delete-other-windows)
 
 ;; C-x u for tree, C-_ to undo, M-_ to redo, etc.
+;; Define a hook to automatically show diff/timestamps?
+;; FIXME TODO
 (require 'undo-tree)
 (global-undo-tree-mode)
 ;; Larger size limits for undo
 (setq undo-outer-limit 18000000 ;; 12000000
-      undo-limit 100000) ;; 80000
-;; Define a hook to automatically show diff/timestamps?
-;; ;;;;;;;; ########## FIXME TODO
+      undo-limit 100000)	;; 80000
 
-;; Something useful instead of uppercase region, esp. given typos.  Never use
-;; this, should maybe put something better here
-(global-set-key (kbd "C-x C-u") 'undo)
+;; Way more likely to remember
+(defalias 'uppercase-region 'upcase-region)
 
 ;; Highlight region undo, yanked, etc., is awesome
 ;; https://github.com/k-talo/volatile-highlights.el
