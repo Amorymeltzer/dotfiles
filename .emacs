@@ -2144,8 +2144,6 @@ This checks in turn:
 (setq guide-key/guide-key-sequence t
       guide-key/idle-delay 0.5 ; quicker
       guide-key/recursive-key-sequence-flag t
-      guide-key/popup-window-position 'bottom
-      guide-key/recursive-key-sequence-flag t
       guide-key/popup-window-position 'bottom)
 (guide-key-mode 1)
 
