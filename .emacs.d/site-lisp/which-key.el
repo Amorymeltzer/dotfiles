@@ -98,7 +98,15 @@ of the which-key popup."
 
 (defcustom which-key-separator
   (if which-key-dont-use-unicode " : " " → ")
-  "Separator to use between key and description."
+  "Separator to use between key and description. Default is \" →
+\", unless `which-key-dont-use-unicode' is non nil, in which case
+the default is \" : \"."
+  :group 'which-key
+  :type 'string)
+
+(defcustom which-key-prefix-prefix "+"
+  "String to insert in front of prefix commands (i.e., commands
+that represent a sub-map). Default is \"+\"."
   :group 'which-key
   :type 'string)
 
@@ -1240,7 +1248,7 @@ ORIGINAL-DESCRIPTION is the description given by
   (let* ((desc description)
          (desc (if (string-match-p "^group:" desc)
                    (substring desc 6) desc))
-         (desc (if group (concat "+" desc) desc))
+         (desc (if group (concat which-key-prefix-prefix desc) desc))
          (desc (which-key--truncate-description desc)))
     (make-text-button desc nil
       'face (cond (hl-face hl-face)
@@ -1527,7 +1535,7 @@ area."
                      (if (= n 4) str (format " %s" prefix-arg))))
                   (_ (format " %s" prefix-arg))))))))
 
-(defun which-key--full-prefix (prefix-keys &optional -prefix-arg)
+(defun which-key--full-prefix (prefix-keys &optional -prefix-arg dont-prop-keys)
   "Return a description of the full key sequence up to now,
 including prefix arguments."
   (let* ((left (eq which-key-show-prefix 'left))
@@ -1538,7 +1546,7 @@ including prefix arguments."
                prefix-keys))
          (dash (if (and which-key--current-prefix
                         (null left)) "-" "")))
-    (if (eq which-key-show-prefix 'echo)
+    (if (or (eq which-key-show-prefix 'echo) dont-prop-keys)
         (concat str dash)
       (concat (which-key--propertize-key str)
               (propertize dash 'face 'which-key-key-face)))))
@@ -1753,7 +1761,7 @@ after first page."
 prefix) if `which-key-use-C-h-commands' is non nil."
   (interactive)
   (let* ((prefix-keys (key-description which-key--current-prefix))
-         (full-prefix (which-key--full-prefix prefix-keys current-prefix-arg))
+         (full-prefix (which-key--full-prefix prefix-keys current-prefix-arg t))
          (prompt (concat (when (string-equal prefix-keys "")
                            (propertize " Top-level bindings" 'face 'which-key-note-face))
                          full-prefix

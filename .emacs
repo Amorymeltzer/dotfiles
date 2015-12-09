@@ -2162,7 +2162,8 @@ This checks in turn:
      (set-face-attribute 'which-key-command-description-face nil :inherit nil)
      (setq which-key-sort-order 'which-key-key-order-alpha)
      (setq which-key-side-window-max-height 0.5) ; default 0.25
-     (setq which-key-idle-delay 0.5)		 ; qdefault 1.0
+     (setq which-key-idle-delay 0.5)		 ; default 1.0
+     (setq which-key-prefix-prefix nil)
      ))
 (which-key-mode)
 (which-key-setup-side-window-bottom)
