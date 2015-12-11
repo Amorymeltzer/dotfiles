@@ -1854,7 +1854,9 @@ idle for SECS seconds." t)
 ;; writegood-mode https://github.com/bnbeckwith/writegood-mode
 (autoload 'writegood-mode "writegood-mode" "Colorize issues with the writing
 in the buffer." t)
-
+;; eprime-mode https://github.com/AndrewHynes/eprime-mode
+;; Don't allow forms of "to be"
+(require 'eprime-mode)
 
 ;; JUST USE WEBJUMP!!!!
 (global-set-key (kbd "C-x g") 'webjump)
