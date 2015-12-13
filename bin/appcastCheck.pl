@@ -43,6 +43,8 @@ sub getCasts
     while (<$file>) {
       chomp;
 
+      last if m/version :latest/;
+
       if (m/appcast/ && $appTick == 0) {
 	s/.*\'(.*)\',?/$1/;
 	$hash{$cask}[0] = $_;
