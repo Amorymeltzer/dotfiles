@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-# appcastCheck.pl by Amory Meltzer
+# appcastList.pl by Amory Meltzer
 # Bulk process homebrew-cask appcasts to check for outdated casks
 
 # cd /usr/local/Library/Taps/caskroom/homebrew-cask/Casks/
