@@ -321,6 +321,10 @@ See http://www.gnu.org/software/emacs/manual/html_node/emacs/Modifier-Keys.html"
   :group 'which-key
   :type 'boolean)
 
+;; Hooks
+(defvar which-key-init-buffer-hook '()
+  "Hook run when which-key buffer is initialized.")
+
 ;; Faces
 (defgroup which-key-faces nil
   "Faces for which-key-mode"
@@ -503,7 +507,8 @@ alongside the actual current key sequence when
       (setq-local cursor-type nil)
       (setq-local cursor-in-non-selected-windows nil)
       (setq-local mode-line-format nil)
-      (setq-local word-wrap nil))))
+      (setq-local word-wrap nil)
+      (run-hooks 'which-key-init-buffer-hook))))
 
 (defun which-key--setup ()
   "Initial setup for which-key.
@@ -1305,7 +1310,7 @@ alists. Returns a list (key separator description)."
   (let ((key-str-qt (regexp-quote (key-description which-key--current-prefix)))
         (buffer (current-buffer))
         (ignore-bindings '("self-insert-command" "ignore" "ignore-event" "company-ignore"))
-        (ignore-keys-regexp "mouse-\\|wheel-\\|remap\\|drag-\\|scroll-bar\\|select-window\\|switch-frame")
+        (ignore-keys-regexp "mouse-\\|wheel-\\|remap\\|drag-\\|scroll-bar\\|select-window\\|switch-frame\\|-state")
         (ignore-sections-regexp "\\(Key translations\\|Function key map translations\\|Input decoding map translations\\)"))
     (with-temp-buffer
       (let ((indent-tabs-mode t))
