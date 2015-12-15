@@ -23,7 +23,7 @@ while (<$casks>) {
 }
 close $casks or die $!;
 
-open my $out, '>', 'updateme.list' or die $!;
+open my $out, '>>', 'updateme.list' or die $!;
 while (@array) {
   my $cask = shift @array;
   system "brew cask cat $cask && brew cask home $cask";
