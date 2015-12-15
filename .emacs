@@ -1248,6 +1248,8 @@ when in source code modes such as python-mode or perl-mode" t)
   (find-file (expand-file-name "~/.bashrc")))
 
 (defalias 'bash-mode 'sh-mode)
+(add-to-list 'auto-mode-alist
+	     '("\\.completion" . bash-mode))
 
 ;; Default mode
 (setq-default major-mode 'text-mode)
