@@ -66,7 +66,6 @@ then
     echo "Homebrew-cask already up to date."
     exit 0
 fi
-echo -e "\n"
 echo "Updated Homebrew-Cask."
 git diff-tree --name-status -r --diff-filter=AMDR -M10% $OLDREV $NEWREV Casks/ > /tmp/git-difftree-log.txt
 
