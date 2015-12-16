@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # External command to show what casks have been changed in homebrew-cask
-# By @alebcay https://github.com/caskroom/homebrew-cask/issues/5839
+# By @alebcay https://github.com/caskroom/homebrew-cask/issues/5839#issuecomment-66958632
+# Modified by @Amorymeltzer
 
 checkNew() {
     while read line; do
@@ -62,37 +63,34 @@ brew update
 NEWREV=$(git rev-parse -q --short --verify HEAD)
 if [ "$OLDREV" = "$NEWREV" ]
 then
-    echo "Already up to date ($NEWREV)."
+    echo "Homebrew-cask already up to date."
     exit 0
 fi
 echo -e "\n"
-echo "Updated Homebrew-Cask from $OLDREV to $NEWREV."
+echo "Updated Homebrew-Cask."
 git diff-tree --name-status -r --diff-filter=AMDR -M10% $OLDREV $NEWREV Casks/ > /tmp/git-difftree-log.txt
 
 NEWRESULT=$(checkNew)
 if [[ -n $NEWRESULT ]]; then
-    echo "New Casks:"
+    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}New Casks:${Color_zOff}"
     printf "%-40s %-40s\n" $(echo $NEWRESULT)
-    # echo -e "\n"
 fi
 
 DELRESULT=$(checkDeleted)
 if [[ -n $DELRESULT ]]; then
-    echo "Deleted Casks:"
+    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Deleted Casks:${Color_zOff}"
     printf "%-40s %-40s\n" $(echo $DELRESULT)
-    # echo -e "\n"
 fi
 
 MODRESULT=$(checkModified)
 if [[ -n $MODRESULT ]]; then
-    echo "Updated Casks:"
+    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Updated Casks:${Color_zOff}"
     printf "%-40s %-40s\n" $(echo $MODRESULT)
-    # echo -e "\n"
 fi
 
 RNMRESULT=$(checkRenamed)
 if [[ -n $RNMRESULT ]]; then
-    echo "Renamed Casks:"
+    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Renamed Casks:${Color_zOff}"
     echo $RNMRESULT | perl -pe 's/\s*\|\s*/\n/g'
 fi
 rm /tmp/git-difftree-log.txt
