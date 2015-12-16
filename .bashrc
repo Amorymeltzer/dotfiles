@@ -102,7 +102,8 @@ alias gld='git ld5'
 # 5; = blinking
 # 7; = highlighted
 
-export Color_zOff="\033[0m"      # No color, stupid stupid hax for sorting
+export Color_zOff="\033[0m"	  # No color, stupid stupid hax for sorting
+export Color_zBold="\033[1m"	  # Bold text
 export Color_zInvisible="\033[8m" # Invisible text
 
 # Regular Colors
