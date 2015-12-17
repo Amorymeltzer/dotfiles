@@ -8,7 +8,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $1 [-bmMpPgrRcCekhH]
+Usage: $1 [-bmMpPgrRcCEKhH]
 
   -b		skip updating macports base, but 'port sync' to update tree
   -m		check for macports updates but don't upgrade
@@ -20,8 +20,8 @@ Usage: $1 [-bmMpPgrRcCekhH]
   -R		skip all ruby actions
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
-  -e		skip all homebrew updates
-  -k		skip all homebrew-cask updates
+  -E		skip all homebrew updates
+  -K		skip all homebrew-cask updates
   -h -H		this help
 END_HELP
 }
@@ -35,7 +35,7 @@ gem_flag='0'
 homebrew_flag='0'
 brewcask_flag='0'
 # Parse commandline options
-while getopts 'bcCegkmMpPrRhH' opt; do
+while getopts 'bcCEgKmMpPrRhH' opt; do
     case $opt in
 	b) base_flag='1';;
 	m) macports_flag='1';;
@@ -47,8 +47,8 @@ while getopts 'bcCegkmMpPrRhH' opt; do
 	R) ruby_flag='2';;
 	c) cpan_flag='1';;
 	C) cpan_flag='2';;
-	e) homebrew_flag='1';;
-	k) brewcask_flag='1';;
+	E) homebrew_flag='1';;
+	K) brewcask_flag='1';;
 	h|H) help $0
 	     exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
