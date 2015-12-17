@@ -66,30 +66,30 @@ then
     echo "Homebrew-cask already up to date."
     exit 0
 fi
-echo "Updated Homebrew-Cask."
+echo "Updated Homebrew-Cask from $OLDREV to $NEWREV."
 git diff-tree --name-status -r --diff-filter=AMDR -M10% $OLDREV $NEWREV Casks/ > /tmp/git-difftree-log.txt
 
 NEWRESULT=$(checkNew)
 if [[ -n $NEWRESULT ]]; then
-    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}New Casks:${Color_zOff}"
+    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}New Casks${Color_zOff}"
     printf "%-40s %-40s\n" $(echo $NEWRESULT)
 fi
 
 DELRESULT=$(checkDeleted)
 if [[ -n $DELRESULT ]]; then
-    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Deleted Casks:${Color_zOff}"
+    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Deleted Casks${Color_zOff}"
     printf "%-40s %-40s\n" $(echo $DELRESULT)
 fi
 
 MODRESULT=$(checkModified)
 if [[ -n $MODRESULT ]]; then
-    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Updated Casks:${Color_zOff}"
+    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Updated Casks${Color_zOff}"
     printf "%-40s %-40s\n" $(echo $MODRESULT)
 fi
 
 RNMRESULT=$(checkRenamed)
 if [[ -n $RNMRESULT ]]; then
-    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Renamed Casks:${Color_zOff}"
+    echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Renamed Casks${Color_zOff}"
     echo $RNMRESULT | perl -pe 's/\s*\|\s*/\n/g'
 fi
 rm /tmp/git-difftree-log.txt
