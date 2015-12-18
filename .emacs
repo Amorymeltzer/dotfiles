@@ -1740,6 +1740,10 @@ round to ones, tens, etc."
 ;; Typing game https://github.com/lujun9972/el-typing-game
 (autoload 'typing-game "typing-game" "Typing game" t)
 
+;; emacs-fireplace by @johanvts.  Because emacs
+;; https://github.com/johanvts/emacs-fireplace
+(require 'fireplace)
+
 ;; Stop unicode trolls https://github.com/camsaul/emacs-unicode-troll-stopper
 ;; MELPA help FIXME TODO
 (autoload 'unicode-troll-stopper-mode "unicode-troll-stopper" "Stop unicode
