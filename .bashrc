@@ -1219,8 +1219,13 @@ function weather() {
     else
 	zip=$1;
     fi
-    echo "Forecast for $zip";
-    curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip" | perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';
+    forecast=$(curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip" | perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';)
+    if [ $forecast ]; then
+	echo "Forecast for $zip";
+	echo $forecast
+    else
+	echo "Unable to forecast weather"
+    fi
 }
 # Just today
 alias today='weather | head -n 2 | tail -n 1'

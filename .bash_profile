@@ -63,9 +63,7 @@ if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; th
     echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_Off}" # only short ones
 fi
 echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $3" "$4}'
-if [[ ! `pg &>/dev/null` ]]; then
-    echo -ne "${Color_Cyan}" ; today
-fi
+echo -ne "${Color_Cyan}" ; today
 
 # Default designed to always take up same space without leading zero for day
 # Meaning dates before the 10th get two spaces, that bugs me
