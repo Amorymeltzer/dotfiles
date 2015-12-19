@@ -4,57 +4,57 @@
 # Modified by @Amorymeltzer
 
 readonly program="$(basename "$0")"
-remote_pull='origin' # use 'upstream' as default remote to pull from
-remote_push='Amorymeltzer' # use 'origin' as default remote to push to
+remote_pull='upstream' # use 'upstream' as default remote to pull from
+remote_push='origin' # use 'origin' as default remote to push to
 
 syntax_error() {
-    echo "$program: $1" >&2
-    echo "Try \`$program --help\` for more information." >&2
-    exit 1
+  echo "$program: $1" >&2
+  echo "Try \`$program --help\` for more information." >&2
+  exit 1
 }
 
 usage() {
-    echo "
+  echo "
     usage: $program [options] <cask_name>
 
     options:
-      -l <remote>, --pull <remote>   Use to specify a remote to pull from (defaults to 'origin').
-      -p <remote>, --push <remote>   Use to specify a remote to push to (defaults to 'Amorymeltzer').
+      -l <remote>, --pull <remote>   Use to specify a remote to pull from (defaults to 'upstream').
+      -p <remote>, --push <remote>   Use to specify a remote to push to (defaults to 'origin').
       -h, --help                     Show this help.
   " | sed -E 's/^ {4}//'
 }
 
 # available flags
 while [[ "$1" ]]; do
-    case "$1" in
-	-h | --help)
-	    usage
-	    exit 0
-	    ;;
-	-l | --pull)
-	    remote_pull="$2"
-	    shift
-	    ;;
-	-p | --push)
-	    remote_push="$2"
-	    shift
-	    ;;
-	-*)
-	    syntax_error "unrecognized option: $1"
-	    ;;
-	*)
-	    break
-	    ;;
-    esac
-    shift
+  case "$1" in
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    -l | --pull)
+      remote_pull="$2"
+      shift
+      ;;
+    -p | --push)
+      remote_push="$2"
+      shift
+      ;;
+    -*)
+      syntax_error "unrecognized option: $1"
+      ;;
+    *)
+      break
+      ;;
+  esac
+  shift
 done
 
 # define function to modify stanzas
 modify_stanza() {
-    stanza_to_modify="$1"
-    new_stanza_value="$2"
+  stanza_to_modify="$1"
+  new_stanza_value="$2"
 
-    perl -0777 -i -e'
+  perl -0777 -i -e'
     $stanza_to_modify = shift(@ARGV);
     $new_stanza_value = shift(@ARGV);
     print <> =~ s|\A.*^\s*\Q$stanza_to_modify\E\s\K[^\n]*|$new_stanza_value|smr;
@@ -63,41 +63,41 @@ modify_stanza() {
 
 # define function to check and modify sha256
 sha_change() {
-    # set sha256 as :no_check tempoparily, to prevent mismatch errors when fetching
-    modify_stanza 'sha256' ':no_check'
+  # set sha256 as :no_check tempoparily, to prevent mismatch errors when fetching
+  modify_stanza 'sha256' ':no_check'
 
-    # change appcast sha if appropriate
-    if [[ "${cask_appcast_url}" ]]; then
-	cask_appcast_sha=$(curl "${cask_appcast_url}"|shasum -a 256|sed 's| .*$||')
-	# abort if the appcast returns empty
-	if [[ "${cask_appcast_sha}" == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' ]]; then
-	    finish abort "Appcast url invalid or empty ${cask_appcast_url}"
-	fi
-	modify_stanza ':sha256 =>' "'${cask_appcast_sha}'"
-    fi
+  rm -rf "$(brew --cache)" # clean homebrew's cache in advance
+  brew cask fetch "${cask_file}"
+  downloaded_file=$(find "$(brew --cache)" -type f)
+  cask_sha=$(shasum --algorithm 256 "${downloaded_file}" | awk '{ print $1 }')
 
-    rm -rf "$(brew --cache)" # clean homebrew's cache in advance
-    brew cask fetch "${cask_file}"
-    downloaded_file=$(find "$(brew --cache)" -type f)
-    cask_sha=$(shasum -a 256 "${downloaded_file}" | awk '{ print $1 }')
+  modify_stanza 'sha256' "'${cask_sha}'"
+}
 
-    modify_stanza 'sha256' "'${cask_sha}'"
+# define function to check and modify appcast's sha256
+appcast_sha_change() {
+  cask_appcast_sha=$(curl --silent "${cask_appcast_url}" | shasum --algorithm 256 | awk '{ print $1 }')
+
+  # abort if the appcast returns empty
+  [[ "${cask_appcast_sha}" == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' ]] && finish abort "Appcast url invalid or empty '${cask_appcast_url}'"
+
+  modify_stanza ':sha256 =>' "'${cask_appcast_sha}'"
 }
 
 # define abort function, that will reset the state
 finish() {
-    git reset HEAD --hard
-    git checkout master
-    git branch -D "${cask_branch}"
+  git reset HEAD --hard
+  git checkout master
+  git branch -D "${cask_branch}"
 
-    # show message
-    if [[ "$1" == 'abort' ]]; then
-	echo -e "\n$(tput setaf 1)$2$(tput sgr0)\n"
-	exit 1
-    elif [[ "$1" == 'success' ]]; then
-	echo -e "\n$(tput setaf 2)Submitted$(tput sgr0)\n"
-	exit 0
-    fi
+  # show message
+  if [[ "$1" == 'abort' ]]; then
+    echo -e "\n$(tput setaf 1)$2$(tput sgr0)\n"
+    exit 1
+  elif [[ "$1" == 'success' ]]; then
+    echo -e "\n$(tput setaf 2)Submitted$(tput sgr0)\n"
+    exit 0
+  fi
 }
 
 # cleanup if aborted with ⌃C
@@ -105,24 +105,24 @@ trap 'finish abort "You aborted"' SIGINT
 
 # define divider function
 divide() {
-    if [[ $(which hr) ]]; then
-	hr -
-    else
-	echo '--------------------'
-    fi
+  if [[ $(which hr) ]]; then
+    hr -
+  else
+    echo '--------------------'
+  fi
 }
 
 # exit if not inside a 'homebrew-*/Casks' directory
 casks_dir=$(pwd | perl -ne 'print m{homebrew-[^/]+/Casks}')
 if [[ -z "${casks_dir}" ]]; then
-    echo -e "\n$(tput setaf 1)You need to be inside a '/homebrew-*/Casks' directory$(tput sgr0)\n"
-    exit 1
+  echo -e "\n$(tput setaf 1)You need to be inside a '/homebrew-*/Casks' directory$(tput sgr0)\n"
+  exit 1
 fi
 
 # exit if no argument was given
 if [[ -z "$1" ]]; then
-    usage
-    exit 1
+  usage
+  exit 1
 fi
 
 # clean the cask's name, and check if it is valid
@@ -141,83 +141,83 @@ git checkout -b "${cask_branch}"
 cask_old_url=$(grep "url ['\"].*['\"]" "${cask_file}" | sed -E "s|.*url ['\"](.*)['\"].*|\1|")
 [[ "${cask_old_url}" =~ \#{version.*} ]] && cask_url_up_to_date='true'
 # get cask appcast url
-cask_appcast_url=$(grep "appcast ['\"].*['\"]" "${cask_file}" | sed -E "s|.*appcast ['\"](.*)['\"],?|\1|")
+cask_appcast_url=$(grep "appcast '.*'" "${cask_file}" | sed -E "s|.*appcast '(.*)'|\1|")
 
 # show cask's current state
 divide
-brew cask home "${cask_file}"
+brew cask chome "${cask_file}"
 if [[ "${cask_appcast_url}" ]]; then
     open "${cask_appcast_url}"
 fi
-cat "${cask_file}"
 divide
 
 # if url is always up to date, use it; else ask for it to be in the clipboard
 if [[ "${cask_url_up_to_date}" ]]; then
-    read -p 'Type the new version (or leave blank to abort)
+  read -p 'Type the new version (or leave blank to abort)
 > ' cask_version
 else
-    read -p 'Save the new download URL to your clipboard, and type the new version (or leave blank to abort)
+  read -p 'Save the new download URL to your clipboard, and type the new version (or leave blank to abort)
 > ' cask_version
-    cask_url="$(pbpaste)"
+  cask_url="$(pbpaste)"
 
-    # check if the URL sends a 200 HTTP code, else abort
-    browser_headers="-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'"
-    cask_status=$(curl -sIL "${browser_headers}" "${cask_url}" | grep '^HTTP' | tail -1 | perl -pe 's|.* (\d{3}) .*|\1|')
+  # check if the URL sends a 200 HTTP code, else abort
+  browser_headers="--header 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'"
+  cask_status=$(curl --silent --head --location "${browser_headers}" "${cask_url}" | grep '^HTTP' | tail -1 | perl -pe 's|.* (\d{3}) .*|\1|')
 
-    # if the download URL is from github or bitbucket, fake the status code
-    [[ "${cask_url}" =~ (github.com|bitbucket.org) ]] && cask_status='200'
+  # if the download URL is from github or bitbucket, fake the status code
+  [[ "${cask_url}" =~ (github.com|bitbucket.org) ]] && cask_status='200'
 
-    if [[ "${cask_status}" != '200' ]]; then
-	if [[ -z "${cask_status}" ]]; then
-	    finish abort 'You need to have a valid URL in your clipboard'
-	else
-	    finish abort "Download URL returned ${cask_status}"
-	fi
+  if [[ "${cask_status}" != '200' ]]; then
+    if [[ -z "${cask_status}" ]]; then
+      finish abort 'You need to have a valid URL in your clipboard'
+    else
+      finish abort "Download URL returned ${cask_status}"
     fi
+  fi
 
-    # modify url
-    modify_stanza 'url' "'${cask_url}'"
+  # modify url
+  modify_stanza 'url' "'${cask_url}'"
 fi
 
 # check if a version was given
 [[ -z "${cask_version}" ]] && finish abort 'You decided to abort'
 
 # change version and sha256, and calculate new sha256 if not using :latest version
-if [[ "${cask_version}" =~ ^:?latest$ ]]; then
-    modify_stanza 'version' ':latest'
-    modify_stanza 'sha256' ':no_check'
+if [[ "${cask_version}" =~ ^:latest$ ]]; then
+  modify_stanza 'version' ':latest'
+  modify_stanza 'sha256' ':no_check'
 else
-    modify_stanza 'version' "'${cask_version}'"
-    sha_change
+  modify_stanza 'version' "'${cask_version}'"
+  sha_change
+  [[ -n "${cask_appcast_url}" ]] && appcast_sha_change
 fi
 
 # check if everything is alright, else abort
 cask_updated='false'
 until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
-    # audit cask
-    brew cask audit "${cask_file}"
+  # audit cask
+  brew cask audit "${cask_file}"
 
-    git diff
+  git diff
 
-    read -n1 -p 'Is everything correct? You can also make further manual edits (y/n/e) ' cask_updated
+  read -n1 -p 'Is everything correct? You can also make further manual edits (y/n/e) ' cask_updated
 
-    if [[ "${cask_updated}" == 'y' ]]; then
-	break
-    elif [[ "${cask_updated}" == 'e' ]]; then
-	emacs "${cask_file}"
-	[[ "$(brew cask _stanza version ${cask_file})" != ':latest' ]] && sha_change # recheck sha256 if version isn't :latest
-	cask_updated='false'
-    elif [[ "${cask_updated}" == 'n' ]]; then
-	finish abort 'You decided to abort'
-    fi
+  if [[ "${cask_updated}" == 'y' ]]; then
+    break
+  elif [[ "${cask_updated}" == 'e' ]]; then
+    emacs "${cask_file}"
+    [[ "$(brew cask _stanza version ${cask_file})" != ':latest' ]] && sha_change # recheck sha256 if version isn't :latest
+    cask_updated='false'
+  elif [[ "${cask_updated}" == 'n' ]]; then
+    finish abort 'You decided to abort'
+  fi
 done
 
 # grab version as it ended up in the cask
 cask_version="$(brew cask _stanza version ${cask_file})"
 
 # commit, push, clean
-git commit "${cask_file}" -m "updated ${cask_name} (${cask_version})"
+git commit "${cask_file}" --message "updated ${cask_name} (${cask_version})"
 git push "${remote_push}" "${cask_branch}"
 
 # cleanup

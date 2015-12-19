@@ -782,6 +782,9 @@ alias cinfo='brew cask info'
 alias clist='brew cask list'
 alias cdoctor='brew cask doctor'
 
+# origin & Amorymeltzer instead of upstream & origin
+alias cask-repair='cask-repair -l origin -p Amorymeltzer '
+
 # Quickly open and make a new perl file executable and with headers
 function newperl() {
     if [ -a $1 ]; then
