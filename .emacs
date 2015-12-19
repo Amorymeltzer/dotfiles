@@ -2146,6 +2146,9 @@ This checks in turn:
 (define-key 'help-command "a" 'apropos)
 
 
+;; Don't have ruby-mode auto-insert coding utf-8 info on files
+(setq ruby-insert-encoding-magic-comment nil)
+
 ;; Pop-up with completions for prefixes, uses 'popwin
 ;; https://github.com/kbkbkbkb1/guide-key
 ;; (require 'guide-key)
