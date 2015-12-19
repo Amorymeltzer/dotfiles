@@ -453,6 +453,9 @@ fi
 # networksetup completion
 complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
 
+# Completion weird, but give some of it to 3.4?  ;;;;;; ##### FIXME TODO
+complete -F _python python3.4
+
 # z, the awesome helper for moving around to popular directories
 . ~/.z.sh
 
@@ -804,9 +807,6 @@ function newbash() {
     fi
 }
 alias nbash='newbash'
-
-# Completion weird, but give some of it to 3.4?  ;;;;;; ##### FIXME TODO
-complete -F _python python3.4
 
 # Recompile all elisp files, with proper warnings/output
 function recompile_emacs() {
@@ -1235,18 +1235,15 @@ alias today='weather | head -n 2 | tail -n 1'
 
 function sunrise()
 {
+    # Uses WOEID, which is some ol' bullshit
     if [ ! $1 -o $1 = "Davis" ]; then
-	# Uses WOEID, which is some ol' bullshit
-	# Davis
-	loc=2389646;
+	loc=2389646;		# Davis
 	echo Davis
     elif [ $1 = "NYC" ]; then
-	# NYC
-	loc=2459115;
+	loc=2459115;		# NYC
 	echo NYC
     elif [ $1 = "Stow" ]; then
-	# Stow, MA
-	loc=2500649;
+	loc=2500649;		# Stow, MA
 	echo Stow
     else
 	echo "sunrise <NYC|Stow|Davis>"
@@ -1263,7 +1260,6 @@ function metar()
 	echo "Please enter an appropriate METAR code"
 	return
     fi
-
     # Convert to all caps
     code=$(echo -n $1|tr '[a-z]' '[A-Z]')
 
@@ -1441,7 +1437,7 @@ function fs() {
 }
 alias filesize='fs'
 
-# Pipe to then give command to invoked on every line from stdin
+# Pipe to map, then give command to invoke on every line from stdin
 # from @nvie https://coderwall.com/p/4tkkpq
 # ls **/*.sh | map dirname
 alias map="xargs -n1"
@@ -1467,12 +1463,8 @@ function wiki() {
     dig +short txt $1.wp.dg.cx | perl -pe's/\\(\d{1,3})/chr $1/eg'
 }
 
-# All images
-function yotsuba() {
-    curl $1 | grep -i "File<a href" | awk -F '<a href="' '{print $4}' | awk -F '" ' '{print $1}' | xargs wget
-}
 
-#### Scripts by @exogen
+######## Scripts by @exogen
 # aac/m4a? FIXME TODO
 function mp3 {
     # Get the best audio, convert it to MP3, and save it to the current
@@ -1498,7 +1490,7 @@ function listen {
                --format="bestaudio[ext!=webm]" \
                --exec=afplay "$*"
 }
-####
+########
 
 # Generate family tree without polutting current directory
 function family()
@@ -1727,6 +1719,7 @@ ______________________
 ###### holiday greeting
 # from Jonathan's .bashrc file (by ~71KR117)
 # http://dotshare.it/dots/516/
+# Rarely log in or out, so maybe incorporate into prompt? FIXME TODO
 # get current day (Month-Day Format)
 day=$(date +"%B%e")
 # get current year (for new years greeting)
