@@ -8,7 +8,7 @@ _cask() {
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     acts="audit cat cleanup create doctor edit fetch home info install list search uninstall update zap"
-    acts=$acts" doutdated github new repository"
+    acts=$acts" chome doutdated github new repository"
 
     COMPREPLY=( $(compgen -W "${acts}" -- ${cur})
 	      )
@@ -21,7 +21,7 @@ _cask() {
 	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
 	    return 0
 	    ;;
-	audit|cat|edit|fetch|home|info|install|zap)
+	audit|cat|chome|edit|fetch|home|info|install|zap)
 	    COMPREPLY=$(brew cask search | grep -v "Kernel.exit")
 	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
 	    return 0
