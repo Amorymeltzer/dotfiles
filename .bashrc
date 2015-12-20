@@ -1222,9 +1222,9 @@ function weather() {
 	zip=$1;
     fi
     forecast=$(curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip" | perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';)
-    if [ $forecast ]; then
+    if [[ -n "${forecast}" ]]; then
 	echo "Forecast for $zip";
-	echo $forecast
+	echo "$forecast"
     else
 	echo "Unable to forecast weather"
     fi
