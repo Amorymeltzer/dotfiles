@@ -479,12 +479,11 @@ function explain_perlcritic() {
 # ;;;;;; ##### FIXME TODO
 _explain_perlcritic()
 {
-    local cur
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local list="$(\ls /opt/local/share/perl5.20/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
+    local clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')"
 
-    COMPREPLY=( $(compgen -W "$(\ls -1 /opt/local/share/perl5.20/siteman/man3/Perl\:\:Critic\:\:Policy\:\:* | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')" -- $cur) )
-    return 0
+    COMPREPLY=($(compgen -W "$clean" -- "$cur"))
 }
 complete -F _explain_perlcritic explain_perlcritic
 # shorthand for perlfunc
