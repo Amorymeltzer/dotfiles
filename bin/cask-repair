@@ -228,7 +228,7 @@ done
 cask_version="$(brew cask _stanza version ${cask_file})"
 
 # commit, push, submit pull request, clean
-readonly commit_message="updated ${cask_name} (${cask_version})"
+readonly commit_message="updated ${cask_name} to v${cask_version}"
 
 git commit "${cask_file}" --message "${commit_message}"
 git push "${remote_push}" "${cask_branch}"
