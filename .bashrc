@@ -853,9 +853,6 @@ function durandal() {
 function leela() {
     ssh Amory@Leela.local
 }
-function amory() {
-    ssh iggatucdavis@amorymeltzer.org
-}
 function twinmos() {
     diskutil umount /Volumes/TWINMOS
 }
