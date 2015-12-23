@@ -815,8 +815,6 @@ alias ii=recompile_emacs
 
 alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 
-alias get="http --download"
-
 # Start an HTTP server from a directory, optionally specifying the port
 function server() {
     local port="${1:-8000}"
