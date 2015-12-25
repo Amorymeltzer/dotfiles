@@ -1711,48 +1711,39 @@ ______________________
 
 
 ###### holiday greeting
+###### Turn into function, append to prompt? FIXME TODO
 # from Jonathan's .bashrc file (by ~71KR117)
 # http://dotshare.it/dots/516/
-# Rarely log in or out, so maybe incorporate into prompt? FIXME TODO
 # get current day (Month-Day Format)
 day=$(date +"%B%e")
 # get current year (for new years greeting)
 year=$(date +"%Y")
 # make sure the holiday greeting is displayed (if any)
 hol=1
-# if it is New Year's Day
 if [ "$day" = "January 1" ]
 then
     holgreet="${Color_Magenta_Intense}Happy ${Color_Red_Intense}New ${Color_Blue_Intense}Year!${Color_zOff} Have a good $year."
-    # if it is Groundhog Day
 elif [ "$day" = "February 2" ]
 then
     holgreet="Happy Groundhog Day"
-    # if it is Valentine's Day
 elif [ "$day" = "February 14" ]
 then
     holgreet="Happy ${Color_Magenta}Valentine's Day${Color_zOff}"
-    # if it is Independance Day
 elif [ "$day" = "July 4" ]
 then
     holgreet="Happy ${Color_Red_Intense}Fourth ${Color_White_Intense}of ${Color_Blue_Intense}July${Color_zOff}"
-    # if it is my birthday
 elif [ "$day" = "August 12" ]
 then
     holgreet="Happy Birthday!"
-    # it is Halloween
 elif [ "$day" = "October 31" ]
 then
     holgreet="${Color_Red_Bold}Happy Halloween.${Color_zOff}"
-    # if it is Christmas Eve
 elif [ "$day" = "December 24" ]
 then
     holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve${Color_zOff}"
-    # if it is Christmas
 elif [ "$day" = "December 25" ]
 then
     holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas${Color_zOff}!"
-    # if it is New Year's Eve
 elif [ "$day" = "December 31" ]
 then
     holgreet="Happy New Year's Eve!"
