@@ -1715,7 +1715,7 @@ ______________________
 # from Jonathan's .bashrc file (by ~71KR117)
 # http://dotshare.it/dots/516/
 # get current day (Month-Day Format)
-day=$(date +"%B%e")
+day=$(date +"%B %e")
 # get current year (for new years greeting)
 year=$(date +"%Y")
 # make sure the holiday greeting is displayed (if any)
