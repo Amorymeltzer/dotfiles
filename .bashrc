@@ -53,9 +53,13 @@ alias lda='lad'
 alias treed='tree -aC -I ".git" --dirsfirst "$@" | less -FRNX'
 alias tree='tree -Csuh'
 
-# Git stuff
+### Git stuff
 # Alias hub as git for github https://github.com/github/hub
-if [[ -f `command -v hub` ]] ; then alias git='hub' ; fi
+if [[ -f `command -v hub` ]] ; then
+    alias git='hub'
+    complete -F _git hub
+fi
+# Quick
 function g {
     ref=$(git symbolic-ref HEAD 2> /dev/null)
     if [[ $ref ]]; then
@@ -74,6 +78,8 @@ function g {
 	echo "Not a git repository"
     fi
 }
+complete -F _git g
+
 alias gb='git b '
 alias gcb='git copy-branch-name'
 alias gco='git co '
@@ -437,10 +443,6 @@ for file in ~/.completions.d/*; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
-
-# Git aliases
-complete -F _git hub
-complete -F _git g
 
 # whois, etc. auto-completion based on entries in known_hosts.
 # [[ -e "$HOME/.ssh/config" ]] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
