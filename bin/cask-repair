@@ -145,6 +145,7 @@ cask_branch="update-${cask_name}"
 # initial tasks
 git checkout master
 git pull --rebase "${remote_pull}" master
+git push "${remote_push}" master
 git checkout -b "${cask_branch}"
 
 # check if cask's url is always up to date
@@ -231,5 +232,5 @@ readonly commit_message="updated ${cask_name} to v${cask_version}"
 
 git commit "${cask_file}" --message "${commit_message}"
 git push "${remote_push}" "${cask_branch}"
-hub pull-request -b "${submit_pr_to}" -m "${commit_message}"
+hub pull-request -b "${submit_pr_to}" -h "${remote_push}":"${cask_branch}" -m "${commit_message}"
 finish success
