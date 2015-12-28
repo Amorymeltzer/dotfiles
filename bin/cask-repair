@@ -155,7 +155,7 @@ cask_appcast_url=$(grep "appcast '.*'" "${cask_file}" | sed -E "s|.*appcast '(.*
 
 # show cask's current state
 divide
-brew cask chome "${cask_file}"
+brew cask chome "${cask_name}"
 if [[ "${cask_appcast_url}" ]]; then
     open "${cask_appcast_url}"
 fi
