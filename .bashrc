@@ -1528,7 +1528,7 @@ function extract {
 	    *.tar.gz)tar xzf $1;;
 	    *.tar.Z)tar xzf $1;;
 	    *.bz2)bunzip2 $1;;
-	    *.rar)rar x $1;;
+	    *.rar)unrar x $1;;
 	    *.gz) gunzip $1;;
 	    *.jar)unzip $1;;
 	    *.tar)tar xf $1;;
