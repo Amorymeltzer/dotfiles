@@ -2429,6 +2429,11 @@ This checks in turn:
 ;; https://github.com/browse-kill-ring/browse-kill-ring
 (autoload 'browse-kill-ring "browse-kill-ring" "Browse kill ring" t)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
+(eval-after-load 'browse-kill-ring
+  '(progn
+     (define-key browse-kill-ring-mode-map (kbd "C-g") 'browse-kill-ring-quit)
+     (define-key browse-kill-ring-mode-map (kbd "M-n") 'browse-kill-ring-forward)
+     (define-key browse-kill-ring-mode-map (kbd "M-p") 'browse-kill-ring-previous)))
 (autoload 'kill-ring-ido "kill-ring-ido" "Kill-ring browsing with ido" t)
 (global-set-key (kbd "M-y") 'kill-ring-ido)
 
