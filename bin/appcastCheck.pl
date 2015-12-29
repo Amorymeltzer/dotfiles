@@ -6,27 +6,37 @@ use strict;
 use warnings;
 use diagnostics;
 
-if (@ARGV != 1) {
-  print "Usage: $0 list_of_casks\n";
+if (@ARGV != 2) {
+  print "Usage: $0 list_of_casks list_to_skip\n";
   exit;
 }
 
-# List of caks
-my @array;
+# Skip casks that I've checked.  Should be cleaned out now n then
+my %hash;
+open my $skips, '<', "$ARGV[1]" or die $!;
+while (<$skips>) {
+  chomp;
+  s/\.rb$//g;
+  $hash{$_} = $_;
+}
+close $skips or die $!;
 
-# Build array
+# Build list of casks
+my @array;
 open my $casks, '<', "$ARGV[0]" or die $!;
 while (<$casks>) {
   chomp;
   s/\.rb$//g;
+  next if $hash{$_};		# Skip if skip
   @array = (@array,$_);
 }
 close $casks or die $!;
 
 open my $out, '>>', 'updateme.list' or die $!;
+open my $skip, '>>', 'skipme.list' or die $!;
 while (@array) {
   my $cask = shift @array;
-  system "brew cask cat $cask && brew cask home $cask";
+  system "brew cask chome $cask";
 
   print "\n[K]eep, [S]kip, or [Q]uit?";
   my $action = <STDIN>;
@@ -43,7 +53,10 @@ while (@array) {
     close $check or die $!;
     exit;
   } elsif ($action =~ m/s/i) {
+    print $skip "$cask\n";
+    next;
     next;
   }
 }
 close $out or die $!;
+close $skip or die $!;
