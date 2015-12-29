@@ -36,6 +36,7 @@ open my $out, '>>', 'updateme.list' or die $!;
 open my $skip, '>>', 'skipme.list' or die $!;
 while (@array) {
   my $cask = shift @array;
+  system "clear";
   system "brew cask chome $cask";
 
   print "\n[K]eep, [S]kip, or [Q]uit?";

@@ -3,14 +3,18 @@
 # Bulk process homebrew-cask appcasts to check for outdated casks
 
 # cd /usr/local/Library/Taps/caskroom/homebrew-cask/Casks/
-# grep -i "appcast" *.rb|cut -f 1 -d ':'
+# grep -i "appcast" *.rb|cut -f 1 -d ':' > list.list
+# appcastlist.pl list.list 2>/dev/null > check.list
 
 use strict;
 use warnings;
 use diagnostics;
 
 if (@ARGV != 1) {
-  print "Usage: $0 list_of_casks\n";
+  print "Usage: $0 list_of_casks\n\n";
+  print "cd /usr/local/Library/Taps/caskroom/homebrew-cask/Casks/\n";
+  print "grep -i \"appcast\" *.rb|cut -f 1 -d ':'\n";
+  print "appcastlist.pl list.list 2>/dev/null > check.list\n";
   exit;
 }
 
@@ -21,7 +25,7 @@ my %hash;
 open my $casks, '<', "$ARGV[0]" or die $!;
 while (<$casks>) {
   chomp;
-  getCasts($_);
+  getCasks($_);
 }
 close $casks or die $!;
 
@@ -35,7 +39,7 @@ foreach my $key (sort keys %hash) {
 }
 
 
-sub getCasts
+sub getCasks
   {
     my $cask = shift;
     my $appTick = 0;
@@ -46,7 +50,7 @@ sub getCasts
       last if m/version :latest/;
 
       if (m/appcast/ && $appTick == 0) {
-	s/.*\'(.*)\',?/$1/;
+	s/.*\'(.*)\',/$1/;
 	$hash{$cask}[0] = $_;
 	$appTick = 1;
 	next;
