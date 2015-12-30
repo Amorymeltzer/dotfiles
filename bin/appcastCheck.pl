@@ -7,7 +7,8 @@ use warnings;
 use diagnostics;
 
 if (@ARGV != 2) {
-  print "Usage: $0 list_of_casks list_to_skip\n";
+  print "Usage: $0 updateme.list skipme.list\n";
+  print "Must be run in same directory as all 3 files\n";
   exit;
 }
 
@@ -52,7 +53,7 @@ while (@array) {
       print $check "$tmp\n";
     }
     close $check or die $!;
-    exit;
+    last;
   } elsif ($action =~ m/s/i) {
     print $skip "$cask\n";
     next;
@@ -61,3 +62,6 @@ while (@array) {
 }
 close $out or die $!;
 close $skip or die $!;
+
+# Replace old list with new one
+system "mv -f newcheck.list checkme.list"
