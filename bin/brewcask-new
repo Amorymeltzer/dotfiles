@@ -60,6 +60,7 @@ checkRenamed() {
 cd $(brew --prefix)/Library/Taps/caskroom/homebrew-cask
 OLDREV=$(git rev-parse -q --short --verify HEAD)
 brew update
+echo
 NEWREV=$(git rev-parse -q --short --verify HEAD)
 if [ "$OLDREV" = "$NEWREV" ]
 then
