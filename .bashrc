@@ -262,7 +262,7 @@ export LESS_TERMCAP_us=$'\033[4;35m' # begin underline
 alias more='less '
 
 # Open the manual page for the last command you executed.
-function lman {
+function lastman {
     set -- $(fc -nl -1);
     while [ $# -gt 0 -a '(' "sudo" = "$1" -o "-" = "${1:0:1}" ')' ]; do
 	shift;
@@ -270,7 +270,7 @@ function lman {
     cmd="$(basename "$1")";
     man "$cmd" || help "$cmd";
 }
-alias lastman='lman '
+alias lman='lastman '
 
 # Misc -------------------------------------------------------------
 # bash readline settings
