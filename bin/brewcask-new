@@ -73,19 +73,19 @@ git diff-tree --name-status -r --diff-filter=AMDR -M10% $OLDREV $NEWREV Casks/ >
 NEWRESULT=$(checkNew)
 if [[ -n $NEWRESULT ]]; then
     echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}New Casks${Color_zOff}"
-    printf "%-40s %-40s\n" $(echo $NEWRESULT)
+    printf "%-30s %-30s %-30s %-30s %-30s %-30s\n" $(echo $NEWRESULT)
 fi
 
 DELRESULT=$(checkDeleted)
 if [[ -n $DELRESULT ]]; then
     echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Deleted Casks${Color_zOff}"
-    printf "%-40s %-40s\n" $(echo $DELRESULT)
+    printf "%-30s %-30s %-30s %-30s %-30s %-30s\n" $(echo $DELRESULT)
 fi
 
 MODRESULT=$(checkModified)
 if [[ -n $MODRESULT ]]; then
     echo -e "${Color_Blue_Bold}==> ${Color_zOff}${Color_zBold}Updated Casks${Color_zOff}"
-    printf "%-40s %-40s\n" $(echo $MODRESULT)
+    printf "%-30s %-30s %-30s %-30s %-30s %-30s\n" $(echo $MODRESULT)
 fi
 
 RNMRESULT=$(checkRenamed)
