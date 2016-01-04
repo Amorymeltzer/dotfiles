@@ -78,20 +78,29 @@ sha_change() {
   modify_stanza 'sha256' ':no_check'
 
   brew cask fetch --force "${cask_file}"
-  downloaded_file=$(brew cask fetch "${cask_file}" | tail -1 | sed 's/==> Success! Downloaded to -> //')
-  cask_sha=$(shasum --algorithm 256 "${downloaded_file}" | awk '{ print $1 }')
+  local downloaded_file=$(brew cask fetch "${cask_file}" 2>/dev/null | tail -1 | sed 's/==> Success! Downloaded to -> //')
+  local package_sha=$(shasum --algorithm 256 "${downloaded_file}" | awk '{ print $1 }')
 
-  modify_stanza 'sha256' "'${cask_sha}'"
+  modify_stanza 'sha256' "'${package_sha}'"
 }
 
 # define function to check and modify appcast's sha256
 appcast_sha_change() {
-  cask_appcast_sha=$(curl --silent "${cask_appcast_url}" | shasum --algorithm 256 | awk '{ print $1 }')
+  local cask_appcast_sha=$(curl --silent "${cask_appcast_url}" | shasum --algorithm 256 | awk '{ print $1 }')
 
-  # abort if the appcast returns empty
-  [[ "${cask_appcast_sha}" == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' ]] && finish abort "Appcast url invalid or empty '${cask_appcast_url}'"
+  # set appcast's sha256 to empty, if its url returns an empty string
+  [[ "${cask_appcast_sha}" == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' ]] && cask_appcast_sha=''
 
   modify_stanza ':sha256 =>' "'${cask_appcast_sha}'"
+}
+
+# define function to update only the appropriate shas, give the conditions
+update_cask_shas() {
+  local cask_sha=$(brew cask _stanza sha256 "${cask_file}")
+  cask_appcast_url=$(brew cask _stanza appcast "${cask_file}")
+
+  [[ "${cask_sha}" != ':no_check' ]] && sha_change
+  [[ -n "${cask_appcast_url}" ]] && appcast_sha_change
 }
 
 # define abort function, that will reset the state
@@ -151,10 +160,6 @@ git checkout -b "${cask_branch}"
 # check if cask's url is always up to date
 cask_old_url=$(grep "url ['\"].*['\"]" "${cask_file}" | sed -E "s|.*url ['\"](.*)['\"].*|\1|")
 [[ "${cask_old_url}" =~ \#{version.*} ]] && cask_url_up_to_date='true'
-# check if cask's sha256 is using :no_check
-[[ $(brew cask _stanza sha256 "${cask_file}") == ':no_check' ]] && cask_sha_no_check='true'
-# get cask's appcast url
-cask_appcast_url=$(grep "appcast '.*'" "${cask_file}" | sed -E "s|.*appcast '(.*)',|\1|")
 
 # show cask's current state
 divide
@@ -174,8 +179,8 @@ else
   cask_url="$(pbpaste)"
 
   # check if the URL sends a 200 HTTP code, else abort
-  browser_headers='User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
-  cask_status=$(curl --silent --head --location --header "${browser_headers}" "${cask_url}" | grep '^HTTP' | tail -1 | perl -pe 's|.* (\d{3}) .*|\1|')
+  local browser_headers='User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
+  local cask_status=$(curl --silent --head --location --header "${browser_headers}" "${cask_url}" | grep '^HTTP' | tail -1 | perl -pe 's|.* (\d{3}) .*|\1|')
 
   # if the download URL is from github or bitbucket, fake the status code
   [[ "${cask_url}" =~ (github.com|bitbucket.org) ]] && cask_status='200'
@@ -201,8 +206,7 @@ if [[ "${cask_version}" =~ ^:latest$ ]]; then
   modify_stanza 'sha256' ':no_check'
 else
   modify_stanza 'version' "'${cask_version}'"
-  [[ -z "${cask_sha_no_check}" ]] && sha_change
-  [[ -n "${cask_appcast_url}" ]] && appcast_sha_change
+  update_cask_shas
 fi
 
 # check if everything is alright, else abort
@@ -220,7 +224,7 @@ until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
     break
   elif [[ "${cask_updated}" == 'e' ]]; then
     emacs "${cask_file}"
-    [[ "$(brew cask _stanza version ${cask_file})" != ':latest' ]] && sha_change # recheck sha256 if version isn't :latest
+    [[ "$(brew cask _stanza version ${cask_file})" != ':latest' ]] && update_cask_shas # recheck sha256 values if version isn't :latest
     cask_updated='false'
   elif [[ "${cask_updated}" == 'n' ]]; then
     finish abort 'You decided to abort'
