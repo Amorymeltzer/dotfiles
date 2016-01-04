@@ -208,7 +208,7 @@ cask_updated='false'
 until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
   # audit cask
   brew cask audit --download "${cask_file}"
-  rubocop -DES "${cask_file}"	# Error message is quite annoying
+  rubocop --auto-correct "${cask_file}"	# Error message is quite annoying
 
   git diff
 
