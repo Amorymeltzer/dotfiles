@@ -207,6 +207,10 @@ fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen 
 timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --format=%ai ${2:-HEAD}); ddiff -f ${3:-%mm-%dd-%Hh-%Mm} \"$one\" \"$two\"; }; f"
 
 
+[rebase]
+# --autostash: Automatically stash before rebase; allows for dirty rebases
+autoStash = true
+
 [help]
 # If there's only suggestion from a typo, automatically call it
 autocorrect = 1
