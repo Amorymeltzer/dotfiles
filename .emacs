@@ -2180,8 +2180,7 @@ This checks in turn:
 (which-key-setup-side-window-bottom)
 (progn
   (setq which-key-show-prefix 'top)
-  (setq which-key-show-remaining-keys t)
-  )
+  (setq which-key-show-remaining-keys nil))
 
 ;; Display what function block if I'm in in certain modes
 ;; (set-face-attribute 'which-func nil
