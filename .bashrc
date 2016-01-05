@@ -1250,6 +1250,7 @@ function sunrise()
     fi
     curl -s http://weather.yahooapis.com/forecastrss?w=$loc | grep astronomy | awk -F\" '{print $2 "\n" $4;}'
 }
+alias sunset='sunrise'
 
 # From https://gist.github.com/komasaru/9635884
 # KEDU KSMF KSAC KNYC
