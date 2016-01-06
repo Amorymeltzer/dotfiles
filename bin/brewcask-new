@@ -2,6 +2,9 @@
 # External command to show what casks have been changed in homebrew-cask
 # By @alebcay https://github.com/caskroom/homebrew-cask/issues/5839#issuecomment-66958632
 # Modified by @Amorymeltzer
+# Should really rubify this or something
+## More convenient columnization
+## Colors show up via sudo, deescalation
 
 checkNew() {
     while read line; do
