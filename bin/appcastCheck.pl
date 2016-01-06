@@ -7,36 +7,41 @@ use warnings;
 use diagnostics;
 
 if (@ARGV != 2) {
-  print "Usage: $0 updateme.list skipme.list\n";
-  print "Must be run in same directory as all 3 files\n";
+  print "Usage: $0 checkme.list skipme.list\n";
+  print "Run in ~ directory (with all relevant files)\n";
   exit;
 }
 
 # Skip casks that I've checked.  Should be cleaned out now n then
-my %hash;
+my %skipList;
 open my $skips, '<', "$ARGV[1]" or die $!;
 while (<$skips>) {
   chomp;
-  s/\.rb$//g;
-  $hash{$_} = $_;
+  my @tmp = split /,/;
+  $tmp[0] =~ s/\.rb$//g;
+  $skipList{$tmp[0]} = $tmp[1];
 }
 close $skips or die $!;
 
 # Build list of casks
-my @array;
+my %caskList;
 open my $casks, '<', "$ARGV[0]" or die $!;
 while (<$casks>) {
   chomp;
-  s/\.rb$//g;
-  next if $hash{$_};		# Skip if skip
-  @array = (@array,$_);
+  my @tmp = split /,/;
+  $tmp[0] =~ s/\.rb$//g;
+  # Skip if in skip list and hash hasn't changed
+  if ($skipList{$tmp[0]}) {
+    next if $tmp[1] eq $skipList{$tmp[0]};
+  }
+  $caskList{$tmp[0]} = $tmp[1];
 }
 close $casks or die $!;
 
 open my $out, '>>', 'updateme.list' or die $!;
 open my $skip, '>>', 'skipme.list' or die $!;
-while (@array) {
-  my $cask = shift @array;
+foreach my $cask (sort keys %caskList) {
+  delete $caskList{$cask};
   system "clear";
   system "brew cask chome $cask";
 
@@ -49,8 +54,8 @@ while (@array) {
   } elsif ($action =~ m/q/i) {
     open my $check, '>', 'newcheck.list' or die $!;
     print $check "$cask\n";
-    foreach my $tmp (@array) {
-      print $check "$tmp\n";
+    foreach my $key (sort keys %caskList) {
+      print $check "$key\n";
     }
     close $check or die $!;
     last;

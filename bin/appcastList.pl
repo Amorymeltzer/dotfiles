@@ -2,10 +2,6 @@
 # appcastList.pl by Amory Meltzer
 # Bulk process homebrew-cask appcasts to check for outdated casks
 
-# cd /usr/local/Library/Taps/caskroom/homebrew-cask/Casks/
-# grep -i "appcast" *.rb|cut -f 1 -d ':' > list.list
-# appcastlist.pl list.list 2>/dev/null > check.list
-
 use strict;
 use warnings;
 use diagnostics;
@@ -13,8 +9,8 @@ use diagnostics;
 if (@ARGV != 1) {
   print "Usage: $0 list_of_casks\n\n";
   print "cd /usr/local/Library/Taps/caskroom/homebrew-cask/Casks/\n";
-  print "grep -i \"appcast\" *.rb|cut -f 1 -d ':'\n";
-  print "appcastlist.pl list.list 2>/dev/null > check.list\n";
+  print "grep -i \"appcast\" *.rb|cut -f 1 -d ':' > ~/list.list\n";
+  print "appcastlist.pl ~/list.list 2>/dev/null > ~/checkme.list\n";
   exit;
 }
 
@@ -34,7 +30,7 @@ foreach my $key (sort keys %hash) {
   $new =~ s/\s+-\s$//;
 
   if ($new ne $hash{$key}[1]) {
-    print "$key\n";
+    print "$key,$new\n";
   }
 }
 
