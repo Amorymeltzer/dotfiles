@@ -1,10 +1,10 @@
 # Path ------------------------------------------------------------
-# MacPorts on OS X, add ~/bin
-export PATH="/opt/local/bin:/opt/local/sbin:$HOME/bin:/usr/local/bin:$PATH"
 # Add python execs, not sure if this is the best but so be it
 export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
 # Add perl execs; again, not sure if this is best
 export PATH="/opt/local/libexec/perl5.22/sitebin:$PATH"
+# add ~/bin, MacPorts, then Homebrew (duplicates /usr/local/bin) FIXME TODO
+export PATH="$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:$PATH"
 #export PATH=~/bin/msdir:$PATH  # add ms to command line
 #export PATH=~/Documents/perl/sandbox:$PATH # add some perl
 
