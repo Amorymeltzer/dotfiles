@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+## Converts a service name to port number(s) or a port number to service name
+## Usage: srv2port PORT|SERVICE
+##   PORT     a port number like 25
+##   SERVICE  a service name, be it complete or not (may return a list of ports)
+## srv2port v0.7 (c) 2005+ by Adam Katz <scriptsATkhopisCOM>, GPL
+
+if [ $# != 1 ] || [ "x$1" != "x${1#-}" ]; then
+  sed -e "/^## /!d" -e s/// "`which $0 2>/dev/null || echo $0`" # --help
+  exit 1
+fi
+
+(
+  s='[ 	]' # space or tab
+  ns='[^ 	]' # not a space or tab
+  if [ "$1" -ge 0 ] >/dev/null 2>&1
+    then sed -e "/$s$1\/[tu][cd]p$s/!d" -e "s/$s.*$//" /etc/services # port2srv
+    else # srv2port
+      ( sed -e "/^$ns*$1/!d" /etc/services 2>/dev/null
+        sed -e "/$s.*$1/!d"  /etc/services 2>/dev/null
+      ) |sed -e "s/#.*//" -e "s/^$ns*$s*//" -e "s/\/..*//" |sort |uniq
+  fi
+) |GREP_OPTIONS='' grep .  # this makes an empty result return false
