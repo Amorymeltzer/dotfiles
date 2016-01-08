@@ -611,6 +611,8 @@ alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist L
 
 alias fuckyou='sudo $(history -p \!\!)'
 # thefuck https://github.com/nvbn/thefuck
+# Currently broken, should be fixed on next update
+# See https://github.com/nvbn/thefuck/pull/411
 eval "$(thefuck --alias)"
 
 # Prompt before overwrite, be vocal about it
