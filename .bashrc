@@ -211,14 +211,16 @@ alias colors="echo -e \`colorslist | sed 's/\(.*\)=\(.*\)/\2 \1/'\`"
 
 # See also 256-colors.sh and colors_and_formatting.sh
 function colordump() {
-    # One column
-    # for i in {0..255} ; do
-    #	printf "\x1b[38;5;${i}mcolour${i}\n"
-    # done
+    # Default to 6 columns
+    local cols
+    if [[ -z "$1" || "$1" -eq 0 ]]; then
+	cols=6
+    else
+	cols=$1
+    fi
 
-    # Six columns
     for i in {0..255} ; do
-	declare -i a="$i % 6";
+	declare -i a="$i % $cols";
 	if [ $a == '0' ]; then
 	    printf "\x1b[38;5;${i}mcolour${i}\n";
 	else
