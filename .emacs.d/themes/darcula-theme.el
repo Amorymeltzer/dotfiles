@@ -147,6 +147,7 @@
  '(git-gutter:modified ((t (:foreground "#9876aa"))))
  '(git-gutter:added ((t (:foreground "#629755"))))
  '(git-gutter:deleted ((t (:foreground "#cc7832"))))
+ '(ido-subdir ((t (:inherit 'font-lock-string-face))))
  '(isearch ((t (:weight normal :slant normal :underline nil :inverse-video t :foreground "#bd3612" :background "#042028"))))
  '(isearch-fail ((t (:weight normal :slant normal :underline nil :inverse-video t :foreground "#bd3612" :background "#042028"))))
  '(lazy-highlight ((t (:weight normal :slant normal :underline nil :inverse-video t :foreground "#a57705" :background "#042028"))))
