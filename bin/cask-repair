@@ -7,13 +7,14 @@ readonly program="$(basename "$0")"
 readonly submit_pr_to='caskroom:master'
 remote_pull='upstream' # use 'upstream' as default remote to pull from
 remote_push='origin' # use 'origin' as default remote to push to
+open_home='true' # by default, open the cask's homepage
 
 # check if 'hub' is installed and configured
-if [[ ! $(which 'hub') ]]; then
+if [[ ! $(which 'hub') ]] || [[ ! $(grep 'oauth_token:' "${HOME}/.config/hub" 2>/dev/null) ]]; then
   echo -e "$(tput setaf 1)
-    This script requires 'hub'.
+    This script requires 'hub' installed and configured.
     If you have [Homebrew](http://brew.sh), you can install it with 'brew install hub'.
-    If it isn’t yet, it will ask to be configured at the appropriate step.
+    To configure it, run 'cd $(brew --repository) && hub issue'. Your Github password will be required, but is never stored.
   $(tput sgr0)" | sed -E 's/ {4}//' >&2
   exit 1
 fi
@@ -31,6 +32,9 @@ usage() {
     options:
       -l <remote>, --pull <remote>   Use to specify a remote to pull from (defaults to 'upstream').
       -p <remote>, --push <remote>   Use to specify a remote to push to (defaults to 'origin').
+      -n, --no-home                  Do not open the homepage for the given cask.
+      -v, --cask-version             Give a version directly, instead of being prompted for it.
+      -u, --cask-url                 Give a URL directly, instead of being prompted for it.
       -h, --help                     Show this help.
   " | sed -E 's/^ {4}//'
 }
@@ -50,6 +54,17 @@ while [[ "$1" ]]; do
       remote_push="$2"
       shift
       ;;
+    -n | --no-home)
+      open_home='false'
+      ;;
+    -a | --app-version)
+      given_cask_version="$2"
+      shift
+      ;;
+    -u | --app-url)
+      given_cask_url="$2"
+      shift
+      ;;
     -*)
       syntax_error "unrecognized option: $1"
       ;;
@@ -63,10 +78,20 @@ done
 # define function to get HTTP status codes of URLs
 http_status() {
   local url="$1"
-  [[ "$2" == 'follow_redirects' ]] && local follow_redirects='--location'
+  [[ "$2" == 'follow_redirects' ]] && local follow_redirects='--location' || local follow_redirects='--no-location'
   local browser_headers='User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
 
-  curl --silent --head "${follow_redirects}" --header "${browser_headers}" "${url}" | grep '^HTTP' | tail -1 | perl -pe 's|.* (\d{3}) .*|\1|'
+  curl --silent --head "${follow_redirects}" --header "${browser_headers}" --write-out '%{http_code}' "${url}" -o '/dev/null'
+}
+
+# define function to check if a given string contains ruby-style interpolation
+has_interpolation() {
+  [[ "$1" =~ \#{version.*} ]] && echo 'true' || echo 'false'
+}
+
+# define function to check if cask is using :latest version
+is_version_latest() {
+  [[ "$(brew cask _stanza version ${cask_file})" == 'latest' ]] && echo 'true' || echo 'false'
 }
 
 # define function to modify stanzas
@@ -122,16 +147,16 @@ update_cask_shas() {
 
 # define abort function, that will reset the state
 finish() {
-  git reset HEAD --hard
-  git checkout master
-  git branch -D "${cask_branch}"
+  git reset HEAD --hard --quiet
+  git checkout master --quiet
+  git branch -D "${cask_branch}" --quiet
 
   # show message
   if [[ "$1" == 'abort' ]]; then
     echo -e "\n$(tput setaf 1)$2$(tput sgr0)\n"
     exit 1
   elif [[ "$1" == 'success' ]]; then
-    echo -e "\n$(tput setaf 2)Submitted$(tput sgr0)\n"
+    echo -e "\n\n$(tput setaf 2)Submitted ($2)$(tput sgr0)\n"
     exit 0
   fi
 }
@@ -169,61 +194,59 @@ cask_branch="update-${cask_name}"
 [[ ! -f "${cask_file}" ]] && finish abort 'There is no such cask'
 
 # initial tasks
-git checkout master
-git pull --rebase "${remote_pull}" master
-git push "${remote_push}" master
-git checkout -b "${cask_branch}"
+git checkout master --quiet
+git pull --rebase "${remote_pull}" master --quiet
+git push "${remote_push}" master --quiet
+git checkout -b "${cask_branch}" --quiet
 
 # show cask's current state
 divide
-brew cask chome "${cask_name}"
-if [[ "${cask_appcast_url}" ]]; then
-    open "${cask_appcast_url}"
-fi
+[[ "${open_home}" == 'true' ]] && brew cask chome "${cask_file}"
 divide
 
-# check if cask's url is always up to date
-cask_old_url=$(grep "url ['\"].*['\"]" "${cask_file}" | sed -E "s|.*url ['\"](.*)['\"].*|\1|")
-[[ "${cask_old_url}" =~ \#{version.*} ]] && cask_url_up_to_date='true'
+# set cask version
+if [[ -z "${given_cask_version}" ]]; then
+  read -p $'Type the new version (or leave blank to abort)\n> ' given_cask_version # ask for cask version, if not given previously
 
-# if url is always up to date, use it; else ask for it to be in the clipboard
-if [[ "${cask_url_up_to_date}" ]]; then
-  read -p 'Type the new version (or leave blank to abort)
-> ' given_cask_version
-else
-  read -p 'Save the new download URL to your clipboard, and type the new version (or leave blank to abort)
-> ' given_cask_version
-  cask_url="$(pbpaste)"
-
-  # abort if no version was given
-  [[ -z "${given_cask_version}" ]] && finish abort 'You decided to abort'
-
-  # check if the URL sends a 200 HTTP code, else abort
-  cask_status=$(http_status "${cask_url}" 'follow_redirects')
-
-  # if the download URL is from github or bitbucket, fake the status code
-  [[ "${cask_url}" =~ (github.com|bitbucket.org) ]] && cask_status='200'
-
-  if [[ "${cask_status}" != '200' ]]; then
-    if [[ -z "${cask_status}" ]]; then
-      finish abort 'You need to have a valid URL in your clipboard'
-    else
-      finish abort "Download URL returned ${cask_status}"
-    fi
-  fi
-
-  # modify url
-  modify_stanza 'url' "'${cask_url}'"
+  [[ -z "${given_cask_version}" ]] && finish abort 'You decided to abort' # abort if no version was given
 fi
 
-# change version and sha256, and calculate new sha256 values as appropriate if not using :latest version
-if [[ "${given_cask_version}" =~ ^:latest$ ]]; then
+if [[ "${given_cask_version}" == ':latest' ]] || [[ "${given_cask_version}" == 'latest' ]]; then # allow both ':latest' and 'latest' to be given
   modify_stanza 'version' ':latest'
-  modify_stanza 'sha256' ':no_check'
 else
   modify_stanza 'version' "'${given_cask_version}'"
-  update_cask_shas
 fi
+
+# check if cask's url uses interpolation
+cask_bare_url=$(grep "url ['\"].*['\"]" "${cask_file}" | sed -E "s|.*url ['\"](.*)['\"].*|\1|")
+[[ $(has_interpolation "${cask_bare_url}") == 'true' ]] && cask_url_uses_interpolation='true' || cask_url_uses_interpolation='false'
+
+# if url does not use interpolation, ask for it
+if [[ "${cask_url_uses_interpolation}" == 'false' ]]; then
+  if [[ -z "${given_cask_url}" ]]; then
+    read -p $'Paste the new URL (or leave blank to abort)\n> ' given_cask_url
+
+    [[ -z "${given_cask_url}" ]] && finish abort 'You decided to abort' # abort if no url was given
+  fi
+
+  [[ $(has_interpolation "${given_cask_url}") == 'true' ]] && modify_stanza 'url' "\"${given_cask_url}\"" || modify_stanza 'url' "'${given_cask_url}'" # use appropriate quotes depending on if a url with interpolation was given
+  cask_url=$(brew cask _stanza url "${cask_file}")
+
+  # check if the URL sends a 200 HTTP code, else abort
+  cask_url_status=$(http_status "${cask_url}" 'follow_redirects')
+
+  [[ "${cask_url}" =~ (github.com|bitbucket.org) ]] && cask_url_status='200' # if the download URL is from github or bitbucket, fake the status code
+
+  if [[ "${cask_url_status}" != '200' ]]; then
+    if [[ -z "${cask_url_status}" ]]; then
+      finish abort 'You need to paste a valid URL'
+    else
+      finish abort "Download URL returned ${cask_url_status}"
+    fi
+  fi
+fi
+
+[[ "$(is_version_latest)" == 'false' ]] && update_cask_shas || modify_stanza 'sha256' ':no_check' # calculate new sha256 values
 
 # check if everything is alright, else abort
 cask_updated='false'
@@ -233,6 +256,7 @@ until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
   bundle exec rubocop --auto-correct "${cask_file}"
 
   git diff
+  divide
 
   read -n1 -p 'Is everything correct? You can also make further manual edits (y/n/e) ' cask_updated
 
@@ -240,7 +264,7 @@ until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
     break
   elif [[ "${cask_updated}" == 'e' ]]; then
     emacs "${cask_file}"
-    [[ "$(brew cask _stanza version ${cask_file})" != ':latest' ]] && update_cask_shas # recheck sha256 values if version isn't :latest
+    [[ "$(is_version_latest)" == 'false' ]] && update_cask_shas # recheck sha256 values if version isn't :latest
     cask_updated='false'
   elif [[ "${cask_updated}" == 'n' ]]; then
     finish abort 'You decided to abort'
@@ -248,12 +272,11 @@ until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
 done
 
 # grab version as it ended up in the cask
-final_cask_version="$(brew cask _stanza version ${cask_file})"
+cask_version="$(brew cask _stanza version ${cask_file})"
 
 # commit, push, submit pull request, clean
 readonly commit_message="updated ${cask_name} to v${final_cask_version}"
 
-git commit "${cask_file}" --message "${commit_message}"
-git push "${remote_push}" "${cask_branch}"
-hub pull-request -b "${submit_pr_to}" -h "${remote_push}":"${cask_branch}" -m "${commit_message}"
-finish success
+git commit "${cask_file}" --message "${commit_message}" --quiet
+git push "${remote_push}" "${cask_branch}" --quiet
+pr_link=$(hub pull-request -b "${submit_pr_to}" -h "${remote_push}":"${cask_branch}" -m "${commit_message}")
