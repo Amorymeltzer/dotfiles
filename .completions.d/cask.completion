@@ -141,14 +141,28 @@ _brew_cask_update ()
 }
 
 
-# Personal stuff
-# Should really just grab everything in $PATH that's brewcask-*
+##### Personal stuff
+# Should really just grab everything in $PATH that's brewcask-* FIXME TODO
 _brew_cask__github ()
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
 
     COMPREPLY=($(compgen -W "d i pr" -- "$cur"))
 }
+
+# Developer-y stuff but why not?  Should figure out how to complete all casks
+# after each of these FIXME TODO
+_brew_cask___stanza ()
+{
+    __brew_caskcomp "version sha256 url name homepage license uninstall
+     zap appcast depends_on conflicts_with caveats preflight postflight
+     uninstall_preflight uninstall_postflight accessibility_access gpg
+     auto_updates app pkg binary colorpicker font input_method internet_plugin
+     prefpane qlplugin screen_saver service audio_unit_plugin vst_plugin suite
+     artifact installer stage_only"
+}
+
+#####
 
 _brew_cask ()
 {
@@ -179,7 +193,7 @@ _brew_cask ()
             --qlplugindir --fontdir --servicedir --binarydir --input_methoddir
             --internet_plugindir --audio_unit_plugindir --vst_plugindir
             --screen_saverdir --no-binaries --debug --verbose --outdated
-            chome clean doutdated github new repository"
+            _stanza chome clean doutdated github new repository"
         return
     fi
 
@@ -197,6 +211,7 @@ _brew_cask ()
 	zap)                       __brew_cask_complete_casks ;;
 	chome)                     __brew_cask_complete_casks ;;
 	github)                     _brew_cask__github ;;
+	_stanza)                    _brew_cask___stanza ;;
 	*)                          ;;
     esac
 }
