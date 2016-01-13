@@ -1,35 +1,199 @@
-# Simple completion for brew cask
+# Amory's bash completion script for brew-cask
+# Modified heavily from brew_bash_completion
 
-_cask() {
-    local cur prev acts
+__brew_caskcomp_words_include ()
+{
+    local i=1
+    while [[ $i -lt $COMP_CWORD ]]; do
+        if [[ "${COMP_WORDS[i]}" = "$1" ]]; then
+            return 0
+        fi
+        i=$((++i))
+    done
+    return 1
+}
 
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
+# Find the previous non-switch word
+__brew_caskcomp_prev ()
+{
+    local idx=$((COMP_CWORD - 1))
+    local prv="${COMP_WORDS[idx]}"
+    while [[ $prv == -* ]]; do
+        idx=$((--idx))
+        prv="${COMP_WORDS[idx]}"
+    done
+    echo "$prv"
+}
 
-    acts="audit cat cleanup create doctor edit fetch home info install list search uninstall update zap"
-    acts=$acts" chome doutdated github new repository"
+__brew_caskcomp ()
+{
+    # break $1 on space, tab, and newline characters,
+    # and turn it into a newline separated list of words
+    local list s sep=$'\n' IFS=$' '$'\t'$'\n'
+    local cur="${COMP_WORDS[COMP_CWORD]}"
 
-    COMPREPLY=( $(compgen -W "${acts}" -- ${cur})
-	      )
-    if [[ ${cur} == -* ]] ; then
-	COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-    fi
-    case $prev in
-	list|uninstall)
-	    COMPREPLY=$(brew cask list | grep -v "Kernel.exit")
-	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
-	    return 0
-	    ;;
-	audit|cat|chome|edit|fetch|home|info|install|zap)
-	    COMPREPLY=$(brew cask search | grep -v "Kernel.exit")
-	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
-	    return 0
-	    ;;
-	github)
-	    COMPREPLY=('d i pr')
-	    COMPREPLY=( $(compgen -W "$COMPREPLY" -- ${cur}) )
+    for s in $1; do
+        __brew_caskcomp_words_include "$s" && continue
+        list="$list$s$sep"
+    done
+
+    IFS=$sep
+    COMPREPLY=($(compgen -W "$list" -- "$cur"))
+}
+
+# Don't use __brew_caskcomp() in any of the __brew_cask_complete_foo functions, as
+# it is too slow and is not worth it just for duplicate elimination.
+__brew_cask_complete_casks ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local lib=$(brew --repository)/Library
+    local taps=${lib}/Taps
+    local casks=${tap}/caskroom/homebrew-cask/Casks
+    local ff=$(\ls ${casks} 2>/dev/null | sed 's/\.rb//g')
+
+    COMPREPLY=($(compgen -W "$ff" -- "$cur"))
+}
+
+__brew_cask_complete_installed ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local inst=$(brew cask list -1)
+    COMPREPLY=($(compgen -W "$inst" -- "$cur"))
+}
+
+_brew_cask_cleanup ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    case "$cur" in
+	-*)
+            __brew_caskcomp "--force"
+            return
+            ;;
+    esac
+    __brew_cask_complete_installed
+}
+
+_brew_cask_fetch ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local prv=$(__brew_caskcomp_prev)
+    case "$cur" in
+	-*)
+            __brew_caskcomp "--force"
+            return
+            ;;
+    esac
+    __brew_cask_complete_casks
+}
+
+_brew_cask_install ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local prv=$(__brew_caskcomp_prev)
+
+    case "$cur" in
+	-*)
+	    __brew_caskcomp "
+                --force
+                --debug
+                --verbose
+                "
+            ;;
+    esac
+    __brew_cask_complete_casks
+}
+
+_brew_cask_list ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+
+    case "$cur" in
+	-*)
+            __brew_caskcomp "-1 -l --versions"
+            return
+            ;;
+    esac
+
+    __brew_cask_complete_installed
+}
+
+_brew_cask_uninstall ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    case "$cur" in
+	-*)
+            __brew_caskcomp "--force"
+            return
+            ;;
+    esac
+    __brew_cask_complete_installed
+}
+
+_brew_cask_update ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    case "$cur" in
+	-*)
+            __brew_caskcomp "--rebase --verbose"
+            return
+            ;;
     esac
 }
 
-complete -F _cask cask
+_brew_cask ()
+{
+    local i=1 cmd
+
+    # find the subcommand
+    while [[ $i -lt $COMP_CWORD ]]; do
+        local s="${COMP_WORDS[i]}"
+        case "$s" in
+            --*)
+		cmd="$s"
+		break
+		;;
+            -*)
+		;;
+            *)
+		cmd="$s"
+		break
+		;;
+        esac
+        i=$((++i))
+    done
+
+    if [[ $i -eq $COMP_CWORD ]]; then
+        __brew_caskcomp "audit cat cleanup create doctor edit fetch help home
+            info install list search uninstall update zap ls homepage -S up
+            rm remove abv dr --force --caskroom --appdir
+            --colorpickerdir --prefpanedir --qlplugindir --fontdir
+            --servicedir --binarydir --input_methoddir --internet_plugindir
+            --audio_unit_plugindir --vst_plugindir --screen_saverdir
+            --no-binaries --debug --verbose --outdated
+            "
+        return
+    fi
+
+    # subcommands have their own completion functions
+    case "$cmd" in
+	audit|cat|edit)            __brew_cask_complete_casks ;;
+	home|homepage)             __brew_cask_complete_casks ;;
+	cleanup)                    _brew_cask_cleanup ;;
+	fetch)                      _brew_cask_fetch ;;
+	info|abv)                  __brew_cask_complete_casks ;;
+	install|instal)             _brew_cask_install ;;
+	list|ls)                    _brew_cask_list ;;
+	uninstall|remove|rm)        _brew_cask_uninstall ;;
+	update|up)                  _brew_cask_update ;;
+	zap)                       __brew_cask_complete_casks ;;
+	*)                          ;;
+    esac
+}
+
+# keep around for compatibility
+_brew_cask_to_completion ()
+{
+    _brew_cask
+}
+
+complete -o bashdefault -o default -F _brew_cask cask
