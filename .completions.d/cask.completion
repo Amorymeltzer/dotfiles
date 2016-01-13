@@ -174,12 +174,11 @@ _brew_cask ()
 
     if [[ $i -eq $COMP_CWORD ]]; then
         __brew_caskcomp "audit cat cleanup create doctor edit fetch help home
-            info install list search uninstall update zap ls homepage -S up
-            rm remove abv dr --force --caskroom --appdir
-            --colorpickerdir --prefpanedir --qlplugindir --fontdir
-            --servicedir --binarydir --input_methoddir --internet_plugindir
-            --audio_unit_plugindir --vst_plugindir --screen_saverdir
-            --no-binaries --debug --verbose --outdated
+            info install list search uninstall update zap ls -S up rm remove
+            abv dr --force --caskroom --appdir --colorpickerdir --prefpanedir
+            --qlplugindir --fontdir --servicedir --binarydir --input_methoddir
+            --internet_plugindir --audio_unit_plugindir --vst_plugindir
+            --screen_saverdir --no-binaries --debug --verbose --outdated
             chome clean doutdated github new repository"
         return
     fi
