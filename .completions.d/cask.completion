@@ -140,6 +140,16 @@ _brew_cask_update ()
     esac
 }
 
+
+# Personal stuff
+# Should really just grab everything in $PATH that's brewcask-*
+_brew_cask__github ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+
+    COMPREPLY=($(compgen -W "d i pr" -- "$cur"))
+}
+
 _brew_cask ()
 {
     local i=1 cmd
@@ -170,7 +180,7 @@ _brew_cask ()
             --servicedir --binarydir --input_methoddir --internet_plugindir
             --audio_unit_plugindir --vst_plugindir --screen_saverdir
             --no-binaries --debug --verbose --outdated
-            "
+            chome clean doutdated github new repository"
         return
     fi
 
@@ -186,6 +196,8 @@ _brew_cask ()
 	uninstall|remove|rm)        _brew_cask_uninstall ;;
 	update|up)                  _brew_cask_update ;;
 	zap)                       __brew_cask_complete_casks ;;
+	chome)                     __brew_cask_complete_casks ;;
+	github)                     _brew_cask__github ;;
 	*)                          ;;
     esac
 }
