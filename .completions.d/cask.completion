@@ -48,7 +48,7 @@ __brew_cask_complete_casks ()
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local lib=$(brew --repository)/Library
     local taps=${lib}/Taps
-    local casks=${tap}/caskroom/homebrew-cask/Casks
+    local casks=${taps}/caskroom/homebrew-cask/Casks
     local ff=$(\ls ${casks} 2>/dev/null | sed 's/\.rb//g')
 
     COMPREPLY=($(compgen -W "$ff" -- "$cur"))
