@@ -793,6 +793,21 @@ alias cdoctor='brew cask doctor'
 # origin & Amorymeltzer instead of upstream & origin
 alias cask-repair='cask-repair -l origin -p Amorymeltzer '
 
+# Calculate :checkpoint from url
+function checkpoint()
+{
+    if [[ ! $1 ]]; then
+	{ read -r url; }	# Read from pipe
+    else
+	url=$1
+    fi
+    if [[ ! $url ]]; then
+	echo "No url provided"
+	return
+    fi
+    curl --silent --compressed "$url" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }'
+}
+
 # bundle exec alias
 alias be='bundle exec '
 
