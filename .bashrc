@@ -1672,62 +1672,64 @@ function bashtips() {
     echo "
 DIRECTORIES
 -----------
-pushd tmp   Push tmp && cd tmp
-popd        Pop && cd
+pushd tmp    Push tmp && cd tmp
+popd         Pop && cd
 GLOBBING AND OUTPUT SUBSTITUTION
 --------------------------------
-ls a[b-dx]e Globs abe, ace, ade, axe
-ls a{c,bl}e Globs ace, able
-\$(ls)      \`ls\` (but nestable!)
+ls a[b-dx]e  Globs abe, ace, ade, axe
+ls a{c,bl}e  Globs ace, able
+\$(ls)        \`ls\` (but nestable!)
 HISTORY MANIPULATION
 --------------------
-!!        Last command
-!?foo     Last command containing \`foo'
-^foo^bar^ Last command containing \`foo', but substitute \`bar'
-!!:0      Last command word
-!!:^      Last command's first argument
-!\$       Last command's last argument
-!!:*      Last command's arguments
-!!:x-y    Arguments x to y of last command
-C-s       search forwards in history
-C-r       search backwards in history
+!!           Last command
+!?foo        Last command containing \`foo'
+^foo^bar^    Last command containing \`foo', but substitute \`bar'
+!!:0         Last command word
+!!:^         Last command's first argument
+!\$           Last command's last argument
+!!:*         Last command's arguments
+!!:x-y       Arguments x to y of last command
+C-s          search forwards in history
+C-r          search backwards in history
 LINE EDITING
 ------------
-M-d     kill to end of word
-C-w     kill to beginning of word
-C-k     kill to end of line
-C-u     kill to beginning of line
-M-r     revert all modifications to current line
-C-]     search forwards in line
-M-C-]   search backwards in line
-C-t     transpose characters
-M-t     transpose words
-M-u     uppercase word
-M-l     lowercase word
-M-c     capitalize word
+M-d          kill to end of word
+C-w          kill to beginning of word
+C-k          kill to end of line
+C-u          kill to beginning of line
+M-r          revert all modifications to current line
+C-]          search forwards in line
+M-C-]        search backwards in line
+C-t          transpose characters
+M-t          transpose words
+M-u          uppercase word
+M-l          lowercase word
+M-c          capitalize word
 COMPLETION
 ----------
-M-/     complete filename
-M-~     complete user name
-M-@     complete host name
-M-\$    complete variable name
-M-!     complete command name
-M-^     complete history
+M-/          complete filename
+M-~          complete user name
+M-@          complete host name
+M-\$          complete variable name
+M-!          complete command name
+M-^          complete history
 IF-THEN TEST OPERATORS
 ______________________
--e      file exists
--a      file exists, deprecated
--f      file is a regular file
--s      file is not zero size
--d      file is a directory
--h      file is a symbolic link
--L      file is a symbolic link
--r      file has read permissiong
--w      file has write permission
--x      file has execute permission
--nt     file is newer than file2
--ot     file is older than file2
--eq, -ne, -gt, -ge, -lt, -le"
+FILES
+-a, -e       file exists
+-d           file is a directory
+-h, -L       file is a symbolic link
+-r           file has read permissiong
+-s           file exists, is not zero size
+-f           file exists, is a regular file(?)
+-w           file exists, has write permission
+-x           file exists, has execute permission
+-nt, -ot     file is newer/older than file2
+-eq, -ne, -gt, -ge, -lt, -le
+STRINGS
+-n           length of string is not zero
+-z           length of string is zero
+== != < >"
 }
 
 
