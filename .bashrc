@@ -796,16 +796,23 @@ alias cask-repair='cask-repair -l origin -p Amorymeltzer '
 # Calculate :checkpoint from url
 function checkpoint()
 {
-    if [[ ! $1 ]]; then
-	{ read -r url; }	# Read from pipe
-    else
+    if [[ $1 ]]; then
 	url=$1
+    else
+	{ read -t 0.1 url; }	# Read from pipe; timeout if nothing
     fi
     if [[ ! $url ]]; then
 	echo "No url provided"
 	return
     fi
-    curl --silent --compressed "$url" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }'
+
+    checkpoint=$(curl --silent --compressed "$url" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
+
+    if [[ $checkpoint == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' ]]; then
+	echo "Error: Appcast shasum appears to be empty"
+    else
+	echo $checkpoint
+    fi
 }
 
 # bundle exec alias
