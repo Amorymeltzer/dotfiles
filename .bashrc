@@ -1129,6 +1129,19 @@ function backup-file-with-timestamp()
     done
 }
 
+# New markdown file with current date
+function diary()
+{
+    local today=$(date +"%Y-%m-%e").md
+    if [[ -e $today ]]; then
+	echo "$today already exists"
+	return
+    fi
+    local title=$(date +"%A, %B %e, %Y")
+    printf "## $title\n\n" > $today
+    echo "Created $today"
+}
+
 # PlistBuddy alias, because sometimes `defaults` just doesn't cut it
 alias plistbuddy="/usr/libexec/PlistBuddy"
 
