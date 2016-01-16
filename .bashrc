@@ -286,10 +286,7 @@ bind "set history-preserve-point on"
 
 
 ### Prompts ----------------------------------------------------------
-#export PS1="${Color_Cyan}\t \#_\u:\w> ${Color_zOff}"  # Primary prompt with user and path
-#export PS1="${Color_Cyan}\u@\h${Color_Green} \w> ${Color_zOff}"  # Primary prompt with user, host, and path
 #export PS1="${Color_Cyan}\u${Color_White_Bold_Intense}@${Color_Cyan}\h${Color_White_Bold_Intense}>${Color_Green}\w${Color_White_Bold_Intense}\$ ${Color_zOff}"
-
 # Smiley (cat?) face prompts, three kinds
 #export PS1="\`if [ \$? = 0 ]; then echo \e[33\;40m\\\^\\\_\\\^\e[0m; else echo \e[36\;40m\\\-\e[0m\\\_\e[36\;40m\\\-\e[0m; fi\` \u \w:\h)"
 #export PS1="\033[0;32m\u@\h\033[0m:\033[0;36m\A\033[0m:\`if [ \$? = 0 ]; then echo '\033[1;30m^_^\033[0m'; else echo '\033[0;33m>_>\033[0m' ; fi\`:\033[1;34m\w\033[0m>\033[0m "
@@ -299,72 +296,79 @@ bind "set history-preserve-point on"
 # Seems unnecessary right now
 #    trap 'echo -ne "\033[00m"' DEBUG
 
-function prompt_command {
+### Used for load_color below, but theoretically useful
+NCPU=$(sysctl -n hw.ncpu)	# Number of CPUs
+SLOAD=$(( 100*${NCPU} ))	# Small load
+MLOAD=$(( 200*${NCPU} ))	# Medium load
+XLOAD=$(( 400*${NCPU} ))	# Large load
 
-    # Catch previous errors
-    # Before everything else so that the return value isn't valid
+### Useful functions
+# Highlight hostname when connected via SSH
+function cnx_color()
+{
+    if [[ ! $SSH_TTY ]]; then
+	echo -en ${Color_Red}
+    else
+	#  echo -en ${Color_Green_Bold_Intense}
+	echo -en ${Color_Black}${Color_Green_zBackground}
+    fi
+}
+
+# Test user type FIXME TODO
+# see also `id -un` instead(?) of `logname`
+function uid_color()
+{
+    if [[ $USER != $(logname) ]]; then
+	echo -en ${Color_Red_zBackground} # User is not login user
+    elif [[ $USER == "root" ]]; then
+	echo -en ${Color_Red}	# User is root
+    else
+	echo -en ${Color_Green}	# User is normal (mostly)
+    fi
+}
+
+# System load of the current host, as percentage (40 instead of 0.40)
+function load()
+{
+    local SYSLOAD=$(uptime | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " " | tr -d '.')
+    echo $((10#$SYSLOAD))
+}
+
+# Return a color indicating system load.
+function load_color()
+{
+    local SYSLOAD=$(load)
+    if [ ${SYSLOAD} -gt ${XLOAD} ]; then
+	echo -en ${Color_Red_zBackground}${Color_Red_Bold_Intense}
+    elif [ ${SYSLOAD} -gt ${MLOAD} ]; then
+	echo -en ${Color_Red_Bold_Intense}
+    elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
+	echo -en ${Color_Magenta_Intense}
+    else
+	echo -en ${Color_zOff}
+    fi
+}
+
+# Return a color according to running/suspended jobs.
+function job_color()
+{
+    if [ $(jobs -s | wc -l) -gt "0" ]; then
+	echo -en ${Color_Red_Bold_Intense}
+    elif [ $(jobs -r | wc -l) -gt "0" ] ; then
+	echo -en ${Color_Cyan}
+    fi
+}
+
+
+### Actual prompt
+function prompt_command {
+    # Catch previous errors before everything else so that the return value
+    # isn't valid
     if (($? > 0)); then
 	ERRORS=1
     else
 	ERRORS=0
     fi
-
-    # Highlight hostname when connected via SSH
-    if [[ ! $SSH_TTY ]]; then
-	CNX=${Color_Red}
-    else
-	#  CNX=${Color_Green_Bold_Intense}
-	CNX=${Color_Black}${Color_Green_zBackground}
-    fi
-
-    # Test user type FIXME TODO
-    # see also `id -un` instead(?) og `logname`
-    if [[ $USER != $(logname) ]]; then
-	SUD=${Color_Red_zBackground} # User is not login user
-    elif [[ $USER == "root" ]]; then
-	SUD=${Color_Red}	# User is root
-    else
-	SUD=${Color_Green}	# User is normal (mostly)
-    fi
-
-    NCPU=$(sysctl -n hw.ncpu) # Number of CPUs
-    SLOAD=$(( 100*${NCPU} ))  # Small load
-    MLOAD=$(( 200*${NCPU} ))  # Medium load
-    XLOAD=$(( 400*${NCPU} ))  # Large load
-
-    # System load of the current host, as percentage (40 instead of 0.40)
-    function load()
-    {
-	local SYSLOAD=$(uptime | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " " | tr -d '.')
-	echo $((10#$SYSLOAD))
-    }
-
-    # Return a color indicating system load.
-    function load_color()
-    {
-	local SYSLOAD=$(load)
-	if [ ${SYSLOAD} -gt ${XLOAD} ]; then
-	    echo -en ${Color_Red_zBackground}${Color_Red_Bold_Intense}
-	elif [ ${SYSLOAD} -gt ${MLOAD} ]; then
-	    echo -en ${Color_Red_Bold_Intense}
-	elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
-	    echo -en ${Color_Magenta_Intense}
-	else
-	    echo -en ${Color_zOff}
-	fi
-    }
-
-    # Return a color according to running/suspended jobs.
-    function job_color()
-    {
-	if [ $(jobs -s | wc -l) -gt "0" ]; then
-	    echo -en ${Color_Red_Bold_Intense}
-	elif [ $(jobs -r | wc -l) -gt "0" ] ; then
-	    echo -en ${Color_Cyan}
-	fi
-    }
-
-    #   PS1="${Color_Black}"'$fill \t\n'"${Color_Cyan}"'${debian_chroot:+($debian_chroot)}\u@\h:\w\$'"${Color_zOff} "
 
     psbegin="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
     psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
@@ -372,14 +376,14 @@ function prompt_command {
     if ((${ERRORS} > 0)); then
 	PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$"
     else
-	PS1="$psbegin[\[${SUD}\]\u\[$Color_Blue\]@\[${CNX}\]$psmiddle[\[$Color_Magenta\]\#"
+	PS1="$psbegin[\[$(uid_color)\]\u\[$Color_Blue\]@\[$(cnx_color)\]$psmiddle[\[$Color_Magenta\]\#"
     fi
 
     psend="\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
     PS1+=$psend
     export PS1
 
-    history -a # All terminal windows go to same history
+    history -a			# All terminal windows go to same history
 
     # create a $fill of all screen width minus the time string and a space:
     let fillsize=${COLUMNS}	# fullscreen
@@ -392,7 +396,6 @@ function prompt_command {
 	fill="$(COLUMNS=$fillsize hr -)${battery}"
     else
 	fill=""
-
 	while [ "$fillsize" -gt "0" ]
 	do
             fill="-${fill}"
@@ -401,7 +404,6 @@ function prompt_command {
 	fill="${fill}${battery}"
     fi
 }
-
 
 export PS2="\[$Color_Cyan\]→\[$Color_zOff\] " # Secondary prompt, multiline commands
 export PS3='#? '			      # Tertiary prompt, select menus
