@@ -205,30 +205,12 @@ export Color_White_Bold_Intense="\033[1;97m"      # White
 # export Color_White_zBackground_Intense="\033[0;107m"   # White
 
 
+# See also 256-colors, colordump, colors_and_formatting, & tput_colors
+# Really need to sort all this color crap out, maybe time for iterm 2 FIXME TODO
 alias colorslist="set | egrep '^Color_\w*' | sort"
 # Lists colors in their actual color, on one line
 alias colors="echo -e \`colorslist | sed 's/\(.*\)=\(.*\)/\2 \1/'\`"
 
-# See also 256-colors.sh and colors_and_formatting.sh
-function colordump() {
-    # Default to 6 columns
-    local cols
-    if [[ -z "$1" || "$1" -eq 0 ]]; then
-	cols=6
-    else
-	cols=$1
-    fi
-
-    for i in {0..255} ; do
-	declare -i a="$i % $cols";
-	if [ $a == '0' ]; then
-	    printf "\x1b[38;5;${i}mcolour${i}\n";
-	else
-	    printf "\x1b[38;5;${i}mcolour${i} ";
-	fi
-    done
-    echo
-}
 
 # Set less as default manpager, screen won't clear after quitting man
 # -F, quit-if-one-screen, if it fits then print it and quit it

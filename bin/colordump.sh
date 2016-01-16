@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Usage: colordump
+# Usage: colordump.sh
 # Dump 256 ansi colors to the terminal.
 
 printf "How each ANSI color is displayed on your terminal:\n\n"
