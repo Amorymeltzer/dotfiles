@@ -392,14 +392,18 @@ function prompt_command {
     # let fillsize=${COLUMNS} # fullscreen
     # let fillsize=${COLUMNS}-11 # room for battery charge via battery.py
     let fillsize=${COLUMNS}-11
-    fill=""
+    if [[ $(which hr) ]]; then
+	fill="$(COLUMNS=$fillsize hr -)$(battery_charge)"
+    else
+	fill=""
 
-    while [ "$fillsize" -gt "0" ]
-    do
-        fill="-${fill}" # fill with underscores to work on
-        let fillsize=${fillsize}-1
-    done
-    fill="${fill}$(battery_charge)"
+	while [ "$fillsize" -gt "0" ]
+	do
+            fill="-${fill}" # fill with underscores to work on
+            let fillsize=${fillsize}-1
+	done
+	fill="${fill}$(battery_charge)"
+    fi
 }
 
 
