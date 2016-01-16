@@ -145,13 +145,18 @@ fi
 
 if [ $cpan_flag -lt 2 ]; then
     checking 'CPAN modules'
-    cpan-outdated --verbose
-    if [ $cpan_flag -lt 1 ]; then
-	updating 'CPAN modules'
-	cpan-outdated | xargs cpan -i
+    cpan_todo=$(cpan-outdated --verbose)
+    if [[ -n $cpan_todo ]]; then
+	echo "$cpan_todo"
+	if [ $cpan_flag -lt 1 ]; then
+	    updating 'CPAN modules'
+	    cpan-outdated | xargs cpan -i
+	    cleaning 'CPAN directories'
+	    cpanclean;
+	fi
+    else
+	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
     fi
-    cleaning 'CPAN directories'
-    cpanclean;
 fi
 
 ## Should probably make this verbose or something
