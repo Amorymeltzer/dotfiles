@@ -295,9 +295,6 @@ bind "set history-preserve-point on"
 #export PS1="\033[0;32m\u@\h\033[0m:\033[0;36m\A\033[0m:\`if [ \$? = 0 ]; then echo '\033[1;30m^_^\033[0m'; else echo '\033[0;33m>_>\033[0m' ; fi\`:\033[1;34m\w\033[0m>\033[0m "
 #export PS1="\`if [ \$? = 0 ]; then echo \[\e[34m\]^_^\[\e[0m\]; else echo \[\e[31m\]O_O\[\e[0m\]; fi\`[\u@\h:\w]\\$ "
 
-# Neater, no errors?
-fill="--- " # Why the space?
-
 # Reset color for command output, invoked every time before command is executed
 # Seems unnecessary right now
 #    trap 'echo -ne "\033[00m"' DEBUG
