@@ -298,10 +298,6 @@ bind "set history-preserve-point on"
 # Neater, no errors?
 fill="--- " # Why the space?
 
-function battery_charge {
-    echo `battery.py` 2>/dev/null
-}
-
 # Reset color for command output, invoked every time before command is executed
 # Seems unnecessary right now
 #    trap 'echo -ne "\033[00m"' DEBUG
@@ -389,20 +385,23 @@ function prompt_command {
     history -a # All terminal windows go to same history
 
     # create a $fill of all screen width minus the time string and a space:
-    # let fillsize=${COLUMNS} # fullscreen
-    # let fillsize=${COLUMNS}-11 # room for battery charge via battery.py
-    let fillsize=${COLUMNS}-11
+    let fillsize=${COLUMNS}	# fullscreen
+    if [[ $(which battery.py) ]]; then
+	battery=$(echo -n `battery.py` 2>/dev/null)
+	let fillsize=${fillsize}-11 # room for battery charge
+    fi
+
     if [[ $(which hr) ]]; then
-	fill="$(COLUMNS=$fillsize hr -)$(battery_charge)"
+	fill="$(COLUMNS=$fillsize hr -)${battery}"
     else
 	fill=""
 
 	while [ "$fillsize" -gt "0" ]
 	do
-            fill="-${fill}" # fill with underscores to work on
+            fill="-${fill}"
             let fillsize=${fillsize}-1
 	done
-	fill="${fill}$(battery_charge)"
+	fill="${fill}${battery}"
     fi
 }
 
