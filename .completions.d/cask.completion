@@ -117,6 +117,18 @@ _brew_cask_list ()
     __brew_cask_complete_installed
 }
 
+_brew_cask_style ()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    case "$cur" in
+	-*)
+            __brew_caskcomp "--fix"
+            return
+            ;;
+    esac
+    __brew_cask_complete_casks
+}
+
 _brew_cask_uninstall ()
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
@@ -188,11 +200,12 @@ _brew_cask ()
 
     if [[ $i -eq $COMP_CWORD ]]; then
         __brew_caskcomp "audit cat cleanup create doctor edit fetch help home
-            info install list search uninstall update zap ls -S up rm remove
-            abv dr --force --caskroom --appdir --colorpickerdir --prefpanedir
-            --qlplugindir --fontdir --servicedir --binarydir --input_methoddir
-            --internet_plugindir --audio_unit_plugindir --vst_plugindir
-            --screen_saverdir --no-binaries --debug --verbose --outdated
+            info install list search style uninstall update zap ls -S up rm
+            remove abv dr --force --caskroom --appdir --colorpickerdir
+            --prefpanedir --qlplugindir --fontdir --servicedir --binarydir
+            --input_methoddir --internet_plugindir --audio_unit_plugindir
+            --vst_plugindir --screen_saverdir --no-binaries --debug --verbose
+            --outdated
             _stanza chome clean doutdated github new repository"
         return
     fi
@@ -206,6 +219,7 @@ _brew_cask ()
 	info|abv)                  __brew_cask_complete_casks ;;
 	install|instal)             _brew_cask_install ;;
 	list|ls)                    _brew_cask_list ;;
+	style)                      _brew_cask_style ;;
 	uninstall|remove|rm)        _brew_cask_uninstall ;;
 	update|up)                  _brew_cask_update ;;
 	zap)                       __brew_cask_complete_casks ;;
