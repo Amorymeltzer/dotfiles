@@ -57,10 +57,10 @@ shopt -s histreedit;
 source ~/.bashrc
 
 # Welcome Messsage --------------------------------------------------
-echo -ne "Welcome to${Color_Green}" `hostname -s`; echo -e "${Color_Off} on" `sw_vers -productName` `sw_vers -productVersion` "("`uname -m`")"
-#echo -e "${COLOR_RED}`bash --version`"
+echo -ne "Welcome to${Color_Green}" `hostname -s` "${Color_zOff}on" `sw_vers -productName`
+echo -e "${Color_Green}" `sw_vers -productVersion` "${Color_zOff}("`uname -m`")"
 if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; then
-    echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_Off}" # only short ones
+    echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_zOff}" # only short ones
 fi
 echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $3" "$4}'
 echo -ne "${Color_Cyan}" ; today
