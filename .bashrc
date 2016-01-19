@@ -775,7 +775,8 @@ alias clist='brew cask list'
 alias cdoctor='brew cask doctor'
 
 # origin & Amorymeltzer instead of upstream & origin
-alias cask-repair='cask-repair -l origin -p Amorymeltzer '
+# Auto open appcast and homepage urls
+alias cask-repair='cask-repair -l origin -p Amorymeltzer -a -o '
 
 # Calculate :checkpoint from url
 function checkpoint()
