@@ -797,6 +797,8 @@ function checkpoint()
 	echo "Error: Appcast shasum appears to be empty"
     else
 	echo $checkpoint
+	echo -n $checkpoint | pbcopy
+	echo "checkpoint copied to clipboard"
     fi
 }
 
