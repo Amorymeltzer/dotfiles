@@ -917,8 +917,8 @@ alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
 # Seriously though, just use pianobar/pandora
 alias pandora='pianobar'
-# or mplayer
-alias mplayer='mplayer -msgcolor'
+# old habits die hard
+alias mplayer='mpv '
 
 
 # Show most used commands, fixed by doing $4 instead of $2, from:
@@ -933,7 +933,7 @@ alias path='echo -e ${PATH//:/\\n}'
 alias pretty-manpath="manpath | tr ':' '\n'"
 
 # Don't change path with nyancat, also play the music!
-alias nyancat='mplayer -really-quiet ~/Music/nyan/cat.mp3 -loop 0 </dev/null & nyancat -s'
+alias nyancat='mpv -really-quiet ~/Music/nyan/cat.mp3 -loop 0 </dev/null & nyancat -s'
 # Matrix-esque screensaver-esque; man tr for different options
 alias matrix='tr -c "[:print:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=lcase,unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
 # Star Wars
@@ -1503,7 +1503,7 @@ function mp3 {
                --audio-format=mp3 \
                --audio-quality=1 "$*"
 }
-# Use mplayer instead of afplay?  FIXME TODO
+# Use mpv instead of afplay?  FIXME TODO
 function listen {
     # Skip DASH manifest for speed purposes. This might actually disable
     # being able to specify things like 'bestaudio' as the requested format,
