@@ -1486,13 +1486,6 @@ function binaryclock() {
     perl -e 'for(;;){@d=split("",`date +%H%M%S`);print"\r";for(0..5){printf"%.4b ",$d[$_]}sleep 1}'
 }
 
-# Summary of enWiki article, perl bit accounts for some UTF-8 unicode stuff
-# https://dgl.cx/wikipedia-dns
-function wiki() {
-    dig +short txt $1.wp.dg.cx | perl -pe's/\\(\d{1,3})/chr $1/eg'
-}
-
-
 ######## Scripts by @exogen
 # aac/m4a? FIXME TODO
 function mp3 {
