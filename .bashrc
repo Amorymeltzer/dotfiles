@@ -606,11 +606,13 @@ alias mv='mv -vi' # add -f to override, or \ before command
 alias cp='cp -Rvi' # recursive if folder, the ending / makes a difference
 # alias rm='rm -i' # Too annoying, perhaps?
 alias rm='rm -v'
-# Move the given file(s) to the Trash.
+# Move the given file(s) to the Trash. Favor osxutils https://github.com/vasi/osxutils
 # Alias rm to this instead???
-function trash() {
-    mv $1 ~/.Trash
-}
+if [[ ! -f `command -v trash` ]]; then
+    function trash() {
+	mv $1 ~/.Trash
+    }
+fi
 function emptyalltrashes() {
     sudo rm -rfv /Volumes/*/.Trashes;
     sudo rm -rfv ~/.Trash;
