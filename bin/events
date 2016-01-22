@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-# events by Amory Meltzer
-# Display upcoming calendar events
-
-/usr/local/bin/icalBuddy -sd -t -li 7 eventsFrom:today to:today+4;

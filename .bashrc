@@ -981,6 +981,9 @@ alias stopwatch='timer'
 # Get week number
 alias weeknum='date +%V'
 
+# See also .icalBuddy.plist
+alias events='icalBuddy -sd -t -li 7 eventsFrom:today to:today+4'
+
 # Quickly check connection by pinging google
 alias pg='ping -c 1 google.com'
 function down4me()
@@ -1231,7 +1234,6 @@ function bitcoin() {
     five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
     echo -e "BTC: $five";
 }
-
 
 # Get coordinates
 function findlocation() {
