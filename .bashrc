@@ -934,8 +934,6 @@ alias which='type -a 2>/dev/null'
 alias path='echo -e ${PATH//:/\\n}'
 alias pretty-manpath="manpath | tr ':' '\n'"
 
-# Don't change path with nyancat, also play the music!
-alias nyancat='mpv -really-quiet ~/Music/nyan/cat.mp3 -loop 0 </dev/null & nyancat -s'
 # Matrix-esque screensaver-esque; man tr for different options
 alias matrix='tr -c "[:print:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=lcase,unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
 # Star Wars
