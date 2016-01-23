@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Usage: license
+# Usage: mit-license
 # Prints an MIT license appropriate for totin' around.
 #
 #   $ license > COPYING
