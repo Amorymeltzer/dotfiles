@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# imessage over the commandline
+# Might be dead post-Mavericks
+# Heavily cribbed from https://gist.github.com/roldershaw/7311547
+
+if [[ $# -ne 2 ]] ; then
+    echo "Usage: $(basename $0) <email/phone> <message>"
+else
+    /usr/bin/osascript -e 'tell application "Messages"
+        send "'"$2"'" to buddy "'"$1"'" of service "E:Amorymeltzer@gmail.com"
+        end tell'
+    echo "Message sent"
+fi
