@@ -26,27 +26,19 @@ Usage: $(basename $0) [-bmMpPgrRcCEKhH]
 END_HELP
 }
 
-base_flag='0'
-cpan_flag='0'
-macports_flag='0'
-python_flag='0'
-ruby_flag='0'
-gem_flag='0'
-homebrew_flag='0'
-brewcask_flag='0'
 # Parse commandline options
 while getopts 'bcCEgKmMpPrRhH' opt; do
     case $opt in
 	b) base_flag='1';;
 	m) macports_flag='1';;
-	M) macports_flag='2';;
+	M) macports_all_flag='2';;
 	p) python_flag='1';;
-	P) python_flag='2';;
+	P) python_all_flag='2';;
 	g) gem_flag='1';;
 	r) ruby_flag='1';;
-	R) ruby_flag='2';;
+	R) ruby_all_flag='2';;
 	c) cpan_flag='1';;
-	C) cpan_flag='2';;
+	C) cpan_all_flag='2';;
 	E) homebrew_flag='1';;
 	K) brewcask_flag='1';;
 	h|H) help $0
@@ -74,8 +66,8 @@ checking () {
 sudo -v
 
 # Do things it suggests, like port select and so on ;;;;;; ##### FIXME TODO
-if [ $macports_flag -lt 2 ]; then
-    if [ $base_flag -lt 1 ]; then
+if [ -z $macports_all_flag ]; then
+    if [[ -z $base_flag ]]; then
 	updating 'Macports base'
 	port selfupdate
     else
@@ -88,7 +80,7 @@ if [ $macports_flag -lt 2 ]; then
 	echo "$port_todo"
 	echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
 	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
-	if [ $macports_flag -lt 1 ]; then
+	if [ -z $macports_flag ]; then
 	    updating 'Macports'
 	    port upgrade outdated
 	    cleaning 'Macports'
@@ -109,12 +101,12 @@ if [ $macports_flag -lt 2 ]; then
     fi
 fi
 
-if [ $python_flag -lt 2 ]; then
+if [ -z $python_all_flag ]; then
     checking 'pip python packages'
     python_todo=$(sudo -u $SUDO_USER pip list -o)
     if [[ -n $python_todo ]]; then
 	echo "$python_todo"
-	if [ $python_flag -lt 1 ]; then
+	if [ -z $python_flag ]; then
 	    updating 'pip python packages'
 	    pipupgrade;
 	fi
@@ -123,8 +115,8 @@ if [ $python_flag -lt 2 ]; then
     fi
 fi
 
-if [ $ruby_flag -lt 2 ]; then
-    if [ $gem_flag -lt 1 ]; then
+if [ -z $ruby_all_flag ]; then
+    if [ -z $gem_flag ]; then
 	updating 'gem ruby manager'
 	gem update --system
     fi
@@ -132,7 +124,7 @@ if [ $ruby_flag -lt 2 ]; then
     ruby_todo=$(gem outdated)
     if [[ -n $ruby_todo ]]; then
 	echo "$ruby_todo"
-	if [ $ruby_flag -lt 1 ]; then
+	if [ -z $ruby_flag ]; then
 	    updating 'ruby gems'
 	    gem update
 	    cleaning 'ruby gems'
@@ -143,12 +135,12 @@ if [ $ruby_flag -lt 2 ]; then
     fi
 fi
 
-if [ $cpan_flag -lt 2 ]; then
+if [ -z $cpan_all_flag ]; then
     checking 'CPAN modules'
     cpan_todo=$(cpan-outdated --verbose)
     if [[ -n $cpan_todo ]]; then
 	echo "$cpan_todo"
-	if [ $cpan_flag -lt 1 ]; then
+	if [ -z $cpan_flag ]; then
 	    updating 'CPAN modules'
 	    cpan-outdated | xargs cpan -i
 	    cleaning 'CPAN directories'
@@ -164,7 +156,7 @@ fi
 # homebrew-cask, and the two are inextricably linked, so for now this must do.
 # I suppose I could do a version of 'git up' in each respective repository,
 # but that sort of seems excessive
-if [ $homebrew_flag -lt 1 ]; then
+if [ -z $homebrew_flag ]; then
     sudo -u $SUDO_USER brew cask new
     if [[ $(brew outdated 2> /dev/null) ]]; then
 	updating 'brews'
@@ -181,7 +173,7 @@ fi
 
 # Not perfect, but uses the external brewcask-doutdated.rb command to grab
 # a list of outdated casks, then --force reinstalls them
-if [ $brewcask_flag -lt 1 ]; then
+if [ -z $brewcask_flag ]; then
     if [[ $(brew cask doutdated &> /dev/null) ]]; then
 	checking 'casks'
 	sudo -u $SUDO_USER brew cask doutdated
