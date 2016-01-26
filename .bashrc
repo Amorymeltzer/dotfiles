@@ -948,6 +948,7 @@ function starwars()
 # 2>&1 | less -S for chunks
 alias zerocool='nc z.ero.cool 1337'
 
+alias screensaver='open -a ScreenSaverEngine'
 # Screensaver as wallpaper, ctrl-c or cmd-. to quit
 alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background"
 # Set a custom wallpaper image. `DefaultDesktop.jpg` is already a symlink, and
