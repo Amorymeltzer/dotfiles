@@ -982,7 +982,7 @@ alias stopwatch='timer'
 alias weeknum='date +%V'
 
 # See also .icalBuddy.plist
-alias events='icalBuddy -sd -t -li 10 eventsFrom:today to:today+6'
+alias events='icalBuddy -sd -t -li 7 eventsFrom:today to:today+5'
 
 # Quickly check connection by pinging google
 alias pg='ping -c 1 google.com'
