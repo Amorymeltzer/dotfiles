@@ -174,16 +174,16 @@ fi
 # Not perfect, but uses the external brewcask-doutdated.rb command to grab
 # a list of outdated casks, then --force reinstalls them
 if [[ -z $brewcask_flag ]]; then
-    if [[ $(brew cask doutdated &> /dev/null) ]]; then
-	checking 'casks'
-	sudo -u $SUDO_USER brew cask doutdated
-	updating 'casks'
-	sudo -u $SUDO_USER "brew cask doutdated | xargs brew cask install --force"
+    # if [[ $(brew cask doutdated &> /dev/null) ]]; then
+    #	checking 'casks'
+    #	sudo -u $SUDO_USER brew cask doutdated
+    #	updating 'casks'
+    #	sudo -u $SUDO_USER "brew cask doutdated | xargs brew cask install --force"
 
-	cleaning 'casks'
-	sudo -u $SUDO_USER brew cask cleanup
-    else
-	#  echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
-	echo -e "${Color_Red}cask updates currently nonfunctional${Color_zOff}"
-    fi
+    #	cleaning 'casks'
+    #	sudo -u $SUDO_USER brew cask cleanup
+    # else
+    #	echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
+    echo -e "${Color_Red}cask updates currently nonfunctional${Color_zOff}"
+    # fi
 fi
