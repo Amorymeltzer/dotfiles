@@ -1826,13 +1826,6 @@ idle for SECS seconds." t)
 
 
 ;;; Maybe set up a modemap for definitions?  ;;;;;; ##### FIXME TODO
-;; Thesaurus
-;; (require 'thesaurus)
-(autoload 'thesaurus-choose-synonym-and-replace "thesaurus"
-  "Search for synonyms in the http://words.bighugelabs.com database." t)
-(setq thesaurus-bhl-api-key "20766aa5f2e2d098765f7f8ebac19579")
-(define-key global-map (kbd "C-c C-t") 'thesaurus-choose-synonym-and-replace)
-
 (autoload 'dictionary-search "dictionary"
   "Ask for a word and search it in all dictionaries" t)
 (autoload 'dictionary-match-words "dictionary"
