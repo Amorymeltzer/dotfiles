@@ -20,8 +20,9 @@ Usage: $(basename $0) [-bmMpPgrRcCEKhH]
   -R		skip all ruby actions
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
+  -e		pull homebrew and hombrew-cask updates but don't update brews
   -E		skip all homebrew updates
-  -K		skip all homebrew-cask updates
+  -K		skip all homebrew-cask updates (currently non-functional)
   -h -H		this help
 END_HELP
 }
@@ -40,6 +41,7 @@ while getopts 'bcCEgKmMpPrRhH' opt; do
 	c) cpan_flag='1';;
 	C) cpan_all_flag='2';;
 	E) homebrew_flag='1';;
+	E) homebrew_all_flag='2';;
 	K) brewcask_flag='1';;
 	h|H) help $0
 	     exit 0;;
@@ -156,18 +158,20 @@ fi
 # homebrew-cask, and the two are inextricably linked, so for now this must do.
 # I suppose I could do a version of 'git up' in each respective repository,
 # but that sort of seems excessive
-if [[ -z $homebrew_flag ]]; then
+if [[ -z $homebrew_all_flag ]]; then
     sudo -u $SUDO_USER brew cask new
-    if [[ $(brew outdated 2> /dev/null) ]]; then
-	updating 'brews'
-	sudo -u $SUDO_USER brew outdated
-	sudo -u $SUDO_USER brew upgrade --all
+    if [[ -z $homebrew_flag ]]; then
+	if [[ $(brew outdated 2> /dev/null) ]]; then
+	    updating 'brews'
+	    sudo -u $SUDO_USER brew outdated
+	    sudo -u $SUDO_USER brew upgrade --all
 
-	cleaning 'brews'
-	sudo -u $SUDO_USER brew cleanup -ns
-	sudo -u $SUDO_USER brew cleanup -s
-    else
-	echo -e "${Color_Green}brews already up-to-date!${Color_zOff}..."
+	    cleaning 'brews'
+	    sudo -u $SUDO_USER brew cleanup -ns
+	    sudo -u $SUDO_USER brew cleanup -s
+	else
+	    echo -e "${Color_Green}brews already up-to-date!${Color_zOff}..."
+	fi
     fi
 fi
 
