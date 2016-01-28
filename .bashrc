@@ -78,7 +78,6 @@ function g {
 	echo "Not a git repository"
     fi
 }
-complete -F _git g
 
 alias gb='git b '
 alias gcb='git copy-branch-name'
@@ -437,6 +436,8 @@ if [[ -e ~/.ssh/known_hosts ]]; then
     # to stop that from happening. ;;;;;; ##### FIXME TODO
     complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" whois nslookup nmap
 fi
+# Complete for g alias
+__git_complete g __git_main
 
 # networksetup completion
 complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
