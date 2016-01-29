@@ -486,7 +486,7 @@ alias perlsecret='man perlsecret'
 alias perlcheat='man perlcheat'
 
 # Tell tidy to use a config file if it's there
-if command_exists tidy; then
+if [[ -f `command -v tidy` ]]; then
     export HTML_TIDY=~/.tidyrc
 fi
 
