@@ -448,10 +448,6 @@ complete -F _python python3.4
 # z, the awesome helper for moving around to popular directories
 . ~/.z.sh
 
-# Emacs ido-like for bash CD, not perfect
-# if [ -f ~/bin/bash-ido ]; then
-#     . ~/bin/bash-ido
-# fi
 
 # ;;;;;; ##### FIXME TODO
 # Make CPAN always select the default option
