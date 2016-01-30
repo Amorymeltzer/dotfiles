@@ -582,17 +582,16 @@ function peek() {
 # last character of the alias value is a space or tab character, then the next
 # command word following the alias is also checked for alias expansion."
 #  alias sudo='sudo '
+alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
+
 # Hook lock-quote scripts into sudo.  Not ideal but fits the right profile:
 # uses sudo, not overly common but often enough to change moderately frequently
 # -E preserves environment, eg colors
 # -H preserves home?  Or something?
-alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
-
 alias lock-quote='sudo ~/Documents/git/lockquote/lock-quote '
 # Get current quote
 alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist LoginwindowText'
 
-alias fuckyou='sudo $(history -p \!\!)'
 # thefuck https://github.com/nvbn/thefuck
 # Currently broken, should be fixed on next update
 # See https://github.com/nvbn/thefuck/pull/434
