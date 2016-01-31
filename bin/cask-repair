@@ -5,6 +5,7 @@
 
 readonly program="$(basename "${0}")"
 readonly submit_pr_to='caskroom:master'
+readonly browser_headers=(--header 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36')
 remote_pull='upstream' # use 'upstream' as default remote to pull from
 remote_push='origin' # use 'origin' as default remote to push to
 show_home='false' # by default, do not open the cask's homepage
@@ -38,7 +39,9 @@ usage() {
       -a, --open-appcast             Open the appcast for the given cask.
       -v, --cask-version             Give a version directly, instead of being prompted for it.
       -u, --cask-url                 Give a URL directly, instead of being prompted for it.
+      -c, --closes-issue <number>    Adds 'Closes #<number>.' to the commit message.
       -b, --blind-submit             Submit cask without asking for confirmation, if it passes audit.
+      -d, --delete-branches          Use with caution! Deletes all local and remote branches named like update-<word>.
       -h, --help                     Show this help.
   " | sed -E 's/^ {4}//'
 }
@@ -72,8 +75,16 @@ while [[ "${1}" ]]; do
       given_cask_url="${2}"
       shift
       ;;
+    -c | --closes-issue)
+      issue_to_close="${2}"
+      shift
+      ;;
     -b | --blind-submit)
-      cask_updated='y'
+      cask_updated='blindly'
+      ;;
+    -d | --delete-branches)
+      can_run_without_arguments='true'
+      delete_created_branches='true'
       ;;
     -*)
       syntax_error "unrecognized option: ${1}"
@@ -87,11 +98,10 @@ done
 
 # define function to get HTTP status codes of URLs
 http_status() {
-  local url follow_redirects browser_headers
+  local url follow_redirects
 
   url="${1}"
   [[ "${2}" == 'follow_redirects' ]] && follow_redirects='--location' || follow_redirects='--no-location'
-  browser_headers=(--header 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36')
 
   curl --silent --head "${follow_redirects}" "${browser_headers[@]}" --write-out '%{http_code}' "${url}" -o '/dev/null'
 }
@@ -151,9 +161,22 @@ appcast_checkpoint_change() {
   cask_appcast_status=$(http_status "${cask_appcast_url}" 'no_follow_redirects')
   [[ "${cask_appcast_status}" != '200' ]] && add_warning warning "appcast is probably incorrect, as a non-200 (OK) HTTP response code was returned (${cask_appcast_status})"
 
-  cask_appcast_checkpoint=$(curl --silent --compressed --location "${cask_appcast_url}" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
+  cask_appcast_checkpoint=$(curl --silent --compressed --location "${browser_headers[@]}" "${cask_appcast_url}" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
 
   modify_stanza 'checkpoint:' "'${cask_appcast_checkpoint}'"
+}
+
+delete_created_branches() {
+  local local_branches remote_branches
+
+  # delete local branches
+  local_branches=$(git branch --all | grep --extended-regexp '^ *update-.+$' | perl -pe 's|^ *||;s|\n| |')
+  [[ -n "${local_branches}" ]] && git branch -D ${local_branches}
+
+  # delete remote branches
+  git fetch --prune "${remote_push}"
+  remote_branches=$(git branch --all | grep --extended-regexp "remotes/${remote_push}/update-.+$" | perl -pe 's|.*/||;s|\n| |')
+  [[ -n "${remote_branches}" ]] && git push "${remote_push}" --delete ${remote_branches}
 }
 
 # define function to quickly call both sha changing functions
@@ -176,11 +199,14 @@ add_warning() {
 
 # define function to show warnings if there are any
 show_warnings() {
-  if [[ ${#warning_messages[@]} != '0' ]]; then
+  if [[ "${#warning_messages[@]}" -gt 0 ]]; then
     printf '%s\n' "${warning_messages[@]}"
-    warning_messages=()
     divide
   fi
+}
+
+clear_warnings() {
+  warning_messages=()
 }
 
 # define abort function, that will reset the state
@@ -194,7 +220,7 @@ finish() {
     echo -e "\n$(tput setaf 1)${2}$(tput sgr0)\n"
     exit 1
   elif [[ "${1}" == 'success' ]]; then
-    echo -e "\n\n$(tput setaf 2)Submitted (${2})$(tput sgr0)\n"
+    echo -e "\n$(tput setaf 2)Submitted (${2})$(tput sgr0)\n"
     exit 0
   fi
 }
@@ -219,9 +245,14 @@ if [[ -z "${casks_dir}" ]]; then
 fi
 
 # exit if no argument or more than one argument was given
-if [[ -z "${1}" ]]; then
+if [[ -z "${1}" ]] && [[ "${can_run_without_arguments}" != 'true' ]]; then
   usage
   exit 1
+fi
+
+if [[ "${delete_created_branches}" == 'true' ]]; then
+  delete_created_branches
+  exit 0
 fi
 
 [[ -n "${2}" ]] && finish abort 'You can only give one cask argument per run'
@@ -302,20 +333,31 @@ until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
 
   audit_message=$(brew cask audit --download "${cask_file}" 2>/dev/null)
   audit_result="$?"
-  [[ "${audit_result}" != '0' ]] && add_warning error "${audit_message}"
+  [[ "${audit_result}" -ne 0 ]] && add_warning error "${audit_message}"
 
-  git diff
+  git --no-pager diff
   divide
   show_warnings
 
-  read -n1 -p 'Is everything correct? You can also make further manual edits (y/n/e) ' cask_updated
+  if [[ "${cask_updated}" == 'blindly' ]] && [[ "${#warning_messages[@]}" -eq 0 ]]; then
+    cask_updated='y'
+  else
+    read -n1 -p 'Is everything correct? You can also make further manual edits (y/n/e) ' cask_updated
+    echo # add an empty line
+  fi
 
   if [[ "${cask_updated}" == 'y' ]]; then
-    [[ "${audit_result}" != '0' ]] && cask_updated='false' || break
+    if [[ "${audit_result}" -ne 0 ]]; then
+      cask_updated='false'
+    else
+      echo 'Submitting…'
+      break
+    fi
   elif [[ "${cask_updated}" == 'e' ]]; then
     [[ -n "${EDITOR}" ]] && "${EDITOR}" "${cask_file}" || open -W "${cask_file}" # open cask in appropriate editor
     [[ "$(is_version_latest)" == 'false' ]] && update_cask_shas # recheck sha256 values if version isn't :latest
     cask_updated='false'
+    clear_warnings
   elif [[ "${cask_updated}" == 'n' ]]; then
     finish abort 'You decided to abort'
   fi
@@ -329,5 +371,5 @@ readonly commit_message="updated ${cask_name} to v${cask_version}"
 
 git commit "${cask_file}" --message "${commit_message}" --quiet
 git push "${remote_push}" "${cask_branch}" --quiet
-pr_link=$(hub pull-request -b "${submit_pr_to}" -h "${remote_push}":"${cask_branch}" -m "${commit_message}")
-finish success "${pr_link}"
+[[ -z "${issue_to_close}" ]] && pr_link=$(hub pull-request -b "${submit_pr_to}" -h "${remote_push}":"${cask_branch}" -m "${commit_message}") || pr_link=$(hub pull-request -b "${submit_pr_to}" -m "$(echo -e "updated ${cask_name} (${cask_version})\n\nCloses #${issue_to_close}.")")
+[[ -n "${pr_link}" ]] && finish success "${pr_link}" || finish abort 'There was an error submitting the pull request. Have you forked the repo and made sure the pull and push remotes exist?'
