@@ -1142,12 +1142,12 @@ function backup-file-with-timestamp()
 # New markdown file with current date
 function diary()
 {
-    local today=$(date +"%Y-%m-%e").md
+    local today=$(date +"%Y-%m-%d").md
     if [[ -e $today ]]; then
 	echo "$today already exists"
 	return
     fi
-    local title=$(date +"%A, %B %e, %Y")
+    local title=$(date +"%A, %B %d, %Y")
     printf "## $title\n\n" > $today
     echo "Created $today"
 }
