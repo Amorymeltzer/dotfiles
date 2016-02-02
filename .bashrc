@@ -944,9 +944,6 @@ function starwars()
 # 2>&1 | less -S for chunks
 alias zerocool='nc z.ero.cool 1337'
 
-alias screensaver='open -a ScreenSaverEngine'
-# Screensaver as wallpaper, ctrl-c or cmd-. to quit
-alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background"
 # Set a custom wallpaper image. `DefaultDesktop.jpg` is already a symlink, and
 # all wallpapers are in `/Library/Desktop Pictures/`. The default is
 # `Wave.jpg`.
@@ -957,6 +954,9 @@ alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/R
 # Lock the screen (when going AFK)
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 # Better as just starting screensaver
+alias screensaver='open -a ScreenSaverEngine'
+# Screensaver as wallpaper, ctrl-c or cmd-. to quit
+alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background"
 # Stolen from @cowboy - https://github.com/cowboy/dotfiles/commit/28a3fd898f93c602080e3c3112b0f04854b66f22
 function lock-screen()
 {
