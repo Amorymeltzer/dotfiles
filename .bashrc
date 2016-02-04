@@ -1049,6 +1049,7 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
 done
 
 alias quicklook="qlmanage -p "
+alias ql="quicklook "
 
 alias pbc='pbcopy '
 alias pbp='pbpaste '
