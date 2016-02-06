@@ -11,7 +11,7 @@ export PATH="$HOME/bin:$PATH"
 #export PATH=~/Documents/perl/sandbox:$PATH # add some perl
 
 # Add unloved perl modules
-export MANPATH="/opt/local/share/perl5.20/siteman:/opt/local/share/perl5.20/man:$MANPATH"
+export MANPATH="/opt/local/share/perl5.22/siteman:/opt/local/share/perl5.22/man:$MANPATH"
 
 # emacs > vim
 export EDITOR="emacs"
