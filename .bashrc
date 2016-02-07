@@ -1467,7 +1467,7 @@ alias filesize='fs'
 # Pipe to map, then give command to invoke on every line from stdin
 # from @nvie https://coderwall.com/p/4tkkpq
 # ls **/*.sh | map dirname
-alias map="xargs -n1"
+alias map="xargs -n1 "
 
 # Repeat n times command.
 function repeat()
