@@ -331,8 +331,6 @@ using overrides and disable it for everything else."
     (enable-old prefix "bbdb-")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/83
     (enable-old exact "where-is")
-    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/85
-    (enable prefix "xref-")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/60
     (disable exact "todo-add-category")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/51
@@ -509,7 +507,7 @@ each function to apply the appropriate override."
            finally return
            (set-default sym final-value)))
 
-(defcustom ido-ubiquitous-auto-update-overrides t
+(defcustom ido-ubiquitous-auto-update-overrides 'notify
   "Whether to add new overrides when updating ido-ubiquitous.
 
 Ido-ubiquitous comes with a default set of overrides for commands
@@ -858,7 +856,12 @@ more information.
 
 If SAVE is non-nil, also save the overrides to the user's custom
 file (but only if they were already customized). When called
-interactively, a prefix argument triggers a save."
+interactively, a prefix argument triggers a save.
+
+When called from Lisp code, this function returns the list of
+variables whose values were modified. In particular, it returns
+non-nil if any variables were modified, and nil if no modifications
+were made."
   (interactive "P")
   (let ((unmodified-vars nil)
         (updated-vars nil)
@@ -890,15 +893,17 @@ interactively, a prefix argument triggers a save."
              var)
             (push var unmodified-vars)
             (set var defval))
-           ;; Var is customized, set and save new value (if SAVE is t)
-           (save
+           ;; Var is saved to custom.el, set and save new value (if
+           ;; SAVE is t)
+           ((and save
+                 (eq var-state 'saved))
             (ido-ubiquitous--debug-message
              "Updating option `%s' with new overrides and saving it."
              var)
              (push var updated-vars)
              (customize-save-variable var newval))
-           ;; Var is set but not saved (or SAVE is nil), update it but
-           ;; don't save it
+           ;; Var is modified but not saved (or SAVE is nil), update it
+           ;; but don't save it
            (t
             (ido-ubiquitous--debug-message
              "Updating option `%s' with new overrides but not saving it for future sessions."
@@ -925,7 +930,8 @@ interactively, a prefix argument triggers a save."
       (if final-message-is-warning
           (display-warning 'ido-ubiquitous
                            (mapconcat 'identity (nreverse final-message-lines) "\n"))
-        (message (mapconcat 'identity (nreverse final-message-lines) "\n"))))))
+        (message (mapconcat 'identity (nreverse final-message-lines) "\n"))))
+    updated-vars))
 
 (defun ido-ubiquitous--find-override-updates (current-value available-updates)
   (cl-set-difference (ido-ubiquitous--combine-override-lists
@@ -952,7 +958,7 @@ See `ido-ubiquitous-auto-update-overrides."
             (if (eq ido-ubiquitous-auto-update-overrides 'notify)
                 (display-warning
                  'ido-ubiquitous
-                 (format "There are %s new overrides available. Use `M-x ido-ubiquitous-update-overrides' to enable them."
+                 (format "There are %s new overrides available. Use `M-x ido-ubiquitous-update-overrides' to enable them. (See `ido-ubiquitous-auto-update-overrides' for more information.)"
                          update-count))
               (ido-ubiquitous--debug-message "Applying override updates.")
               (ido-ubiquitous-update-overrides t))
