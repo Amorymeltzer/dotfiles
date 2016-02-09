@@ -1407,6 +1407,7 @@ function monitor() {
 # Check unread count, shell script to option username?
 function gmail() {
     curl -u $1 -s "https://mail.google.com/mail/feed/atom" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;'
+    curl -u $1 -s "https://mail.google.com/mail/feed/atom" | egrep -o '<fullcount>[0-9]*' | cut -c 12-
 }
 function priority() {
     curl -u $1 -s "https://mail.google.com/mail/feed/atom/important" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;'
