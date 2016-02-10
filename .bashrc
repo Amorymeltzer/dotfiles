@@ -1404,16 +1404,6 @@ function monitor() {
     tail -f $1 | while read line; do printf "$(date '+%F %T')\t$line\n"; done;
 }
 
-# Check unread count, shell script to option username?
-# Off because insecure: https://www.google.com/settings/u/0/security/lesssecureapps
-# function gmail() {
-#     curl -u $1 -s "https://mail.google.com/mail/feed/atom" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;'
-#     curl -u $1 -s "https://mail.google.com/mail/feed/atom" | egrep -o '<fullcount>[0-9]*' | cut -c 12-
-# }
-# function priority() {
-#     curl -u $1 -s "https://mail.google.com/mail/feed/atom/important" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;'
-# }
-
 # Check available macs on UCD campus
 function available() {
     # curl -s "clm.ucdavis.edu/rooms/available/" | perl -ne 'print "$2\t$3\n" if /(roomcolumn)\">(\d*\s\w*)<\/.*\/>(\d*\sMac)/;'
