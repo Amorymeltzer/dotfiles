@@ -1285,6 +1285,7 @@ function metar()
 {
     if [[ ! "$1" =~ [0-9A-Z]{4} ]]; then
 	echo "Please enter an appropriate METAR code"
+	echo "Suggestions: KEDU KSMF KSAC KNYC"
 	return
     fi
     # Convert to all caps
