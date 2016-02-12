@@ -18,6 +18,7 @@ else:
 #stocks={"MSFT","AAPL","GOOGL","AMZN","ONDK"}
 stocks=sys.argv[1:]
 
+from termcolor import colored
 quote = ""
 for i in stocks:
     quote = i + ',' + quote
@@ -36,4 +37,11 @@ for i in stocks:
     obj = json.loads(quote[4:-1])
 
     for ticker in obj:
-        print "{} {} {} | color=".format(ticker["t"], ticker["l"], ticker["c"]), "red" if float(ticker["c"]) < 0 else "green"
+        if float(ticker["c"]) < 0:
+            color = 'red'
+        else:
+            color = 'green'
+        #print "{} {} {} | color=".format(ticker["t"], ticker["l"], ticker["c"]), "red" if float(ticker["c"]) < 0 else "green"
+        print color
+        print "{} {} {}".format(ticker["t"], ticker["l"], ticker["c"])
+        print colored ('"{} {} {}".format(ticker["t"], ticker["l"], ticker["c"])', color)
