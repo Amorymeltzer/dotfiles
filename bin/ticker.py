@@ -14,6 +14,16 @@ else:
     print "hi"
 
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 #Stocks can be provided with just the symbol (AAPL) or exchange:symbol (NASDAQ:AAPL)
 #stocks={"MSFT","AAPL","GOOGL","AMZN","ONDK"}
 stocks=sys.argv[1:]
@@ -45,3 +55,4 @@ for i in stocks:
         print color
         print "{} {} {}".format(ticker["t"], ticker["l"], ticker["c"])
         print colored ('"{} {} {}".format(ticker["t"], ticker["l"], ticker["c"])', color)
+        print bcolors.OKGREEN + "Green" + bcolors.OKBLUE + "Blue" + bcolors.ENDC
