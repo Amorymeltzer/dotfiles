@@ -6,6 +6,7 @@
 import urllib2
 import json
 import sys
+import re
 
 if len(sys.argv) <= 1:
     sys.exit(1)
@@ -36,7 +37,10 @@ for i in stocks:
     for ticker in obj:
         if float(ticker["c"]) < 0:
             color = colors.RED
+            res = re.sub('-', 'Down ', ticker["c"])
         else:
             color = colors.GREEN
+            res = re.sub('\+', 'Up ', ticker["c"])
 
-        print color + "\t".join([ticker["t"], ticker["l"], ticker["c"], ticker["cp"]]) + colors.ENDC
+        perc = "(" + ticker["cp"] + "%)"
+        print color + "\t".join([ticker["t"], ticker["l"], res, perc]) + colors.ENDC
