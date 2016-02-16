@@ -1,8 +1,47 @@
-#!/usr/bin/env bash
-# ticker by Amory Meltzer
-# Grab current price of stock or index.  Avoids proper API since ^DJI is
-# blocked:
-# curl -s "http://download.finance.yahoo.com/d/quotes.csv?s=$quote&f=l1";
+#!/usr/bin/env python
+# Grab current price of stock or index
+# Use python to colorize, columnize, etc.
+# Heavily based off bitbar gfinance plugin:
+# https://github.com/matryer/bitbar-plugins/blob/master/Finance/gfinance.5m.py
 
-quote=`echo $1`;
-curl -s "http://finance.yahoo.com/q?s=$quote" | perl -ne 'print uc($1)."\t$2\t$3 $4 ($5)\n" if /time_rtq_ticker\"\>\<span id=\"yfs_.*?_(.*?)\"\>(\d+,?\d*.\d*).*?_arrow\" alt=\"(\w*)\"\>   (\d*.\d*).*?\((\d*.\d*%)/;';
+import urllib2
+import json
+import sys
+import re
+
+if len(sys.argv) <= 1:
+    sys.exit(1)
+
+
+# Stocks can be provided as symbol (AAPL) or exchange:symbol (NASDAQ:AAPL)
+stocks=sys.argv[1:]
+
+# Nothing fancy
+class colors:
+    GREEN = '\033[32m'
+    RED = '\033[31m'
+    ENDC = '\033[0m'
+
+quote = ""
+for i in stocks:
+    url = "http://finance.google.com/finance/info?client=ig&q=" + i
+
+    try:
+        u = urllib2.urlopen(url)
+    except Exception:
+        print "Ticker lookup of %s failed" % i
+        continue
+
+    quote = u.read()
+    obj = json.loads(quote[4:-1])
+
+    for ticker in obj:
+        if float(ticker["c"]) < 0:
+            color = colors.RED
+            res = re.sub('-', 'Down ', ticker["c"])
+        else:
+            color = colors.GREEN
+            res = re.sub('\+', 'Up ', ticker["c"])
+
+        perc = "(" + ticker["cp"] + "%)"
+        print color + "\t".join([ticker["t"], ticker["l"], res, perc]) + colors.ENDC
