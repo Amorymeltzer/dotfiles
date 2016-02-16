@@ -4,7 +4,7 @@
 
 ;; Author: Artur Malabarba <emacs@endlessparentheses.com>
 ;; URL: https://github.com/Malabarba/elisp-bug-hunter
-;; Version: 1.0.1
+;; Version: 1.1
 ;; Keywords: lisp
 ;; Package-Requires: ((seq "1.3") (cl-lib "0.5"))
 
@@ -143,7 +143,10 @@ file.")
               nil)
           (end-of-file `(bug-caught (end-of-file) ,line ,col))
           (invalid-read-syntax `(bug-caught ,er ,line ,col))
-          (error (error "Ran into an error we don't understand, please file a bug report: %S" er)))
+          (error
+           (if (string= (elt er 1) "Invalid modifier in string")
+               `(bug-caught (invalid-modifier) ,line ,col)
+             (error "Ran into an error we don't understand, please file a bug report: %S" er))))
         (nreverse out))))
 
 (defun bug-hunter--read-contents (file)
@@ -210,43 +213,46 @@ LINE and COLUMN are the coordinates where EXPRESSION started in
 the file."
   (when line
     (bug-hunter--report "%S, line %s pos %s:"
-              bug-hunter--current-file line column))
+      bug-hunter--current-file line column))
   (bug-hunter--report "  %s"
-            (cl-case (car error)
-              (end-of-file
-               "There's a missing closing parenthesis, the expression on this line never ends.")
-              (invalid-read-syntax
-               (let ((char (cadr error)))
-                 (if (member char '("]" ")"))
-                     (concat "There's an extra " char
-                             " on this position. There's probably a missing "
-                             (if (string= char ")") "(" "[")
-                             " before that.")
-                   (concat "There's a " char
-                           " on this position, and that is not valid elisp syntax."))))
-              (user-aborted
-               (let* ((print-level 2)
-                      (print-length 15)
-                      (forms (cadr error))
-                      (size (length forms)))
-                 (concat "User aborted while testing the following expressions:\n"
-                         (mapconcat (lambda (x) (bug-hunter--pretty-format x 4))
-                                    (if (< size 16) forms (seq-take forms 7))
-                                    "")
-                         (when (> size 16)
-                           (format "\n    ... %s omitted expressions ...\n\n"
-                                   (- size 14)))
-                         (when (> size 16)
-                           (mapconcat (lambda (x) (bug-hunter--pretty-format x 4))
-                                      (seq-drop forms (- size 7)) "")))))
-              (assertion-triggered
-               (concat "The assertion returned the following value here:\n"
-                       (bug-hunter--pretty-format (cadr error) 4)))
-              (t (format "The following error was signaled here:\n    %S"
-                         error))))
+    (cl-case (car error)
+      (end-of-file
+       "There's a missing closing parenthesis, the expression on this line never ends.")
+      (invalid-modifier (concat "There's a string on this line with an invalid modifier."
+                                "\n  A \"modifier\" is a \\ followed by a few characters."
+                                "\n  For example, \\C-; is an invalid modifier."))
+      (invalid-read-syntax
+       (let ((char (cadr error)))
+         (if (member char '("]" ")"))
+             (concat "There's an extra " char
+                     " on this position. There's probably a missing "
+                     (if (string= char ")") "(" "[")
+                     " before that.")
+           (concat "There's a " char
+                   " on this position, and that is not valid elisp syntax."))))
+      (user-aborted
+       (let* ((print-level 2)
+              (print-length 15)
+              (forms (cadr error))
+              (size (length forms)))
+         (concat "User aborted while testing the following expressions:\n"
+                 (mapconcat (lambda (x) (bug-hunter--pretty-format x 4))
+                            (if (< size 16) forms (seq-take forms 7))
+                            "")
+                 (when (> size 16)
+                   (format "\n    ... %s omitted expressions ...\n\n"
+                           (- size 14)))
+                 (when (> size 16)
+                   (mapconcat (lambda (x) (bug-hunter--pretty-format x 4))
+                              (seq-drop forms (- size 7)) "")))))
+      (assertion-triggered
+       (concat "The assertion returned the following value here:\n"
+               (bug-hunter--pretty-format (cadr error) 4)))
+      (t (format "The following error was signaled here:\n    %S"
+                 error))))
   (when expression
     (bug-hunter--report "  Caused by the following expression:\n%s"
-              (bug-hunter--pretty-format expression 4)))
+      (bug-hunter--pretty-format expression 4)))
   (bug-hunter--report "\xc\n")
   `[,error ,line ,column ,expression])
 
@@ -408,27 +414,27 @@ are evaluated."
      ((progn (bug-hunter--report "Doing some initial tests...")
              (not (bug-hunter--run-and-test expressions assertion)))
       (bug-hunter--report-user-error "Test failed.\n%s\n%s"
-                           (if assertion
-                               (concat "The assertion returned nil after loading the entire file.\n"
-                                       bug-hunter--assertion-reminder)
-                             "No errors signaled after loading the entire file.
+        (if assertion
+            (concat "The assertion returned nil after loading the entire file.\n"
+                    bug-hunter--assertion-reminder)
+          "No errors signaled after loading the entire file.
 If you're looking for something that's not an error, use the
 interactive hunt instead of the error hunt.  If you have some
 elisp proficiency, you can also use the assertion hunt, see this
 link for some examples:
     https://github.com/Malabarba/elisp-bug-hunter")
-                           (or assertion "")))
+        (or assertion "")))
 
      ;; Make sure we're in a forest, not a volcano.
      ((bug-hunter--run-and-test nil assertion)
       (bug-hunter--report-user-error "Test failed.\n%s\n%s"
-                           (if assertion
-                               (concat "Assertion returned non-nil even on emacs -Q:"
-                                       bug-hunter--assertion-reminder)
-                             "Detected a signaled error even on emacs -Q. I'm sorry, but there
+        (if assertion
+            (concat "Assertion returned non-nil even on emacs -Q:"
+                    bug-hunter--assertion-reminder)
+          "Detected a signaled error even on emacs -Q. I'm sorry, but there
 is something seriously wrong with your Emacs installation.
 There's nothing more I can do here.")
-                           (or assertion "")))
+        (or assertion "")))
 
      (t
       ;; Perform the actual hunt.
@@ -436,7 +442,7 @@ There's nothing more I can do here.")
       (let* ((result (bug-hunter--bisect-start expressions assertion)))
         (if (not result)
             (bug-hunter--report-user-error "No problem was found, despite our initial tests.\n%s"
-                                 "I have no idea what's going on.")
+              "I have no idea what's going on.")
           (let* ((pos (elt result 0))
                  (ret (elt result 1))
                  (linecol (when pos (cdr (elt rich-forms pos))))

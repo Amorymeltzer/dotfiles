@@ -535,6 +535,7 @@ alongside the actual current key sequence when
       (setq-local cursor-in-non-selected-windows nil)
       (setq-local mode-line-format nil)
       (setq-local word-wrap nil)
+      (setq-local show-trailing-whitespace nil)
       (run-hooks 'which-key-init-buffer-hook))))
 
 (defun which-key--setup ()
@@ -1702,7 +1703,8 @@ including prefix arguments."
        (cons page
              (concat full-prefix (when prefix-keys " ")
                      status-line (when status-line " ")
-                     nxt-pg-hint))))))
+                     nxt-pg-hint)))
+      (_ (cons page nil)))))
 
 (defun which-key--show-page (n)
   "Show page N, starting from 0."
