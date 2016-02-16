@@ -3,15 +3,12 @@
 # Use python to colorize, columnize, etc.
 # Heavily based off bitbar gfinance plugin:
 # https://github.com/matryer/bitbar-plugins/blob/master/Finance/gfinance.5m.py
+# TODO: Use up/down arrows instead of up/down?
 
-import urllib2
-import json
 import sys
-import re
 
 if len(sys.argv) <= 1:
     sys.exit(1)
-
 
 # Stocks can be provided as symbol (AAPL) or exchange:symbol (NASDAQ:AAPL)
 stocks=sys.argv[1:]
@@ -22,7 +19,9 @@ class colors:
     RED = '\033[31m'
     ENDC = '\033[0m'
 
-quote = ""
+import urllib2
+import json
+import re
 for i in stocks:
     url = "http://finance.google.com/finance/info?client=ig&q=" + i
 
