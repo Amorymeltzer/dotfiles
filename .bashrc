@@ -1452,7 +1452,7 @@ function fs() {
     if [[ -n "$@" ]]; then
 	du $arg -- "$@"
     else
-	du $arg .[^.]* *
+	du $arg .[^.]* ./*
     fi
 }
 alias filesize='fs'
