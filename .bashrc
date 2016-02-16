@@ -1205,17 +1205,15 @@ pass ()
 
 # Dashboard stock prices, use ticker for price, stockclose for last close
 function marketupdate() {
-    FILES="SSO QLD VOOG QQQ ^DJI ^IXIC ^GSPC ^NYA ^TNX"
+    FILES="SSO QLD VOOG QQQ .DJI .IXIC .INX INDEXNYSEGIS:NYA TNX"
 
     # Only show investments if after market close or weekend
     # Based on DST, correct using Eastern time??
     if ((`date -u '+%H'` < 13)) || ((`date -u '+%u'` > 5)); then
 	FILES="FGCKX FDIKX CCPIX VSCPX VGSNX VFFVX RDITX $FILES"
     fi
-    for ticker in $FILES
-    do
-	ticker $ticker
-    done
+
+    ticker $FILES | column -t
 }
 alias mu='marketupdate'
 alias stockmarket='ticker'
