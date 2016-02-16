@@ -35,12 +35,11 @@ for i in stocks:
     obj = json.loads(quote[4:-1])
 
     for ticker in obj:
+        perc = "(" + ticker["cp"] + "%)"
         if float(ticker["c"]) < 0:
             color = colors.RED
-            res = re.sub('-', 'Down ', ticker["c"])
+            perc = re.sub('-', '', perc)
         else:
             color = colors.GREEN
-            res = re.sub('\+', 'Up ', ticker["c"])
 
-        perc = "(" + ticker["cp"] + "%)"
-        print color + "\t".join([ticker["t"], ticker["l"], res, perc]) + colors.ENDC
+        print color + "\t".join([ticker["t"], ticker["l"], ticker["c"], perc]) + colors.ENDC
