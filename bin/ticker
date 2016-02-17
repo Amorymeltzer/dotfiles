@@ -42,4 +42,5 @@ for i in stocks:
         else:
             color = colors.GREEN
 
-        print color + "\t".join([ticker["t"], ticker["l"], ticker["c"], perc]) + colors.ENDC
+        name = re.sub('^\.', '', ticker["t"])
+        print color + "\t".join([name, ticker["l"], ticker["c"], perc]) + colors.ENDC
