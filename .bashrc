@@ -1218,6 +1218,7 @@ function marketupdate() {
 alias mu='marketupdate'
 alias stockmarket='ticker'
 alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
+alias inflation="perl ~/Documents/perl/sandbox/inflation.pl "
 
 function btc() {
     five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
