@@ -845,8 +845,7 @@ function server() {
 # Modified slightly
 function transfer() {
     if [ $# -eq 0 ]; then
-	echo "No arguments specified. Usage:"
-	echo "transfer /tmp/test.md"
+	echo "Usage: transfer /tmp/test.md"
 	echo "cat /tmp/test.md | transfer test.md"
 	return 1
     fi
