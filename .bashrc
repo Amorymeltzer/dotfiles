@@ -301,9 +301,9 @@ SLOAD=$(( 100*${NCPU} ))	# Small load
 MLOAD=$(( 200*${NCPU} ))	# Medium load
 XLOAD=$(( 400*${NCPU} ))	# Large load
 
-### Useful functions
+### Prompt functions
 # Highlight hostname when connected via SSH
-function cnx_color()
+function _cnx_color()
 {
     if [[ ! $SSH_TTY ]]; then
 	echo -en ${Color_Red}
@@ -315,7 +315,7 @@ function cnx_color()
 
 # Test user type FIXME TODO
 # see also `id -un` instead(?) of `logname`
-function uid_color()
+function _uid_color()
 {
     if [[ $USER != $(logname) ]]; then
 	echo -en ${Color_Red_zBackground} # User is not login user
@@ -334,7 +334,7 @@ function load()
 }
 
 # Return a color indicating system load.
-function load_color()
+function _load_color()
 {
     local SYSLOAD=$(load)
     if [ ${SYSLOAD} -gt ${XLOAD} ]; then
@@ -349,7 +349,7 @@ function load_color()
 }
 
 # Return a color according to running/suspended jobs.
-function job_color()
+function _job_color()
 {
     if [ $(jobs -s | wc -l) -gt "0" ]; then
 	echo -en ${Color_Red_Bold_Intense}
@@ -370,15 +370,15 @@ function prompt_command {
     fi
 
     psbegin="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
-    psmiddle="\h\[$Color_Cyan\]]-[\[$(load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
+    psmiddle="\h\[$Color_Cyan\]]-[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
 
     if ((${ERRORS} > 0)); then
 	PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$"
     else
-	PS1="$psbegin[\[$(uid_color)\]\u\[$Color_Blue\]@\[$(cnx_color)\]$psmiddle[\[$Color_Magenta\]\#"
+	PS1="$psbegin[\[$(_uid_color)\]\u\[$Color_Blue\]@\[$(_cnx_color)\]$psmiddle[\[$Color_Magenta\]\#"
     fi
 
-    psend="\[$Color_Cyan\]]\[$(job_color)\]->\[$Color_zOff\] "
+    psend="\[$Color_Cyan\]]\[$(_job_color)\]->\[$Color_zOff\] "
     PS1+=$psend
     export PS1
 
