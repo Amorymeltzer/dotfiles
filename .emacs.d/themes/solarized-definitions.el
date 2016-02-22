@@ -702,6 +702,7 @@ the \"Gen RGB\" column in solarized-definitions.el to improve them further."
                 (whitespace-trailing (,@fmt-bold ,@fg-red ,@bg-base02))
                 (whitespace-highlight-face (,@fg-red ,@bg-blue))
                 (whitespace-line (,@fg-magenta))
+                (whitespace-newline (:inherit shadow :slant normal))
                 ;; writegood
                 (writegood-weasels-face (,@fmt-curl-cyan ,@fg-cyan))
                 (writegood-passive-voice-face (,@fg-magenta))
@@ -774,7 +775,9 @@ the \"Gen RGB\" column in solarized-definitions.el to improve them further."
                 (undo-tree-visualizer-default-face (:inherit shadow))
                 (undo-tree-visualizer-active-branch-face (:inherit default))
                 (undo-tree-visualizer-unmodified-face (,@fg-cyan))
-                (undo-tree-visualizer-register-face (,@fg-yellow)))))))
+                (undo-tree-visualizer-register-face (,@fg-yellow))
+                ;; haskell
+                (haskell-keyword-face (,@fg-cyan)))))))
 
 ;;;###autoload
 (when (boundp 'custom-theme-load-path)
