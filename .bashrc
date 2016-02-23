@@ -695,6 +695,7 @@ fi
 if [[ -f `command -v cwdiff` ]]; then
     alias wcolordiff='cwdiff '
 elif [[ -f `command -v wdiff` ]]; then
+    # What the fuck is this?  Need to explain FIXME TODO
     alias wcolordiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
 fi
 alias diffc='wcolordiff '
