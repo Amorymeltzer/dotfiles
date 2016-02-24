@@ -861,12 +861,6 @@ function transfer() {
     echo $tmp
 }
 
-function durandal() {
-    ssh Amory@Durandal.local
-}
-function leela() {
-    ssh Amory@Leela.local
-}
 function twinmos() {
     diskutil umount /Volumes/TWINMOS
 }
