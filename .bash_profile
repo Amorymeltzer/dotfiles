@@ -7,8 +7,6 @@ export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin
 export PATH="/opt/local/libexec/perl5.22/sitebin:$PATH"
 # add ~/bin
 export PATH="$HOME/bin:$PATH"
-#export PATH=~/bin/msdir:$PATH  # add ms to command line
-#export PATH=~/Documents/perl/sandbox:$PATH # add some perl
 
 # Add unloved perl modules
 export MANPATH="/opt/local/share/perl5.22/siteman:/opt/local/share/perl5.22/man:$MANPATH"
