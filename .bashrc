@@ -308,7 +308,6 @@ function _cnx_color()
     if [[ ! $SSH_TTY ]]; then
 	echo -en ${Color_Red}
     else
-	#  echo -en ${Color_Green_Bold_Intense}
 	echo -en ${Color_Black}${Color_Green_zBackground}
     fi
 }
