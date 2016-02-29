@@ -550,6 +550,7 @@ alias cls='clear'
 alias em='emacs '
 alias e='$EDITOR '
 alias count='wc -l '
+alias linecount='count '
 
 # http://linux.die.net/man/1/pygmentize
 # Colorized cat
