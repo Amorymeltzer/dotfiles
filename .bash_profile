@@ -63,5 +63,6 @@ echo -ne "${Color_Cyan}" ; today
 
 # Default designed to always take up same space without leading zero for day,
 # meaning dates before the 10th get two spaces, that bugs me
-# First line ("last login...") gone with .hushlogin
+# The system copyright notice, the date and time of the last login, the
+# message of the day as well as other information is silenced via .hushlogin
 echo -ne "${Color_Red}Local time: ${Color_zOff}" ; date +'%a %b %d %H:%M:%S %Z %Y'
