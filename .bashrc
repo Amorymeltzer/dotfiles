@@ -282,7 +282,8 @@ bind "set mark-symlinked-directories on"
 bind "set expand-tilde off"
 # try to keep the cursor position when moving through  history
 bind "set history-preserve-point on"
-
+# Treat hyphens and underscores as equivalent
+bind "set completion-map-case on"
 
 ### Prompts ----------------------------------------------------------
 #export PS1="${Color_Cyan}\u${Color_White_Bold_Intense}@${Color_Cyan}\h${Color_White_Bold_Intense}>${Color_Green}\w${Color_White_Bold_Intense}\$ ${Color_zOff}"

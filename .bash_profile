@@ -43,9 +43,11 @@ shopt -s checkwinsize
 shopt -s nocaseglob
 # Do not autocomplete when accidentally pressing Tab on an empty line - takes
 # forever and yields "Display all 15 gazillion possibilites?"
-shopt -s no_empty_cmd_completion;
+shopt -s no_empty_cmd_completion
 # If a command contains an invalid history operation, let me correct it
-shopt -s histreedit;
+shopt -s histreedit
+# Prevent file overwrite on stdout redirection
+shopt -s noclobber
 
 
 # Load in .bashrc -------------------------------------------------
