@@ -382,8 +382,6 @@ function prompt_command {
     PS1+=$psend
     export PS1
 
-    history -a			# All terminal windows go to same history
-
     # create a $fill of all screen width minus the time string and a space:
     let fillsize=${COLUMNS}	# fullscreen
     if [[ $(which battery.py) ]]; then
@@ -402,6 +400,8 @@ function prompt_command {
 	done
 	fill="${fill}${battery}"
     fi
+
+    history -a			# All terminal windows go to same history
 }
 
 export PS2="\[$Color_Cyan\]→\[$Color_zOff\] " # Secondary prompt, multiline commands
