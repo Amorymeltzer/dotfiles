@@ -47,7 +47,7 @@ shopt -s no_empty_cmd_completion
 # If a command contains an invalid history operation, let me correct it
 shopt -s histreedit
 # Prevent file overwrite on stdout redirection
-shopt -s noclobber
+set -o noclobber
 
 
 # Load in .bashrc -------------------------------------------------
