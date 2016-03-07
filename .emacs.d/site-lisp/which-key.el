@@ -4,7 +4,7 @@
 
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-which-key
-;; Version: 0.8
+;; Version: 0.9
 ;; Keywords:
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -1677,7 +1677,7 @@ including prefix arguments."
                           (make-string first-col-width 32)))
               lines first-line new-end)
          (if (= 1 height)
-             (concat prefix page)
+             (cons (concat prefix page) nil)
            (setq lines (split-string page "\n")
                  first-line (concat prefix (car lines) "\n" page-cnt)
                  new-end (concat "\n" (make-string first-col-width 32)))
