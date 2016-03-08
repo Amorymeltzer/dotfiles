@@ -1217,9 +1217,11 @@ alias inflation="perl ~/Documents/perl/sandbox/inflation.pl "
 
 function btc() {
     five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
-    tail -n 1 ~/btc.csv;
-    echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five";
-    echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five" >> ~/btc.csv;
+    if [[ -n $five ]]; then
+	tail -n 1 ~/btc.csv
+	echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five"
+	echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five" >> ~/btc.csv
+    fi
 }
 alias btn='btc'
 function bitcoin() {
