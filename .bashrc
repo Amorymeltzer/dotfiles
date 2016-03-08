@@ -61,7 +61,7 @@ if [[ -f `command -v hub` ]] ; then
 fi
 # Quick
 function g {
-    ref=$(git symbolic-ref HEAD 2> /dev/null)
+    local ref=$(git symbolic-ref HEAD 2> /dev/null)
     if [[ $ref ]]; then
 	if [[ $# > 0 ]]; then
             git "$@"
@@ -250,7 +250,7 @@ function lastman {
     while [ $# -gt 0 -a '(' "sudo" = "$1" -o "-" = "${1:0:1}" ')' ]; do
 	shift;
     done;
-    cmd="$(basename "$1")";
+    local cmd="$(basename "$1")";
     man "$cmd" || help "$cmd";
 }
 alias lman='lastman '
@@ -502,7 +502,7 @@ alias ee='emacs ~/.emacs'
 alias eg='emacs ~/.gitconfig'
 alias gitconfig='emacs ~/.gitconfig'
 function gitignore() {
-    ignore=".gitignore"
+    local ignore=".gitignore"
     if [[ ! -f $ignore ]]; then
 	ignore="~/.global-gitignore"
     elif [[ -n $1 && $1 = "g" ]]; then
@@ -781,6 +781,7 @@ alias cask-repair='cask-repair -l origin -p Amorymeltzer -a -o '
 # Calculate :checkpoint from url
 function checkpoint()
 {
+    local url
     if [[ $1 ]]; then
 	url=$1
     else
@@ -791,7 +792,7 @@ function checkpoint()
 	return
     fi
 
-    checkpoint=$(curl --silent --compressed "$url" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
+    local checkpoint=$(curl --silent --compressed "$url" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
 
     if [[ $checkpoint == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' ]]; then
 	echo "Error: Appcast shasum appears to be empty"
@@ -852,6 +853,7 @@ function transfer() {
 	return 1
     fi
 
+    local basefile tmp
     if [ `tty -s` ]; then
 	basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
 	tmp=$(curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile")
@@ -892,7 +894,7 @@ if [ ! -x /opt/local/bin/setvolume ]; then
 	elif [ $1 -lt 0 -o $1 -gt 100 ]; then
 	    echo "setvolume <0-100>"
 	else
-	    val=$1*7/100
+	    local val=$1*7/100
 	    osascript -e "set volume $val"
 	fi
     }
@@ -999,7 +1001,7 @@ function down4me()
 # }
 function ip()
 {
-    iplist=$(ifconfig -a | perl -nle'/inet (?:addr:)?(\d+\.\d+\.\d+\.\d+)/ && print $1')
+    local iplist=$(ifconfig -a | perl -nle'/inet (?:addr:)?(\d+\.\d+\.\d+\.\d+)/ && print $1')
 
     if [ "$1" ]; then
 	if [ "$(echo $iplist | grep -w $1)" ]; then
@@ -1021,7 +1023,7 @@ alias ipaddr="ifconfig -a | grep 'inet' | grep 'broadcast' | awk '{ print $2 }'"
 
 function ssid()
 {
-    ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | grep " SSID" | sed "s/.*: //")
+    local ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | grep " SSID" | sed "s/.*: //")
 
     if [ "$1" ]; then
 	if [ "$(echo $ssid | grep -w $1)" ]; then
@@ -1200,7 +1202,7 @@ pass ()
 
 # Dashboard stock prices, use ticker for price, stockclose for last close
 function marketupdate() {
-    FILES="SSO QLD VOOG QQQ .DJI .IXIC .INX INDEXNYSEGIS:NYA TNX"
+    local FILES="SSO QLD VOOG QQQ .DJI .IXIC .INX INDEXNYSEGIS:NYA TNX"
 
     # Only show investments if after market close or weekend
     # Based on DST, correct using Eastern time??
@@ -1216,7 +1218,7 @@ alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
 alias inflation="perl ~/Documents/perl/sandbox/inflation.pl "
 
 function btc() {
-    five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
+    local five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
     if [[ -n $five ]]; then
 	tail -n 1 ~/btc.csv
 	echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five"
@@ -1225,19 +1227,20 @@ function btc() {
 }
 alias btn='btc'
 function bitcoin() {
-    five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
+    local five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
     echo -e "BTC: $five";
 }
 
 # Get coordinates
 function findlocation() {
-    place=`echo $* | sed 's/ /%20/g'`
+    local place=`echo $* | sed 's/ /%20/g'`
     curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=$place&sensor=false" | grep -A 2 -e "location\"" -e "formatted_address" | grep -e "formatted" -e "lat" -e "lng" | sed -e 's/^ *//' -e 's/"//g' -e 's/formatted_address/Full address/g' -e 's/,$//g' -e 's/^.*{//g';
 }
 alias getcoordinates='findlocation'
 
 # Get the weather
 function weather() {
+    local zip
     if [ ! $1 ]; then
 	zip="95618";
 	#	zip=$(curl -s api.hostip.info/get_html.php?ip=$(curl -s icanhazip.com) | sed -e'1d;3d' -e's/C.*: \(.*\)/\1/' -e's/ /%20/g' -e"s/'/%27/g" -e"s/-/%2d/g")
@@ -1257,6 +1260,7 @@ alias today='weather | head -n 2 | tail -n 1'
 
 function sunrise()
 {
+    local loc
     # Uses WOEID, which is some ol' bullshit
     if [ ! $1 -o $1 = "Davis" ]; then
 	loc=2389646;		# Davis
@@ -1285,9 +1289,9 @@ function metar()
 	return
     fi
     # Convert to all caps
-    code=$(echo -n $1|tr '[a-z]' '[A-Z]')
+    local code=$(echo -n $1|tr '[a-z]' '[A-Z]')
 
-    URL="http://weather.noaa.gov/pub/data/observations/metar/decoded/"
+    local URL="http://weather.noaa.gov/pub/data/observations/metar/decoded/"
     wget -q -O - "${URL}${code}.TXT" 2>/dev/null
 }
 
@@ -1301,9 +1305,9 @@ alias sobasically='thisforthat'
 
 # Print the given text in the center of the screen.
 function center {
-    width=$(tput cols);
-    str="$@";
-    len=${#str};
+    local width=$(tput cols);
+    local str="$@";
+    local len=${#str};
     [ $len -ge $width ] && echo "$str" && return;
     for ((i = 0; i < $(((($width - $len)) / 2)); i++)); do
 	echo -n " ";
@@ -1515,7 +1519,7 @@ function =() {
 # Calculate factors
 # https://twitter.com/climagic/status/550355281415503872
 function factors {
-    num=$1;
+    local num=$1;
     seq $(($num/2)) | awk '"'$num'"%$0==0'
 }
 
@@ -1558,7 +1562,7 @@ function targz() {
     local tmpFile="${@%/}.tar";
     tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
 
-    size=$(
+    local size=$(
 	stat -f"%z" "${tmpFile}" 2> /dev/null; # OS X `stat`
 	stat -c"%s" "${tmpFile}" 2> /dev/null # GNU `stat`
 	);
