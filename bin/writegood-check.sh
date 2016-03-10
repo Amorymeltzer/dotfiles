@@ -12,3 +12,6 @@ echo
 echo "Lexical dups:"
 writegood--lexicalillusions.pl $1
 echo
+echo "Proselint:"
+proselint $1
+echo
