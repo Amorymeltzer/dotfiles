@@ -358,6 +358,54 @@ function _job_color()
     fi
 }
 
+###### holiday greeting
+# from Jonathan's .bashrc file (by ~71KR117)
+# http://dotshare.it/dots/516/
+function holiday_greeting()
+{
+    # get current day (Month-Day Format)
+    local day=$(date +"%B %e")
+    # get current year (for new years greeting)
+    local year=$(date +"%Y")
+    # make sure the holiday greeting is displayed (if any)
+    local hol=1 holgreet
+    if [ "$day" = "January 1" ]
+    then
+	holgreet="${Color_Magenta_Intense}Happy ${Color_Red_Intense}New ${Color_Blue_Intense}Year!${Color_zOff} Have a good $year."
+    elif [ "$day" = "February 2" ]
+    then
+	holgreet="Happy Groundhog Day"
+    elif [ "$day" = "February 14" ]
+    then
+	holgreet="Happy ${Color_Magenta}Valentine's Day${Color_zOff}"
+    elif [ "$day" = "July 4" ]
+    then
+	holgreet="Happy ${Color_Red_Intense}Fourth ${Color_White_Intense}of ${Color_Blue_Intense}July${Color_zOff}"
+    elif [ "$day" = "August 12" ]
+    then
+	holgreet="Happy Birthday!"
+    elif [ "$day" = "October 31" ]
+    then
+	holgreet="${Color_Red_Bold}Happy Halloween.${Color_zOff}"
+    elif [ "$day" = "December 24" ]
+    then
+	holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve${Color_zOff}"
+    elif [ "$day" = "December 25" ]
+    then
+	holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas${Color_zOff}!"
+    elif [ "$day" = "December 31" ]
+    then
+	holgreet="Happy New Year's Eve!"
+    else
+	hol=0
+    fi
+
+    if [ "$hol" = "1" ]
+    then
+	echo
+	echo -e $holgreet
+    fi
+}
 
 ### Actual prompt
 function prompt_command {
@@ -370,7 +418,7 @@ function prompt_command {
     fi
 
     psbegin="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
-    psmiddle="\h\[$Color_Cyan\]]-[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]\n\[$Color_Cyan\]└─"
+    psmiddle="\h\[$Color_Cyan\]]-[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]$(holiday_greeting)\n\[$Color_Cyan\]└─"
 
     if ((${ERRORS} > 0)); then
 	PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$"
@@ -1565,7 +1613,7 @@ function targz() {
     local size=$(
 	stat -f"%z" "${tmpFile}" 2> /dev/null; # OS X `stat`
 	stat -c"%s" "${tmpFile}" 2> /dev/null # GNU `stat`
-	);
+	  );
 
     local cmd="";
     if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
@@ -1727,51 +1775,4 @@ STRINGS
 
 
 
-###### holiday greeting
-###### Turn into function, append to prompt? FIXME TODO
-# from Jonathan's .bashrc file (by ~71KR117)
-# http://dotshare.it/dots/516/
-# get current day (Month-Day Format)
-day=$(date +"%B %e")
-# get current year (for new years greeting)
-year=$(date +"%Y")
-# make sure the holiday greeting is displayed (if any)
-hol=1
-if [ "$day" = "January 1" ]
-then
-    holgreet="${Color_Magenta_Intense}Happy ${Color_Red_Intense}New ${Color_Blue_Intense}Year!${Color_zOff} Have a good $year."
-elif [ "$day" = "February 2" ]
-then
-    holgreet="Happy Groundhog Day"
-elif [ "$day" = "February 14" ]
-then
-    holgreet="Happy ${Color_Magenta}Valentine's Day${Color_zOff}"
-elif [ "$day" = "July 4" ]
-then
-    holgreet="Happy ${Color_Red_Intense}Fourth ${Color_White_Intense}of ${Color_Blue_Intense}July${Color_zOff}"
-elif [ "$day" = "August 12" ]
-then
-    holgreet="Happy Birthday!"
-elif [ "$day" = "October 31" ]
-then
-    holgreet="${Color_Red_Bold}Happy Halloween.${Color_zOff}"
-elif [ "$day" = "December 24" ]
-then
-    holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve${Color_zOff}"
-elif [ "$day" = "December 25" ]
-then
-    holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas${Color_zOff}!"
-elif [ "$day" = "December 31" ]
-then
-    holgreet="Happy New Year's Eve!"
-else
-    hol=0
-fi
-# display holiday greeting
-if [ "$hol" = "1" ]
-then
-    echo -e $holgreet
-    # elif [ "$hol" = "0" ]
-    # then
-    #   randomvarthatsomehowimportant=0
-fi
+
