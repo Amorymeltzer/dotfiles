@@ -1761,8 +1761,3 @@ STRINGS
 -z           length of string is zero
 == != < >"
 }
-
-
-
-
-
