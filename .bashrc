@@ -1711,14 +1711,14 @@ ls a{c,bl}e  Globs ace, able
 \$(ls)        \`ls\` (but nestable!)
 HISTORY MANIPULATION
 --------------------
-!!           Last command
-!?foo        Last command containing \`foo'
-^foo^bar^    Last command containing \`foo', but substitute \`bar'
-!!:0         Last command word
-!!:^         Last command's first argument
-!\$           Last command's last argument
-!!:*         Last command's arguments
-!!:x-y       Arguments x to y of last command
+!!           last command
+!?foo        last command containing \`foo'
+^foo^bar^    last command containing \`foo', but substitute \`bar'
+!!:0         last command word
+!!:^         last command's first argument
+!\$          last command's last argument
+!!:*         last command's arguments
+!!:x-y       arguments x to y of last command
 C-s          search forwards in history
 C-r          search backwards in history
 LINE EDITING
@@ -1740,7 +1740,7 @@ COMPLETION
 M-/          complete filename
 M-~          complete user name
 M-@          complete host name
-M-\$          complete variable name
+M-\$         complete variable name
 M-!          complete command name
 M-^          complete history
 IF-THEN TEST OPERATORS
