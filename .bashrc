@@ -946,7 +946,7 @@ alias maxvolume='setvolume 100'
 # Stuff I never use but can't delete because of http://xkcd.com/530/
 alias stfu='mutevolume'
 alias pumpitup='maxvolume'
-alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
+alias haxx="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
 # Seriously though, just use pianobar/pandora
 alias pandora='pianobar'
