@@ -35,7 +35,7 @@
 
 ;;; Color Palette
 
-(defvar zenburn-colors-alist
+(defvar zenburn-default-colors-alist
   '(("zenburn-fg+1"     . "#FFFFEF")
     ("zenburn-fg"       . "#DCDCCC")
     ("zenburn-fg-1"     . "#656555")
@@ -77,6 +77,16 @@ Each element has the form (NAME . HEX).
 
 `+N' suffixes indicate a color is lighter.
 `-N' suffixes indicate a color is darker.")
+
+(defvar zenburn-override-colors-alist
+  '()
+  "Place to override default theme colors.
+
+You can override a subset of the theme's default colors by
+defining them in this alist before loading the theme.")
+
+(defvar zenburn-colors-alist
+  (append zenburn-default-colors-alist zenburn-override-colors-alist))
 
 (defmacro zenburn-with-color-variables (&rest body)
   "`let' bind all colors defined in `zenburn-colors-alist' around BODY.
@@ -651,8 +661,18 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(js2-jsdoc-tag ((t (:foreground ,zenburn-green-1))))
    `(js2-jsdoc-type ((t (:foreground ,zenburn-green+2))))
    `(js2-jsdoc-value ((t (:foreground ,zenburn-green+3))))
-   `(js2-function-param ((t (:foreground, zenburn-green+3))))
+   `(js2-function-param ((t (:foreground, zenburn-orange))))
    `(js2-external-variable ((t (:foreground ,zenburn-orange))))
+;;;;; additional js2 mode attributes for better syntax highlighting
+   `(js2-instance-member ((t (:foreground ,zenburn-green-1))))
+   `(js2-jsdoc-html-tag-delimiter ((t (:foreground ,zenburn-orange))))
+   `(js2-jsdoc-html-tag-name ((t (:foreground ,zenburn-red-1))))
+   `(js2-object-property ((t (:foreground ,zenburn-blue+1))))
+   `(js2-magic-paren ((t (:foreground ,zenburn-blue-5))))
+   `(js2-private-function-call ((t (:foreground ,zenburn-cyan))))
+   `(js2-function-call ((t (:foreground ,zenburn-cyan))))
+   `(js2-private-member ((t (:foreground ,zenburn-blue-1))))
+   `(js2-keywords ((t (:foreground ,zenburn-magenta))))
 ;;;;; ledger-mode
    `(ledger-font-payee-uncleared-face ((t (:foreground ,zenburn-red-1 :weight bold))))
    `(ledger-font-payee-cleared-face ((t (:foreground ,zenburn-fg :weight normal))))
@@ -888,6 +908,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(org-mode-line-clock-overrun ((t (:foreground ,zenburn-bg :background ,zenburn-red-1))))
    `(org-ellipsis ((t (:foreground ,zenburn-yellow-1 :underline t))))
    `(org-footnote ((t (:foreground ,zenburn-cyan :underline t))))
+   `(org-document-title ((t (:foreground ,zenburn-blue))))
+   `(org-document-info ((t (:foreground ,zenburn-blue))))
    `(org-habit-ready-face ((t :background ,zenburn-green)))
    `(org-habit-alert-face ((t :background ,zenburn-yellow-1 :foreground ,zenburn-bg)))
    `(org-habit-clear-face ((t :background ,zenburn-blue-3)))
