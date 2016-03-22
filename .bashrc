@@ -1083,7 +1083,7 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
     alias "$method"="lwp-request -m '$method'"
 done
 
-alias quicklook="qlmanage -p "
+alias quicklook="qlmanage -p 2> /dev/null"
 alias ql="quicklook "
 
 alias pbc='pbcopy '
