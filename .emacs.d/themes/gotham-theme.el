@@ -318,7 +318,7 @@ depending on DISPLAY for keys which are either :foreground or
    (gnus-summary-normal-read :foreground green)
    (gnus-summary-normal-ticked :foreground base7)
    (gnus-summary-normal-undownloaded :foreground base5)
-   (gnus-summary-normal-unread :foreground base4)
+   (gnus-summary-normal-unread :foreground cyan)
    (gnus-server-agent :foreground base6 :weight bold)
    (gnus-server-closed :inherit italic :foreground base4)
    (gnus-server-cloud :foreground green :weight bold)
@@ -506,7 +506,7 @@ depending on DISPLAY for keys which are either :foreground or
    ;; company
    (company-echo-common :foreground red)
    (company-preview :inherit company-tooltip-selection)
-   (company-preview-common :inherit company-preview :foreground orange)
+   (company-preview-common :inherit company-preview :foreground yellow)
    (company-preview-search :inherit company-preview)
    (company-scrollbar-bg :background base2)
    (company-scrollbar-fg :background base4)

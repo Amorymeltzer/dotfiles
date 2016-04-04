@@ -2021,6 +2021,23 @@ Finally, show the buffer."
     ;;  (message "key: %s" (key-description prefix-keys)))
     ;; (when (> (length prefix-keys) 0)
     ;;  (message "key binding: %s" (key-binding prefix-keys)))
+    ;; Taken from guide-key
+    (when (and (equal prefix-keys [key-chord])
+               (bound-and-true-p key-chord-mode))
+      (setq prefix-keys
+            (condition-case nil
+                (let ((rkeys (recent-keys)))
+                  (vector 'key-chord
+                          ;; Take the two preceding the last one, because the
+                          ;; read-event call in key-chord seems to add a
+                          ;; spurious key press to this list. Note this is
+                          ;; different from guide-key's method which didn't work
+                          ;; for me.
+                          (aref rkeys (- (length rkeys) 3))
+                          (aref rkeys (- (length rkeys) 2))))
+              (error (progn
+                       (message "which-key error in key-chord handling")
+                       [key-chord])))))
     (cond ((and (> (length prefix-keys) 0)
                 (or (keymapp (key-binding prefix-keys))
                     ;; Some keymaps are stored here like iso-transl-ctl-x-8-map
