@@ -1103,20 +1103,19 @@ qsort()
 }
 
 # Get rid of pesky .DS_Store files, recursively
-# alias dscleanup='find . -type f -name "*.DS_Store" -ls delete"
 alias dscleanup='find . -type f -name "*.DS_Store" -print0 | xargs -0 rm -v'
 # Clean up LaunchServices to remove duplicates in the "Open With" menu
 alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 # Flush Directory Service cache
 alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 
-# OS X has no `md5sum`, so use `md5` as a fallback
+# OS X has no md5sum, so use md5 as a fallback
 command -v md5sum > /dev/null || alias md5sum="md5 "
-# OS X has no `sha1sum`, so use `shasum` as a fallback
+# OS X has no sha1sum, so use shasum as a fallback
 command -v sha1sum > /dev/null || alias sha1sum="shasum "
-# OS X has no `sha256sum`, so use `shasum` as a fallback
+# OS X has no sha256sum, so use shasum as a fallback
 command -v sha256sum > /dev/null || alias sha256sum="shasum -a 256 "
-# OS X has no `sha512sum`, so use `shasum` as a fallback
+# OS X has no sha512sum, so use shasum as a fallback
 command -v sha512sum > /dev/null || alias sha512sum="shasum -a 512 "
 
 # Canonical hex dump; some systems have this symlinked
