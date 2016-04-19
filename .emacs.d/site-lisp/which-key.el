@@ -4,7 +4,7 @@
 
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-which-key
-;; Version: 1.1.4
+;; Version: 1.1.7
 ;; Keywords:
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -435,6 +435,10 @@ to a non-nil value for the execution of a command. Like this
 
 \(let \(\(which-key-inhibit t\)\)
 ...\)")
+
+(defvar which-key-keymap-history nil
+  "History of keymap selections in functions like
+`which-key-show-keymap'.")
 
 ;; Internal Vars
 (defvar which-key--buffer nil
@@ -1921,7 +1925,7 @@ is selected interactively from all available keymaps."
                         (and (boundp m)
                              (keymapp (symbol-value m))
                              (not (equal (symbol-value m) (make-sparse-keymap)))))
-                      t nil 'variable-name-history))))
+                      t nil 'which-key-keymap-history))))
     (which-key--show-keymap (symbol-name keymap-sym) (symbol-value keymap-sym))))
 
 (defun which-key-show-minor-mode-keymap ()
@@ -1938,7 +1942,7 @@ is selected interactively by mode in `minor-mode-map-alist'."
                       (and (symbol-value (car entry))
                            (not (equal (cdr entry) (make-sparse-keymap)))))
                     minor-mode-map-alist))
-           nil t nil 'variable-name-history))))
+           nil t nil 'which-key-keymap-history))))
     (which-key--show-keymap (symbol-name mode-sym)
                             (cdr (assq mode-sym minor-mode-map-alist)))))
 
