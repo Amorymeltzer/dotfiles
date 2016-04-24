@@ -28,6 +28,9 @@ severity = 2
 # Lower these from level 2 to level 1
 [Modules::RequireVersionVar]
 severity = 1
+# Lower from level 3 to level 2
+[ErrorHandling::RequireCarping]
+severity = 2
 
 # ProhibitStringyEval rightly prevents "eval $thing" but
 # the allow_includes let's a few minor cases sneak in
