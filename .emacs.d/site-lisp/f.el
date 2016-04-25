@@ -4,7 +4,7 @@
 
 ;; Author: Johan Andersson <johan.rejeep@gmail.com>
 ;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
-;; Version: 0.18.1
+;; Version: 0.18.2
 ;; Keywords: files, directories
 ;; URL: http://github.com/rejeep/f.el
 ;; Package-Requires: ((s "1.7.0") (dash "2.2.0"))
@@ -76,7 +76,8 @@ If PATH is not allowed to be modified, throw error."
 
 (defun f-expand (path &optional dir)
   "Expand PATH relative to DIR (or `default-directory')."
-  (directory-file-name (expand-file-name path dir)))
+  (let (file-name-handler-alist)
+    (directory-file-name (expand-file-name path dir))))
 
 (defun f-filename (path)
   "Return the name of PATH."

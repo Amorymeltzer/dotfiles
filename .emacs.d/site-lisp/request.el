@@ -1,11 +1,11 @@
-;;; request.el --- Compatible layer for URL request in Emacs
+;;; request.el --- Compatible layer for URL request in Emacs -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2012 Takafumi Arakaki
 ;; Copyright (C) 1985-1986, 1992, 1994-1995, 1999-2012
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Takafumi Arakaki <aka.tkf at gmail.com>
-;; Package-Requires: ((cl-lib "0.5"))
+;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Version: 0.2.0
 
 ;; This file is NOT part of GNU Emacs.
@@ -41,10 +41,10 @@
 ;;; Code:
 
 (eval-when-compile
-  (require 'cl) ; for obsolete `lexical-let'
-  (require 'cl-lib)
   (defvar url-http-method)
   (defvar url-http-response-status))
+
+(require 'cl-lib)
 (require 'url)
 (require 'mail-utils)
 
@@ -61,34 +61,46 @@
 (defcustom request-storage-directory
   (concat (file-name-as-directory user-emacs-directory) "request")
   "Directory to store data related to request.el."
-  :group 'request)
+  :type 'directory)
 
 (defcustom request-curl "curl"
   "Executable for curl command."
-  :group 'request)
+  :type 'string)
 
 (defcustom request-backend (if (executable-find request-curl)
                                'curl
                              'url-retrieve)
   "Backend to be used for HTTP request.
 Automatically set to `curl' if curl command is found."
-  :group 'request)
+  :type '(choice (const :tag "cURL backend" curl)
+                 (const :tag "url-retrieve backend" url-retrieve)))
 
 (defcustom request-timeout nil
   "Default request timeout in second.
 `nil' means no timeout."
-  :group 'request)
+  :type '(choice (integer :tag "Request timeout seconds")
+                 (boolean :tag "No timeout" nil)))
 
 (defcustom request-log-level -1
   "Logging level for request.
 One of `error'/`warn'/`info'/`verbose'/`debug'.
 -1 means no logging."
-  :group 'request)
+  :type '(choice (integer :tag "No logging" -1)
+                 (const :tag "Level error" error)
+                 (const :tag "Level warn" warn)
+                 (const :tag "Level info" info)
+                 (const :tag "Level Verbose" verbose)
+                 (const :tag "Level DEBUG" debug)))
 
 (defcustom request-message-level 'warn
   "Logging level for request.
 See `request-log-level'."
-  :group 'request)
+  :type '(choice (integer :tag "No logging" -1)
+                 (const :tag "Level error" error)
+                 (const :tag "Level warn" warn)
+                 (const :tag "Level info" info)
+                 (const :tag "Level Verbose" verbose)
+                 (const :tag "Level DEBUG" debug)))
 
 
 ;;; Utilities
@@ -541,7 +553,6 @@ and requests.request_ (Python).
                       (request--urlencode-alist params))))
   (setq settings (plist-put settings :url url))
   (setq settings (plist-put settings :response response))
-  (setq settings (plist-put settings :unix-socket unix-socket))
   (setf (request-response-settings response) settings)
   (setf (request-response-url      response) url)
   (setf (request-response--backend response) request-backend)
@@ -634,10 +645,12 @@ then kill the current buffer."
 
     ;; Parse response body
     (request-log 'debug "error-thrown = %S" error-thrown)
-    (unless error-thrown
-      (condition-case err
-          (request--parse-data response parser)
-        (error
+    (condition-case err
+        (request--parse-data response parser)
+      (error
+       ;; If there was already an error (e.g. server timeout) do not set the
+       ;; status to `parse-error'.
+       (unless error-thrown
          (setq symbol-status 'parse-error)
          (setq error-thrown err)
          (request-log 'error "Error from parser %S: %S" parser err))))
@@ -966,7 +979,11 @@ removed from the buffer before it is shown to the parser function.
   (let* (;; Use pipe instead of pty.  Otherwise, curl process hangs.
          (process-connection-type nil)
          ;; Avoid starting program in non-existing directory.
-         (default-directory (expand-file-name "~/"))
+         (home-directory (if (file-remote-p default-directory)
+                             (with-parsed-tramp-file-name default-directory nil
+                               (tramp-make-tramp-file-name method user host "~/"))
+                           "~/"))
+         (default-directory (expand-file-name home-directory))
          (buffer (generate-new-buffer " *request curl*"))
          (command (cl-destructuring-bind
                       (files* tempfiles)
@@ -974,7 +991,7 @@ removed from the buffer before it is shown to the parser function.
                     (setf (request-response--tempfiles response) tempfiles)
                     (apply #'request--curl-command url :files* files*
                            settings)))
-         (proc (apply #'start-process "request curl" buffer command)))
+         (proc (apply #'start-file-process "request curl" buffer command)))
     (request-log 'debug "Run: %s" (mapconcat 'identity command " "))
     (setf (request-response--buffer response) buffer)
     (process-put proc :request-response response)
@@ -1102,7 +1119,7 @@ START-URL is the URL requested."
 (cl-defun request--curl-sync (url &rest settings &key response &allow-other-keys)
   ;; To make timeout work, use polling approach rather than using
   ;; `call-process'.
-  (lexical-let (finished)
+  (let (finished)
     (prog1 (apply #'request--curl url
                   :complete (lambda (&rest _) (setq finished t))
                   settings)
