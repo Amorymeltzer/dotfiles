@@ -77,6 +77,16 @@ special values."
 
 (put '-each 'lisp-indent-function 1)
 
+(defalias '--each-indexed '--each)
+
+(defun -each-indexed (list fn)
+  "Call (FN index item) for each item in LIST.
+
+In the anaphoric form `--each-indexed', the index is exposed as `it-index`.
+
+See also: `-map-indexed'."
+  (--each list (funcall fn it-index it)))
+
 (defmacro --each-while (list pred &rest body)
   "Anaphoric form of `-each-while'."
   (declare (debug (form form body))
@@ -270,7 +280,7 @@ See also: `-remove', `-map-first'"
 Alias: `-reject-last'
 
 See also: `-remove', `-map-last'"
-  (nreverse (-remove-first pred (nreverse list))))
+  (nreverse (-remove-first pred (reverse list))))
 
 (defmacro --remove-last (form list)
   "Anaphoric form of `-remove-last'."
@@ -317,7 +327,9 @@ If you want to select the original items satisfying a predicate use `-filter'."
 (defun -map-indexed (fn list)
   "Return a new list consisting of the result of (FN index item) for each item in LIST.
 
-In the anaphoric form `--map-indexed', the index is exposed as `it-index`."
+In the anaphoric form `--map-indexed', the index is exposed as `it-index`.
+
+See also: `-each-indexed'."
   (--map-indexed (funcall fn it-index it) list))
 
 (defmacro --map-when (pred rep list)
@@ -361,7 +373,7 @@ See also: `-map-when', `-replace-first'"
   "Replace first item in LIST satisfying PRED with result of REP called on this item.
 
 See also: `-map-when', `-replace-last'"
-  (nreverse (-map-first pred rep (nreverse list))))
+  (nreverse (-map-first pred rep (reverse list))))
 
 (defmacro --map-last (pred rep list)
   "Anaphoric form of `-map-last'."
