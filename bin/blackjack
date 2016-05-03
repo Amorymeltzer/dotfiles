@@ -207,23 +207,25 @@ function predict() {
 	fi
     fi
 
-    echo "$type $shown $toplay A:$aces 2:$twohands $cardone $cardtwo"
-    echo -n "You should "
-    echo -en ${Color_Red}
-    todo=$(perl ~/Documents/perl/sandbox/blackjackTester.pl $type $shown $toplay)
-    if [ $todo == H ]; then
-	echo -en ${Color_Red}
-    elif [ $todo == S ]; then
-	echo -en ${Color_Yellow_Intense}
-    elif [ $todo == P -o $todo == Ph ]; then
-	echo -en ${Color_Green}
-    elif [ $todo == D -o $todo == Dh -o $todo == Ds ]; then
-	echo -en ${Color_Blue}
-    elif [ $todo == R -o $todo == Rh -o $todo == Rs -o $todo == Rp ]; then
-	echo -en ${Color_White}
-    fi
-    echo $todo
-    echo -en ${Color_zOff}
+    echo "$type $shown $toplay"
+
+    # Shows proper strategy alongside. Good for learning, bad for playing
+    # echo -n "You should "
+    # echo -en ${Color_Red}
+    # todo=$(perl ~/Documents/perl/sandbox/blackjackTester.pl $type $shown $toplay)
+    # if [ $todo == H ]; then
+    #	echo -en ${Color_Red}
+    # elif [ $todo == S ]; then
+    #	echo -en ${Color_Yellow_Intense}
+    # elif [ $todo == P -o $todo == Ph ]; then
+    #	echo -en ${Color_Green}
+    # elif [ $todo == D -o $todo == Dh -o $todo == Ds ]; then
+    #	echo -en ${Color_Blue}
+    # elif [ $todo == R -o $todo == Rh -o $todo == Rs -o $todo == Rp ]; then
+    #	echo -en ${Color_White}
+    # fi
+    # echo $todo
+    # echo -en ${Color_zOff}
 }
 
 function play-dealer() {
@@ -262,11 +264,11 @@ function get-my-input() {
 	[dD]) echo double;;
 	#  [pP]) echo split;;
 	[pP]) if [ "$twohands" != 1 -a "$cardone" = "$cardtwo" ]; then
-	    echo split
-	    else
-	    echo $(get-my-input)
-	    fi
-	    ;;
+		  echo split
+	      else
+		  echo $(get-my-input)
+	      fi
+	      ;;
 	*) echo $(get-my-input);;
     esac
 }
