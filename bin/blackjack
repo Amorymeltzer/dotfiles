@@ -9,6 +9,7 @@
 # Commandline option to NOT show correct move
 # Better output, show results/score after each playing
 # Currently possible to bet more than you have by doubling or splitting
+# Process money and exit messages in function, don't repeat redundant code
 ## Only split on first turn?  Or allow resplitting??
 ## Sometimes double only allowed on 10 or 11?  Uncommon.
 ## Dealer draw on soft 17?  Minor differences...
@@ -54,7 +55,6 @@ function split-hand() {
 		    hit)
 			echo Hit!
 			player=$player$(draw-card)
-			#  if [ $(count-value $player) -gt 21 ]; then
 			if [ $(count-value $player) -ge 21 ]; then # Stop on 21
 			    break
 			fi;;
@@ -83,7 +83,6 @@ function split-hand() {
 		    hit)
 			echo Hit!
 			ghost=$ghost$(draw-card)
-			#  if [ $(count-value $player) -gt 21 ]; then
 			if [ $(count-value $ghost) -ge 21 ]; then # Stop on 21
 			    break
 			fi;;
@@ -120,15 +119,7 @@ function reshuffle-cards() {
     clear-used
 }
 
-# function shuffle-cards() {
-#     local line array
-#     array=(A 2 3 4 5 6 7 8 9 0 J Q K)
-#     jot - 0 52 | while true; do
-#	read line || break
-#	echo ${array[$(($line / 4))]}
-#     done | head -n 52 | shuf > $CARDFILE
-# }
-# Use eight decks instead
+# Use eight decks
 function shuffle-cards() {
     local line array
     array=(A 2 3 4 5 6 7 8 9 0 J Q K)
@@ -143,7 +134,6 @@ function draw-card() {
 	reshuffle-cards
     fi
     head -n 1 $CARDFILE
-    #  sed -i.bak -e '1d' $CARDFILE
     sed -i '' -e '1d' $CARDFILE
 }
 
@@ -252,7 +242,6 @@ function get-my-input() {
     echo -n "What do? [H]it, [S]tand, [D]ouble" >&2
     cardone=$(echo ${player:0:1} | sed -e '/[1-9]/q; s/[0JQK]/10/; s/A/11/')
     cardtwo=$(echo ${player:1:2} | sed -e '/[1-9]/q; s/[0JQK]/10/; s/A/11/')
-    # echo -n "$cardone $cardtwo" >&2
     if [ "$twohands" != 1 -a "$cardone" = "$cardtwo" ]; then
 	echo -n ", S[p]lit" >&2
     fi
@@ -290,11 +279,8 @@ function get-a-bet() {
     read bet
     bet=${bet//[^0-9]/}
     if [ -z "$bet" ]; then
-	#  get-a-bet $maxbet
-	#  echo 10 # Default to 10 bucks
 	bet=10 # Default to 10 bucks
     fi
-    #  if [ "$bet" -gt $maxbet -o "$bet" -lt 1 ]; then
     if [ "$bet" -gt $maxbet ]; then
 	echo $maxbet # If bet is greater than total, bet it all
     elif [ "$bet" -lt 1 ]; then
