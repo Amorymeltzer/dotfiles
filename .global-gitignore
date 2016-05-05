@@ -73,6 +73,10 @@ tramp
 _site
 .jekyll-metadata
 
+# Ruby stuff #
+##############
+.bundle/
+
 # Compiled source #
 ###################
 *.com
