@@ -405,16 +405,16 @@ function play-round() {
     if [ "$twohands" = 1 ]; then
 	add-used $ghost
     fi
-    case $(play-again) in
-	yes)
-	    if [ $pmoney -gt 0 ]; then
-		play-round $pmoney
-	    else
-		echo "You have no more money!"
-	    fi;;
-	no)
-	    echo "You have $pmoney dollars";;
-    esac
+    if [ $pmoney -le 0 ]; then
+	echo "You have no more money!"
+    else
+	case $(play-again) in
+	    yes)
+		play-round $pmoney;;
+	    no)
+		echo "You have $pmoney dollars";;
+	esac
+    fi
 }
 
 function main() {
