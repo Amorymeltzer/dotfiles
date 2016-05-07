@@ -407,6 +407,13 @@ function play-round() {
     fi
     if [ $pmoney -le 0 ]; then
 	echo "You have no more money!"
+	echo -n "Start over?  [Y]es [N]o:" >&2
+	case $(get-char) in
+	    [yY]) main;;
+	    "") main ;;
+	    [nN]) exit;;
+	    *) exit;;
+	esac
     else
 	case $(play-again) in
 	    yes)
