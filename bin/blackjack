@@ -427,7 +427,10 @@ function play-round() {
 function main() {
     clear-used
     shuffle-cards
-    play-round 100
+    if [ -z $CASH ]; then
+	CASH=100
+    fi
+    play-round $CASH
 }
 
 #  PREFIX=$PWD
@@ -438,4 +441,5 @@ if [ -L "$0" ]; then
 fi
 CARDFILE=$PREFIX/cards
 USEDCARDS=$PREFIX/usedcards
-main "$@"
+CASH=$1
+main $CASH
