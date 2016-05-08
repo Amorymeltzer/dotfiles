@@ -263,7 +263,7 @@ function get-my-input() {
 }
 
 function play-again() {
-    echo -n "Play again!?  [Y]es [N]o:" >&2
+    echo -n "Play again!?  [Y]es [N]o: " >&2
     case $(get-char) in
 	[yY]) echo yes;;
 	"") echo yes;;
@@ -407,7 +407,7 @@ function play-round() {
     fi
     if [ $pmoney -le 0 ]; then
 	echo "You have no more money!"
-	echo -n "Start over?  [Y]es [N]o:" >&2
+	echo -n "Start over?  [Y]es [N]o: " >&2
 	case $(get-char) in
 	    [yY]) main;;
 	    "") main ;;
