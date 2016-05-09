@@ -750,6 +750,11 @@ current buffer" t)
 ;; (global-set-key (kbd "C-c r") 'vr/replace)
 ;; (global-set-key (kbd "C-c q") 'vr/query-replace)
 
+
+;; Plur, search and replace multiple variants of a word
+;; https://github.com/xuchunyang/plur
+(require 'plur)
+
 ;; Display number of matches in modeline for isearch.  Need to use anzu instead
 ;; of visual regexp since it does much the same thing ;;;;;;; ##### FIXME TODO
 ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
