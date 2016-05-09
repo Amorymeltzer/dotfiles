@@ -5,13 +5,14 @@
 ;; Author: Oleksandr Manzyuk <manzyuk@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/google-translate
-;; Version: 0.10.5
+;; Version: 0.11.7
 ;; Keywords: convenience
 
 ;; Contributors:
 ;;   Tassilo Horn <tsdh@gnu.org>
 ;;   Bernard Hurley <bernard@marcade.biz>
 ;;   Chris Bilson <cbilson@pobox.com>
+;;   Takumi Kinjo <takumi.kinjo@gmail.com>
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -65,13 +66,14 @@
 
 (require 'json)
 (require 'url)
+(require 'google-translate-tk)
 
 (defgroup google-translate-core nil
   "Google Translate core script."
   :group 'processes)
 
 (defvar google-translate-base-url
-  "http://translate.google.com/translate_a/t")
+  "http://translate.google.com/translate_a/single")
 
 (defvar google-translate-listen-url
   "http://translate.google.com/translate_tts")
@@ -111,7 +113,8 @@ QUERY-PARAMS must be an alist of field-value pairs."
                                          ("idx"     . "0")
                                          ("textlen" . ,(number-to-string (length text)))
                                          ("client"  . "t")
-                                         ("prev"    . "input"))))
+                                         ("prev"    . "input")
+                                         ("tk"      . ,(google-translate--gen-tk text)))))
 
 (defun google-translate--http-response-body (url &optional for-test-purposes)
   "Retrieve URL and return the response body as a string."
@@ -170,9 +173,9 @@ response in json format."
        (google-translate--insert-nulls
         (google-translate--request source-language target-language text))))))
 
-(defun google-translate--request (source-language 
-                                  target-language 
-                                  text 
+(defun google-translate--request (source-language
+                                  target-language
+                                  text
                                   &optional for-test-purposes)
   "Send to the Google Translate http request which consigned to
 translate TEXT from SOURCE-LANGUAGE to TARGET-LANGUAGE."
@@ -183,15 +186,30 @@ translate TEXT from SOURCE-LANGUAGE to TARGET-LANGUAGE."
       ("oe"     . "UTF-8")
       ("sl"     . ,source-language)
       ("tl"     . ,target-language)
-      ("sc"     . "2")
-      ("text"   . ,text)))
+      ("q"      . ,text)
+      ("dt"     . "bd")
+      ("dt"     . "ex")
+      ("dt"     . "ld")
+      ("dt"     . "md")
+      ("dt"     . "qc")
+      ("dt"     . "rw")
+      ("dt"     . "rm")
+      ("dt"     . "ss")
+      ("dt"     . "t")
+      ("dt"     . "at")
+      ("pc"     . "1")
+      ("otf"    . "1")
+      ("srcrom" . "1")
+      ("ssel"   . "0")
+      ("tsel"   . "0")
+      ("tk"     . ,(google-translate--gen-tk text))))
    for-test-purposes))
 
 (defun google-translate-json-text-phonetic (json)
   "Retrieve from the JSON (which returns by the
 `google-translate-request' function) phonetic transcription of
 the translating text."
-  (mapconcat (lambda (item) (aref item 3))
+  (mapconcat (lambda (item) (if (> (length item) 3) (aref item 3) ""))
              (aref json 0) ""))
 
 (defun google-translate-json-translation (json)
@@ -205,7 +223,7 @@ translating text."
   "Retrieve from the JSON (which returns by the
 `google-translate-request' function) phonetic transcription of
 the translating text."
-  (mapconcat #'(lambda (item) (aref item 2))
+  (mapconcat #'(lambda (item) (if (> (length item) 2) (aref item 2) ""))
              (aref json 0) ""))
 
 (defun google-translate-json-detailed-translation (json)
@@ -217,10 +235,24 @@ whose first element is a vector of translations for that part of
 speech."
   (aref json 1))
 
+(defun google-translate-json-detailed-definition (json)
+  "Retrieve the definition of translating text in source language from the JSON
+which returned by the `google-translate-request' function.
+
+This function returns the definition if it's included within the JSON as 12th
+element, or returns nil if not included.
+
+The definition is a dictionary article represented by a vector of items, where
+each item is a 2-element vector whose zeroth element is the name of a part of
+speech and whose first element is a vector of definitions for that part of
+speech."
+  (if (> (length json) 12)
+    (aref json 12)))
+
 (defun google-translate-json-suggestion (json)
   "Retrieve from JSON (which returns by the
 `google-translate-request' function) suggestion. This function
-does matter when translating misspelled world. So instead of
+does matter when translating misspelled word. So instead of
 translation it is possible to get suggestion."
   (let ((info (aref json 7)))
     (when info

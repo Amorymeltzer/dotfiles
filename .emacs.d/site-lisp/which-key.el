@@ -4,7 +4,7 @@
 
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-which-key
-;; Version: 1.1.7
+;; Version: 1.1.9
 ;; Keywords:
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -1354,11 +1354,14 @@ ORIGINAL-DESCRIPTION is the description given by
                   (local 'which-key-local-map-description-face)
                   (t 'which-key-command-description-face))
       'help-echo (cond
-                  ((and (fboundp (intern original-description))
+                  ((and original-description
+                        (fboundp (intern original-description))
                         (documentation (intern original-description))
-                        tooltip-mode)
+                        ;; tooltip-mode doesn't exist in emacs-nox
+                        (boundp 'tooltip-mode) tooltip-mode)
                    (documentation (intern original-description)))
-                  ((and (fboundp (intern original-description))
+                  ((and original-description
+                        (fboundp (intern original-description))
                         (documentation (intern original-description))
                         (let* ((doc (documentation (intern original-description)))
                                (str (replace-regexp-in-string "\n" " " doc))
@@ -2160,6 +2163,25 @@ Finally, show the buffer."
                          which-key--on-last-page nil)
                    (cancel-timer which-key--paging-timer)
                    (which-key--start-timer))))))
+
+;; backport some functions for 24.3
+
+;; found at https://github.com/Lindydancer/andersl-old-emacs-support/blob/master/andersl-old-emacs-support.el
+(unless (fboundp 'frame-fringe-width)
+  (defun frame-fringe-width (&optional frame)
+    "Return fringe width of FRAME in pixels."
+    (let ((left-pair (assq 'left-fringe (frame-parameters frame)))
+          (right-pair (assq 'right-fringe (frame-parameters frame))))
+      (+ (if left-pair (cdr left-pair) 0)
+         (if right-pair (cdr right-pair) 0)))))
+
+(unless (fboundp 'frame-scroll-bar-width)
+  (defun frame-scroll-bar-width (&optional frame)
+    "Return scroll bar width of FRAME in pixels."
+    (let ((pair (assq 'scroll-bar-width (frame-parameters frame))))
+      (if pair
+          (cdr pair)
+        0))))
 
 (provide 'which-key)
 ;;; which-key.el ends here

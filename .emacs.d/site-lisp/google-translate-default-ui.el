@@ -6,13 +6,14 @@
 ;; Author: Oleksandr Manzyuk <manzyuk@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/google-translate
-;; Version: 0.10.5
+;; Version: 0.11.7
 ;; Keywords: convenience
 
 ;; Contributors:
 ;;   Tassilo Horn <tsdh@gnu.org>
 ;;   Bernard Hurley <bernard@marcade.biz>
 ;;   Chris Bilson <cbilson@pobox.com>
+;;   Takumi Kinjo <takumi.kinjo@gmail.com>
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -194,10 +195,10 @@ becomes the default target language and vice versa."
          (source-language (car langs))
          (target-language (cadr langs)))
     (google-translate-translate source-language target-language
-     (read-from-minibuffer
-      (format "Translate from %s to %s: "
-              (google-translate-language-display-name source-language)
-              (google-translate-language-display-name target-language))))))
+                                (read-from-minibuffer
+                                 (format "Translate from %s to %s: "
+                                         (google-translate-language-display-name source-language)
+                                         (google-translate-language-display-name target-language))))))
 
 ;;;###autoload
 (defun google-translate-query-translate (&optional override-p)
@@ -245,12 +246,14 @@ in the reverse direction."
 (defun %google-translate-at-point (override-p reverse-p)
   (let* ((langs (google-translate-read-args override-p reverse-p))
          (source-language (car langs))
-         (target-language (cadr langs)))
+         (target-language (cadr langs))
+         (bounds nil))
     (google-translate-translate
      source-language target-language
      (if (use-region-p)
          (buffer-substring-no-properties (region-beginning) (region-end))
-       (or (current-word t)
+       (or (and (setq bounds (bounds-of-thing-at-point 'word))
+                (buffer-substring-no-properties (car bounds) (cdr bounds)))
            (error "No word at point."))))))
 
 ;;;###autoload

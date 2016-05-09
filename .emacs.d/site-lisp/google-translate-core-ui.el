@@ -5,13 +5,14 @@
 ;; Author: Oleksandr Manzyuk <manzyuk@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/google-translate
-;; Version: 0.10.5
+;; Version: 0.11.7
 ;; Keywords: convenience
 
 ;; Contributors:
 ;;   Tassilo Horn <tsdh@gnu.org>
 ;;   Bernard Hurley <bernard@marcade.biz>
 ;;   Chris Bilson <cbilson@pobox.com>
+;;   Takumi Kinjo <takumi.kinjo@gmail.com>
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -69,10 +70,11 @@
 ;; `google-translate-output-destination' determines translation output
 ;; destination. If `nil' the translation output will be displayed in the pop up
 ;; buffer. If value equal to `echo-area' then translation outputs in the Echo
-;; Area. And in case of `popup' the translation outputs to the popup tooltip using
-;; `popup' package. If you would like output translation to the Echo Area you would
-;; probably like to increase it because only part of translation could be visible
-;; there. To increase echo area you could increase the value of
+;; Area. In case of `popup' the translation outputs to the popup tooltip using
+;; `popup' package. And in case of `kill-ring' the translation outputs to the kill
+;; ring. If you would like output translation to the Echo Area you would probably
+;; like to increase it because only part of translation could be visible there with
+;; the default settings. To increase echo area you could increase the value of
 ;; `max-mini-window-height' variable, for example: `(setq max-mini-window-height
 ;; 0.5)'.
 ;;
@@ -147,7 +149,11 @@
     ("Basque"              . "eu")
     ("Belarusian"          . "be")
     ("Bengali"             . "bn")
+    ("Bosnian"             . "bs")
     ("Bulgarian"           . "bg")
+    ("Catalan"             . "ca")
+    ("Cebuano"             . "ceb")
+    ("Chichewa"            . "ny")
     ("Chinese Simplified"  . "zh-CN")
     ("Chinese Traditional" . "zh-TW")
     ("Croatian"            . "hr")
@@ -155,6 +161,7 @@
     ("Danish"              . "da")
     ("Dutch"               . "nl")
     ("English"             . "en")
+    ("Esperanto"           . "eo")
     ("Estonian"            . "et")
     ("Filipino"            . "tl")
     ("Finnish"             . "fi")
@@ -165,43 +172,66 @@
     ("Greek"               . "el")
     ("Gujarati"            . "gu")
     ("Haitian Creole"      . "ht")
+    ("Hausa"               . "ha")
     ("Hebrew"              . "iw")
     ("Hindi"               . "hi")
+    ("Hmong"               . "hmn")
     ("Hungarian"           . "hu")
     ("Icelandic"           . "is")
+    ("Igbo"                . "ig")
     ("Indonesian"          . "id")
     ("Irish"               . "ga")
     ("Italian"             . "it")
     ("Japanese"            . "ja")
+    ("Javanese"            . "jw")
     ("Kannada"             . "kn")
+    ("Kazakh"              . "kk")
+    ("Khmer"               . "km")
     ("Korean"              . "ko")
+    ("Lao"                 . "lo")
     ("Latin"               . "la")
     ("Latvian"             . "lv")
     ("Lithuanian"          . "lt")
     ("Macedonian"          . "mk")
+    ("Malagasy"            . "mg")
     ("Malay"               . "ms")
+    ("Malayalam"           . "ml")
     ("Maltese"             . "mt")
+    ("Maori"               . "mi")
+    ("Marathi"             . "mr")
+    ("Mongolian"           . "mn")
+    ("Myanmar (Burmese)"   . "my")
+    ("Nepali"              . "ne")
     ("Norwegian"           . "no")
     ("Persian"             . "fa")
     ("Polish"              . "pl")
     ("Portuguese"          . "pt")
+    ("Punjabi"             . "pa")
     ("Romanian"            . "ro")
     ("Russian"             . "ru")
     ("Serbian"             . "sr")
+    ("Sesotho"             . "st")
+    ("Sinhala"             . "si")
     ("Slovak"              . "sk")
     ("Slovenian"           . "sl")
+    ("Somali"              . "so")
     ("Spanish"             . "es")
+    ("Sundanese"           . "su")
     ("Swahili"             . "sw")
     ("Swedish"             . "sv")
+    ("Tajik"               . "tg")
     ("Tamil"               . "ta")
     ("Telugu"              . "te")
     ("Thai"                . "th")
     ("Turkish"             . "tr")
     ("Ukrainian"           . "uk")
     ("Urdu"                . "ur")
+    ("Uzbek"               . "uz")
     ("Vietnamese"          . "vi")
     ("Welsh"               . "cy")
-    ("Yiddish"             . "yi"))
+    ("Yiddish"             . "yi")
+    ("Yoruba"              . "yo")
+    ("Zulu"                . "zu"))
   "Alist of the languages supported by Google Translate.
 
 Each element is a cons-cell of the form (NAME . CODE), where NAME
@@ -217,7 +247,7 @@ query parameter in HTTP requests.")
   area or popup tooltip."
   source-language target-language text
   auto-detected-language text-phonetic translation
-  translation-phonetic detailed-translation suggestion)
+  translation-phonetic detailed-translation suggestion detailed-definition)
 
 (defgroup google-translate-core-ui nil
   "Emacs core UI script for the Google Translate package."
@@ -385,12 +415,54 @@ source and target languages."
   "Return detailed translation."
   (with-temp-buffer
     (loop for item across detailed-translation do
-          (let ((index 0))
-            (unless (string-equal (aref item 0) "")
-              (insert (format format1 (aref item 0)))
-              (loop for translation across (aref item 1) do
+          (let ((index 0)
+                (label (aref item 0)))
+            (unless (string-equal label "")
+              (put-text-property 0 (length label)
+                                 'font-lock-face
+                                 'google-translate-translation-face
+                                 label)
+              (insert (format format1 label))
+              (loop for translation across (aref item 2) do
+                    (let ((content
+                           (format "%s (%s)"
+                                   (aref translation 0)
+                                   (mapconcat 'identity
+                                              (aref translation 1)
+                                              ", "))))
+                      (insert (format format2
+                                      (incf index)
+                                      content)))))))
+    (buffer-substring (point-min) (point-max))))
+
+(defun google-translate--detailed-definition (detailed-definition definition
+                                                                    format1
+                                                                    format2)
+  "Return detailed definition."
+  (with-temp-buffer
+    (let ((section "DEFINITION"))
+      (put-text-property 0 (length section)
+			 'font-lock-face
+			 'google-translate-translation-face
+			 section)
+      (insert (format "\n%s\n" section)))
+    (loop for item across detailed-definition do
+          (let ((index 0)
+                (label (aref item 0)))
+            (unless (string-equal label "")
+              (put-text-property 0 (length label)
+                                 'font-lock-face
+                                 'google-translate-translation-face
+                                 label)
+              (insert (format format1 label))
+              (loop for definition across (aref item 1) do
                     (insert (format format2
-                                    (incf index) translation))))))
+                                    (incf index)
+                                    (if (> (length definition) 2)
+                                        (format "%s\n    \"%s\""
+                                                (aref definition 0)
+                                                (aref definition 2))
+                                      (format "%s" (aref definition 0)))))))))
     (buffer-substring (point-min) (point-max))))
 
 (defun google-translate--suggestion (gtos)
@@ -430,22 +502,20 @@ clicked."
                                 target-language
                                 suggestion)))
 
-(defun google-translate--listen-button (gtos)
+(defun google-translate--listen-button (language text)
   "Return listen button."
-  (let ((language (gtos-source-language gtos))
-        (text (gtos-text gtos)))
-    (with-temp-buffer
-      (insert " ")
-      (let ((beg (point)))
-        (insert-text-button "[Listen]"
-                            'action 'google-translate--listen-action
-                            'follow-link t
-                            'text text
-                            'language language)
-        (facemenu-set-face 'google-translate-listen-button-face
-                           beg (point))
-        (insert "\n"))
-      (buffer-substring (point-min) (point-max)))))
+  (with-temp-buffer
+    (insert " ")
+    (let ((beg (point)))
+      (insert-text-button "[Listen]"
+                          'action 'google-translate--listen-action
+                          'follow-link t
+                          'text text
+                          'language language)
+      (facemenu-set-face 'google-translate-listen-button-face
+                         beg (point))
+      (insert "\n"))
+    (buffer-substring (point-min) (point-max))))
 
 (defun google-translate--listen-action (button)
   "Do translation listening."
@@ -467,7 +537,7 @@ clicked."
       (call-process google-translate-listen-program nil nil nil
                     (format "%s" (google-translate-format-listen-url text language))))))
 
-(defun google-translate-translate (source-language target-language text)
+(defun google-translate-translate (source-language target-language text &optional output-destination)
   "Translate TEXT from SOURCE-LANGUAGE to TARGET-LANGUAGE.
 
 In case of `google-translate-output-destination' is nil pops up a
@@ -487,6 +557,8 @@ message is printed."
         (message "Nothing to translate.")
       (let* ((detailed-translation
               (google-translate-json-detailed-translation json))
+             (detailed-definition
+              (google-translate-json-detailed-definition json))
              (gtos
               (make-gtos
                :source-language source-language
@@ -497,15 +569,29 @@ message is printed."
                :translation (google-translate-json-translation json)
                :translation-phonetic (google-translate-json-translation-phonetic json)
                :detailed-translation detailed-translation
+               :detailed-definition detailed-definition
                :suggestion (when (null detailed-translation)
-                             (google-translate-json-suggestion json)))))
+                             (google-translate-json-suggestion json))))
+             (output-destination (if (null output-destination)
+                                     google-translate-output-destination
+                                   output-destination)))
         (cond
-         ((null google-translate-output-destination)
+         ((null output-destination)
           (google-translate-buffer-output-translation gtos))
-         ((equal google-translate-output-destination 'echo-area)
+         ((equal output-destination 'echo-area)
           (google-translate-echo-area-output-translation gtos))
-         ((equal google-translate-output-destination 'popup)
-          (google-translate-popup-output-translation gtos)))))))
+         ((equal output-destination 'popup)
+          (google-translate-popup-output-translation gtos))
+         ((equal output-destination 'kill-ring)
+          (google-translate-kill-ring-output-translation gtos))
+         ((equal output-destination 'help)
+          (let ((describe-func
+                 (function
+                  (lambda (gtos)
+                    (google-translate-help-buffer-output-translation gtos)))))
+            (help-setup-xref (list 'google-translate-translate source-language target-language text) nil)
+            (with-help-window (help-buffer)
+              (funcall describe-func gtos)))))))))
 
 (defun google-translate-popup-output-translation (gtos)
   "Output translation to the popup tooltip using `popup'
@@ -525,6 +611,16 @@ http://www.gnu.org/software/emacs/manual/html_node/elisp/The-Echo-Area.html)"
      (google-translate-insert-translation gtos)
      (google-translate--trim-string
       (buffer-substring (point-min) (point-max))))))
+
+(defun google-translate-kill-ring-output-translation (gtos)
+  "Output translation to the kill ring."
+  (kill-new
+   (with-temp-buffer
+     (insert
+      (gtos-translation gtos))
+     (google-translate--trim-string
+      (buffer-substring (point-min) (point-max)))))
+  (message "Translated text was added to the kill ring."))
 
 (defun google-translate-insert-translation (gtos)
   "Insert translation to the current buffer."
@@ -552,10 +648,20 @@ http://www.gnu.org/software/emacs/manual/html_node/elisp/The-Echo-Area.html)"
         (set-buffer buffer-name))
       (google-translate-buffer-insert-translation gtos))))
 
+(defun google-translate-help-buffer-output-translation (gtos)
+  "Output translation to the help buffer."
+  (and google-translate-pop-up-buffer-set-focus
+       (select-window (display-buffer "*Help*")))
+  (google-translate-buffer-insert-translation gtos))
+
 (defun google-translate-buffer-insert-translation (gtos)
   "Insert translation to the current temp buffer."
   (let ((translation (gtos-translation gtos))
-        (detailed-translation (gtos-detailed-translation gtos)))
+        (detailed-translation (gtos-detailed-translation gtos))
+        (detailed-definition (gtos-detailed-definition gtos))
+        (source-language (gtos-source-language gtos))
+        (target-language (gtos-target-language gtos))
+        (text (gtos-text gtos)))
     (insert
      (google-translate--translation-title gtos "Translate from %s to %s:\n")
      "\n"
@@ -565,16 +671,27 @@ http://www.gnu.org/software/emacs/manual/html_node/elisp/The-Echo-Area.html)"
           "%s\n"
         "%s"))
      (if google-translate-listen-program
-         (google-translate--listen-button gtos) "")
+         (google-translate--listen-button source-language text) "")
      (google-translate--text-phonetic gtos "\n%s\n")
      "\n"
-     (google-translate--translated-text gtos "%s\n")
+     (google-translate--translated-text
+      gtos
+      (if (null google-translate-listen-program)
+          "%s\n"
+        "%s"))
+     (if google-translate-listen-program
+         (google-translate--listen-button target-language translation) "")
      (google-translate--translation-phonetic gtos "\n%s\n")
      (if detailed-translation
          (google-translate--detailed-translation
           detailed-translation translation
           "\n%s\n" "%2d. %s\n")
-       (google-translate--suggestion gtos)))))
+       (google-translate--suggestion gtos))
+     (if detailed-definition
+         (google-translate--detailed-definition
+          detailed-definition translation
+          "\n%s\n" "%2d. %s\n")
+       ""))))
 
 (defun google-translate-read-source-language (&optional prompt)
   "Read a source language, with completion, and return its abbreviation.

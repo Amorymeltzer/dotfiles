@@ -6,13 +6,14 @@
 ;; Author: Oleksandr Manzyuk <manzyuk@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/google-translate
-;; Version: 0.10.5
+;; Version: 0.11.7
 ;; Keywords: convenience
 
 ;; Contributors:
 ;;   Tassilo Horn <tsdh@gnu.org>
 ;;   Bernard Hurley <bernard@marcade.biz>
 ;;   Chris Bilson <cbilson@pobox.com>
+;;   Takumi Kinjo <takumi.kinjo@gmail.com>
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -380,7 +381,7 @@ one respectively."
         (if (use-region-p)
             (google-translate--strip-string
              (buffer-substring-no-properties (region-beginning) (region-end)))
-          (current-word t)))
+          (current-word t t)))
 
   (setq google-translate-current-translation-direction 0)
 
