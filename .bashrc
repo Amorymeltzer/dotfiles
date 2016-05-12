@@ -657,8 +657,8 @@ function emptyalltrashes() {
 
 # Make intermediate directories and be verbose about it
 alias mkdir='mkdir -pv'
-# Deleting intermediate directories not as logical
-# alias rmdir='rmdir -p'
+# Deleting intermediate directories not as logical?
+alias rmdir='rmdir -p'
 
 # mkdir then cd
 function mkcd() {
