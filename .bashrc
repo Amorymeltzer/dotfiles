@@ -845,6 +845,7 @@ function checkpoint()
 
 # bundle exec alias
 alias be='bundle exec '
+alias bej='be jekyll serve --watch '
 
 # Quickly open and make a new perl file executable and with headers
 function newperl() {
