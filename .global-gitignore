@@ -24,6 +24,7 @@ Build.bat
 /META.yml
 /META.json
 /MYMETA.*
+nytprof/
 nytprof.out
 /pm_to_blib
 *.o
