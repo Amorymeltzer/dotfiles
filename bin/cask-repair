@@ -13,7 +13,7 @@ show_appcast='false' # by default, do not open the cask's appcast
 warning_messages=()
 
 # check if 'hub' is installed and configured
-if [[ ! $(which 'hub') ]] || [[ ! $(grep 'oauth_token:' "${HOME}/.config/hub" 2>/dev/null) ]]; then
+if [[ ! $(which 'hub') ]] || [[ -z "${GITHUB_TOKEN}" && ! $(grep 'oauth_token:' "${HOME}/.config/hub" 2>/dev/null) ]]; then
   echo -e "$(tput setaf 1)
     This script requires 'hub' installed and configured.
     If you have [Homebrew](http://brew.sh), you can install it with 'brew install hub'.
@@ -370,8 +370,10 @@ cask_version="$(brew cask _stanza version ${cask_file})"
 
 # commit, push, submit pull request, clean
 readonly commit_message="updated ${cask_name} to v${cask_version}"
+readonly hub_message="$(echo -e "${commit_message}\n\n### Changes to a cask\n#### Editing an existing cask\n\n- [x] Commit message includes cask’s name (and new version, if applicable).\n- [x] \`brew cask audit --download {{cask_file}}\` is error-free.\n- [x] \`brew cask style --fix {{cask_file}}\` left no offenses.")"
 
 git commit "${cask_file}" --message "${commit_message}" --quiet
 git push "${remote_push}" "${cask_branch}" --quiet
-[[ -z "${issue_to_close}" ]] && pr_link=$(hub pull-request -b "${submit_pr_to}" -h "${remote_push}":"${cask_branch}" -m "${commit_message}") || pr_link=$(hub pull-request -b "${submit_pr_to}" -m "$(echo -e "updated ${cask_name} (${cask_version})\n\nCloses #${issue_to_close}.")")
+[[ -z "${issue_to_close}" ]] && pr_link=$(hub pull-request -b "${submit_pr_to}" -h "${remote_push}":"${cask_branch}" -m "${hub_message}") || pr_link=$(hub pull-request -b "${submit_pr_to}" -m "$(echo -e "${hub_message}\n\n---\n\nCloses #${issue_to_close}.")")
+
 [[ -n "${pr_link}" ]] && finish success "${pr_link}" || finish abort 'There was an error submitting the pull request. Have you forked the repo and made sure the pull and push remotes exist?'
