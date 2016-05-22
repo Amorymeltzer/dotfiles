@@ -492,10 +492,8 @@ complete -F _python python3.4
 # ;;;;;; ##### FIXME TODO
 # Make CPAN always select the default option
 export PERL_MM_USE_DEFAULT=1
-# Make perl -d automatically use NYTProf
+# Make perl -d automatically use NYTProf.  See also dprofpp
 export PERL5DB='use Devel::NYTProf'
-# Define nytprofhtml, see also dprofpp
-# alias nytprofhtml='~/.cpan/build/Devel-NYTProf-5.04-4mP05e/bin/nytprofhtml'
 # Access Perl::Critic documentation
 function explain_perlcritic() {
     #  perldoc -oman Perl::Critic::Policy::"$1"
