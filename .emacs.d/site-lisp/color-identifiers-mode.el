@@ -178,6 +178,18 @@ For cc-mode support within color-identifiers-mode."
                "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
                (nil font-lock-variable-name-face js3-function-param-face))))
 
+(add-to-list
+ 'color-identifiers:modes-alist
+ `(js-jsx-mode . ("[^.][[:space:]]*"
+                  "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
+                  (nil font-lock-variable-name-face js2-function-param))))
+
+(add-to-list
+ 'color-identifiers:modes-alist
+ `(js2-jsx-mode . ("[^.][[:space:]]*"
+                   "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
+                   (nil font-lock-variable-name-face js2-function-param))))
+
 ;; CoffeeScript
 ;; May need to add the @ to the symbol syntax
 ;; (add-hook 'coffee-mode-hook (lambda () (modify-syntax-entry ?\@ "_"))) in .emacs
@@ -225,18 +237,20 @@ arguments, loops (for .. in), or for comprehensions."
       (save-excursion
         (goto-char (point-min))
         (while (python-nav-forward-defun)
-          (let ((arglist (sexp-at-point)))
-            (when (and arglist (listp arglist))
-              (let* ((first-arg (car arglist))
-                     (rest (cdr arglist))
-                     (rest-args
-                      (-map (lambda (token) (cadr token))
-                            (-filter (lambda (token) (and (listp token) (eq (car token) '\,))) rest)))
-                     (args-filtered (cons first-arg rest-args))
-                     (params (-map (lambda (token)
-                                     (car (split-string (symbol-name token) "=")))
-                                   args-filtered)))
-                (setq result (append params result)))))))
+          (condition-case nil
+              (let ((arglist (sexp-at-point)))
+                (when (and arglist (listp arglist))
+                  (let* ((first-arg (car arglist))
+                         (rest (cdr arglist))
+                         (rest-args
+                          (-map (lambda (token) (cadr token))
+                                (-filter (lambda (token) (and (listp token) (eq (car token) '\,))) rest)))
+                         (args-filtered (cons first-arg rest-args))
+                         (params (-map (lambda (token)
+                                         (car (split-string (symbol-name token) "=")))
+                                       args-filtered)))
+                    (setq result (append params result)))))
+            (wrong-type-argument nil))))
       ;; Variables that python-mode highlighted with font-lock-variable-name-face
       (save-excursion
         (goto-char (point-min))
@@ -419,7 +433,8 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
                                                 (when (symbolp id) (symbol-name id)))
                                               ids))))
                   (setq result (append strs result)))
-              (invalid-read-syntax nil)))
+              (invalid-read-syntax nil)
+              (wrong-type-argument nil)))
         (end-of-file nil)))
     (delete-dups result)
     result))
@@ -432,6 +447,73 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
  `(clojure-mode . (""
                    "\\_<\\(\\(?:\\s_\\|\\sw\\)+\\)"
                    (nil))))
+
+(dolist (maj-mode '(tuareg-mode sml-mode))
+  (color-identifiers:set-declaration-scan-fn
+   maj-mode 'color-identifiers:cc-mode-get-declarations)
+  (add-to-list
+   'color-identifiers:modes-alist
+   `(,maj-mode . (""
+                  "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\|'\\)*\\)"
+                  (nil font-lock-variable-name-face)))))
+
+;; R support in ess-mode
+(defun color-identifiers:remove-string-or-comment (str)
+  "Remove string or comment in str, based on font lock faces"
+  (let ((remove (memq (get-text-property 0 'face str)
+                      '(font-lock-string-face font-lock-comment-face)))
+        (pos 0)
+        (nextpos)
+        (result ""))
+    (while (setq nextpos (next-single-property-change pos 'face str))
+      (unless remove
+        (setq result (concat result (substring-no-properties str pos nextpos))))
+      (setq pos nextpos)
+      (setq remove (memq (get-text-property pos 'face str)
+                         '(font-lock-string-face font-lock-comment-face))))
+    (unless remove
+      (setq result (concat result (substring-no-properties str pos nextpos))))
+    result))
+
+  (defun color-identifiers:r-get-args (lend)
+    "Extract a list of function arg names. LEND is the point at
+the left parenthesis, after `function' keyword."
+    (let* ((rend (save-excursion
+                  (goto-char lend)
+                  (forward-sexp)
+                  (point)))
+           (str (color-identifiers:remove-string-or-comment
+                 (buffer-substring (1+ lend) (1- rend))))
+           (result))
+      (mapcar (lambda (s) (replace-regexp-in-string "\\s *=.*" "" s))
+              (split-string str "," t " "))))
+
+  (defun color-identifiers:r-get-declarations ()
+    "Extract a list of identifiers declared in the current buffer.
+For Emacs Lisp support within color-identifiers-mode."
+    (let ((result nil))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "\\(\\(?:\\w\\|\\s_\\)*\\)\\s *<<?-\\s *\\(function\\s *\\)?" nil t)
+        (unless (memq (get-text-property (match-end 0) 'face)
+                      '(font-lock-string-face font-lock-comment-face))
+
+          (if (match-string 2)
+              (setq result (append (color-identifiers:r-get-args (match-end 2))
+                                   result))
+            (let ((var-name (match-string-no-properties 1)))
+              (unless (string= var-name "")
+                (add-to-list 'result var-name)))))))
+    (delete-dups result)
+    result))
+
+  (color-identifiers:set-declaration-scan-fn
+   'ess-mode 'color-identifiers:r-get-declarations)
+
+  (add-to-list
+   'color-identifiers:modes-alist
+   `(ess-mode "[^$][[:space:]]*" "\\_<\\(\\(?:\\s_\\|\\sw\\)+\\)"
+                   (nil)))
 
 
 ;;; PACKAGE INTERNALS ==========================================================

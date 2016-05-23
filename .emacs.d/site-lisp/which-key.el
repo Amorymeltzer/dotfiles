@@ -245,8 +245,10 @@ a percentage out of the frame's height."
 are
 
 1. `which-key-key-order': by key (default)
-2. `which-key-description-order': by description
-3. `which-key-prefix-then-key-order': prefix (no prefix first) then key
+2. `which-key-key-order-alpha': by key using alphabetical order
+3. `which-key-description-order': by description
+4. `which-key-prefix-then-key-order': prefix (no prefix first) then key
+5. `which-key-local-then-key-order': local binding then key
 
 See the README and the docstrings for those functions for more
 information."
@@ -1194,6 +1196,21 @@ coming before a prefix. Within these categories order using
         (bpref? (which-key--group-p (cdr bcons))))
     (if (not (eq apref? bpref?))
         (and (not apref?) bpref?)
+      (which-key-key-order acons bcons))))
+
+(defun which-key--local-binding-p (keydesc)
+  (eq (which-key--safe-lookup-key
+       (current-local-map) (kbd (which-key--current-key-string (car keydesc))))
+      (intern (cdr keydesc))))
+
+(defun which-key-local-then-key-order (acons bcons)
+  "Order first by whether A and/or B is a local binding with
+local bindings coming first. Within these categories order using
+`which-key-key-order'."
+  (let ((aloc? (which-key--local-binding-p acons))
+        (bloc? (which-key--local-binding-p bcons)))
+    (if (not (eq aloc? bloc?))
+        (and aloc? (not bloc?))
       (which-key-key-order acons bcons))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
