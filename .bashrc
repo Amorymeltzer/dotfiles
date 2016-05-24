@@ -489,18 +489,15 @@ complete -F _python python3.4
 . ~/.z.sh
 
 
-# ;;;;;; ##### FIXME TODO
 # Make CPAN always select the default option
 export PERL_MM_USE_DEFAULT=1
 # Make perl -d automatically use NYTProf.  See also dprofpp
 export PERL5DB='use Devel::NYTProf'
 # Access Perl::Critic documentation
 function explain_perlcritic() {
-    #  perldoc -oman Perl::Critic::Policy::"$1"
     perldoc Perl::Critic::Policy::"$1"
 }
-# ;;;;;; ##### FIXME TODO
-_explain_perlcritic()
+_explain_perlcritic()		# ;;;;;; ##### FIXME TODO
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local list="$(\ls /opt/local/share/perl5.20/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
@@ -734,7 +731,7 @@ fi
 if [[ -f `command -v cwdiff` ]]; then
     alias wcolordiff='cwdiff '
 elif [[ -f `command -v wdiff` ]]; then
-    # What the fuck is this?  Need to explain FIXME TODO
+    # What is this?  Need to explain FIXME TODO
     alias wcolordiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
 fi
 alias diffc='wcolordiff '
