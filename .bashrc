@@ -767,6 +767,7 @@ alias safari='open -a safari '
 alias firefox='open -a firefox '
 alias chrome='open -a google\ chrome '
 alias vlc='open -a vlc '
+alias excel='open -a microsoft\ excel '
 
 # Macports
 alias pecho='port echo '
