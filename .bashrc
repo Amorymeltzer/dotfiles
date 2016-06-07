@@ -1248,7 +1248,7 @@ alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
 alias inflation="perl ~/Documents/perl/sandbox/inflation.pl "
 
 function btc() {
-    local five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
+    local five=$(curl -s 'https://www.coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
     if [[ -n $five ]]; then
 	tail -n 1 ~/btc.csv
 	echo -e "$(date -u -v-8H +'%y-%m-%d %H:%M:%S')\t$five"
@@ -1256,7 +1256,7 @@ function btc() {
     fi
 }
 function bitcoin() {
-    local five=$(curl -s 'https://coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
+    local five=$(curl -s 'https://www.coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
     echo -e "BTC: $five";
 }
 
