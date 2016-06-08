@@ -1015,6 +1015,7 @@ function down4me()
 {
     curl -s "http://www.downforeveryoneorjustme.com/$1" | sed "/just you/!d;s/<[^>]*>//g" | sed -e 's/  //g' | sed -e 's/http.*#x2F;/  /g'
 }
+alias downforeveryoneorjustme='down4me '
 
 
 # Combine all IP shit to give local and external, only if appropriate
