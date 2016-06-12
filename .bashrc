@@ -100,6 +100,7 @@ alias gcm='git cm '
 alias gl='git l1 -5'
 alias gl1='git l1'
 alias gld='git ld5'
+alias greh='g reh '
 
 # Setup some colors to use later in interactive shell or scripts
 # ~/bin/colordump and termcolors give some clues about these
