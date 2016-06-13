@@ -46,3 +46,5 @@ allow_includes = 1
 [-RegularExpressions::RequireDotMatchAnything]
 # Don't escape before { } ( ) . * + ? | #
 [-RegularExpressions::ProhibitEscapedMetacharacters]
+# Don't whine about using die or warn instead of croak or carp
+[-ErrorHandling::RequireCarping]
