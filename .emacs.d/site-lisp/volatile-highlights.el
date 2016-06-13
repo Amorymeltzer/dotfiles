@@ -9,7 +9,7 @@
 ;; Revision: $Id$
 ;; URL: http://www.emacswiki.org/emacs/download/volatile-highlights.el
 ;; GitHub: http://github.com/k-talo/volatile-highlights.el
-;; Version: 1.13
+;; Version: 1.15
 ;; Contributed by: Ryan Thompson and Le Wang.
 
 ;; This file is not part of GNU Emacs.
@@ -48,6 +48,7 @@
 ;;
 ;;    (require 'volatile-highlights)
 ;;    (volatile-highlights-mode t)
+;;
 ;;
 ;; USING
 ;; =====
@@ -96,10 +97,40 @@
 ;; via customization. Also check out the customization group
 ;;
 ;;   `M-x customize-group RET volatile-highlights RET'
+;;
+;;
+;; EXAMPLE SNIPPETS FOR USING VOLATILE HIGHLIGHTS WITH OTHER PACKAGES
+;; ==================================================================
+;;
+;; - vip-mode
+;;
+;;   (vhl/define-extension 'vip 'vip-yank)
+;;   (vhl/install-extension 'vip)
+;;   
+;; - evil-mode
+;;
+;;   (vhl/define-extension 'evil 'evil-paste-after 'evil-paste-before
+;;                         'evil-paste-pop 'evil-move)
+;;   (vhl/install-extension 'evil)
+;;
+;; - undo-tree
+;;
+;;   (vhl/define-extension 'undo-tree 'undo-tree-yank 'undo-tree-move)
+;;   (vhl/install-extension 'undo-tree)
 
 
 ;;; Change Log:
-
+;;
+;; v1.15 Sun Jun 12 10:40:31 2016 JST
+;;   - Update documents, example snippets for other packages,
+;;     regarding #14.
+;;
+;; v1.14 Sun Jun 12 10:12:30 2016 JST
+;;   - Update documents, especially supporting `evil-mode',
+;;     regarding #13.
+;;   - Fixed a bug #14, an extension won't be loaded properly
+;;     when it was installed by `vhl/install-extension'.
+;;
 ;; v1.13 Sat May 21 11:02:36 2016 JST
 ;;   - Fixed a bug that highlighting was not working with nested volatile
 ;;     highlighting aware operations like `yak-pop'.
@@ -387,8 +418,8 @@ Optional args are the same as `vhl/add-range'."
                     (set-default sym-to-set val)
                     (if val
                         (when volatile-highlights-mode
-                          (vhl/load-extension sym-to-set))
-                      (vhl/unload-extension sym-to-set)))))))
+                          (vhl/load-extension (quote ,sym)))
+                      (vhl/unload-extension (quote ,sym))))))))
 
 (defun vhl/load-extension (sym)
   (let ((fn-on  (intern (format "vhl/ext/%s/on" sym)))
