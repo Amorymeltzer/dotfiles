@@ -4,12 +4,12 @@ export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:$PATH"
 # Add python execs, not sure if this is the best but so be it
 export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
 # Add perl execs; again, not sure if this is best
-export PATH="/opt/local/libexec/perl5.22/sitebin:$PATH"
+export PATH="/opt/local/libexec/perl5.24/sitebin:$PATH"
 # add ~/bin
 export PATH="$HOME/bin:$PATH"
 
 # Add unloved perl modules
-export MANPATH="/opt/local/share/perl5.22/siteman:/opt/local/share/perl5.22/man:$MANPATH"
+export MANPATH="/opt/local/share/perl5.24/siteman:/opt/local/share/perl5.24/man:$MANPATH"
 
 # emacs > vim
 export EDITOR="emacs"
