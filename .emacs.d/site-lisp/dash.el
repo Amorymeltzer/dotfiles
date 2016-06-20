@@ -101,6 +101,7 @@ In the anaphoric form `--each-indexed', the index is exposed as `it-index`.
 
 See also: `-map-indexed'."
   (--each list (funcall fn it-index it)))
+(put '-each-indexed 'lisp-indent-function 1)
 
 (defmacro --each-while (list pred &rest body)
   "Anaphoric form of `-each-while'."
@@ -2254,6 +2255,8 @@ structure such as plist or alist."
        (let ((new-keywords '(
                              "-each"
                              "--each"
+                             "-each-indexed"
+                             "--each-indexed"
                              "-each-while"
                              "--each-while"
                              "-dotimes"

@@ -4,11 +4,11 @@
 
 ;; Author: Ryan C. Thompson
 ;; URL: https://github.com/DarwinAwardWinner/ido-ubiquitous
-;; Version: 3.13
+;; Version: 3.14
 ;; Created: 2011-09-01
 ;; Keywords: convenience, completion, ido
 ;; EmacsWiki: InteractivelyDoThings
-;; Package-Requires: ((emacs "24.1") (ido-completing-read+ "3.13") (cl-lib "0.5"))
+;; Package-Requires: ((emacs "24.1") (ido-completing-read+ "3.14") (cl-lib "0.5"))
 ;; Filename: ido-ubiquitous.el
 
 ;; This file is NOT part of GNU Emacs.
@@ -69,7 +69,7 @@
 ;;
 ;;; Code:
 
-(defconst ido-ubiquitous-version "3.13"
+(defconst ido-ubiquitous-version "3.14"
   "Currently running version of ido-ubiquitous.
 
 Note that when you update ido-ubiquitous, this variable may not
@@ -333,6 +333,8 @@ using overrides and disable it for everything else."
     (enable exact "find-tag")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/89
     (enable prefix "etags-select-")
+    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/110
+    (enable regexp "\\`describe-\\(function\\|variable\\)\\'")
     ) ; Close paren on separate line for better VC diffs
   "Default value of `ido-ubiquitous-command-overrides'.
 
@@ -363,7 +365,8 @@ You can restore these using the command `ido-ubiquitous-restore-default-override
     ;; https://github.com/mooz/js2-mode/issues/181
     (enable exact "imenu--completion-buffer")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/74
-    (enable-old exact "auto-insert"))
+    (enable-old exact "auto-insert")
+    ) ; Close paren on separate line for better VC diffs
   "Default value of `ido-ubiquitous-function-overrides'.
 
 You can restore these using the command `ido-ubiquitous-restore-default-overrides'.")
@@ -625,7 +628,8 @@ ido-ubiquitous, not for ordinary ido completion."
          (ido-ubiquitous-initial-item nil))
     ad-do-it))
 
-;; Signal used to trigger fallback
+;; Signal used to trigger fallback (don't use `define-error' because
+;; it's only supported in 24.4 and up)
 (put 'ido-ubiquitous-fallback 'error-conditions '(ido-ubiquitous-fallback error))
 (put 'ido-ubiquitous-fallback 'error-message "ido-ubiquitous-fallback")
 
@@ -646,33 +650,44 @@ completion for them."
         (orig-args
          (list prompt collection predicate require-match
                initial-input hist def inherit-input-method)))
+    ;; Outer `condition-case' is the fallback handler
     (condition-case sig
-        (let* (;; Set the active override and clear the "next" one so it
-               ;; doesn't apply to nested calls.
-               (ido-ubiquitous-active-override ido-ubiquitous-next-override)
-               (ido-ubiquitous-next-override nil)
-               ;; Apply the active override, if any
-               (ido-ubiquitous-active-state
-                (or ido-ubiquitous-active-override
-                    ido-ubiquitous-default-state
-                    'enable)))
-          ;; If ido-ubiquitous is disabled this time, fall back
-          (when (eq ido-ubiquitous-active-state 'disable)
-            (signal 'ido-ubiquitous-fallback
-                    "`ido-ubiquitous-active-state' is `disable'"))
-          ;; Handle a collection that is a function: either expand
-          ;; completion list now or fall back
-          (when (functionp collection)
-            (if (or ido-ubiquitous-allow-on-functional-collection
-                    (memq ido-ubiquitous-active-override
-                          '(enable enable-old)))
-                (setq collection (all-completions "" collection predicate))
-              (signal 'ido-ubiquitous-fallback
-                      "COLLECTION is a function and there is no override")))
-          (let ((ido-ubiquitous-enable-next-call t))
-            (ido-completing-read+
-             prompt collection predicate require-match
-             initial-input hist def inherit-input-method)))
+        ;; Inner `condition-case' converts any unexpected errors into
+        ;; fallback signals.
+        (condition-case err
+            (let* (;; Set the active override and clear the "next" one so it
+                   ;; doesn't apply to nested calls.
+                   (ido-ubiquitous-active-override ido-ubiquitous-next-override)
+                   (ido-ubiquitous-next-override nil)
+                   ;; Apply the active override, if any
+                   (ido-ubiquitous-active-state
+                    (or ido-ubiquitous-active-override
+                        ido-ubiquitous-default-state
+                        'enable)))
+              ;; If ido-ubiquitous is disabled this time, fall back
+              (when (eq ido-ubiquitous-active-state 'disable)
+                (signal 'ido-ubiquitous-fallback
+                        "`ido-ubiquitous-active-state' is `disable'"))
+              ;; Handle a collection that is a function: either expand
+              ;; completion list now or fall back
+              (when (functionp collection)
+                (if (or ido-ubiquitous-allow-on-functional-collection
+                        (memq ido-ubiquitous-active-override
+                              '(enable enable-old)))
+                    (setq collection (all-completions "" collection predicate)
+                          ;; `all-completions' will apply the predicate,
+                          ;; so it now becomes redundant.
+                          predicate nil)
+                  (signal 'ido-ubiquitous-fallback
+                          "COLLECTION is a function and there is no override")))
+              (let ((ido-ubiquitous-enable-next-call t))
+                (ido-completing-read+
+                 prompt collection predicate require-match
+                 initial-input hist def inherit-input-method)))
+          (error
+           (signal 'ido-ubiquitous-fallback
+                   (format "ido-ubiquitous encountered an unexpected error: %S"
+                           err))))
       ;; Handler for ido-ubiquitous-fallback signal
       (ido-ubiquitous-fallback
        (ido-ubiquitous--explain-fallback sig)
