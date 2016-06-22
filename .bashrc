@@ -1474,7 +1474,7 @@ function filecount() {
 }
 
 # Determine size of a file or total size of a directory
-function fs() {
+function filesize() {
     if du -b /dev/null > /dev/null 2>&1; then
 	local arg=-sbh
     else
@@ -1486,7 +1486,7 @@ function fs() {
 	du $arg .[^.]* ./*
     fi
 }
-alias filesize='fs'
+alias fs='filesize'
 
 # Pipe to map, then give command to invoke on every line from stdin
 # from @nvie https://coderwall.com/p/4tkkpq
