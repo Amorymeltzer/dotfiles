@@ -35,6 +35,9 @@ precomposeunicode = false
 # Via: http://git.io/QXnAqw
 # abbrev = 12
 
+[commit]
+	verbose = true
+
 [alias]
 h = help
 cfg = config --global
