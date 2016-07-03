@@ -36,7 +36,10 @@ precomposeunicode = false
 # abbrev = 12
 
 [commit]
-	verbose = true
+verbose = true
+
+[diff]
+compactionHeuristic = true
 
 [alias]
 h = help
