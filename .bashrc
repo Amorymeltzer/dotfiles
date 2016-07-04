@@ -373,21 +373,21 @@ function holiday_greeting()
     # make sure the holiday greeting is displayed (if any)
     local hol=1 holgreet
     if [ "$day" = "January 01" ]; then
-	holgreet="${Color_Magenta_Intense}Happy ${Color_Red_Intense}New ${Color_Blue_Intense}Year!${Color_zOff} Have a good $year."
+	holgreet="${Color_Magenta_Intense}Happy ${Color_Red_Intense}New ${Color_Blue_Intense}Year!${Color_zOff} Have a great $year."
     elif [ "$day" = "February 02" ]; then
-	holgreet="Happy Groundhog Day"
+	holgreet="Happy Groundhog Day!"
     elif [ "$day" = "February 14" ]; then
-	holgreet="Happy ${Color_Magenta}Valentine's Day${Color_zOff}"
+	holgreet="Happy ${Color_Magenta}Valentine's Day!${Color_zOff}"
     elif [ "$day" = "July 04" ]; then
-	holgreet="Happy ${Color_Red_Intense}Fourth ${Color_White_Intense}of ${Color_Blue_Intense}July${Color_zOff}"
+	holgreet="Happy ${Color_Red_Intense}Fourth ${Color_White_Intense}of ${Color_Blue_Intense}July!${Color_zOff}"
     elif [ "$day" = "August 12" ]; then
 	holgreet="Happy Birthday!"
     elif [ "$day" = "October 31" ]; then
-	holgreet="${Color_Red_Bold}Happy Halloween.${Color_zOff}"
+	holgreet="${Color_Red_Bold}Happy Halloween!${Color_zOff}"
     elif [ "$day" = "December 24" ]; then
-	holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve${Color_zOff}"
+	holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve!${Color_zOff}"
     elif [ "$day" = "December 25" ];then
-	holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas${Color_zOff}!"
+	holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas!${Color_zOff}!"
     elif [ "$day" = "December 31" ]; then
 	holgreet="Happy New Year's Eve!"
     else
