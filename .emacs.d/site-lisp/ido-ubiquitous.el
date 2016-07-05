@@ -4,11 +4,11 @@
 
 ;; Author: Ryan C. Thompson
 ;; URL: https://github.com/DarwinAwardWinner/ido-ubiquitous
-;; Version: 3.14
+;; Version: 3.15
 ;; Created: 2011-09-01
 ;; Keywords: convenience, completion, ido
 ;; EmacsWiki: InteractivelyDoThings
-;; Package-Requires: ((emacs "24.1") (ido-completing-read+ "3.14") (cl-lib "0.5"))
+;; Package-Requires: ((emacs "24.1") (ido-completing-read+ "3.15") (cl-lib "0.5"))
 ;; Filename: ido-ubiquitous.el
 
 ;; This file is NOT part of GNU Emacs.
@@ -69,7 +69,7 @@
 ;;
 ;;; Code:
 
-(defconst ido-ubiquitous-version "3.14"
+(defconst ido-ubiquitous-version "3.15"
   "Currently running version of ido-ubiquitous.
 
 Note that when you update ido-ubiquitous, this variable may not
@@ -333,8 +333,6 @@ using overrides and disable it for everything else."
     (enable exact "find-tag")
     ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/89
     (enable prefix "etags-select-")
-    ;; https://github.com/DarwinAwardWinner/ido-ubiquitous/issues/110
-    (enable regexp "\\`describe-\\(function\\|variable\\)\\'")
     ) ; Close paren on separate line for better VC diffs
   "Default value of `ido-ubiquitous-command-overrides'.
 
