@@ -2,7 +2,6 @@
 # /usr/share/doc/bash
 # man fold
 # man sysctl
-# cp file{,.bk} to copy to backup
 
 # if not running interactively, don't do anything
 # I see this around, seems good?  ;;;;;; ##### FIXME TODO
