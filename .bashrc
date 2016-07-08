@@ -255,7 +255,7 @@ function lastman {
     local cmd="$(basename "$1")";
     man "$cmd" || help "$cmd";
 }
-alias lman='lastman '
+alias lman='lastman'
 
 # Misc -------------------------------------------------------------
 # bash readline settings
@@ -583,14 +583,14 @@ alias j="jobs"
 alias h='history 15'
 alias cl='clear'
 alias cls='clear'
-alias em='emacs '
-alias e='$EDITOR '
-alias count='wc -l '
-alias linecount='count '
+alias em='emacs'
+alias e='$EDITOR'
+alias count='wc -l'
+alias linecount='count'
 
 # http://linux.die.net/man/1/pygmentize
 # Colorized cat
-alias cot='pygmentize-3.4 -O bg=light -g '
+alias cot='pygmentize-3.4 -O bg=light -g'
 
 # o with no args opens current directory, otherwise opens the given location
 function o() {
@@ -666,7 +666,7 @@ function mkcd() {
 	mkdir $1 && cd $1
     fi
 }
-alias mkd='mkcd '
+alias mkd='mkcd'
 
 # Make a directory and move a file into it
 function mkmv() {
@@ -711,7 +711,7 @@ function memstat {
 }
 
 # Show five most recently modified files.
-alias last-modified='ls -t $* 2> /dev/null | head -n 5 '
+alias last-modified='ls -t $* 2> /dev/null | head -n 5'
 
 # growlnotify: add after to show when done
 # Maybe other options...
