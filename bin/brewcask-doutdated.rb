@@ -1,1 +1,0 @@
-/usr/local/Library/Taps/caskroom/homebrew-cask/developer/examples/brewcask-doutdated.rb
