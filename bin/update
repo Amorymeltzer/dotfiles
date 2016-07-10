@@ -28,7 +28,7 @@ END_HELP
 }
 
 # Parse commandline options
-while getopts 'bcCEgKmMpPrRhH' opt; do
+while getopts 'bcCeEgKmMpPrRhH' opt; do
     case $opt in
 	b) base_flag='1';;
 	m) macports_flag='1';;
@@ -40,7 +40,7 @@ while getopts 'bcCEgKmMpPrRhH' opt; do
 	R) ruby_all_flag='2';;
 	c) cpan_flag='1';;
 	C) cpan_all_flag='2';;
-	E) homebrew_flag='1';;
+	e) homebrew_flag='1';;
 	E) homebrew_all_flag='2';;
 	K) brewcask_flag='1';;
 	h|H) help $0
