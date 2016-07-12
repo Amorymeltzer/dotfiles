@@ -20,15 +20,16 @@ Usage: $(basename $0) [-bmMpPgrRcCEKhH]
   -R		skip all ruby actions
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
-  -e		pull homebrew and hombrew-cask updates but don't update brews
-  -E		skip all homebrew updates
-  -K		skip all homebrew-cask updates (currently non-functional)
+  -e		pull homebrew and hombrew-cask changes but don't upgrade brews
+  -k		skip all homebrew-cask updates (currently non-functional)
+  -E		skip all homebrew and homebrew-cask updates
+  -K		skip all homebrew and homebrew-cask updates
   -h -H		this help
 END_HELP
 }
 
 # Parse commandline options
-while getopts 'bcCeEgKmMpPrRhH' opt; do
+while getopts 'bcCeEgkKmMpPrRhH' opt; do
     case $opt in
 	b) base_flag='1';;
 	m) macports_flag='1';;
@@ -41,8 +42,9 @@ while getopts 'bcCeEgKmMpPrRhH' opt; do
 	c) cpan_flag='1';;
 	C) cpan_all_flag='2';;
 	e) homebrew_flag='1';;
+	k) brewcask_flag='1';;
 	E) homebrew_all_flag='2';;
-	K) brewcask_flag='1';;
+	K) homebrew_all_flag='2';;
 	h|H) help $0
 	     exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
@@ -173,21 +175,21 @@ if [[ -z $homebrew_all_flag ]]; then
 	    echo -e "${Color_Green}brews already up-to-date!${Color_zOff}..."
 	fi
     fi
-fi
 
-# Not perfect, but uses the external brewcask-doutdated.rb command to grab
-# a list of outdated casks, then --force reinstalls them
-if [[ -z $brewcask_flag ]]; then
-    # if [[ $(brew cask doutdated &> /dev/null) ]]; then
-    #	checking 'casks'
-    #	sudo -u $SUDO_USER brew cask doutdated
-    #	updating 'casks'
-    #	sudo -u $SUDO_USER "brew cask doutdated | xargs brew cask install --force"
+    # Not perfect, but uses the external brewcask-doutdated.rb command to grab
+    # a list of outdated casks, then --force reinstalls them
+    if [[ -z $brewcask_flag ]]; then
+	# if [[ $(brew cask doutdated &> /dev/null) ]]; then
+	#	checking 'casks'
+	#	sudo -u $SUDO_USER brew cask doutdated
+	#	updating 'casks'
+	#	sudo -u $SUDO_USER "brew cask doutdated | xargs brew cask install --force"
 
-    #	cleaning 'casks'
-    #	sudo -u $SUDO_USER brew cask cleanup
-    # else
-    #	echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
-    echo -e "${Color_Red}cask updates currently nonfunctional${Color_zOff}"
-    # fi
+	#	cleaning 'casks'
+	#	sudo -u $SUDO_USER brew cask cleanup
+	# else
+	#	echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
+	echo -e "${Color_Red}cask updates currently nonfunctional${Color_zOff}"
+	# fi
+    fi
 fi
