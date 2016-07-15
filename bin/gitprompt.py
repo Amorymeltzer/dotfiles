@@ -22,7 +22,7 @@ def check(dirname):
     messages = []
     out = run('LC_ALL=C git status 2>/dev/null')
     if out:
-        if re.search(r'nothing to commit.?.?working directory clean.?', out):
+        if re.search(r'nothing to commit.?.?working tree clean.?', out):
             messages.append("=")
         else:
             if 'Changes not staged for commit' in out:
