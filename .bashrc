@@ -617,7 +617,6 @@ function peek() {
 # http://www.gnu.org/software/bash/manual/bashref.html#Aliases says: "If the
 # last character of the alias value is a space or tab character, then the next
 # command word following the alias is also checked for alias expansion."
-#  alias sudo='sudo '
 alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
 
 # Hook lock-quote scripts into sudo.  Not ideal but fits the right profile:
