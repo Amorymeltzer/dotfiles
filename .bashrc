@@ -78,14 +78,14 @@ function g {
     fi
 }
 
-alias gb='git b '
+alias gb='git b'
 alias gcb='git copy-branch-name'
-alias gco='git co '
-alias gg='git go '
+alias gco='git co'
+alias gg='git go'
 alias gs='git s'
 alias s='git s'
-alias ga='git add '
-alias gaa='git aa '
+alias ga='git add'
+alias gaa='git aa'
 alias gaas='git aas'
 alias gas='git aas'
 alias gd='git d'
@@ -95,11 +95,11 @@ alias gicdc='git icdc'
 alias gds='git ds'
 alias gdsc='git dsc'
 alias gdcs='git dsc'
-alias gcm='git cm '
+alias gcm='git cm'
 alias gl='git l1 -5'
 alias gl1='git l1'
 alias gld='git ld5'
-alias greh='g reh '
+alias greh='g reh'
 
 # Setup some colors to use later in interactive shell or scripts
 # ~/bin/colordump and termcolors give some clues about these
@@ -244,7 +244,7 @@ export LESS_TERMCAP_ue=$'\033[0m'    # end underline
 export LESS_TERMCAP_us=$'\033[4;35m' # begin underline
 
 # more is less
-alias more='less '
+alias more='less'
 
 # Open the manual page for the last command you executed.
 function lastman {
@@ -623,7 +623,7 @@ alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
 # uses sudo, not overly common but often enough to change moderately frequently
 # -E preserves environment, eg colors
 # -H preserves home?  Or something?
-alias lock-quote='sudo ~/Documents/git/lockquote/lock-quote '
+alias lock-quote='sudo ~/Documents/git/lockquote/lock-quote'
 # Get current quote
 alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist LoginwindowText'
 
@@ -725,19 +725,19 @@ alias beep='tput bel'
 
 # Use colordiff if it exists
 if [[ -f `command -v colordiff` ]]; then
-    alias diff='colordiff ';
+    alias diff='colordiff';
 fi
 if [[ -f `command -v cwdiff` ]]; then
-    alias wcolordiff='cwdiff '
+    alias wcolordiff='cwdiff'
 elif [[ -f `command -v wdiff` ]]; then
     # What is this?  Need to explain FIXME TODO
     alias wcolordiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
 fi
-alias diffc='wcolordiff '
-alias diffw='wcolordiff '
+alias diffc='wcolordiff'
+alias diffw='wcolordiff'
 # But for real?  Just use dwdiff: git-like giff
 # Use -3 option to only show changes
-alias dwdiff='dwdiff -sc '
+alias dwdiff='dwdiff -sc'
 
 # grep prints line number if piped, kinda sorta breaks other things
 # http://unix.stackexchange.com/a/25549/43935
@@ -811,7 +811,7 @@ alias cdoctor='brew cask doctor'
 
 # origin & Amorymeltzer instead of upstream & origin
 # Auto open appcast and homepage urls
-alias cask-repair='cask-repair -l origin -p Amorymeltzer -a -o '
+alias cask-repair='cask-repair -l origin -p Amorymeltzer -a -o'
 
 # Calculate :checkpoint from url
 function checkpoint()
@@ -839,9 +839,9 @@ function checkpoint()
 }
 
 # bundle exec alias
-alias be='bundle exec '
-alias bej='be jekyll serve --watch '
-alias jes='jekyll serve --watch '
+alias be='bundle exec'
+alias bej='be jekyll serve --watch'
+alias jes='jekyll serve --watch'
 
 # Quickly open and make a new perl file executable and with headers
 function newperl() {
@@ -907,8 +907,8 @@ function twinmos() {
 function sandisk() {
     diskutil umount /Volumes/SANDISK
 }
-alias unmount='diskutil umount '
-alias eject='unmount '
+alias unmount='diskutil umount'
+alias eject='unmount'
 # Eject all drives, kind of slow?
 function ejectall() {
     find /Volumes -maxdepth 1 -not -user root -a -not -name '.*' -print0 | xargs -0 umount
@@ -950,7 +950,7 @@ alias haxx="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 # Seriously though, just use pianobar/pandora
 alias pandora='pianobar'
 # old habits die hard
-alias mplayer='mpv '
+alias mplayer='mpv'
 
 
 # Show most used commands, fixed by doing $4 instead of $2, from:
@@ -1014,7 +1014,7 @@ function down4me()
 {
     curl -s "http://www.downforeveryoneorjustme.com/$1" | sed "/just you/!d;s/<[^>]*>//g" | sed -e 's/  //g' | sed -e 's/http.*#x2F;/  /g'
 }
-alias downforeveryoneorjustme='down4me '
+alias downforeveryoneorjustme='down4me'
 
 
 # Combine all IP shit to give local and external, only if appropriate
@@ -1070,17 +1070,17 @@ function ssid()
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\"'
 # Which processes are listening on ports
-alias eaves='lsof -iTCP -sTCP:LISTEN -P "$@" '
+alias eaves='lsof -iTCP -sTCP:LISTEN -P "$@"'
 
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
     alias "$method"="lwp-request -m '$method'"
 done
 
 alias quicklook="qlmanage -p 2> /dev/null"
-alias ql="quicklook "
+alias ql="quicklook"
 
-alias pbc='pbcopy '
-alias pbp='pbpaste '
+alias pbc='pbcopy'
+alias pbp='pbpaste'
 # Trim new lines and copy to clipboard
 alias clipboard="tr -d '\n' | pbcopy"
 
@@ -1103,16 +1103,16 @@ alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/La
 alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 
 # OS X has no md5sum, so use md5 as a fallback
-command -v md5sum > /dev/null || alias md5sum="md5 "
+command -v md5sum > /dev/null || alias md5sum="md5"
 # OS X has no sha1sum, so use shasum as a fallback
-command -v sha1sum > /dev/null || alias sha1sum="shasum "
+command -v sha1sum > /dev/null || alias sha1sum="shasum"
 # OS X has no sha256sum, so use shasum as a fallback
-command -v sha256sum > /dev/null || alias sha256sum="shasum -a 256 "
+command -v sha256sum > /dev/null || alias sha256sum="shasum -a 256"
 # OS X has no sha512sum, so use shasum as a fallback
-command -v sha512sum > /dev/null || alias sha512sum="shasum -a 512 "
+command -v sha512sum > /dev/null || alias sha512sum="shasum -a 512"
 
 # Canonical hex dump; some systems have this symlinked
-command -v hd > /dev/null || alias hd="hexdump -C "
+command -v hd > /dev/null || alias hd="hexdump -C"
 
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
@@ -1205,7 +1205,7 @@ function mergepdf() {
 function cdfinder() {
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
-alias cdf='cdfinder '
+alias cdf='cdfinder'
 
 
 ## Couple of functions jacked from bash-it
@@ -1245,7 +1245,7 @@ function marketupdate() {
 alias mu='marketupdate'
 alias stockmarket='ticker'
 alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
-alias inflation="perl ~/Documents/perl/sandbox/inflation.pl "
+alias inflation="perl ~/Documents/perl/sandbox/inflation.pl"
 
 function btc() {
     local five=$(curl -s 'https://www.coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
