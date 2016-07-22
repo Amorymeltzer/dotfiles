@@ -5,7 +5,7 @@
 
 readonly program="$(basename "${0}")"
 readonly submit_pr_to='caskroom:master'
-readonly browser_headers=(--header 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36')
+readonly user_agent=(--user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36')
 remote_pull='upstream' # use 'upstream' as default remote to pull from
 remote_push='origin' # use 'origin' as default remote to push to
 show_home='false' # by default, do not open the cask's homepage
@@ -39,6 +39,7 @@ usage() {
       -a, --open-appcast             Open the appcast for the given cask.
       -v, --cask-version             Give a version directly, instead of being prompted for it.
       -u, --cask-url                 Give a URL directly, instead of being prompted for it.
+      -e, --edit-cask                Opens cask for editing before trying first download.
       -c, --closes-issue <number>    Adds 'Closes #<number>.' to the commit message.
       -b, --blind-submit             Submit cask without asking for confirmation, if there are no errors.
       -d, --delete-branches          Deletes all local and remote branches named like cask-repair_update-<word>.
@@ -75,6 +76,9 @@ while [[ "${1}" ]]; do
       given_cask_url="${2}"
       shift
       ;;
+    -e | --edit-cask)
+      edit_on_start='true'
+      ;;
     -c | --closes-issue)
       issue_to_close="${2}"
       shift
@@ -103,7 +107,7 @@ http_status() {
   url="${1}"
   [[ "${2}" == 'follow_redirects' ]] && follow_redirects='--location' || follow_redirects='--no-location'
 
-  curl --silent --head "${follow_redirects}" "${browser_headers[@]}" --write-out '%{http_code}' "${url}" -o '/dev/null'
+  curl --silent --head "${follow_redirects}" "${user_agent[@]}" --write-out '%{http_code}' "${url}" -o '/dev/null'
 }
 
 # define function to check if a given string contains ruby-style interpolation
@@ -116,6 +120,11 @@ is_version_latest() {
   [[ "$(brew cask _stanza version ${cask_file})" == 'latest' ]] && echo 'true' || echo 'false'
 }
 
+# define function to check for block url
+has_block_url() {
+  [[ $(grep 'url do' "${cask_file}") ]] && echo 'true' || echo 'false'
+}
+
 # define function to modify stanzas
 modify_stanza() {
   stanza_to_modify="${1}"
@@ -126,6 +135,13 @@ modify_stanza() {
     $new_stanza_value = shift(@ARGV);
     print <> =~ s|\A.*^\s*\Q$stanza_to_modify\E\s\K[^\n]*|$new_stanza_value|smr;
   ' "${stanza_to_modify}" "${new_stanza_value}" "${cask_file}"
+}
+
+# define function to modify url with correct quotes
+modify_url() {
+  local url="${1}"
+
+  [[ $(has_interpolation "${url}") == 'true' ]] && modify_stanza 'url' "\"${url}\"" || modify_stanza 'url' "'${url}'" # use appropriate quotes depending on if a url with interpolation was given
 }
 
 # define function to get appcast url and existence
@@ -161,7 +177,7 @@ appcast_checkpoint_change() {
   cask_appcast_status=$(http_status "${cask_appcast_url}" 'no_follow_redirects')
   [[ "${cask_appcast_status}" != '200' ]] && add_warning warning "appcast is probably incorrect, as a non-200 (OK) HTTP response code was returned (${cask_appcast_status})"
 
-  cask_appcast_checkpoint=$(curl --silent --compressed --location "${browser_headers[@]}" "${cask_appcast_url}" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
+  cask_appcast_checkpoint=$(curl --silent --compressed --location "${user_agent[@]}" "${cask_appcast_url}" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
 
   modify_stanza 'checkpoint:' "'${cask_appcast_checkpoint}'"
 }
@@ -183,6 +199,11 @@ delete_created_branches() {
 update_cask_shas() {
   sha_change
   appcast_checkpoint_change
+}
+
+# define function to open cask in appropriate editor
+edit_cask() {
+  [[ -n "${EDITOR}" ]] && eval "${EDITOR}" "${cask_file}" || open -W "${cask_file}"
 }
 
 # define function to add warnings to be shown on review
@@ -296,19 +317,17 @@ else
   modify_stanza 'version' "'${given_cask_version}'"
 fi
 
-# check if cask's url uses interpolation
-cask_bare_url=$(grep "url ['\"].*['\"]" "${cask_file}" | sed -E "s|.*url ['\"](.*)['\"].*|\1|")
-[[ $(has_interpolation "${cask_bare_url}") == 'true' ]] && cask_url_uses_interpolation='true' || cask_url_uses_interpolation='false'
-
-# if url does not use interpolation, ask for it
-if [[ "${cask_url_uses_interpolation}" == 'false' ]]; then
-  if [[ -z "${given_cask_url}" ]]; then
+if [[ -n "${given_cask_url}" ]]; then
+  [[ $(has_block_url) == 'false' ]] && modify_url "${given_cask_url}" || echo 'Cask has block url, so it can only be modified manually (choose "e" when prompted)'
+else
+  # if url does not use interpolation and is not block, ask for it
+  cask_bare_url=$(grep "url ['\"].*['\"]" "${cask_file}" | sed -E "s|.*url ['\"](.*)['\"].*|\1|")
+  if [[ $(has_interpolation "${cask_bare_url}") == 'false' ]] && [[ $(has_block_url) == 'false' ]]; then
     read -p $'Paste the new URL (or leave blank to use the current one)\n> ' given_cask_url
 
-    [[ -z "${given_cask_url}" ]] && given_cask_url=$(brew cask _stanza url "${cask_file}")
+    [[ -z "${given_cask_url}" ]] && given_cask_url=$(brew cask _stanza url "${cask_file}") || modify_url "${given_cask_url}"
   fi
 
-  [[ $(has_interpolation "${given_cask_url}") == 'true' ]] && modify_stanza 'url' "\"${given_cask_url}\"" || modify_stanza 'url' "'${given_cask_url}'" # use appropriate quotes depending on if a url with interpolation was given
   cask_url=$(brew cask _stanza url "${cask_file}")
 
   # check if the URL sends a 200 HTTP code, else abort
@@ -324,6 +343,8 @@ if [[ "${cask_url_uses_interpolation}" == 'false' ]]; then
     fi
   fi
 fi
+
+[[ "${edit_on_start}" == 'true' ]] && edit_cask
 
 [[ "$(is_version_latest)" == 'false' ]] && update_cask_shas || modify_stanza 'sha256' ':no_check' # calculate new sha256 values
 
@@ -356,7 +377,7 @@ until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
       break
     fi
   elif [[ "${cask_updated}" == 'e' ]]; then
-    [[ -n "${EDITOR}" ]] && "${EDITOR}" "${cask_file}" || open -W "${cask_file}" # open cask in appropriate editor
+    edit_cask
     [[ "$(is_version_latest)" == 'false' ]] && update_cask_shas # recheck sha256 values if version isn't :latest
     cask_updated='false'
     clear_warnings
