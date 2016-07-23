@@ -1288,6 +1288,11 @@ function weather() {
 alias today='weather | head -n 2 | tail -n 1'
 
 function sunrise()
+# FIXME TODO
+# See:
+# http://stackoverflow.com/questions/36186538/making-yahoo-weather-api-request-with-oauth-1
+# https://www.igorkromin.net/index.php/2016/04/14/yahoo-returns-its-weather-api-to-public-aess-switches-to-yql-for-query/
+# https://www.igorkromin.net/index.php/2016/04/15/example-yahoo-weather-yql-to-fetch-forecasts-and-render-with-jquery/
 {
     local loc
     # Uses WOEID, which is some ol' bullshit
@@ -1304,7 +1309,7 @@ function sunrise()
 	echo "sunrise <NYC|Stow|Davis>"
 	return
     fi
-    curl -s http://weather.yahooapis.com/forecastrss?w=$loc | grep astronomy | awk -F\" '{print $2 "\n" $4;}'
+      curl -s http://weather.yahooapis.com/forecastrss?w=$loc | grep astronomy | awk -F\" '{print $2 "\n" $4;}'
 }
 alias sunset='sunrise'
 
