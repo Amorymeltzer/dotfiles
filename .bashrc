@@ -1262,7 +1262,12 @@ function bitcoin() {
 
 # Get coordinates
 function findlocation() {
-    local place=`echo $* | sed 's/ /%20/g'`
+    local place
+    if [ ! $1 ]; then
+	echo "Usage: findlocation <place>"
+    else
+	place=`echo $* | sed 's/ /%20/g'`
+    fi
     curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=$place&sensor=false" | grep -A 2 -e "location\"" -e "formatted_address" | grep -e "formatted" -e "lat" -e "lng" | sed -e 's/^ *//' -e 's/"//g' -e 's/formatted_address/Full address/g' -e 's/,$//g' -e 's/^.*{//g';
 }
 alias getcoordinates='findlocation'
@@ -1309,7 +1314,7 @@ function sunrise()
 	echo "sunrise <NYC|Stow|Davis>"
 	return
     fi
-      curl -s http://weather.yahooapis.com/forecastrss?w=$loc | grep astronomy | awk -F\" '{print $2 "\n" $4;}'
+    curl -s http://weather.yahooapis.com/forecastrss?w=$loc | grep astronomy | awk -F\" '{print $2 "\n" $4;}'
 }
 alias sunset='sunrise'
 
