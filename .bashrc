@@ -628,8 +628,6 @@ alias lock-quote='sudo ~/Documents/git/lockquote/lock-quote'
 alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist LoginwindowText'
 
 # thefuck https://github.com/nvbn/thefuck
-# Currently broken, should be fixed on next update
-# See https://github.com/nvbn/thefuck/pull/434
 eval "$(thefuck --alias)"
 
 # Prompt before overwrite, be vocal about it
