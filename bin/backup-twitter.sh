@@ -27,13 +27,14 @@ t followers --csv > $FOLDERPATH/followers-$DAY.csv
 t followers > $FOLDERPATH/followers-$DAY.txt
 echo "Backing up followings..."
 t followings --csv > $FOLDERPATH/followings-$DAY.csv
-echo "Backing up lists..."
-listlist=$(t lists)
-listlist=$(echo $listlist | sed -e 's/\@Amorymeltzer\///g')
-for i in $listlist
-do
-    t list members @amorymeltzer/$i --csv > $FOLDERPATH/list-$i-$DAY.csv
-done
+
+# echo "Backing up lists..."
+# listlist=$(t lists)
+# listlist=$(echo $listlist | sed -e 's/\@Amorymeltzer\///g')
+# for i in $listlist
+# do
+#     t list members @amorymeltzer/$i --csv > $FOLDERPATH/list-$i-$DAY.csv
+# done
 
 echo -e "\nBacked up the following:"
 echo -e "- "`wc -l $FOLDERPATH/tweets-$DAY.csv|cut -d" " -f 1`" tweets"
