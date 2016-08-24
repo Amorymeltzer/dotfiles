@@ -1230,7 +1230,7 @@ pass ()
 
 # Dashboard stock prices, use ticker for price, stockclose for last close
 function marketupdate() {
-    local FILES="SSO QLD VOOG QQQ LC .DJI .IXIC .INX INDEXNYSEGIS:NYA TNX"
+    local FILES="SSO QLD VOOG QQQ .DJI .IXIC .INX INDEXNYSEGIS:NYA TNX"
 
     # Only show investments if after market close or weekend
     # Based on DST, correct using Eastern time??
