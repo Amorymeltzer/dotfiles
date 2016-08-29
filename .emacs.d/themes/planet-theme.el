@@ -50,11 +50,12 @@
       (planet-bg-2    "#090c10")
       (planet-bg-3    "#243248")
       (planet-bg-4    "#2A3A53")
-      (planet-blue    "#729fcf")
-      (planet-green   "#649d8a")
-      (planet-purple  "#a6a1ea")
+      (planet-error   "#ff8683")
       (planet-warning "#e9b96e")
-      (planet-error   "#ff8683"))
+      (planet-yellow  "#fbf2c0")
+      (planet-green   "#649d8a")
+      (planet-blue    "#729fcf")
+      (planet-purple  "#a6a1ea"))
   (custom-theme-set-faces
    'planet
 
@@ -74,6 +75,7 @@
    `(region ((,class (:foreground ,planet-bg :background ,planet-fg-2))))
    `(secondary-selection ((,class (:foreground ,planet-bg :background ,planet-blue))))
    '(underline ((t (:underline t))))
+   `(trailing-whitespace ((,class (:background ,planet-error))))
 
    ;; company
    `(company-echo-common ((t (:foreground ,planet-error))))
@@ -110,6 +112,17 @@
    ;; diff
    `(diff-removed ((,class (:foreground ,planet-bg-2 :background ,planet-error))))
    `(diff-added ((,class (:foreground ,planet-bg-2 :background ,planet-green))))
+
+   ;; ediff
+   `(ediff-current-diff-A ((,class (:foreground ,planet-bg-2 :background ,planet-error))))
+   `(ediff-current-diff-B ((,class (:foreground ,planet-bg-2 :background ,planet-green))))
+   `(ediff-current-diff-C ((,class (:foreground ,planet-bg-2 :background ,planet-yellow))))
+   `(ediff-odd-diff-A ((,class (:background ,planet-bg-4))))
+   `(ediff-odd-diff-B ((,class (:background ,planet-bg-4))))
+   `(ediff-odd-diff-C ((,class (:background ,planet-bg-4))))
+   `(ediff-even-diff-A ((,class (:background ,planet-bg-4))))
+   `(ediff-even-diff-B ((,class (:background ,planet-bg-4))))
+   `(ediff-even-diff-C ((,class (:background ,planet-bg-4))))
 
    ;; erc
    '(erc-action-face ((t (:bold t :weight bold))))

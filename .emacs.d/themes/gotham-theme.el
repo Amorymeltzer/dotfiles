@@ -4,7 +4,7 @@
 
 ;; Author: Vasilij Schneidermann <v.schneidermann@gmail.com>
 ;; URL: https://github.com/wasamasa/gotham-theme
-;; Version: 1.1.6
+;; Version: 1.1.7
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -43,8 +43,10 @@
 
 (deftheme gotham "The Gotham color theme")
 
-(defcustom gotham-tty-extended-palette nil
-  "Use the extended 256-color palette in the terminal?
+(define-obsolete-variable-alias 'gotham-tty-extended-palette
+  'gotham-tty-256-colors "1.1.6")
+(defcustom gotham-tty-256-colors nil
+  "Use the regular 256-color palette in the terminal?
 When t, assume a regular 256-color palette, otherwise assume a
 customized 16-color palette."
   :type '(boolean (const :tag "16 colors" nil)
@@ -52,23 +54,23 @@ customized 16-color palette."
   :group 'gotham)
 
 (defvar gotham-color-alist
-  `((base0   "#0c1014" ,(if gotham-tty-extended-palette "color-232" "black"))
-    (base1   "#11151c" ,(if gotham-tty-extended-palette "color-233" "brightblack"))
-    (base2   "#091f2e" ,(if gotham-tty-extended-palette "color-17"  "brightgreen"))
-    (base3   "#0a3749" ,(if gotham-tty-extended-palette "color-18"  "brightblue"))
-    (base4   "#245361" ,(if gotham-tty-extended-palette "color-24"  "brightyellow"))
-    (base5   "#599cab" ,(if gotham-tty-extended-palette "color-81"  "brightcyan"))
-    (base6   "#99d1ce" ,(if gotham-tty-extended-palette "color-122" "white"))
-    (base7   "#d3ebe9" ,(if gotham-tty-extended-palette "color-194" "brightwhite"))
+  `((base0   "#0c1014" ,(if gotham-tty-256-colors "color-232" "black"))
+    (base1   "#11151c" ,(if gotham-tty-256-colors "color-233" "brightblack"))
+    (base2   "#091f2e" ,(if gotham-tty-256-colors "color-17"  "brightgreen"))
+    (base3   "#0a3749" ,(if gotham-tty-256-colors "color-18"  "brightblue"))
+    (base4   "#245361" ,(if gotham-tty-256-colors "color-24"  "brightyellow"))
+    (base5   "#599cab" ,(if gotham-tty-256-colors "color-81"  "brightcyan"))
+    (base6   "#99d1ce" ,(if gotham-tty-256-colors "color-122" "white"))
+    (base7   "#d3ebe9" ,(if gotham-tty-256-colors "color-194" "brightwhite"))
 
-    (red     "#c23127" ,(if gotham-tty-extended-palette "color-124" "red"))
-    (orange  "#d26937" ,(if gotham-tty-extended-palette "color-166" "brightred"))
-    (yellow  "#edb443" ,(if gotham-tty-extended-palette "color-214" "yellow"))
-    (magenta "#888ca6" ,(if gotham-tty-extended-palette "color-67"  "brightmagenta"))
-    (violet  "#4e5166" ,(if gotham-tty-extended-palette "color-60"  "magenta"))
-    (blue    "#195466" ,(if gotham-tty-extended-palette "color-24"  "blue"))
-    (cyan    "#33859e" ,(if gotham-tty-extended-palette "color-44"  "cyan"))
-    (green   "#2aa889" ,(if gotham-tty-extended-palette "color-78"  "green")))
+    (red     "#c23127" ,(if gotham-tty-256-colors "color-124" "red"))
+    (orange  "#d26937" ,(if gotham-tty-256-colors "color-166" "brightred"))
+    (yellow  "#edb443" ,(if gotham-tty-256-colors "color-214" "yellow"))
+    (magenta "#888ca6" ,(if gotham-tty-256-colors "color-67"  "brightmagenta"))
+    (violet  "#4e5166" ,(if gotham-tty-256-colors "color-60"  "magenta"))
+    (blue    "#195466" ,(if gotham-tty-256-colors "color-24"  "blue"))
+    (cyan    "#33859e" ,(if gotham-tty-256-colors "color-44"  "cyan"))
+    (green   "#2aa889" ,(if gotham-tty-256-colors "color-78"  "green")))
   "List of colors the theme consists of.")
 
 (defun gotham-set-faces (faces)
@@ -542,10 +544,19 @@ depending on DISPLAY for keys which are either :foreground or
    (ecb-tree-guide-line-face :foreground base4)
    (ecb-type-tag-group-face :foreground magenta)
 
-   ;; flycheck
-   (flycheck-error :underline (:style wave :color red))
-   (flycheck-info :underline (:style wave :color green))
-   (flycheck-warning :underline (:style wave :color orange))
+   ;; emms
+   (emms-playlist-track-face :foreground blue)
+   (emms-playlist-selected-face :foreground base6)
+   (emms-browser-album-face :foreground cyan)
+   (emms-browser-artist-face :foreground cyan)
+   (emms-browser-composer-face :foreground cyan)
+   (emms-browser-performer-face :foreground cyan)
+   (emms-browser-track-face :foreground blue)
+   (emms-browser-year/genre-face :foreground cyan)
+   (emms-metaplaylist-mode-current-face :foreground red)
+   (emms-metaplaylist-mode-face :foreground base6)
+   (emms-stream-name-face :foreground cyan)
+   (emms-stream-url-face :foreground violet)
 
    ;; enh-ruby-mode
    (enh-ruby-heredoc-delimiter-face :foreground green :weight bold)
@@ -555,6 +566,11 @@ depending on DISPLAY for keys which are either :foreground or
    (enh-ruby-string-delimiter-face :foreground green)
    (erm-syn-errline :foreground red)
    (erm-syn-warnline :foreground orange)
+
+   ;; flycheck
+   (flycheck-error :underline (:style wave :color red))
+   (flycheck-info :underline (:style wave :color green))
+   (flycheck-warning :underline (:style wave :color orange))
 
    ;; geiser
    (geiser-font-lock-autodoc-current-arg :foreground orange)
