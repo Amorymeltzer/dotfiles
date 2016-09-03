@@ -177,7 +177,7 @@ appcast_checkpoint_change() {
   cask_appcast_status=$(http_status "${cask_appcast_url}" 'no_follow_redirects')
   [[ "${cask_appcast_status}" != '200' ]] && add_warning warning "appcast is probably incorrect, as a non-200 (OK) HTTP response code was returned (${cask_appcast_status})"
 
-  cask_appcast_checkpoint=$(curl --silent --compressed --location "${user_agent[@]}" "${cask_appcast_url}" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
+  cask_appcast_checkpoint=$(curl --silent --compressed --location "${user_agent[@]}" "${cask_appcast_url}" | /usr/bin/sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
 
   modify_stanza 'checkpoint:' "'${cask_appcast_checkpoint}'"
 }
@@ -351,8 +351,10 @@ fi
 # check if everything is alright, else abort
 [[ -z "${cask_updated}" ]] && cask_updated='false'
 until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
-  # fix style errors and check for audit errors
-  brew cask style --fix "${cask_file}" &>/dev/null
+  # fix style errors and check for style and audit errors
+  style_message=$(brew cask style --fix "${cask_file}" 2>/dev/null)
+  style_result="$?"
+  [[ "${style_result}" -ne 0 ]] && add_warning error "${style_message}"
 
   audit_message=$(brew cask audit --download "${cask_file}" 2>/dev/null)
   audit_result="$?"
@@ -370,7 +372,7 @@ until [[ "${cask_updated}" =~ ^[yne]$ ]]; do
   fi
 
   if [[ "${cask_updated}" == 'y' ]]; then
-    if [[ "${audit_result}" -ne 0 ]]; then
+    if [[ "${style_result}" -ne 0 ]] || [[ "${audit_result}" -ne 0 ]]; then
       cask_updated='false'
     else
       echo 'Submitting…'
@@ -390,11 +392,11 @@ done
 cask_version="$(brew cask _stanza version ${cask_file})"
 
 # commit, push, submit pull request, clean
-readonly commit_message="updated ${cask_name} to v${cask_version}"
-readonly hub_message="$(echo -e "${commit_message}\n\n### Changes to a cask\n#### Editing an existing cask\n\n- [x] Commit message includes cask’s name (and new version, if applicable).\n- [x] \`brew cask audit --download {{cask_file}}\` is error-free.\n- [x] \`brew cask style --fix {{cask_file}}\` left no offenses.")"
+readonly commit_message="Update ${cask_name} to v${cask_version}"
+readonly hub_message="$(echo -e "${commit_message}\n\n#### Checklist\n\n- [x] The commit message includes the cask’s name and version.\n- [x] \`brew cask audit --download {{cask_file}}\` is error-free.\n- [x] \`brew cask style --fix {{cask_file}}\` left no offenses.")"
 
 git commit "${cask_file}" --message "${commit_message}" --quiet
-git push "${remote_push}" "${cask_branch}" --quiet
+git push --force "${remote_push}" "${cask_branch}" --quiet
 git branch --set-upstream-to "${remote_push}/${cask_branch}" --quiet # needed as workaround for hub to work with certain .gitconfig options to push default: https://github.com/github/hub/issues/789#issuecomment-72553866; after that issue is fixed, this line may likely be completely removed
 [[ -z "${issue_to_close}" ]] && pr_link=$(hub pull-request -b "${submit_pr_to}" -h "${remote_push}":"${cask_branch}" -m "${hub_message}") || pr_link=$(hub pull-request -b "${submit_pr_to}" -m "$(echo -e "${hub_message}\n\n---\n\nCloses #${issue_to_close}.")")
 
