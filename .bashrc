@@ -1442,6 +1442,7 @@ function monitor() {
 }
 
 # Check available macs on UCD campus
+# FIXME TODO
 function available() {
     # curl -s "clm.ucdavis.edu/rooms/available/" | perl -ne 'print "$2\t$3\n" if /(roomcolumn)\">(\d*\s\w*)<\/.*\/>(\d*\sMac)/;'
     curl -s "clm.ucdavis.edu/rooms/available/" | perl -ne 'print "$2\t$3\n" if /(roomcolumn)\">(\d*\s\w*).*?(\d*\sMac)/;'
