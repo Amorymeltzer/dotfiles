@@ -140,20 +140,19 @@ if [[ -z $ruby_all_flag ]]; then
 fi
 
 if [[ -z $cpan_all_flag ]]; then
-    echo -e "${Color_Red}cpan updates currently nonfunctional${Color_zOff}"
-    #     checking 'CPAN modules'
-    #     cpan_todo=$(cpan-outdated --verbose)
-    #     if [[ -n $cpan_todo ]]; then
-    #	echo "$cpan_todo"
-    #	if [[ -z $cpan_flag ]]; then
-    #	    updating 'CPAN modules'
-    #	    cpan-outdated | xargs cpan -i
-    #	    cleaning 'CPAN directories'
-    #	    cpanclean;
-    #	fi
-    #     else
-    #	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
-    #     fi
+    checking 'CPAN modules'
+    cpan_todo=$(cpan-outdated --verbose)
+    if [[ -n $cpan_todo ]]; then
+	echo "$cpan_todo"
+	if [[ -z $cpan_flag ]]; then
+	    updating 'CPAN modules'
+	    cpan-outdated -p | xargs cpan -i
+	    cleaning 'CPAN directories'
+	    cpanclean;
+	fi
+    else
+	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
+    fi
 fi
 
 ## Should probably make this verbose or something
