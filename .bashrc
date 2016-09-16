@@ -400,6 +400,7 @@ function holiday_greeting()
 }
 
 ### Actual prompt
+# Should try and incorporate PS0 from bash 4.4 somewhere... FIXME TODO
 function prompt_command {
     # Catch previous errors before everything else so that the return value
     # isn't valid
