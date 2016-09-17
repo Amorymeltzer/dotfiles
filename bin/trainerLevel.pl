@@ -13,6 +13,7 @@ use Date::Calc qw(Delta_Days);
 
 # Globals
 my ($xp,$date,$rate);
+my %lvls;
 
 my %opts = ();
 getopts('x:d:r:hH', \%opts);
@@ -36,8 +37,34 @@ if (!$xp || $xp !~ /^\d+$/) {
   # Original value if defined, 0 if not
   $rate ||= int($xp/$days);
 
-  print "xp: $xp\tdays: $days\trate: $rate\n";
-  exit 0;
+  # Parse _END_ data
+  while (<DATA>) {
+    chomp;
+    my @tmp = split;
+    $lvls{$tmp[0]} = $tmp[1];
+  }
+
+  # Figure out current level
+  my $lvl = 0;
+  foreach my $key (sort {$a<=>$b} keys %lvls) {
+    if ($xp >= $lvls{$key}) {
+      $lvl = $key;
+    } else {
+      last;
+    }
+  }
+
+  print "Played:\t$days days\n";
+  print "Level:\t$lvl\n";
+  print "XP/day:\t$rate\n";
+
+  foreach my $key (sort {$a<=>$b} keys %lvls) {
+    next if $lvl >= $key;
+    my $left = $lvls{$key} - $xp;
+    my $timeline = int($left/$rate);
+    print "$key\t$timeline days\n";
+  }
+
 }
 
 
