@@ -1261,12 +1261,11 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Make RET aka C-m tab as well, C-j just newline
 ;; (global-set-key "\C-m" 'newline-and-indent)
-;; Make Enter akaaM-o m a newline as well
-(global-set-key (kbd "M-o m") 'newline-and-indent)
 
 ;; Cleaner: Reindent current line, insert newline, indent newline
 (global-set-key "\C-m" 'reindent-then-newline-and-indent)
 (global-set-key "\C-j" 'newline)
+(global-set-key (kbd "M-o m") 'newline-and-indent) ; Enter on number pad
 
 ;; Probably don't need these, don't work currently anyway
 ;; lpstat -p -d to get list of printers or lpq
