@@ -61,7 +61,7 @@ if (!$xp || $xp !~ /^\d+$/) {
   foreach my $key (sort {$a<=>$b} keys %lvls) {
     next if $lvl >= $key;
     my $left = $lvls{$key} - $xp;
-    my $timeline = int($left/$rate);
+    my $timeline = sprintf("%.1f", $left/$rate);
     print "$key\t$timeline days\n";
   }
 
