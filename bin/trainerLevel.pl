@@ -56,3 +56,49 @@ Usage: $0 -x <current XP> [-d <MM/DD/YY>] [-r <XP gain per day>]
       -hH print this message
 USAGE
 }
+
+
+## The lines below do not represent Perl code, and are not examined by the
+## compiler.  Rather, they are the total XP needed for each level.
+## From: https://www.reddit.com/r/TheSilphRoad/comments/4s1cpq/xp_requirements_for_levels_so_far_125/
+__END__
+1 0
+  2 1000
+  3 3000
+  4 6000
+  5 10000
+  6 15000
+  7 21000
+  8 28000
+  9 36000
+  10 45000
+  11 55000
+  12 65000
+  13 75000
+  14 85000
+  15 100000
+  16 120000
+  17 140000
+  18 160000
+  19 185000
+  20 210000
+  21 260000
+  22 335000
+  23 435000
+  24 560000
+  25 710000
+  26 900000
+  27 1100000
+  28 1350000
+  29 1650000
+  30 2000000
+  31 2500000
+  32 3000000
+  33 3750000
+  34 4750000
+  35 6000000
+  36 7500000
+  37 9500000
+  38 12000000
+  39 15000000
+  40 20000000
