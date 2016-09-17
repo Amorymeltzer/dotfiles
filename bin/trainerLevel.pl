@@ -9,7 +9,7 @@ use warnings;
 use diagnostics;
 
 use Getopt::Std;
-use Date::Calc qw(Delta_Days);
+use Date::Calc qw(Delta_Days Add_Delta_Days); # or qw(:all)
 
 # Globals
 my ($xp,$date,$rate);
@@ -62,9 +62,11 @@ if (!$xp || $xp !~ /^\d+$/) {
     next if $lvl >= $key;
     my $left = $lvls{$key} - $xp;
     my $timeline = sprintf("%.1f", $left/$rate);
-    print "$key\t$timeline days\n";
+    my @fut = Add_Delta_Days(@today,$timeline);
+    $fut[2] = sprintf("%.f",$fut[2]); # Round the day
+    $fut[0] = substr $fut[0], -2;
+    print "$key\t$timeline days\t$fut[1]/$fut[2]/$fut[0]\n";
   }
-
 }
 
 
