@@ -1261,6 +1261,8 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Make RET aka C-m tab as well, C-j just newline
 ;; (global-set-key "\C-m" 'newline-and-indent)
+;; Make Enter akaaM-o m a newline as well
+(global-set-key (kbd "M-o m") 'newline-and-indent)
 
 ;; Cleaner: Reindent current line, insert newline, indent newline
 (global-set-key "\C-m" 'reindent-then-newline-and-indent)
@@ -1272,7 +1274,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (setq send-mail-function (quote mailclient-send-it))
 
 ;; enlarge or shrink windows
-(global-set-key (kbd "C-x }") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-x }") 'Enlarge-window-horizontally)
 (global-set-key (kbd "C-x <up>") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-x {") 'shrink-window-horizontally)
 (global-set-key (kbd "C-x <down>") 'shrink-window-horizontally)
