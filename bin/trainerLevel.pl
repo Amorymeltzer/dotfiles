@@ -49,6 +49,10 @@ if (!$xp || $xp !~ /^\d+$/) {
   my $days = Delta_Days(@date, @today);
   # Original value if defined, 0 if not
   $rate ||= int($xp/$days);
+  if ($rate !~ /^\d+$/) {
+    print "Rate must be an integer\n";
+    exit 1;
+  }
 
   # Parse _END_ data
   while (<DATA>) {
