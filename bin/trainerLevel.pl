@@ -18,7 +18,7 @@ my %lvls;
 my %opts = ();
 getopts('x:d:r:hH', \%opts);
 if($opts{x}) { $xp = $opts{x}; } # Current XP
-if($opts{d}) { $date = $opts{d}; } # Pick a date, why? FIXME TODO
+if($opts{d}) { $date = $opts{d}; } # Specificy a start a date
 if($opts{r}) { $rate = $opts{r}; } # Rate of XP gain per day
 if($opts{H} || $opts{h}) { &usage; exit; } # Usage
 
@@ -29,7 +29,21 @@ if (!$xp || $xp !~ /^\d+$/) {
   exit 1;
 } else {
   my @date = (2016, 7, 7);
-  my @today = (localtime)[5,4,3]; # mon, day, year
+  if ($opts{d}) {
+    if ($opts{d} !~ /^\d\d\/\d\d\/20\d\d$/) {
+      print "Date via -d must be in MM/DD/YYYY format\n";
+      exit 1;
+    }
+
+    my @tmp = split '\/', $opts{d};
+    @date = ($tmp[2],$tmp[1],$tmp[0]);
+    if ($date[1] > 31 || $date[2] > 12) {
+      print "aDate via -d must be in MM/DD/YYYY format\n";
+      exit 1;
+    }
+  }
+
+  my @today = (localtime)[5,4,3]; # year, month, day
   $today[0] += 1900;		  # Stupid epoch
   $today[1]++;			  # localtime is 0-indexed, Delta_Days isn't
 
@@ -78,9 +92,9 @@ if (!$xp || $xp !~ /^\d+$/) {
 sub usage
 {
     print <<USAGE;
-Usage: $0 -x <current XP> [-d <MM/DD/YY>] [-r <XP gain per day>]
+Usage: $0 -x <current XP> [-d <MM/DD/YYYY>] [-r <XP gain per day>]
       -x Current XP amount.  Required.
-      -d Specify a date of the form MM/DD/YY. For what?
+      -d Specify a start date of the form MM/DD/YYYY. Defaults to 7/7/2016
       -r Estimate XP gain per day
       -hH print this message
 USAGE
