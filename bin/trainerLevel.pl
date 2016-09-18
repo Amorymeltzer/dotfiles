@@ -36,7 +36,7 @@ if (!$xp || $xp !~ /^\d+$/) {
     }
 
     @date = split '\/', $opts{d};
-    @date[0,2] = @date[2,0];
+    @date[0,1,2] = @date[2,0,1];
     if ($date[1] > 31 || $date[2] > 12) {
       print "Date via -d must be in MM/DD/YYYY format\n";
       exit 1;
