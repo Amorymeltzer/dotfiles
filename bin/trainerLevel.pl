@@ -18,7 +18,6 @@ my %lvls;
 my %opts = ();
 getopts('x:d:r:hH', \%opts);
 if($opts{x}) { $xp = $opts{x}; } # Current XP
-if($opts{d}) { $date = $opts{d}; } # Specificy a start a date
 if($opts{r}) { $rate = $opts{r}; } # Rate of XP gain per day
 if($opts{H} || $opts{h}) { &usage; exit; } # Usage
 
