@@ -89,8 +89,6 @@ if (!$xp || $xp !~ /^\d+$/) {
 
 
 #### Usage statement ####
-# Use POD or whatever?
-# Escapes not necessary but ensure pretty colors
 # Final line must be unindented?
 sub usage
 {
