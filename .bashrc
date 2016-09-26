@@ -629,7 +629,9 @@ alias lock-quote='sudo ~/Documents/git/lockquote/lock-quote'
 alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist LoginwindowText'
 
 # thefuck https://github.com/nvbn/thefuck
-eval "$(thefuck --alias)"
+if which thefuck > /dev/null; then
+    eval "$(thefuck --alias)"
+fi
 
 # Prompt before overwrite, be vocal about it
 alias mv='mv -vi' # add -f to override, or \ before command
