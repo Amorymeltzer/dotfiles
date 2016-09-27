@@ -94,6 +94,10 @@
 (global-set-key (kbd "C-c C-y") 'duplicate-line)
 (global-set-key (kbd "C-c y") 'duplicate-and-comment-line)
 
+;; New in emacs 25
+;; Too similar to below comment-dwim-next-line stuff? FIXME TODO
+(global-set-key (kbd "C-x ;") 'comment-line)
+
 
 (defun yank-and-down ()
   "Yank the text and go down a line."
