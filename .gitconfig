@@ -75,6 +75,7 @@ scan = "!~/bin/gscan"
 co = checkout
 com = checkout master
 cog = checkout gh-pages
+cod = checkout dev
 wc = whatchanged
 
 stat = status
@@ -134,6 +135,7 @@ rb = rebase
 reb = rebase
 rbm = rebase master
 rebm = rebase master
+rebd = rebase dev
 # Interactive rebase with the selected number of latest commits
 rebi = "!r() { git rebase -i HEAD~$1; }; r"
 
