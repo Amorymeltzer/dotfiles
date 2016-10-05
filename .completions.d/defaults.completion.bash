@@ -14,6 +14,8 @@ _defaults_domains()
     cur=${COMP_WORDS[COMP_CWORD]}
 
 	local domains=$( defaults domains | sed -e 's/, /:/g' | tr : '\n' | sed -e 's/ /\\ /g' | grep -i "^$cur" )
+	domains="$domains
+NSGlobalDomain"
 	local IFS=$'\n'
 	COMPREPLY=( $domains )
 	if [[ $( echo '-app' | grep "^$cur" ) ]]; then
