@@ -442,7 +442,8 @@ function prompt_command {
 	fill="${fill}${battery}"
     fi
 
-    history -a			# All terminal windows go to same history
+    # Save and reload history after each command, send all windows go to same file
+    history -a; history -c; history -r
 }
 
 export PS2="\[$Color_Cyan\]→\[$Color_zOff\] " # Secondary prompt, multiline commands
