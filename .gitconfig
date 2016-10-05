@@ -199,6 +199,8 @@ conflicts = "!git ls-files -u | awk '{print $4}' | sort -u"
 
 # List all aliases
 aliases = "!git config -l | grep alias | cut -c 7-"
+# All options
+configs = config -l
 
 # Find branches containing commit
 fb = "!f() { git branch -a --contains $1; }; f"
