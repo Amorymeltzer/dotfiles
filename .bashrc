@@ -479,8 +479,9 @@ if [[ -e ~/.ssh/known_hosts ]]; then
     complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" whois nslookup nmap
 fi
 # Complete for g alias
-__git_complete g __git_main
-
+if type __git_complete &> /dev/null; then
+    __git_complete g __git_main
+fi
 # networksetup completion
 complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
 
