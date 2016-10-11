@@ -76,6 +76,9 @@ co = checkout
 com = checkout master
 cog = checkout gh-pages
 cod = checkout dev
+gom = checkout master
+gog = checkout gh-pages
+god = checkout dev
 wc = whatchanged
 
 stat = status
