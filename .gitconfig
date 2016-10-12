@@ -146,6 +146,7 @@ rebi = "!r() { git rebase -i HEAD~$1; }; r"
 po = push origin
 pom = push origin master
 pog = push origin gh-pages
+pod = push origin dev
 # Use rebase to prevent unnecessary commits
 pum = pull --rebase origin master
 # Personal remote
