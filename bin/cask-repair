@@ -33,17 +33,17 @@ usage() {
     usage: ${program} [options] <cask_name>
 
     options:
-      -l <remote>, --pull <remote>   Use to specify a remote to pull from (defaults to 'upstream').
-      -p <remote>, --push <remote>   Use to specify a remote to push to (defaults to 'origin').
-      -o, --open-home                Open the homepage for the given cask.
-      -a, --open-appcast             Open the appcast for the given cask.
-      -v, --cask-version             Give a version directly, instead of being prompted for it.
-      -u, --cask-url                 Give a URL directly, instead of being prompted for it.
-      -e, --edit-cask                Opens cask for editing before trying first download.
-      -c, --closes-issue <number>    Adds 'Closes #<number>.' to the commit message.
-      -b, --blind-submit             Submit cask without asking for confirmation, if there are no errors.
-      -d, --delete-branches          Deletes all local and remote branches named like cask-repair_update-<word>.
-      -h, --help                     Show this help.
+      -l <remote>, --pull <remote>           Use to specify a remote to pull from (defaults to 'upstream').
+      -p <remote>, --push <remote>           Use to specify a remote to push to (defaults to 'origin').
+      -o, --open-home                        Open the homepage for the given cask.
+      -a, --open-appcast                     Open the appcast for the given cask.
+      -v, --cask-version                     Give a version directly, instead of being prompted for it.
+      -u, --cask-url                         Give a URL directly, instead of being prompted for it.
+      -e, --edit-cask                        Opens cask for editing before trying first download.
+      -c <number>, --closes-issue <number>   Adds 'Closes #<number>.' to the commit message.
+      -b, --blind-submit                     Submit cask without asking for confirmation, if there are no errors.
+      -d, --delete-branches                  Deletes all local and remote branches named like cask-repair_update-<word>.
+      -h, --help                             Show this help.
   " | sed -E 's/^ {4}//'
 }
 
@@ -203,7 +203,13 @@ update_cask_shas() {
 
 # define function to open cask in appropriate editor
 edit_cask() {
-  [[ -n "${EDITOR}" ]] && eval "${EDITOR}" "${cask_file}" || open -W "${cask_file}"
+  echo 'Opening cask in default editor. If it is a GUI editor, you will need to completely quit it (⌘Q) before the script can continue.'
+
+  if [[ -n "${EDITOR}" ]]; then
+    eval "${EDITOR}" "${cask_file}"
+  else
+    [[ -n "${GIT_EDITOR}" ]] && eval "${GIT_EDITOR}" "${cask_file}" || open -W "${cask_file}"
+  fi
 }
 
 # define function to add warnings to be shown on review
@@ -392,7 +398,7 @@ cask_version="$(brew cask _stanza version ${cask_file})"
 
 # commit, push, submit pull request, clean
 readonly commit_message="Update ${cask_name} to v${cask_version}"
-readonly hub_message="$(echo -e "${commit_message}\n\n#### Checklist\n\n- [x] The commit message includes the cask’s name and version.\n- [x] \`brew cask audit --download {{cask_file}}\` is error-free.\n- [x] \`brew cask style --fix {{cask_file}}\` left no offenses.")"
+readonly hub_message="$(echo -e "${commit_message}\n\nAfter making all changes to the cask:\n\n- [x] \`brew cask audit --download {{cask_file}}\` is error-free.\n- [x] \`brew cask style --fix {{cask_file}}\` left no offenses.\n- [x] The commit message includes the cask’s name and version.")"
 
 git commit "${cask_file}" --message "${commit_message}" --quiet
 git push --force "${remote_push}" "${cask_branch}" --quiet
