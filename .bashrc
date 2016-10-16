@@ -43,6 +43,7 @@ alias lsr='ls -lrS'
 alias lasr='lsr -A'
 alias las='lss -A'
 alias lass='las'
+alias l.='ls -dAFh .[^.]*'	# Dotfiles only
 # Note: flags get passed to grep, not ls
 alias ld='ls -l | grep "^d" --color=never'
 alias lad='ls -Al | grep "^d" --color=never'
@@ -559,6 +560,7 @@ alias .....='cd ../../../..'
 alias ~="cd ~"
 alias -- --='cd -'		# go back a directory, -- means end of options
 alias -- -='cd -'
+alias b='cd -'
 
 # Shortcuts
 alias dt="cd ~/dotfiles"
