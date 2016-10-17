@@ -5,7 +5,7 @@
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-anzu
 ;; Version: 0.62
-;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
+;; Package-Requires: ((emacs "24.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -99,6 +99,10 @@
 (defface anzu-mode-line
   '((t (:foreground "magenta" :weight bold)))
   "face of anzu modeline")
+
+(defface anzu-mode-line-no-match
+  '((t (:inherit anzu-mode-line)))
+  "face of anzu modeline in no match case")
 
 (defface anzu-replace-highlight
   '((t :inherit query-replace))
@@ -284,8 +288,11 @@
                                     (anzu--format-here-position here total)
                                     total (if anzu--overflow-p "+" "")))
                     (replace-query (format "(%d replace)" total))
-                    (replace (format "(%d/%d)" here total)))))
-      (propertize status 'face 'anzu-mode-line))))
+                    (replace (format "(%d/%d)" here total))))
+          (face (if (and (zerop total) (not (string= isearch-string "")))
+                    'anzu-mode-line-no-match
+                  'anzu-mode-line)))
+      (propertize status 'face face))))
 
 (defun anzu--update-mode-line ()
   (funcall anzu-mode-line-update-function anzu--current-position anzu--total-matched))
@@ -298,7 +305,7 @@
   :lighter    anzu-mode-lighter
   (if anzu-mode
       (progn
-        (set (make-local-variable 'anzu--state) nil)
+        (setq-local anzu--state nil)
         (add-hook 'isearch-update-post-hook #'anzu--update-post-hook nil t)
         (add-hook 'isearch-mode-hook #'anzu--cons-mode-line-search nil t)
         (add-hook 'isearch-mode-end-hook #'anzu--reset-mode-line nil t))
@@ -789,26 +796,31 @@
 
 ;;;###autoload
 (defun anzu-query-replace-at-cursor ()
+  "Replace symbol at cursor with to-string."
   (interactive)
   (anzu--query-replace-common t :at-cursor t))
 
 ;;;###autoload
 (defun anzu-query-replace-at-cursor-thing ()
+  "Replace symbol at cursor within `anzu-replace-at-cursor-thing' area."
   (interactive)
   (anzu--query-replace-common t :at-cursor t :thing anzu-replace-at-cursor-thing))
 
 ;;;###autoload
 (defun anzu-query-replace (arg)
+  "anzu version of `query-replace'."
   (interactive "p")
   (anzu--query-replace-common nil :prefix-arg arg))
 
 ;;;###autoload
 (defun anzu-query-replace-regexp (arg)
+  "anzu version of `query-replace-regexp'."
   (interactive "p")
   (anzu--query-replace-common t :prefix-arg arg))
 
 ;;;###autoload
 (defun anzu-replace-at-cursor-thing ()
+  "anzu-query-replace-at-cursor-thing without query."
   (interactive)
   (let ((orig (point-marker)))
     (anzu--query-replace-common t
@@ -836,11 +848,13 @@
 
 ;;;###autoload
 (defun anzu-isearch-query-replace (arg)
+  "anzu version of `isearch-query-replace'."
   (interactive "p")
   (anzu--isearch-query-replace-common nil arg))
 
 ;;;###autoload
 (defun anzu-isearch-query-replace-regexp (arg)
+  "anzu version of `isearch-query-replace-regexp'."
   (interactive "p")
   (anzu--isearch-query-replace-common t arg))
 
