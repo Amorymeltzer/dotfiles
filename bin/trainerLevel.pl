@@ -82,7 +82,16 @@ if (!$xp || $xp !~ /^\d+$/) {
     my @fut = Add_Delta_Days(@today,$timeline);
     $fut[2] = sprintf("%.f",$fut[2]); # Round the day
     $fut[0] = substr $fut[0], -2;
-    print "$key\t$timeline days\t$fut[1]/$fut[2]/$fut[0]\n";
+
+    $left = sprintf("%.2f",$left/1000);
+    if ($left >= 1000) {
+      $left = sprintf("%.2f",$left/1000);
+      $left .= 'M';
+    } else {
+      $left .= 'k';
+    }
+    
+    print "$key\t$left\t$timeline days\t$fut[1]/$fut[2]/$fut[0]\n";
   }
 }
 
