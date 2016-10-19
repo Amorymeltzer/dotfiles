@@ -17,8 +17,8 @@ my %lvls;
 
 my %opts = ();
 getopts('x:d:r:hH', \%opts);
-if($opts{x}) { $xp = $opts{x}; } # Current XP
-if($opts{r}) { $rate = $opts{r}; } # Rate of XP gain per day
+if($opts{x}) { $xp = $opts{x}; }	   # Current XP
+if($opts{r}) { $rate = $opts{r}; }	   # Rate of XP gain per day
 if($opts{H} || $opts{h}) { &usage; exit; } # Usage
 
 
@@ -71,12 +71,13 @@ if (!$xp || $xp !~ /^\d+$/) {
     }
   }
 
-  print "Played:\t$days days\n";
-  print "Level:\t$lvl\n";
-  print "XP/day:\t$rate\n";
+  print "Played:\t$days days\t";
+  print "Level:\t$lvl\t";
+  print "XP/day:\t$rate\n\n";
 
   foreach my $key (sort {$a<=>$b} keys %lvls) {
     next if $lvl >= $key;
+
     my $left = $lvls{$key} - $xp;
     my $timeline = sprintf("%.1f", $left/$rate);
     my @fut = Add_Delta_Days(@today,$timeline);
@@ -90,7 +91,7 @@ if (!$xp || $xp !~ /^\d+$/) {
     } else {
       $left .= 'k';
     }
-    
+
     print "$key\t$left\t$timeline days\t$fut[1]/$fut[2]/$fut[0]\n";
   }
 }
