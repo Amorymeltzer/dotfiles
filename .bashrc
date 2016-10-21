@@ -1015,7 +1015,7 @@ alias events='icalBuddy -sd -t -li 7 eventsFrom:today to:today+5'
 
 # Quickly check connection by pinging google
 alias pg='ping -c 1 google.com'
-function down4me()
+function down4me()		# FIXME TODO
 {
     curl -s "http://www.downforeveryoneorjustme.com/$1" | sed "/just you/!d;s/<[^>]*>//g" | sed -e 's/  //g' | sed -e 's/http.*#x2F;/  /g'
 }
