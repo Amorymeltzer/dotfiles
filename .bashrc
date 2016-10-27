@@ -1462,7 +1462,7 @@ function slashdot() {
 }
 # HN mainpage stories
 function hackernews() {
-    curl -s "https://news.ycombinator.com/news" | perl -ne 'print "$1\n" if /<span class=\"deadmark\"><\/span><a href=\".*\">(.*)<\/a><span class=\"sitebit comhead\">/;'
+    curl -s "https://news.ycombinator.com/news" | perl -ne 'print "$1\n" if /class=\"storylink\">(.*)<\/a><span class=\"sitebit comhead\">/;'
 }
 
 # Test how fast the machine is, 32GB
