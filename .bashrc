@@ -1297,29 +1297,26 @@ function weather() {
 # Just today
 alias today='weather | head -n 2 | tail -n 1'
 
-function sunrise()
 # FIXME TODO
-# See:
-# http://stackoverflow.com/questions/36186538/making-yahoo-weather-api-request-with-oauth-1
-# https://www.igorkromin.net/index.php/2016/04/14/yahoo-returns-its-weather-api-to-public-aess-switches-to-yql-for-query/
-# https://www.igorkromin.net/index.php/2016/04/15/example-yahoo-weather-yql-to-fetch-forecasts-and-render-with-jquery/
+function sunrise()
 {
-    local loc
-    # Uses WOEID, which is some ol' bullshit
-    if [ ! $1 -o $1 = "Davis" ]; then
-	loc=2389646;		# Davis
-	echo Davis
-    elif [ $1 = "NYC" ]; then
-	loc=2459115;		# NYC
-	echo NYC
-    elif [ $1 = "Stow" ]; then
-	loc=2500649;		# Stow, MA
-	echo Stow
+    local zip
+    if [ ! $1 ]; then
+	zip="95618";
+	#	zip=$(curl -s api.hostip.info/get_html.php?ip=$(curl -s icanhazip.com) | sed -e'1d;3d' -e's/C.*: \(.*\)/\1/' -e's/ /%20/g' -e"s/'/%27/g" -e"s/-/%2d/g")
     else
-	echo "sunrise <NYC|Stow|Davis>"
-	return
+	zip=$1;
     fi
-    curl -s http://weather.yahooapis.com/forecastrss?w=$loc | grep astronomy | awk -F\" '{print $2 "\n" $4;}'
+    #  forecast=$(curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip" | perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';)
+    forecast=$(curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip")
+    if [[ -n "${forecast}" ]]; then
+	echo "Forecast for $zip";
+	#  sunrise=$(echo -n $forecast | perl -ne '/<sunrise>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';)
+	sunrise=$(echo -n $forecast | grep -iA 2 sunrise)
+	echo "$sunrise"
+    else
+	echo "Unable to find sunrise/sunset"
+    fi
 }
 alias sunset='sunrise'
 
