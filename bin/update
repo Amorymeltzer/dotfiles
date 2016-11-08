@@ -107,7 +107,7 @@ fi
 
 if [[ -z $python_all_flag ]]; then
     checking 'pip python packages'
-    python_todo=$(sudo -u $SUDO_USER pip list -o)
+    python_todo=$(sudo -u $SUDO_USER pip list --format=legacy -o)
     if [[ -n $python_todo ]]; then
 	echo "$python_todo"
 	if [[ -z $python_flag ]]; then
