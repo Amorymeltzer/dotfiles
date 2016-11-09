@@ -163,9 +163,10 @@ fi
 if [[ -z $homebrew_all_flag ]]; then
     sudo -u $SUDO_USER brew cask new
     if [[ -z $homebrew_flag ]]; then
-	if [[ $(brew outdated 2> /dev/null) ]]; then
+	brew_todo=$(sudo -u $SUDO_USER brew outdated)
+	if [[ -n $brew_todo ]]; then
 	    updating 'brews'
-	    sudo -u $SUDO_USER brew outdated
+	    echo "$brew_todo"
 	    sudo -u $SUDO_USER brew upgrade --all
 
 	    cleaning 'brews'
