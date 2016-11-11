@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # update by Amory Meltzer
 # UPDATE ALL THE THINGS!!!
+# https://xkcd.com/1579/
 ## brew/cask sudo deescalation
 ## fix doutdated
 ## Need to exit if not run as 'sudo update'
