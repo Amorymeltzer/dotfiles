@@ -200,8 +200,8 @@ _brew_cask ()
 
     if [[ $i -eq $COMP_CWORD ]]; then
         __brew_caskcomp "audit cat cleanup create doctor edit fetch help home
-            info install list search style uninstall update zap ls -S up rm
-            remove abv dr --force --caskroom --appdir --colorpickerdir
+            info install reinstall list search style uninstall update zap ls -S
+            up rm remove abv dr --force --caskroom --appdir --colorpickerdir
             --prefpanedir --qlplugindir --fontdir --servicedir --binarydir
             --input_methoddir --internet_plugindir --audio_unit_plugindir
             --vst_plugindir --screen_saverdir --no-binaries --debug --verbose
@@ -221,6 +221,7 @@ _brew_cask ()
 	list|ls)                    _brew_cask_list ;;
 	style)                      _brew_cask_style ;;
 	uninstall|remove|rm)        _brew_cask_uninstall ;;
+	reinstall)                 __brew_cask_complete_installed ;;
 	update|up)                  _brew_cask_update ;;
 	zap)                       __brew_cask_complete_casks ;;
 	chome)                     __brew_cask_complete_casks ;;
