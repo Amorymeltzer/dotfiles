@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-# stockclose by Amory Meltzer
-# No-frills closing quote for a stock or index
-
-for quote in $@;
-do
-    curl -s "http://finance.yahoo.com/q/hp?s=$quote+Historical+Prices" | perl -ne 'print "$1\n" if /<td class=\"yfnc_tabledata1\" align=\"right\">(\d*,?\d*.\d*)<\/td><\/tr><tr><td class=\"yfnc_tabledata1\" nowrap/;';
-done
