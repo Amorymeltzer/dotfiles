@@ -1249,7 +1249,6 @@ function marketupdate() {
 }
 alias mu='marketupdate'
 alias stockmarket='ticker'
-alias netbenefits="perl ~/Documents/perl/sandbox/netBenefits.pl"
 alias inflation="perl ~/Documents/perl/sandbox/inflation.pl"
 
 function btc() {
