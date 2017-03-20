@@ -106,7 +106,7 @@ sub usage
 Usage: $0 -x <current XP> [-d <MM/DD/YYYY>] [-r <XP gain per day>]
       -x Current XP amount.  Required.
       -d Specify a start date of the form MM/DD/YYYY. Defaults to 7/7/2016
-      -r Estimate XP gain per day
+      -r Specify rate of XP gain per day
       -hH print this message
 USAGE
 }
