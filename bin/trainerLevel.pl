@@ -12,13 +12,14 @@ use Getopt::Std;
 use Date::Calc qw(Delta_Days Add_Delta_Days); # or qw(:all)
 
 # Globals
-my ($xp,$date,$rate);
+my ($xp,$date,$rate,$dist);
 my %lvls;
 
 my %opts = ();
-getopts('x:d:r:hH', \%opts);
+getopts('x:d:r:l:hH', \%opts);
 if($opts{x}) { $xp = $opts{x}; }	   # Current XP
 if($opts{r}) { $rate = $opts{r}; }	   # Rate of XP gain per day
+if($opts{l}) { $dist = $opts{l}; }	   # Current distance walked
 if($opts{H} || $opts{h}) { &usage; exit; } # Usage
 
 
@@ -54,6 +55,15 @@ if (!$xp || $xp !~ /^\d+$/) {
     exit 1;
   }
 
+  if ($opts{l}) {
+    if ($dist !~ /^\d+$/) {
+      print "Distance must be an integer\n";
+      exit 1;
+    } else {
+      $dist = sprintf("%.2f", $dist/$days);
+    }
+  }
+
   # Parse _END_ data
   while (<DATA>) {
     chomp;
@@ -73,7 +83,9 @@ if (!$xp || $xp !~ /^\d+$/) {
 
   print "Played:\t$days days\t";
   print "Level:\t$lvl\t";
-  print "XP/day:\t$rate\n\n";
+  print "XP/day:\t$rate";
+  print "\tKm/day:\t$dist" if $opts{l};
+  print "\n\n";
 
   foreach my $key (sort {$a<=>$b} keys %lvls) {
     next if $lvl >= $key;
@@ -103,10 +115,11 @@ if (!$xp || $xp !~ /^\d+$/) {
 sub usage
 {
     print <<USAGE;
-Usage: $0 -x <current XP> [-d <MM/DD/YYYY>] [-r <XP gain per day>]
+Usage: $0 -x <current XP> [-d <MM/DD/YYYY>] [-r <XP gain per day>] [-l <distance>]
       -x Current XP amount.  Required.
       -d Specify a start date of the form MM/DD/YYYY. Defaults to 7/7/2016
       -r Specify rate of XP gain per day
+      -l Current distance walked
       -hH print this message
 USAGE
 }
