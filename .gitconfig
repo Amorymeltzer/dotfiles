@@ -232,8 +232,8 @@ ff = only
 autoStash = true
 
 [help]
-# If there's only suggestion from a typo, automatically call it
-autocorrect = 1
+# If there's only suggestion from a typo, automatically call it after 1.5s
+autocorrect = 15
 
 # Special diffs for special cases
 [diff "bin"]
