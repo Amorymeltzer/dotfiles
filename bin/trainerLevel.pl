@@ -12,14 +12,16 @@ use Getopt::Std;
 use Date::Calc qw(Delta_Days Add_Delta_Days); # or qw(:all)
 
 # Globals
-my ($xp,$date,$rate,$dist);
+my ($xp,$date,$rate,$dist,$catch,$spin);
 my %lvls;
 
 my %opts = ();
-getopts('x:d:r:l:hH', \%opts);
+getopts('x:d:r:l:c:s:hH', \%opts);
 if($opts{x}) { $xp = $opts{x}; }	   # Current XP
 if($opts{r}) { $rate = $opts{r}; }	   # Rate of XP gain per day
 if($opts{l}) { $dist = $opts{l}; }	   # Current distance walked
+if($opts{c}) { $catch = $opts{c}; }	   # Current catches
+if($opts{s}) { $spin = $opts{s}; }	   # Current stops spun
 if($opts{H} || $opts{h}) { &usage; exit; } # Usage
 
 
@@ -55,12 +57,31 @@ if (!$xp || $xp !~ /^\d+$/) {
     exit 1;
   }
 
+  # Need to subroutine this FIXME TODO
   if ($opts{l}) {
     if ($dist !~ /^\d+$/) {
       print "Distance must be an integer\n";
       exit 1;
     } else {
       $dist = sprintf("%.2f", $dist/$days);
+    }
+  }
+
+  if ($opts{c}) {
+    if ($catch !~ /^\d+$/) {
+      print "Number of catches must be an integer\n";
+      exit 1;
+    } else {
+      $catch = sprintf("%.2f", $catch/$days);
+    }
+  }
+
+  if ($opts{s}) {
+    if ($spin !~ /^\d+$/) {
+      print "Number of spins must be an integer\n";
+      exit 1;
+    } else {
+      $spin = sprintf("%.2f", $spin/$days);
     }
   }
 
@@ -85,6 +106,8 @@ if (!$xp || $xp !~ /^\d+$/) {
   print "Level:\t$lvl\t";
   print "XP/day:\t$rate";
   print "\tKm/day:\t$dist" if $opts{l};
+  print "\tCatch/day:\t$catch" if $opts{c};
+  print "\tSpins/day:\t$spin" if $opts{s};
   print "\n\n";
 
   foreach my $key (sort {$a<=>$b} keys %lvls) {
@@ -115,11 +138,13 @@ if (!$xp || $xp !~ /^\d+$/) {
 sub usage
 {
     print <<USAGE;
-Usage: $0 -x <current XP> [-d <MM/DD/YYYY>] [-r <XP gain per day>] [-l <distance>]
+Usage: $0 -x <current XP> [-d <MM/DD/YYYY>] [-rlcs]
       -x Current XP amount.  Required.
       -d Specify a start date of the form MM/DD/YYYY. Defaults to 7/7/2016
       -r Specify rate of XP gain per day
       -l Current distance walked
+      -c Current number of catches
+      -s Current number of stops spun
       -hH print this message
 USAGE
 }
