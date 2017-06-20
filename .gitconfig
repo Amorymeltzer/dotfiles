@@ -223,6 +223,7 @@ fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen 
 # available via: brew install dateutils, apt-get install dateutils, etc
 timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --format=%ai ${2:-HEAD}); ddiff -f ${3:-%mm-%dd-%Hh-%Mm} \"$one\" \"$two\"; }; f"
 
+dad = "!curl https://icanhazdadjoke.com/"
 
 [pull]
 ff = only
