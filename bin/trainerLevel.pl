@@ -152,13 +152,14 @@ if (!$xp || $xp !~ /^\d+$/) {
 sub usage
 {
     print <<USAGE;
-Usage: $0 -x <current XP> [-d <MM/DD/YYYY>] [-rlcs]
+Usage: $0 -x <current XP> [-d <MM/DD/YYYY>] [-rlcsb]
       -x Current XP amount.  Required.
       -d Specify a start date of the form MM/DD/YYYY. Defaults to 7/7/2016
       -r Specify rate of XP gain per day
       -l Current distance walked
       -c Current number of catches
       -s Current number of stops spun
+      -b Current number of berries fed
       -hH print this message
 USAGE
 }
