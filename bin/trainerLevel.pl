@@ -12,16 +12,18 @@ use Getopt::Std;
 use Date::Calc qw(Delta_Days Add_Delta_Days); # or qw(:all)
 
 # Globals
-my ($xp,$date,$rate,$dist,$catch,$spin);
+my ($xp,$date,$rate,$dist,$catch,$spin,$berry);
 my %lvls;
+my $bDays;
 
 my %opts = ();
-getopts('x:d:r:l:c:s:hH', \%opts);
+getopts('x:d:r:l:c:s:b:hH', \%opts);
 if($opts{x}) { $xp = $opts{x}; }	   # Current XP
 if($opts{r}) { $rate = $opts{r}; }	   # Rate of XP gain per day
 if($opts{l}) { $dist = $opts{l}; }	   # Current distance walked
 if($opts{c}) { $catch = $opts{c}; }	   # Current catches
 if($opts{s}) { $spin = $opts{s}; }	   # Current stops spun
+if($opts{b}) { $berry = $opts{b}; }	   # Current berries fed
 if($opts{H} || $opts{h}) { &usage; exit; } # Usage
 
 
@@ -85,6 +87,17 @@ if (!$xp || $xp !~ /^\d+$/) {
     }
   }
 
+  if ($opts{b}) {
+    if ($berry !~ /^\d+$/) {
+      print "Number of berries must be an integer\n";
+      exit 1;
+    } else {
+      my @bDate = (2017, 6, 22);
+      $bDays = Delta_Days(@bDate, @today);
+      $berry = sprintf("%.2f", $berry/$bDays);
+    }
+  }
+
   # Parse _END_ data
   while (<DATA>) {
     chomp;
@@ -102,13 +115,14 @@ if (!$xp || $xp !~ /^\d+$/) {
     }
   }
 
-  print "Played:\t$days days\t";
-  print "Level:\t$lvl\t";
-  print "XP/day:\t$rate";
-  print "\tKm/day:\t$dist" if $opts{l};
-  print "\tCatch/day:\t$catch" if $opts{c};
-  print "\tSpins/day:\t$spin" if $opts{s};
-  print "\n\n";
+  print "Played:\t$days days\n";
+  print "Player level:\t$lvl\n";
+  print "Experience/day:\t$rate\n";
+  print "Distance/day:\t$dist\n" if $opts{l};
+  print "Catch/day:\t$catch\n" if $opts{c};
+  print "Spins/day:\t$spin\n" if $opts{s};
+  print "Berries/day:\t$berry\n" if $opts{b};
+  print "\nNext levels:\n";
 
   foreach my $key (sort {$a<=>$b} keys %lvls) {
     next if $lvl >= $key;
