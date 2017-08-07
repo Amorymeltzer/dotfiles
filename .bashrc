@@ -1280,7 +1280,7 @@ alias getcoordinates='findlocation'
 function weather() {
     local zip
     if [ ! $1 ]; then
-	zip="95618";
+	zip="01720";
 	#	zip=$(curl -s api.hostip.info/get_html.php?ip=$(curl -s icanhazip.com) | sed -e'1d;3d' -e's/C.*: \(.*\)/\1/' -e's/ /%20/g' -e"s/'/%27/g" -e"s/-/%2d/g")
     else
 	zip=$1;
