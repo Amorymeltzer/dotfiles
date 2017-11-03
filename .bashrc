@@ -1252,6 +1252,12 @@ alias mu='marketupdate'
 alias stockmarket='ticker'
 alias inflation="perl ~/Documents/perl/sandbox/inflation.pl"
 
+# Robinhood dashboard
+# https://github.com/bcwik9/robinhood-on-rails
+function robinhood() {
+    (cd ~/Documents/git/robinhood-on-rails/ ; exec bundle exec rails server & sleep 1 & browser http://localhost:3000/)
+}
+
 function btc() {
     local five=$(curl -s 'https://www.coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
     if [[ -n $five ]]; then
