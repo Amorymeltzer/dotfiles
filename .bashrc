@@ -1284,6 +1284,7 @@ function findlocation() {
 alias getcoordinates='findlocation'
 
 # Get the weather
+# Or just use curl wttr.in? FIXME TODO
 function weather() {
     local zip
     if [ ! $1 ]; then
