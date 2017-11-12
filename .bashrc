@@ -1309,7 +1309,7 @@ function sunrise()
 {
     local zip
     if [ ! $1 ]; then
-	zip="95618";
+	zip="01720";
 	#	zip=$(curl -s api.hostip.info/get_html.php?ip=$(curl -s icanhazip.com) | sed -e'1d;3d' -e's/C.*: \(.*\)/\1/' -e's/ /%20/g' -e"s/'/%27/g" -e"s/-/%2d/g")
     else
 	zip=$1;
@@ -1328,6 +1328,7 @@ function sunrise()
 alias sunset='sunrise'
 
 # From https://gist.github.com/komasaru/9635884
+# Busted, replace with https://www.aviationweather.gov/metar FIXME TODO
 function metar()
 {
     if [[ ! "$1" =~ [0-9A-Z]{4} ]]; then
