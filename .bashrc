@@ -1525,16 +1525,16 @@ function binaryclock() {
 }
 
 ######## Scripts originally by @exogen
-# aac/m4a? FIXME TODO
-function mp3 {
-    # Get best audio, convert it to MP3, and save it to the current directory.
+function aac {
+    # Get best audio, convert it to AAC, and save it to the current directory.
     youtube-dl --default-search=ytsearch: \
                --restrict-filenames \
                --format=bestaudio \
                --extract-audio \
-               --audio-format=mp3 \
+               --audio-format=aac \
                --audio-quality=1 "$*"
 }
+alias mp3='aac'
 function listen-youtube {
     # Skip DASH manifest for speed purposes. This might actually disable being
     # able to specify things like 'bestaudio' as the requested format, but try
