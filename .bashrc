@@ -1108,6 +1108,13 @@ alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/La
 # Flush Directory Service cache
 alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 
+# Alias for playball a la nba-watch
+# https://www.npmjs.com/package/playball
+# https://github.com/chentsulin/watch-nba
+if [[ -f `command -v playball` ]]; then
+    alias watch-mlb='playball';
+fi
+
 # OS X has no md5sum, so use md5 as a fallback
 command -v md5sum > /dev/null || alias md5sum="md5"
 # OS X has no sha1sum, so use shasum as a fallback
