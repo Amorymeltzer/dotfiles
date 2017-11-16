@@ -9,7 +9,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-bmMpPgrRcCekEKhH]
+Usage: $(basename $0) [-bmMpPgrRnNcCekEKhH]
 
   -b		skip updating macports base, but 'port sync' to update tree
   -m		check for macports updates but don't upgrade
@@ -19,6 +19,8 @@ Usage: $(basename $0) [-bmMpPgrRcCekEKhH]
   -g		skip updating gem itself
   -r		check for ruby updates but don't upgrade
   -R		skip all ruby actions
+  -n		check for npm nodejs updates (global) but don't upgrade
+  -N		skip all npm nodejs actions
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
   -e		pull homebrew and hombrew-cask changes but don't upgrade brews
@@ -30,7 +32,7 @@ END_HELP
 }
 
 # Parse commandline options
-while getopts 'bcCeEgkKmMpPrRhH' opt; do
+while getopts 'bcCeEgkKmMnNpPrRhH' opt; do
     case $opt in
 	b) base_flag='1';;
 	m) macports_flag='1';;
@@ -40,6 +42,8 @@ while getopts 'bcCeEgkKmMpPrRhH' opt; do
 	g) gem_flag='1';;
 	r) ruby_flag='1';;
 	R) ruby_all_flag='2';;
+	n) npm_flag='1';;
+	N) npm_all_flag='2';;
 	c) cpan_flag='1';;
 	C) cpan_all_flag='2';;
 	e) homebrew_flag='1';;
@@ -137,6 +141,20 @@ if [[ -z $ruby_all_flag ]]; then
 	fi
     else
 	echo -e "${Color_Green}ruby gems already up-to-date!${Color_zOff}"
+    fi
+fi
+
+if [[ -z $npm_all_flag ]]; then
+    checking 'npm nodejs packages (global)'
+    npm_todo=$(npm outdated --global)
+    if [[ -n $npm_todo ]]; then
+	echo "$npm_todo"
+	if [[ -z $npm_flag ]]; then
+	    updating 'npm nodejs packages (global)'
+	    sudo npm upgrade --global;
+	fi
+    else
+	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
     fi
 fi
 
