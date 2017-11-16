@@ -153,6 +153,8 @@ if [[ -z $npm_all_flag ]]; then
 	    updating 'npm nodejs packages (global)'
 	    sudo npm upgrade --global;
 	fi
+	checking 'npm for unupdated packages FIXME TODO'
+	npm outdated --global
     else
 	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
     fi
