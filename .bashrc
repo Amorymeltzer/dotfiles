@@ -979,6 +979,15 @@ function starwars()
     sleep 1
     telnet towel.blinkenlights.nl
 }
+# Lightcycle https://github.com/zachlatta/sshtron
+function lightcycle()
+{
+    echo "Loading Tron Lightcycle..."
+    echo "Use WASD to play, ctrl-C to quit"
+    sleep 1
+    ssh sshtron.zachlatta.com
+}
+alias tron='lightcycle'
 # Hackers script https://twitter.com/paultag/status/644160355409752065
 # 2>&1 | less -S for chunks
 alias zerocool='nc z.ero.cool 1337'
