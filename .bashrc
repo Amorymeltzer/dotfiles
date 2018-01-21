@@ -1271,7 +1271,12 @@ alias inflation="perl ~/Documents/perl/sandbox/inflation.pl"
 # Robinhood dashboard
 # https://github.com/bcwik9/robinhood-on-rails
 function robinhood() {
-    (cd ~/Documents/git/robinhood-on-rails/ ; exec bundle exec rails server & sleep 1 & browser http://localhost:3000/)
+    (cd ~/Documents/git/robinhood-on-rails@bcwik9/ ; exec bundle exec rails server & sleep 1 & browser http://localhost:3000/)
+}
+# Shell
+# https://github.com/anilshanbhag/RobinhoodShell
+function robinhood-shell() {
+    (cd ~/Documents/git/RobinhoodShell@anilshanbhag ; ./shell.py)
 }
 
 function btc() {
