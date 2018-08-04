@@ -82,8 +82,9 @@
       (back-to-indentation)
       (insert comment-start)
       (if (equal major-mode 'emacs-lisp-mode)
-	  (insert comment-start))
-      (insert comment-padding)
+	  (progn
+	    (insert comment-start)
+	    (insert comment-padding)))
       (forward-line 1)
       (yank))
     (forward-line 1)
