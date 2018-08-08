@@ -47,7 +47,7 @@ def check(dirname):
                 p = re.search("Your branch is behind .* by (\d+) commit", out)
                 messages.append(p.group(1))
                 messages.append("\033[0;33m)")
-            elif 'Your branch is up-to-date with ' in out:
+            elif 'Your branch is up to date with ' in out:
                 messages.append("=")
             elif re.search(r'Your branch and .* have diverged.?', out):
                 messages.append("⇵")
