@@ -1694,6 +1694,7 @@ urban() { word=`echo $* | sed 's/ /%20/g'`; curl -s http://www.urbandictionary.c
 # Add note to Notes.app (OS X 10.8+)
 # Usage: `note 'title' 'body'` or `echo 'body' | note`
 # Title is optional
+# FIXME TODO
 function note() {
     local title
     local body
@@ -1717,6 +1718,7 @@ function note() {
 
 # Add reminder to Reminders.app (OS X 10.8+)
 # Usage: `remind 'foo'` or `echo 'foo' | remind`
+# FIXME TODO
 function remind() {
     local text
     if [ -t 0 ]; then

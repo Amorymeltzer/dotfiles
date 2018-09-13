@@ -6,6 +6,7 @@
 ## fix doutdated
 ## Need to exit if not run as 'sudo update'
 ## Better color management
+## TODO: Grep and detect errors
 
 function help {
     cat <<END_HELP
