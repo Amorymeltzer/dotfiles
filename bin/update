@@ -3,10 +3,9 @@
 # UPDATE ALL THE THINGS!!!
 # https://xkcd.com/1579/
 ## brew/cask sudo deescalation
-## fix doutdated
 ## Need to exit if not run as 'sudo update'
 ## Better color management
-## TODO: Grep and detect errors
+## TODO: Grep and detect errors for each step
 
 function help {
     cat <<END_HELP
@@ -24,10 +23,9 @@ Usage: $(basename $0) [-bmMpPgrRnNcCekEKhH]
   -N		skip all npm nodejs actions
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
-  -e		pull homebrew and hombrew-cask changes but don't upgrade brews
-  -k		skip all homebrew-cask updates (currently non-functional)
-  -E		skip all homebrew and homebrew-cask updates
-  -K		skip all homebrew and homebrew-cask updates
+  -e		pull homebrew and hombrew-cask changes but don't upgrade homebrew
+  -k		skip all homebrew-cask updates
+  -E -K		skip all homebrew and homebrew-cask updates
   -h -H		this help
 END_HELP
 }
@@ -49,8 +47,7 @@ while getopts 'bcCeEgkKmMnNpPrRhH' opt; do
 	C) cpan_all_flag='2';;
 	e) homebrew_flag='1';;
 	k) brewcask_flag='1';;
-	E) homebrew_all_flag='2';;
-	K) homebrew_all_flag='2';;
+	E|K) homebrew_all_flag='2';;
 	h|H) help $0
 	     exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
@@ -178,41 +175,39 @@ if [[ -z $cpan_all_flag ]]; then
 fi
 
 ## Should probably make this verbose or something
-# This should properly be 'brew update', but I like seeing what's changed in
-# homebrew-cask, and the two are inextricably linked, so for now this must do.
-# I suppose I could do a version of 'git up' in each respective repository,
-# but that sort of seems excessive
 if [[ -z $homebrew_all_flag ]]; then
-    sudo -u $SUDO_USER brew cask new
+    updating 'Homebrew repository'
+    sudo -u $SUDO_USER brew update
     if [[ -z $homebrew_flag ]]; then
 	brew_todo=$(sudo -u $SUDO_USER brew outdated)
 	if [[ -n $brew_todo ]]; then
 	    updating 'brews'
 	    echo "$brew_todo"
-	    sudo -u $SUDO_USER brew upgrade --all
+	    sudo -u $SUDO_USER brew upgrade outdated
 
 	    cleaning 'brews'
 	    sudo -u $SUDO_USER brew cleanup -ns
 	    sudo -u $SUDO_USER brew cleanup -s
 	else
-	    echo -e "${Color_Green}brews already up-to-date!${Color_zOff}..."
+	    echo -e "${Color_Green}brews already up-to-date!${Color_zOff}"
 	fi
     fi
 
-    # Not perfect, but uses the external brewcask-doutdated.rb command to grab
-    # a list of outdated casks, then --force reinstalls them
     if [[ -z $brewcask_flag ]]; then
-	# if [[ $(brew cask doutdated &> /dev/null) ]]; then
-	#	checking 'casks'
-	#	sudo -u $SUDO_USER brew cask doutdated
-	#	updating 'casks'
-	#	sudo -u $SUDO_USER "brew cask doutdated | xargs brew cask install --force"
+	if [[ -n $homebrew_all_flag ]]; then
+	    updating 'Homebrew-cask repository'
+	    brew update;
+	fi
+	cask_todo=$(sudo -u $SUDO_USER brew cask outdated)
+	if [[ -n $cask_todo ]]; then
+	    updating 'casks'
+	    echo "$cask_todo"
+	    sudo -u $SUDO_USER brew cask upgrade
 
-	#	cleaning 'casks'
-	#	sudo -u $SUDO_USER brew cask cleanup
-	# else
-	#	echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
-	echo -e "${Color_Red}cask updates currently nonfunctional${Color_zOff}"
-	# fi
+	    cleaning 'casks'
+	    sudo -u $SUDO_USER brew cleanup
+	else
+	    echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
+	fi
     fi
 fi
