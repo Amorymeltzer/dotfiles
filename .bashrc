@@ -563,6 +563,7 @@ alias -- -='cd -'
 alias b='cd -'
 
 # Shortcuts
+alias bin="cd ~/bin"
 alias dt="cd ~/dotfiles"
 alias dr="cd ~/Dropbox"
 alias de="cd ~/Desktop"
@@ -576,9 +577,9 @@ alias dp="cd ~/Documents/perl"
 alias dps="cd ~/Documents/perl/sandbox"
 alias dpk="cd ~/Documents/perl/ksp"
 alias dpw="cd ~/Documents/perl/website"
-alias dk="cd ~/Dropbox/R/kinship/"
+alias drk="cd ~/Dropbox/R/kinship/"
+alias dws="cd ~/Documents/perl/wiki/sysopIndex"
 alias eds="cd ~/.emacs.d/site-lisp/"
-alias bin="cd ~/bin"
 alias m='more'
 #alias c='cat'
 alias j="jobs"
