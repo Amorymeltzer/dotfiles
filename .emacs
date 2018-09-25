@@ -2070,7 +2070,8 @@ This checks in turn:
 (setq cperl-hairy t)
 ;; Help in cperl, default is 5s
 ;; Works in perl-mode?! too?
-(setq cperl-lazy-help-time 1)
+;; (setq cperl-lazy-help-time 1)
+(setq cperl-lazy-help-time 0.25)
 ;; Don't mess with C-h; would be useful but for the above
 (setq cperl-clobber-lisp-bindings 1)
 ;; flymake in cperl
@@ -2172,7 +2173,8 @@ This checks in turn:
      (set-face-attribute 'which-key-command-description-face nil :inherit nil)
      (setq which-key-sort-order 'which-key-key-order-alpha)
      (setq which-key-side-window-max-height 0.5) ; default 0.25
-     (setq which-key-idle-delay 0.5)		 ; default 1.0
+     ;; (setq which-key-idle-delay 0.5)		 ; default 1.0
+     (setq which-key-idle-delay 0.25)		 ; default 1.0
      (setq which-key-prefix-prefix nil)
      ))
 (which-key-mode)
