@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012-2016 Free Software Foundation, Inc.
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
-;; Version: 2.13.0
+;; Version: 2.14.1
 ;; Keywords: lists
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -97,7 +97,7 @@ the target form."
 (defun -each-indexed (list fn)
   "Call (FN index item) for each item in LIST.
 
-In the anaphoric form `--each-indexed', the index is exposed as `it-index`.
+In the anaphoric form `--each-indexed', the index is exposed as symbol `it-index'.
 
 See also: `-map-indexed'."
   (--each list (funcall fn it-index it)))
@@ -125,8 +125,51 @@ Return nil, used for side-effects only."
 
 (put '-each-while 'lisp-indent-function 2)
 
+(defmacro --each-r (list &rest body)
+  "Anaphoric form of `-each-r'."
+  (declare (debug (form body))
+           (indent 1))
+  (let ((v (make-symbol "vector")))
+    ;; Implementation note: building vector is considerably faster
+    ;; than building a reversed list (vector takes less memory, so
+    ;; there is less GC), plus length comes naturally.  In-place
+    ;; 'nreverse' would be faster still, but BODY would be able to see
+    ;; that, even if modification was reversed before we return.
+    `(let* ((,v (vconcat ,list))
+            (it-index (length ,v))
+            it)
+       (while (> it-index 0)
+         (setq it-index (1- it-index))
+         (setq it (aref ,v it-index))
+         ,@body))))
+
+(defun -each-r (list fn)
+  "Call FN with every item in LIST in reversed order.
+ Return nil, used for side-effects only."
+  (--each-r list (funcall fn it)))
+
+(defmacro --each-r-while (list pred &rest body)
+  "Anaphoric form of `-each-r-while'."
+  (declare (debug (form form body))
+           (indent 2))
+  (let ((v (make-symbol "vector")))
+    `(let* ((,v (vconcat ,list))
+            (it-index (length ,v))
+            it)
+       (while (> it-index 0)
+         (setq it-index (1- it-index))
+         (setq it (aref ,v it-index))
+         (if (not ,pred)
+             (setq it-index -1)
+           ,@body)))))
+
+(defun -each-r-while (list pred fn)
+  "Call FN with every item in reversed LIST while (PRED item) is non-nil.
+Return nil, used for side-effects only."
+  (--each-r-while list (funcall pred it) (funcall fn it)))
+
 (defmacro --dotimes (num &rest body)
-  "Repeatedly executes BODY (presumably for side-effects) with `it` bound to integers from 0 through NUM-1."
+  "Repeatedly executes BODY (presumably for side-effects) with symbol `it' bound to integers from 0 through NUM-1."
   (declare (debug (form body))
            (indent 1))
   (let ((n (make-symbol "num")))
@@ -162,10 +205,10 @@ Return nil, used for side-effects only."
   "Return the result of applying FN to INITIAL-VALUE and the
 first item in LIST, then applying FN to that result and the 2nd
 item, etc. If LIST contains no items, return INITIAL-VALUE and
-FN is not called.
+do not call FN.
 
 In the anaphoric form `--reduce-from', the accumulated value is
-exposed as `acc`.
+exposed as symbol `acc'.
 
 See also: `-reduce', `-reduce-r'"
   (--reduce-from (funcall fn acc it) initial-value list))
@@ -182,17 +225,22 @@ See also: `-reduce', `-reduce-r'"
 (defun -reduce (fn list)
   "Return the result of applying FN to the first 2 items in LIST,
 then applying FN to that result and the 3rd item, etc. If LIST
-contains no items, FN must accept no arguments as well, and
-reduce return the result of calling FN with no arguments. If
-LIST has only 1 item, it is returned and FN is not called.
+contains no items, return the result of calling FN with no
+arguments. If LIST contains a single item, return that item
+and do not call FN.
 
 In the anaphoric form `--reduce', the accumulated value is
-exposed as `acc`.
+exposed as symbol `acc'.
 
 See also: `-reduce-from', `-reduce-r'"
   (if list
       (-reduce-from fn (car list) (cdr list))
     (funcall fn)))
+
+(defmacro --reduce-r-from (form initial-value list)
+  "Anaphoric version of `-reduce-r-from'."
+  (declare (debug (form form form)))
+  `(--reduce-from ,form ,initial-value (reverse ,list)))
 
 (defun -reduce-r-from (fn initial-value list)
   "Replace conses with FN, nil with INITIAL-VALUE and evaluate
@@ -203,20 +251,18 @@ Note: this function works the same as `-reduce-from' but the
 operation associates from right instead of from left.
 
 See also: `-reduce-r', `-reduce'"
-  (if (not list) initial-value
-    (funcall fn (car list) (-reduce-r-from fn initial-value (cdr list)))))
+  (--reduce-r-from (funcall fn it acc) initial-value list))
 
-(defmacro --reduce-r-from (form initial-value list)
-  "Anaphoric version of `-reduce-r-from'."
-  (declare (debug (form form form)))
-  `(-reduce-r-from (lambda (&optional it acc) ,form) ,initial-value ,list))
+(defmacro --reduce-r (form list)
+  "Anaphoric version of `-reduce-r'."
+  (declare (debug (form form)))
+  `(--reduce ,form (reverse ,list)))
 
 (defun -reduce-r (fn list)
   "Replace conses with FN and evaluate the resulting expression.
-The final nil is ignored. If LIST contains no items, FN must
-accept no arguments as well, and reduce return the result of
-calling FN with no arguments. If LIST has only 1 item, it is
-returned and FN is not called.
+The final nil is ignored. If LIST contains no items, return the
+result of calling FN with no arguments. If LIST contains a single
+item, return that item and do not call FN.
 
 The first argument of FN is the new item, the second is the
 accumulated value.
@@ -225,18 +271,50 @@ Note: this function works the same as `-reduce' but the operation
 associates from right instead of from left.
 
 See also: `-reduce-r-from', `-reduce'"
-  (cond
-   ((not list) (funcall fn))
-   ((not (cdr list)) (car list))
-   (t (funcall fn (car list) (-reduce-r fn (cdr list))))))
+  (if list
+      (--reduce-r (funcall fn it acc) list)
+    (funcall fn)))
 
-(defmacro --reduce-r (form list)
-  "Anaphoric version of `-reduce-r'."
-  (declare (debug (form form)))
-  `(-reduce-r (lambda (&optional it acc) ,form) ,list))
+(defun -reductions-from (fn init list)
+  "Return a list of the intermediate values of the reduction.
+
+See `-reduce-from' for explanation of the arguments.
+
+See also: `-reductions', `-reductions-r', `-reduce-r'"
+  (nreverse (--reduce-from (cons (funcall fn (car acc) it) acc) (list init) list)))
+
+(defun -reductions (fn list)
+  "Return a list of the intermediate values of the reduction.
+
+See `-reduce' for explanation of the arguments.
+
+See also: `-reductions-from', `-reductions-r', `-reduce-r'"
+  (and list (-reductions-from fn (car list) (cdr list))))
+
+(defun -reductions-r-from (fn init list)
+  "Return a list of the intermediate values of the reduction.
+
+See `-reduce-r-from' for explanation of the arguments.
+
+See also: `-reductions-r', `-reductions', `-reduce'"
+  (--reduce-r-from (cons (funcall fn it (car acc)) acc) (list init) list))
+
+(defun -reductions-r (fn list)
+  "Return a list of the intermediate values of the reduction.
+
+See `-reduce-r' for explanation of the arguments.
+
+See also: `-reductions-r-from', `-reductions', `-reduce'"
+  (when list
+    (let ((rev (reverse list)))
+      (--reduce-from (cons (funcall fn it (car acc)) acc)
+                     (list (car rev))
+                     (cdr rev)))))
 
 (defmacro --filter (form list)
-  "Anaphoric form of `-filter'."
+  "Anaphoric form of `-filter'.
+
+See also: `--remove'."
   (declare (debug (form form)))
   (let ((r (make-symbol "result")))
     `(let (,r)
@@ -248,21 +326,25 @@ See also: `-reduce-r-from', `-reduce'"
 
 Alias: `-select'
 
-See also: `-keep'"
+See also: `-keep', `-remove'."
   (--filter (funcall pred it) list))
 
 (defalias '-select '-filter)
 (defalias '--select '--filter)
 
 (defmacro --remove (form list)
-  "Anaphoric form of `-remove'."
+  "Anaphoric form of `-remove'.
+
+See also `--filter'."
   (declare (debug (form form)))
   `(--filter (not ,form) ,list))
 
 (defun -remove (pred list)
   "Return a new list of the items in LIST for which PRED returns nil.
 
-Alias: `-reject'"
+Alias: `-reject'
+
+See also: `-filter'."
   (--remove (funcall pred it) list))
 
 (defalias '-reject '-remove)
@@ -310,6 +392,7 @@ See also: `-remove', `-map-last'"
   "Remove all occurences of ITEM from LIST.
 
 Comparison is done with `equal'."
+  (declare (pure t) (side-effect-free t))
   (--remove (equal it item) list))
 
 (defmacro --keep (form list)
@@ -329,6 +412,7 @@ If you want to select the original items satisfying a predicate use `-filter'."
 
 (defun -non-nil (list)
   "Return all non-nil elements of LIST."
+  (declare (pure t) (side-effect-free t))
   (-remove 'null list))
 
 (defmacro --map-indexed (form list)
@@ -343,7 +427,7 @@ If you want to select the original items satisfying a predicate use `-filter'."
 (defun -map-indexed (fn list)
   "Return a new list consisting of the result of (FN index item) for each item in LIST.
 
-In the anaphoric form `--map-indexed', the index is exposed as `it-index`.
+In the anaphoric form `--map-indexed', the index is exposed as symbol `it-index'.
 
 See also: `-each-indexed'."
   (--map-indexed (funcall fn it-index it) list))
@@ -386,7 +470,7 @@ See also: `-map-when', `-replace-first'"
   `(-map-first (lambda (it) ,pred) (lambda (it) (ignore it) ,rep) ,list))
 
 (defun -map-last (pred rep list)
-  "Replace first item in LIST satisfying PRED with result of REP called on this item.
+  "Replace last item in LIST satisfying PRED with result of REP called on this item.
 
 See also: `-map-when', `-replace-last'"
   (nreverse (-map-first pred rep (reverse list))))
@@ -401,6 +485,7 @@ See also: `-map-when', `-replace-last'"
 Elements are compared using `equal'.
 
 See also: `-replace-at'"
+  (declare (pure t) (side-effect-free t))
   (--map-when (equal it old) new list))
 
 (defun -replace-first (old new list)
@@ -409,6 +494,7 @@ See also: `-replace-at'"
 Elements are compared using `equal'.
 
 See also: `-map-first'"
+  (declare (pure t) (side-effect-free t))
   (--map-first (equal old it) new list))
 
 (defun -replace-last (old new list)
@@ -417,6 +503,7 @@ See also: `-map-first'"
 Elements are compared using `equal'.
 
 See also: `-map-last'"
+  (declare (pure t) (side-effect-free t))
   (--map-last (equal old it) new list))
 
 (defmacro --mapcat (form list)
@@ -441,6 +528,7 @@ Conses of two atoms are considered \"terminals\", that is, they
 aren't flattened further.
 
 See also: `-flatten-n'"
+  (declare (pure t) (side-effect-free t))
   (if (and (listp l) (listp (cdr l)))
       (-mapcat '-flatten l)
     (list l)))
@@ -454,14 +542,18 @@ See also: `-flatten-n'"
   "Flatten NUM levels of a nested LIST.
 
 See also: `-flatten'"
+  (declare (pure t) (side-effect-free t))
   (-last-item (--iterate (--mapcat (-list it) it) list (1+ num))))
 
 (defun -concat (&rest lists)
   "Return a new list with the concatenation of the elements in the supplied LISTS."
+  (declare (pure t) (side-effect-free t))
   (apply 'append lists))
 
 (defalias '-copy 'copy-sequence
-  "Create a shallow copy of LIST.")
+  "Create a shallow copy of LIST.
+
+\(fn LIST)")
 
 (defun -splice (pred fun list)
   "Splice lists generated by FUN in place of elements matching PRED in LIST.
@@ -501,6 +593,7 @@ See also: `-splice', `-insert-at'"
 The last 2 members of ARGS are used as the final cons of the
 result so if the final member of ARGS is not a list the result is
 a dotted list."
+  (declare (pure t) (side-effect-free t))
   (-reduce-r 'cons args))
 
 (defun -snoc (list elem &rest elements)
@@ -563,15 +656,72 @@ Alias: `-any'"
   (--last (funcall pred it) list))
 
 (defalias '-first-item 'car
-  "Return the first item of LIST, or nil on an empty list.")
+  "Return the first item of LIST, or nil on an empty list.
+
+See also: `-second-item', `-last-item'.
+
+\(fn LIST)")
+
+;; Ensure that calls to `-first-item' are compiled to a single opcode,
+;; just like `car'.
+(put '-first-item 'byte-opcode 'byte-car)
+(put '-first-item 'byte-compile 'byte-compile-one-arg)
+
+(defalias '-second-item 'cadr
+  "Return the second item of LIST, or nil if LIST is too short.
+
+See also: `-third-item'.
+
+\(fn LIST)")
+
+(defalias '-third-item 'caddr
+  "Return the third item of LIST, or nil if LIST is too short.
+
+See also: `-fourth-item'.
+
+\(fn LIST)")
+
+(defun -fourth-item (list)
+  "Return the fourth item of LIST, or nil if LIST is too short.
+
+See also: `-fifth-item'."
+  (declare (pure t) (side-effect-free t))
+  (car (cdr (cdr (cdr list)))))
+
+(defun -fifth-item (list)
+  "Return the fifth item of LIST, or nil if LIST is too short.
+
+See also: `-last-item'."
+  (declare (pure t) (side-effect-free t))
+  (car (cdr (cdr (cdr (cdr list))))))
+
+;; TODO: gv was introduced in 24.3, so we can remove the if statement
+;; when support for earlier versions is dropped
+(eval-when-compile
+  (require 'cl)
+  (if (fboundp 'gv-define-simple-setter)
+      (gv-define-simple-setter -first-item setcar)
+    (require 'cl)
+    (with-no-warnings
+      (defsetf -first-item (x) (val) `(setcar ,x ,val)))))
 
 (defun -last-item (list)
   "Return the last item of LIST, or nil on an empty list."
+  (declare (pure t) (side-effect-free t))
   (car (last list)))
+
+;; TODO: gv was introduced in 24.3, so we can remove the if statement
+;; when support for earlier versions is dropped
+(eval-when-compile
+  (if (fboundp 'gv-define-setter)
+      (gv-define-setter -last-item (val x) `(setcar (last ,x) ,val))
+    (with-no-warnings
+      (defsetf -last-item (x) (val) `(setcar (last ,x) ,val)))))
 
 (defun -butlast (list)
   "Return a list of all items in list except for the last."
   ;; no alias as we don't want magic optional argument
+  (declare (pure t) (side-effect-free t))
   (butlast list))
 
 (defmacro --count (pred list)
@@ -587,12 +737,13 @@ Alias: `-any'"
   (--count (funcall pred it) list))
 
 (defun ---truthy? (val)
+  (declare (pure t) (side-effect-free t))
   (not (null val)))
 
 (defmacro --any? (form list)
   "Anaphoric form of `-any?'."
   (declare (debug (form form)))
-  `(---truthy? (--first ,form ,list)))
+  `(---truthy? (--some ,form ,list)))
 
 (defun -any? (pred list)
   "Return t if (PRED x) is non-nil for any x in LIST, else nil.
@@ -670,6 +821,7 @@ modulo the length of the list.
 
 If STEP is a number, only each STEPth item in the resulting
 section is returned.  Defaults to 1."
+  (declare (pure t) (side-effect-free t))
   (let ((length (length list))
         (new-list nil))
     ;; to defaults to the end of the list
@@ -692,6 +844,7 @@ section is returned.  Defaults to 1."
   "Return a new list of the first N items in LIST, or all items if there are fewer than N.
 
 See also: `-take-last'"
+  (declare (pure t) (side-effect-free t))
   (let (result)
     (--dotimes n
       (when list
@@ -703,18 +856,22 @@ See also: `-take-last'"
   "Return the last N items of LIST in order.
 
 See also: `-take'"
+  (declare (pure t) (side-effect-free t))
   (copy-sequence (last list n)))
 
 (defalias '-drop 'nthcdr
   "Return the tail of LIST without the first N items.
 
-See also: `-drop-last'")
+See also: `-drop-last'
+
+\(fn N LIST)")
 
 (defun -drop-last (n list)
   "Remove the last N items of LIST and return a copy.
 
 See also: `-drop'"
   ;; No alias because we don't want magic optional argument
+  (declare (pure t) (side-effect-free t))
   (butlast list n))
 
 (defmacro --take-while (form list)
@@ -744,6 +901,7 @@ See also: `-drop'"
 
 (defun -split-at (n list)
   "Return a list of ((-take N LIST) (-drop N LIST)), in no more than one pass through the list."
+  (declare (pure t) (side-effect-free t))
   (let (result)
     (--dotimes n
       (when list
@@ -754,6 +912,7 @@ See also: `-drop'"
 (defun -rotate (n list)
   "Rotate LIST N places to the right.  With N negative, rotate to the left.
 The time complexity is O(n)."
+  (declare (pure t) (side-effect-free t))
   (if (> n 0)
       (append (last list n) (butlast list n))
     (append (-drop (- n) list) (-take (- n) list))))
@@ -762,6 +921,7 @@ The time complexity is O(n)."
   "Return a list with X inserted into LIST at position N.
 
 See also: `-splice', `-splice-list'"
+  (declare (pure t) (side-effect-free t))
   (let ((split-list (-split-at n list)))
     (nconc (car split-list) (cons x (cadr split-list)))))
 
@@ -769,6 +929,7 @@ See also: `-splice', `-splice-list'"
   "Return a list with element at Nth position in LIST replaced with X.
 
 See also: `-replace'"
+  (declare (pure t) (side-effect-free t))
   (let ((split-list (-split-at n list)))
     (nconc (car split-list) (cons x (cdr (cadr split-list))))))
 
@@ -788,6 +949,7 @@ See also: `-map-when'"
   "Return a list with element at Nth position in LIST removed.
 
 See also: `-remove-at-indices', `-remove'"
+  (declare (pure t) (side-effect-free t))
   (-remove-at-indices (list n) list))
 
 (defun -remove-at-indices (indices list)
@@ -796,6 +958,7 @@ elements selected as `(nth i list)` for all i
 from INDICES.
 
 See also: `-remove-at', `-remove'"
+  (declare (pure t) (side-effect-free t))
   (let* ((indices (-sort '< indices))
          (diffs (cons (car indices) (-map '1- (-zip-with '- (cdr indices) indices))))
          r)
@@ -888,12 +1051,14 @@ This function can be thought of as a generalization of
 (defun -partition-all-in-steps (n step list)
   "Return a new list with the items in LIST grouped into N-sized sublists at offsets STEP apart.
 The last groups may contain less than N items."
+  (declare (pure t) (side-effect-free t))
   (nreverse (---partition-all-in-steps-reversed n step list)))
 
 (defun -partition-in-steps (n step list)
   "Return a new list with the items in LIST grouped into N-sized sublists at offsets STEP apart.
 If there are not enough items to make the last group N-sized,
 those items are discarded."
+  (declare (pure t) (side-effect-free t))
   (let ((result (---partition-all-in-steps-reversed n step list)))
     (while (and result (< (length (car result)) n))
       (!cdr result))
@@ -902,12 +1067,14 @@ those items are discarded."
 (defun -partition-all (n list)
   "Return a new list with the items in LIST grouped into N-sized sublists.
 The last group may contain less than N items."
+  (declare (pure t) (side-effect-free t))
   (-partition-all-in-steps n n list))
 
 (defun -partition (n list)
   "Return a new list with the items in LIST grouped into N-sized sublists.
 If there are not enough items to make the last group N-sized,
 those items are discarded."
+  (declare (pure t) (side-effect-free t))
   (-partition-in-steps n n list))
 
 (defmacro --partition-by (form list)
@@ -979,6 +1146,36 @@ returns the header value, but only after seeing at least one
 other value (the body)."
   (--partition-by-header (funcall fn it) list))
 
+(defun -partition-after-pred (pred list)
+  "Partition directly after each time PRED is true on an element of LIST."
+  (when list
+    (let ((rest (-partition-after-pred pred
+                                       (cdr list))))
+      (if (funcall pred (car list))
+          ;;split after (car list)
+          (cons (list (car list))
+                rest)
+
+        ;;don't split after (car list)
+        (cons (cons (car list)
+                    (car rest))
+              (cdr rest))))))
+
+(defun -partition-before-pred (pred list)
+  "Partition directly before each time PRED is true on an element of LIST."
+  (nreverse (-map #'reverse
+                  (-partition-after-pred pred (reverse list)))))
+
+(defun -partition-after-item (item list)
+  "Partition directly after each time ITEM appears in LIST."
+  (-partition-after-pred (lambda (ele) (equal ele item))
+                         list))
+
+(defun -partition-before-item (item list)
+  "Partition directly before each time ITEM appears in LIST."
+  (-partition-before-pred (lambda (ele) (equal ele item))
+                          list))
+
 (defmacro --group-by (form list)
   "Anaphoric form of `-group-by'."
   (declare (debug t))
@@ -1008,6 +1205,7 @@ elements of LIST.  Keys are compared by `equal'."
 
 (defun -interpose (sep list)
   "Return a new list of all elements in LIST separated by SEP."
+  (declare (pure t) (side-effect-free t))
   (let (result)
     (when list
       (!cons (car list) result)
@@ -1019,16 +1217,18 @@ elements of LIST.  Keys are compared by `equal'."
 
 (defun -interleave (&rest lists)
   "Return a new list of the first item in each list, then the second etc."
-  (let (result)
-    (while (-none? 'null lists)
-      (--each lists (!cons (car it) result))
-      (setq lists (-map 'cdr lists)))
-    (nreverse result)))
+  (declare (pure t) (side-effect-free t))
+  (when lists
+    (let (result)
+      (while (-none? 'null lists)
+        (--each lists (!cons (car it) result))
+        (setq lists (-map 'cdr lists)))
+      (nreverse result))))
 
 (defmacro --zip-with (form list1 list2)
   "Anaphoric form of `-zip-with'.
 
-The elements in list1 is bound as `it`, the elements in list2 as `other`."
+The elements in list1 are bound as symbol `it', the elements in list2 as symbol `other'."
   (declare (debug (form form form)))
   (let ((r (make-symbol "result"))
         (l1 (make-symbol "list1"))
@@ -1050,8 +1250,8 @@ function is applied pairwise taking as first argument element of
 LIST1 and as second argument element of LIST2 at corresponding
 position.
 
-The anaphoric form `--zip-with' binds the elements from LIST1 as `it`,
-and the elements from LIST2 as `other`."
+The anaphoric form `--zip-with' binds the elements from LIST1 as symbol `it',
+and the elements from LIST2 as symbol `other'."
   (--zip-with (funcall fn it other) list1 list2))
 
 (defun -zip (&rest lists)
@@ -1062,18 +1262,20 @@ groupings are equal to the length of the shortest input list.
 If two lists are provided as arguments, return the groupings as a list
 of cons cells. Otherwise, return the groupings as a list of lists.
 
-Please note! This distinction is being removed in an upcoming 2.0
+Please note! This distinction is being removed in an upcoming 3.0
 release of Dash. If you rely on this behavior, use -zip-pair instead."
-  (let (results)
-    (while (-none? 'null lists)
-      (setq results (cons (mapcar 'car lists) results))
-      (setq lists (mapcar 'cdr lists)))
-    (setq results (nreverse results))
-    (if (= (length lists) 2)
-        ;; to support backward compatability, return
-        ;; a cons cell if two lists were provided
-        (--map (cons (car it) (cadr it)) results)
-      results)))
+  (declare (pure t) (side-effect-free t))
+  (when lists
+    (let (results)
+      (while (-none? 'null lists)
+        (setq results (cons (mapcar 'car lists) results))
+        (setq lists (mapcar 'cdr lists)))
+      (setq results (nreverse results))
+      (if (= (length lists) 2)
+          ;; to support backward compatability, return
+          ;; a cons cell if two lists were provided
+          (--map (cons (car it) (cadr it)) results)
+        results))))
 
 (defalias '-zip-pair '-zip)
 
@@ -1081,11 +1283,26 @@ release of Dash. If you rely on this behavior, use -zip-pair instead."
   "Zip LISTS, with FILL-VALUE padded onto the shorter lists. The
 lengths of the returned groupings are equal to the length of the
 longest input list."
+  (declare (pure t) (side-effect-free t))
   (apply '-zip (apply '-pad (cons fill-value lists))))
+
+(defun -unzip (lists)
+  "Unzip LISTS.
+
+This works just like `-zip' but takes a list of lists instead of
+a variable number of arguments, such that
+
+  (-unzip (-zip L1 L2 L3 ...))
+
+is identity (given that the lists are the same length).
+
+See also: `-zip'"
+  (apply '-zip lists))
 
 (defun -cycle (list)
   "Return an infinite copy of LIST that will cycle through the
 elements and repeat from the beginning."
+  (declare (pure t) (side-effect-free t))
   (let ((newlist (-map 'identity list)))
     (nconc newlist newlist)))
 
@@ -1153,23 +1370,20 @@ combinations created by taking one element from each list in
 order.  The results are flattened, ignoring the tensor structure
 of the result.  This is equivalent to calling:
 
-  (-flatten-n (1- (length lists)) (-table fn lists))
+  (-flatten-n (1- (length lists)) (apply \\='-table fn lists))
 
 but the implementation here is much more efficient.
 
 See also: `-flatten-n', `-table'"
-  (when lists                           ;Just in case.
-    (let* ((list1 (pop lists))
-           (restore-lists (copy-sequence lists))
-           (last-list (last lists))
-           re)
-      (while (car last-list)
-        (let ((tail (-map #'car lists)))
-          (dolist (head list1)
-            (push (apply fn head tail) re)))
-        (pop (car lists))
-        (dash--table-carry lists restore-lists))
-      (nreverse re))))
+  (let ((restore-lists (copy-sequence lists))
+        (last-list (last lists))
+        re)
+    (while (car last-list)
+      (let ((item (apply fn (-map 'car lists))))
+        (push item re)
+        (setcar lists (cdar lists)) ;; silence byte compiler
+        (dash--table-carry lists restore-lists)))
+    (nreverse re)))
 
 (defun -partial (fn &rest args)
   "Take a function FN and fewer than the normal arguments to FN,
@@ -1182,11 +1396,13 @@ then additional args."
   "Return the index of the first element in the given LIST which
 is equal to the query element ELEM, or nil if there is no
 such element."
+  (declare (pure t) (side-effect-free t))
   (car (-elem-indices elem list)))
 
 (defun -elem-indices (elem list)
   "Return the indices of all elements in LIST equal to the query
 element ELEM, in ascending order."
+  (declare (pure t) (side-effect-free t))
   (-find-indices (-partial 'equal elem) list))
 
 (defun -find-indices (pred list)
@@ -1227,6 +1443,7 @@ See also `-last'."
 (defun -select-by-indices (indices list)
   "Return a list whose elements are elements from LIST selected
 as `(nth i list)` for all i from INDICES."
+  (declare (pure t) (side-effect-free t))
   (let (r)
     (--each indices
       (!cons (nth it list) r))
@@ -1242,6 +1459,7 @@ Each row is transformed such that only the specified COLUMNS are
 selected.
 
 See also: `-select-column', `-select-by-indices'"
+  (declare (pure t) (side-effect-free t))
   (--map (-select-by-indices columns it) table))
 
 (defun -select-column (column table)
@@ -1253,6 +1471,7 @@ It is assumed each row has the same length.
 The single selected column is returned as a list.
 
 See also: `-select-columns', `-select-by-indices'"
+  (declare (pure t) (side-effect-free t))
   (--mapcat (-select-by-indices (list column) it) table))
 
 (defmacro -> (x &optional form &rest more)
@@ -1281,17 +1500,29 @@ last item in second form, etc."
                   (list form x)))
    (:else `(->> (->> ,x ,form) ,@more))))
 
-(defmacro --> (x form &rest more)
-  "Thread the expr through the forms. Insert X at the position
-signified by the token `it' in the first form. If there are more
-forms, insert the first form at the position signified by `it' in
-in second form, etc."
-  (declare (debug ->))
-  (if (null more)
-      (if (listp form)
-          (--map-when (eq it 'it) x form)
-        (list form x))
-    `(--> (--> ,x ,form) ,@more)))
+(defmacro --> (x &rest forms)
+  "Starting with the value of X, thread each expression through FORMS.
+
+Insert X at the position signified by the symbol `it' in the first
+form.  If there are more forms, insert the first form at the position
+signified by `it' in in second form, etc."
+  (declare (debug (form body)))
+  `(-as-> ,x it ,@forms))
+
+(defmacro -as-> (value variable &rest forms)
+  "Starting with VALUE, thread VARIABLE through FORMS.
+
+In the first form, bind VARIABLE to VALUE.  In the second form, bind
+VARIABLE to the result of the first form, and so forth."
+  (declare (debug (form symbolp body)))
+  (if (null forms)
+      `,value
+    `(let ((,variable ,value))
+       (-as-> ,(if (symbolp (car forms))
+                 (list (car forms) variable)
+               (car forms))
+            ,variable
+              ,@(cdr forms)))))
 
 (defmacro -some-> (x &optional form &rest more)
   "When expr is non-nil, thread it through the first form (via `->'),
@@ -1431,7 +1662,7 @@ SOURCE is a proper or improper list."
         (cond
          ((and (symbolp (car match-form))
                (memq (car match-form) '(&keys &plist &alist &hash)))
-          (dash--match-kv match-form (dash--match-cons-get-cdr skip-cdr source)))
+          (dash--match-kv (dash--match-kv-normalize-match-form match-form) (dash--match-cons-get-cdr skip-cdr source)))
          ((dash--match-ignore-place-p (car match-form))
           (dash--match-cons-1 (cdr match-form) source
                               (plist-put props :skip-cdr (1+ skip-cdr))))
@@ -1515,6 +1746,47 @@ is discarded."
         (setq i (1+ i))))
     (-flatten-n 1 (nreverse re))))
 
+(defun dash--match-kv-normalize-match-form (pattern)
+  "Normalize kv PATTERN.
+
+This method normalizes PATTERN to the format expected by
+`dash--match-kv'.  See `-let' for the specification."
+  (let ((normalized (list (car pattern)))
+        (skip nil)
+        (fill-placeholder (make-symbol "--dash-fill-placeholder--")))
+    (-each (apply '-zip (-pad fill-placeholder (cdr pattern) (cddr pattern)))
+      (lambda (pair)
+        (let ((current (car pair))
+              (next (cdr pair)))
+          (if skip
+              (setq skip nil)
+            (if (or (eq fill-placeholder next)
+                    (not (or (and (symbolp next)
+                                  (not (keywordp next))
+                                  (not (eq next t))
+                                  (not (eq next nil)))
+                             (and (consp next)
+                                  (not (eq (car next) 'quote)))
+                             (vectorp next))))
+                (progn
+                  (cond
+                   ((keywordp current)
+                    (push current normalized)
+                    (push (intern (substring (symbol-name current) 1)) normalized))
+                   ((stringp current)
+                    (push current normalized)
+                    (push (intern current) normalized))
+                   ((and (consp current)
+                         (eq (car current) 'quote))
+                    (push current normalized)
+                    (push (cadr current) normalized))
+                   (t (error "-let: found key `%s' in kv destructuring but its pattern `%s' is invalid and can not be derived from the key" current next)))
+                  (setq skip nil))
+              (push current normalized)
+              (push next normalized)
+              (setq skip t))))))
+    (nreverse normalized)))
+
 (defun dash--match-kv (match-form source)
   "Setup a kv matching environment and call the real matcher.
 
@@ -1587,7 +1859,7 @@ Key-value stores are disambiguated by placing a token &plist,
         (cons (list s source)
               (dash--match (cddr match-form) s))))
      ((memq (car match-form) '(&keys &plist &alist &hash))
-      (dash--match-kv match-form source))
+      (dash--match-kv (dash--match-kv-normalize-match-form match-form) source))
      (t (dash--match-cons match-form source))))
    ((vectorp match-form)
     ;; We support the &as binding in vectors too
@@ -1599,6 +1871,20 @@ Key-value stores are disambiguated by placing a token &plist,
         (cons (list s source)
               (dash--match (dash--vector-tail match-form 2) s))))
      (t (dash--match-vector match-form source))))))
+
+(defun dash--normalize-let-varlist (varlist)
+  "Normalize VARLIST so that every binding is a list.
+
+`let' allows specifying a binding which is not a list but simply
+the place which is then automatically bound to nil, such that all
+three of the following are identical and evaluate to nil.
+
+  (let (a) a)
+  (let ((a)) a)
+  (let ((a nil)) a)
+
+This function normalizes all of these to the last form."
+  (--map (if (consp it) it (list it nil)) varlist))
 
 (defmacro -let* (varlist &rest body)
   "Bind variables according to VARLIST then eval BODY.
@@ -1612,9 +1898,10 @@ VARLIST.  This is useful if you want to destructure SOURCE
 recursively but also want to name the intermediate structures.
 
 See `-let' for the list of all possible patterns."
-  (declare (debug ((&rest (sexp form)) body))
+  (declare (debug ((&rest [&or (sexp form) sexp]) body))
            (indent 1))
-  (let ((bindings (--mapcat (dash--match (car it) (cadr it)) varlist)))
+  (let* ((varlist (dash--normalize-let-varlist varlist))
+         (bindings (--mapcat (dash--match (car it) (cadr it)) varlist)))
     `(let* ,bindings
        ,@body)))
 
@@ -1689,14 +1976,17 @@ Key/value stores:
   (&plist key0 a0 ... keyN aN) - bind value mapped by keyK in the
                                  SOURCE plist to aK.  If the
                                  value is not found, aK is nil.
+                                 Uses `plist-get' to fetch values.
 
   (&alist key0 a0 ... keyN aN) - bind value mapped by keyK in the
                                  SOURCE alist to aK.  If the
                                  value is not found, aK is nil.
+                                 Uses `assoc' to fetch values.
 
   (&hash key0 a0 ... keyN aN) - bind value mapped by keyK in the
                                 SOURCE hash table to aK.  If the
                                 value is not found, aK is nil.
+                                Uses `gethash' to fetch values.
 
 Further, special keyword &keys supports \"inline\" matching of
 plist-like key-value pairs, similarly to &keys keyword of
@@ -1706,6 +1996,36 @@ plist-like key-value pairs, similarly to &keys keyword of
 
 This binds N values from the list to a1 ... aN, then interprets
 the cdr as a plist (see key/value matching above).
+
+A shorthand notation for kv-destructuring exists which allows the
+patterns be optionally left out and derived from the key name in
+the following fashion:
+
+- a key :foo is converted into `foo' pattern,
+- a key 'bar is converted into `bar' pattern,
+- a key \"baz\" is converted into `baz' pattern.
+
+That is, the entire value under the key is bound to the derived
+variable without any further destructuring.
+
+This is possible only when the form following the key is not a
+valid pattern (i.e. not a symbol, a cons cell or a vector).
+Otherwise the matching proceeds as usual and in case of an
+invalid spec fails with an error.
+
+Thus the patterns are normalized as follows:
+
+   ;; derive all the missing patterns
+   (&plist :foo 'bar \"baz\") => (&plist :foo foo 'bar bar \"baz\" baz)
+
+   ;; we can specify some but not others
+   (&plist :foo 'bar explicit-bar) => (&plist :foo foo 'bar explicit-bar)
+
+   ;; nothing happens, we store :foo in x
+   (&plist :foo x) => (&plist :foo x)
+
+   ;; nothing happens, we match recursively
+   (&plist :foo (a b c)) => (&plist :foo (a b c))
 
 You can name the source using the syntax SYMBOL &as PATTERN.
 This syntax works with lists (proper or improper), vectors and
@@ -1746,14 +2066,15 @@ it with pattern
 Note: Clojure programmers may know this feature as the \":as
 binding\".  The difference is that we put the &as at the front
 because we need to support improper list binding."
-  (declare (debug ([&or (&rest (sexp form))
+  (declare (debug ([&or (&rest [&or (sexp form) sexp])
                         (vector [&rest [sexp form]])]
                    body))
            (indent 1))
   (if (vectorp varlist)
       `(let* ,(dash--match (aref varlist 0) (aref varlist 1))
          ,@body)
-    (let* ((inputs (--map-indexed (list (make-symbol (format "input%d" it-index)) (cadr it)) varlist))
+    (let* ((varlist (dash--normalize-let-varlist varlist))
+           (inputs (--map-indexed (list (make-symbol (format "input%d" it-index)) (cadr it)) varlist))
            (new-varlist (--map (list (caar it) (cadr it)) (-zip varlist inputs))))
       `(let ,inputs
          (-let* ,new-varlist ,@body)))))
@@ -1791,6 +2112,60 @@ See `-let' for the description of destructuring mechanism."
       `(lambda ,(--map (cadr it) inputs)
          (-let* ,inputs ,@body))))))
 
+(defmacro -setq (&rest forms)
+  "Bind each MATCH-FORM to the value of its VAL.
+
+MATCH-FORM destructuring is done according to the rules of `-let'.
+
+This macro allows you to bind multiple variables by destructuring
+the value, so for example:
+
+  (-setq (a b) x
+         (&plist :c c) plist)
+
+expands roughly speaking to the following code
+
+  (setq a (car x)
+        b (cadr x)
+        c (plist-get plist :c))
+
+Care is taken to only evaluate each VAL once so that in case of
+multiple assignments it does not cause unexpected side effects.
+
+\(fn [MATCH-FORM VAL]...)"
+  (declare (debug (&rest sexp form))
+           (indent 1))
+  (when (= (mod (length forms) 2) 1)
+    (error "Odd number of arguments"))
+  (let* ((forms-and-sources
+          ;; First get all the necessary mappings with all the
+          ;; intermediate bindings.
+          (-map (lambda (x) (dash--match (car x) (cadr x)))
+                (-partition 2 forms)))
+         ;; To preserve the logic of dynamic scoping we must ensure
+         ;; that we `setq' the variables outside of the `let*' form
+         ;; which holds the destructured intermediate values.  For
+         ;; this we generate for each variable a placeholder which is
+         ;; bound to (lexically) the result of the destructuring.
+         ;; Then outside of the helper `let*' form we bind all the
+         ;; original variables to their respective placeholders.
+         ;; TODO: There is a lot of room for possible optimization,
+         ;; for start playing with `special-variable-p' to eliminate
+         ;; unnecessary re-binding.
+         (variables-to-placeholders
+          (-mapcat
+           (lambda (bindings)
+             (-map
+              (lambda (binding)
+                (let ((var (car binding)))
+                  (list var (make-symbol (concat "--dash-binding-" (symbol-name var) "--")))))
+              (--filter (not (string-prefix-p "--" (symbol-name (car it)))) bindings)))
+           forms-and-sources)))
+    `(let ,(-map 'cadr variables-to-placeholders)
+       (let* ,(-flatten-n 1 forms-and-sources)
+         (setq ,@(-flatten (-map 'reverse variables-to-placeholders))))
+       (setq ,@(-flatten variables-to-placeholders)))))
+
 (defmacro -if-let* (vars-vals then &rest else)
   "If all VALS evaluate to true, bind them to their corresponding
 VARS and do THEN, otherwise do ELSE. VARS-VALS should be a list
@@ -1812,15 +2187,17 @@ encountered."
 
 (defmacro -if-let (var-val then &rest else)
   "If VAL evaluates to non-nil, bind it to VAR and do THEN,
-otherwise do ELSE. VAR-VAL should be a (VAR VAL) pair.
+otherwise do ELSE.
 
-Note: binding is done according to `-let'."
+Note: binding is done according to `-let'.
+
+\(fn (VAR VAL) THEN &rest ELSE)"
   (declare (debug ((sexp form) form body))
            (indent 2))
   `(-if-let* (,var-val) ,then ,@else))
 
 (defmacro --if-let (val then &rest else)
-  "If VAL evaluates to non-nil, bind it to `it' and do THEN,
+  "If VAL evaluates to non-nil, bind it to symbol `it' and do THEN,
 otherwise do ELSE."
   (declare (debug (form form body))
            (indent 2))
@@ -1840,16 +2217,17 @@ encountered."
 
 (defmacro -when-let (var-val &rest body)
   "If VAL evaluates to non-nil, bind it to VAR and execute body.
-VAR-VAL should be a (VAR VAL) pair.
 
-Note: binding is done according to `-let'."
+Note: binding is done according to `-let'.
+
+\(fn (VAR VAL) &rest BODY)"
   (declare (debug ((sexp form) body))
            (indent 1))
   `(-if-let ,var-val (progn ,@body)))
 
 (defmacro --when-let (val &rest body)
-  "If VAL evaluates to non-nil, bind it to `it' and execute
-body."
+  "If VAL evaluates to non-nil, bind it to symbol `it' and
+execute body."
   (declare (debug (form body))
            (indent 1))
   `(--if-let ,val (progn ,@body)))
@@ -1858,7 +2236,7 @@ body."
   "Tests for equality use this function or `equal' if this is nil.
 It should only be set using dynamic scope with a let, like:
 
-  (let ((-compare-fn #'=)) (-union numbers1 numbers2 numbers3)")
+  (let ((-compare-fn #\\='=)) (-union numbers1 numbers2 numbers3)")
 
 (defun -distinct (list)
   "Return a new list with all duplicates removed.
@@ -1903,6 +2281,40 @@ The test for equality is done with `equal',
 or with `-compare-fn' if that's non-nil."
   (--filter (not (-contains? list2 it)) list))
 
+(defun -powerset (list)
+  "Return the power set of LIST."
+  (if (null list) '(())
+    (let ((last (-powerset (cdr list))))
+      (append (mapcar (lambda (x) (cons (car list) x)) last)
+              last))))
+
+(defun -permutations (list)
+  "Return the permutations of LIST."
+  (if (null list) '(())
+    (apply #'append
+           (mapcar (lambda (x)
+                     (mapcar (lambda (perm) (cons x perm))
+                             (-permutations (remove x list))))
+                   list))))
+
+(defun -inits (list)
+  "Return all prefixes of LIST."
+  (nreverse (-map 'reverse (-tails (nreverse list)))))
+
+(defun -tails (list)
+  "Return all suffixes of LIST"
+  (-reductions-r-from 'cons nil list))
+
+(defun -common-prefix (&rest lists)
+  "Return the longest common prefix of LISTS."
+  (declare (pure t) (side-effect-free t))
+  (--reduce (--take-while (and acc (equal (pop acc) it)) it)
+            lists))
+
+(defun -common-suffix (&rest lists)
+  "Return the longest common suffix of LISTS."
+  (nreverse (apply #'-common-prefix (mapcar #'reverse lists))))
+
 (defun -contains? (list element)
   "Return non-nil if LIST contains ELEMENT.
 
@@ -1943,6 +2355,7 @@ Alias: `-same-items-p'"
   "Return non-nil if PREFIX is prefix of LIST.
 
 Alias: `-is-prefix-p'"
+  (declare (pure t) (side-effect-free t))
   (--each-while list (equal (car prefix) it)
     (!cdr prefix))
   (not prefix))
@@ -1951,6 +2364,7 @@ Alias: `-is-prefix-p'"
   "Return non-nil if SUFFIX is suffix of LIST.
 
 Alias: `-is-suffix-p'"
+  (declare (pure t) (side-effect-free t))
   (-is-prefix? (reverse suffix) (reverse list)))
 
 (defun -is-infix? (infix list)
@@ -1959,6 +2373,7 @@ Alias: `-is-suffix-p'"
 This operation runs in O(n^2) time
 
 Alias: `-is-infix-p'"
+  (declare (pure t) (side-effect-free t))
   (let (done)
     (while (and (not done) list)
       (setq done (-is-prefix? infix list))
@@ -1986,30 +2401,54 @@ if the first element should sort before the second."
 
 If first item of ARGS is already a list, simply return ARGS.  If
 not, return a list with ARGS as elements."
+  (declare (pure t) (side-effect-free t))
   (let ((arg (car args)))
     (if (listp arg) arg args)))
 
 (defun -repeat (n x)
   "Return a list with X repeated N times.
 Return nil if N is less than 1."
+  (declare (pure t) (side-effect-free t))
   (let (ret)
     (--dotimes n (!cons x ret))
     ret))
 
 (defun -sum (list)
   "Return the sum of LIST."
+  (declare (pure t) (side-effect-free t))
   (apply '+ list))
+
+(defun -running-sum (list)
+  "Return a list with running sums of items in LIST.
+
+LIST must be non-empty."
+  (declare (pure t) (side-effect-free t))
+  (unless (consp list)
+    (error "LIST must be non-empty"))
+  (-reductions '+ list))
 
 (defun -product (list)
   "Return the product of LIST."
+  (declare (pure t) (side-effect-free t))
   (apply '* list))
+
+(defun -running-product (list)
+  "Return a list with running products of items in LIST.
+
+LIST must be non-empty."
+  (declare (pure t) (side-effect-free t))
+  (unless (consp list)
+    (error "LIST must be non-empty"))
+  (-reductions '* list))
 
 (defun -max (list)
   "Return the largest value from LIST of numbers or markers."
+  (declare (pure t) (side-effect-free t))
   (apply 'max list))
 
 (defun -min (list)
   "Return the smallest value from LIST of numbers or markers."
+  (declare (pure t) (side-effect-free t))
   (apply 'min list))
 
 (defun -max-by (comparator list)
@@ -2094,11 +2533,13 @@ the new seed."
 (defun -cons-pair? (con)
   "Return non-nil if CON is true cons pair.
 That is (A . B) where B is not a list."
+  (declare (pure t) (side-effect-free t))
   (and (listp con)
        (not (listp (cdr con)))))
 
 (defun -cons-to-list (con)
   "Convert a cons pair to a list with `car' and `cdr' of the pair respectively."
+  (declare (pure t) (side-effect-free t))
   (list (car con) (cdr con)))
 
 (defun -value-to-list (val)
@@ -2108,6 +2549,7 @@ If the value is a cons pair, make a list with two elements, `car'
 and `cdr' of the pair respectively.
 
 If the value is anything else, wrap it in a list."
+  (declare (pure t) (side-effect-free t))
   (cond
    ((-cons-pair? val) (-cons-to-list val))
    (t (list val))))
@@ -2252,19 +2694,23 @@ Non-branch nodes are simply copied."
 The new list has the same elements and structure but all cons are
 replaced with new ones.  This is useful when you need to clone a
 structure such as plist or alist."
+  (declare (pure t) (side-effect-free t))
   (-tree-map 'identity list))
 
 (defun dash-enable-font-lock ()
   "Add syntax highlighting to dash functions, macros and magic values."
-  (eval-after-load "lisp-mode"
+  (eval-after-load 'lisp-mode
     '(progn
        (let ((new-keywords '(
+                             "!cons"
+                             "!cdr"
                              "-each"
                              "--each"
                              "-each-indexed"
                              "--each-indexed"
                              "-each-while"
                              "--each-while"
+                             "-doto"
                              "-dotimes"
                              "--dotimes"
                              "-map"
@@ -2277,6 +2723,10 @@ structure such as plist or alist."
                              "--reduce-r-from"
                              "-reduce-r"
                              "--reduce-r"
+                             "-reductions-from"
+                             "-reductions-r-from"
+                             "-reductions"
+                             "-reductions-r"
                              "-filter"
                              "--filter"
                              "-select"
@@ -2333,6 +2783,10 @@ structure such as plist or alist."
                              "-last"
                              "--last"
                              "-first-item"
+                             "-second-item"
+                             "-third-item"
+                             "-fourth-item"
+                             "-fifth-item"
                              "-last-item"
                              "-butlast"
                              "-count"
@@ -2345,8 +2799,13 @@ structure such as plist or alist."
                              "--any-p"
                              "-some-p"
                              "--some-p"
+                             "-some->"
+                             "-some->>"
+                             "-some-->"
                              "-all?"
+                             "-all-p"
                              "--all?"
+                             "--all-p"
                              "-every?"
                              "--every?"
                              "-all-p"
@@ -2364,6 +2823,8 @@ structure such as plist or alist."
                              "-slice"
                              "-take"
                              "-drop"
+                             "-drop-last"
+                             "-take-last"
                              "-take-while"
                              "--take-while"
                              "-drop-while"
@@ -2387,6 +2848,10 @@ structure such as plist or alist."
                              "-partition-in-steps"
                              "-partition-all"
                              "-partition"
+                             "-partition-after-item"
+                             "-partition-after-pred"
+                             "-partition-before-item"
+                             "-partition-before-pred"
                              "-partition-by"
                              "--partition-by"
                              "-partition-by-header"
@@ -2395,10 +2860,12 @@ structure such as plist or alist."
                              "--group-by"
                              "-interpose"
                              "-interleave"
+                             "-unzip"
                              "-zip-with"
                              "--zip-with"
                              "-zip"
                              "-zip-fill"
+                             "-zip-pair"
                              "-cycle"
                              "-pad"
                              "-annotate"
@@ -2422,6 +2889,7 @@ structure such as plist or alist."
                              "->"
                              "->>"
                              "-->"
+                             "-as->"
                              "-when-let"
                              "-when-let*"
                              "--when-let"
@@ -2436,6 +2904,12 @@ structure such as plist or alist."
                              "-union"
                              "-intersection"
                              "-difference"
+                             "-powerset"
+                             "-permutations"
+                             "-inits"
+                             "-tails"
+                             "-common-prefix"
+                             "-common-suffix"
                              "-contains?"
                              "-contains-p"
                              "-same-items?"
@@ -2451,7 +2925,9 @@ structure such as plist or alist."
                              "-list"
                              "-repeat"
                              "-sum"
+                             "-running-sum"
                              "-product"
+                             "-running-product"
                              "-max"
                              "-min"
                              "-max-by"

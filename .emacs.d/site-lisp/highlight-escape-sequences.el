@@ -1,12 +1,14 @@
 ;;; highlight-escape-sequences.el --- Highlight escape sequences -*- lexical-binding: t -*-
 
+;; Copyright (C) 2013, 2015-2017  Free Software Foundation, Inc.
+
 ;; Author:   Dmitry Gutov <dgutov@yandex.ru>
 ;;	Pavel Matcula <dev.plvlml@gmail.com>
 ;; URL:      https://github.com/dgutov/highlight-escape-sequences
 ;; Keywords: convenience
-;; Version:  0.2
+;; Version:  0.4
 
-;; This file is not part of GNU Emacs.
+;; This file is part of GNU Emacs.
 
 ;; This file is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,13 +26,15 @@
 ;;; Commentary:
 
 ;; This global minor mode highlights escape sequences in strings and
-;; other kinds of literals with `hes-escape-sequence-face' which
-;; inherits from `font-lock-regexp-grouping-construct' face by
-;; default and with `hes-escape-backslash-face' which inherits from
-;; `font-lock-regexp-grouping-backslash' face by default.
+;; other kinds of literals with `hes-escape-sequence-face' and with
+;; `hes-escape-backslash-face'. They inherit from faces
+;; `font-lock-regexp-grouping-construct' and
+;; `font-lock-regexp-grouping-backslash' by default, respectively.
 
-;; It currently supports `ruby-mode' and some simple modes:
-;; both main JavaScript modes, Java mode, and C/C++/ObjC modes.
+;; It currently supports `ruby-mode', `emacs-lisp-mode', JS escape
+;; sequences in both popular modes, C escapes is `c-mode', `c++-mode',
+;; `objc-mode' and `go-mode',
+;; and Java escapes in `java-mode' and `clojure-mode'.
 
 ;; To enable it elsewhere, customize `hes-mode-alist'.
 
@@ -180,13 +184,11 @@ Currently handles:
           'hes-escape-sequence-face)
         prepend))))
 
-(define-obsolete-variable-alias 'hes-simple-modes 'hes-mode-alist
-  "Modes where escape sequences can appear in any string literal.")
-
 (defcustom hes-mode-alist
   `((c-mode          . ,hes-c/c++/objc-escape-sequence-re)
     (c++-mode        . ,hes-c/c++/objc-escape-sequence-re)
     (objc-mode       . ,hes-c/c++/objc-escape-sequence-re)
+    (go-mode         . ,hes-c/c++/objc-escape-sequence-re)
     (java-mode       . ,hes-java-escape-sequence-re)
     (clojure-mode    . ,hes-java-escape-sequence-re)
     (js-mode         . ,hes-js-escape-sequence-re)
@@ -209,9 +211,15 @@ Currently handles:
   (interactive)
   (dolist (mode hes-mode-alist)
     (if (atom mode)
-        (font-lock-add-keywords mode (hes-make-simple-escape-sequence-keywords hes-common-escape-sequence-re) 'append)
+        (font-lock-add-keywords
+         mode
+         (hes-make-simple-escape-sequence-keywords hes-common-escape-sequence-re)
+         'append)
       (when (stringp (cdr mode))
-        (font-lock-add-keywords (car mode) (hes-make-simple-escape-sequence-keywords (cdr mode)) 'append))
+        (font-lock-add-keywords
+         (car mode)
+         (hes-make-simple-escape-sequence-keywords (cdr mode))
+         'append))
       (when (listp (cdr mode))
         (font-lock-add-keywords (car mode) (cdr mode) 'append)))))
 
@@ -221,9 +229,13 @@ Currently handles:
   (interactive)
   (dolist (mode hes-mode-alist)
     (if (atom mode)
-        (font-lock-remove-keywords mode (hes-make-simple-escape-sequence-keywords hes-common-escape-sequence-re))
+        (font-lock-remove-keywords
+         mode
+         (hes-make-simple-escape-sequence-keywords hes-common-escape-sequence-re))
       (when (stringp (cdr mode))
-        (font-lock-remove-keywords (car mode) (hes-make-simple-escape-sequence-keywords (cdr mode))))
+        (font-lock-remove-keywords
+         (car mode)
+         (hes-make-simple-escape-sequence-keywords (cdr mode))))
       (when (listp (cdr mode))
         (font-lock-remove-keywords (car mode) (cdr mode))))))
 

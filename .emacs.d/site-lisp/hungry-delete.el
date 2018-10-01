@@ -4,7 +4,7 @@
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/hungry-delete
-;; Version: 1.1.2
+;; Version: 1.1.5
 
 ;; This file is not part of GNU Emacs.
 
@@ -53,51 +53,42 @@
 
 (define-key hungry-delete-mode-map [remap delete-backward-char] 'hungry-delete-backward)
 (define-key hungry-delete-mode-map [remap backward-delete-char-untabify] 'hungry-delete-backward)
+(define-key hungry-delete-mode-map [remap c-electric-backspace] 'hungry-delete-backward)
+(define-key hungry-delete-mode-map [remap c-electric-delete-forward] 'hungry-delete-forward)
 
 (defvar hungry-delete-chars-to-skip " \t\n\r\f\v"
   "String of characters to skip.")
 
-(defun hungry-delete-skip-ws-forward (&optional limit)
+(defvar hungry-delete-except-modes '(help-mode minibuffer-inactive-mode calc-mode)
+  "List of modes hungry-delete will not be turned on in.")
+
+(defun hungry-delete-skip-ws-forward ()
   "Skip over any whitespace following point.
 This function skips over horizontal and vertical whitespace and
 line continuations."
-  (if limit
-      (let ((limit (or limit (point-max))))
-        (while (progn
-                 ;; skip-syntax-* doesn't count \n as whitespace..
-                 (skip-chars-forward hungry-delete-chars-to-skip limit)
-                 (when (and (eq (char-after) ?\\)
-                            (< (point) limit))
-                   (forward-char)
-                   (or (eolp)
-                       (progn (backward-char) nil))))))
-    (while (progn
-             (skip-chars-forward hungry-delete-chars-to-skip)
-             (when (eq (char-after) ?\\)
-               (forward-char)
-               (or (eolp)
-                   (progn (backward-char) nil))))))
+  (while (and
+          (> (skip-chars-forward hungry-delete-chars-to-skip) 0)
+          (eq (char-after) ?\\)
+          (progn
+            (forward-char)
+            (or (eolp) (backward-char)))))
   (while (get-text-property (point) 'read-only)
     (backward-char)))
 
-(defun hungry-delete-skip-ws-backward (&optional limit)
+(defun hungry-delete-skip-ws-backward ()
   "Skip over any whitespace preceding point.
 This function skips over horizontal and vertical whitespace and
 line continuations."
-  (if limit
-      (let ((limit (or limit (point-min))))
-        (while (progn
-                 ;; skip-syntax-* doesn't count \n as whitespace..
-                 (skip-chars-backward hungry-delete-chars-to-skip limit)
-                 (and (eolp)
-                      (eq (char-before) ?\\)
-                      (> (point) limit)))
-          (backward-char)))
-    (while (progn
-             (skip-chars-backward hungry-delete-chars-to-skip)
-             (and (eolp)
-                  (eq (char-before) ?\\)))
-      (backward-char)))
+  (skip-chars-backward hungry-delete-chars-to-skip)
+  (while (and
+          (eolp)
+          (eq (char-before) ?\\)
+          (progn
+            (backward-char)
+            (or
+             (= (point) (point-min))
+             (< (skip-chars-backward hungry-delete-chars-to-skip) 0)
+             (forward-char)))))
   (while (get-text-property (point) 'read-only)
     (forward-char)))
 
@@ -212,9 +203,8 @@ executed."
 ;;;###autoload
 (defun turn-on-hungry-delete-mode ()
   "Turn on hungry delete mode if the buffer is appropriate."
-  (unless (or (window-minibuffer-p (selected-window))
-              (equal (substring (buffer-name) 0 1) " ")
-              (eq major-mode 'help-mode ))
+  (interactive)
+  (unless (member major-mode hungry-delete-except-modes)
     (hungry-delete-mode t)))
 
 ;;;###autoload

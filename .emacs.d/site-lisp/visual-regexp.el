@@ -1,10 +1,10 @@
 ;;; visual-regexp.el --- A regexp/replace command for Emacs with interactive visual feedback
 
-;; Copyright (C) 2013-2016 Marko Bencun
+;; Copyright (C) 2013-2017 Marko Bencun
 
 ;; Author: Marko Bencun <mbencun@gmail.com>
 ;; URL: https://github.com/benma/visual-regexp.el/
-;; Version: 1.0
+;; Version: 1.1
 ;; Package-Requires: ((cl-lib "0.2"))
 ;; Keywords: regexp, replace, visual, feedback
 
@@ -24,6 +24,7 @@
 ;; along with visual-regexp.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; WHAT'S NEW
+;; 1.1: Add new customization: vr/plain
 ;; 1.0: Add support for one prompt for search/replace, using query-replace-from-to-separator
 ;;      (query-replace history like in Emacs 25).
 ;;      Breaking changes:
@@ -209,6 +210,12 @@ If nil, don't limit the number of matches shown in visual feedback."
     'query-replace-defaults)
   "History of search/replace pairs"
   :type 'symbol
+  :group 'visual-regexp)
+
+
+(defcustom vr/plain nil
+  "If non-nil, use plain search/replace instead of regexp search/replace."
+  :type 'boolean
   :group 'visual-regexp)
 
 (defvar vr/initialize-hook nil
@@ -478,8 +485,8 @@ visible all the time in the minibuffer."
           (while (and looping
                       (condition-case err
                           (if forward
-                              (re-search-forward regexp-string vr--target-buffer-end t)
-                            (re-search-backward regexp-string vr--target-buffer-start t))
+                              (funcall (if vr/plain 'search-forward 're-search-forward) regexp-string vr--target-buffer-end t)
+                            (funcall (if vr/plain 'search-backward 're-search-backward) regexp-string vr--target-buffer-start t))
                         (invalid-regexp (progn (setq message-line (car (cdr err))) nil))))
             (when (or (not feedback-limit) (< i feedback-limit)) ;; let outer loop finish so we can get the matches count
               (cl-loop for (start end) on (match-data) by 'cddr
@@ -540,8 +547,8 @@ visible all the time in the minibuffer."
       ;; (match-data) could have been modified in the meantime, e.g. by vr--get-regexp-string->pcre-to-elisp.
       (set-match-data match-data)
       (if (stringp replacement)
-          (match-substitute-replacement replacement nocasify)
-        (match-substitute-replacement (funcall (car replacement) (cdr replacement) i) nocasify)))))
+          (match-substitute-replacement replacement nocasify vr/plain)
+        (match-substitute-replacement (funcall (car replacement) (cdr replacement) i) nocasify vr/plain)))))
 
 (defun vr--do-replace-feedback-match-callback (replacement match-data i)
   (let ((begin (cl-first match-data))
@@ -564,6 +571,9 @@ visible all the time in the minibuffer."
                                                current-face))
                                  (propertize replacement 'face current-face)))
             (overlay-put overlay 'priority (+ vr--overlay-priority 0))))))))
+
+(defun vr--mapcar-nonnil (rep list)
+  (mapcar (lambda (it) (when it (funcall rep it))) list))
 
 (defun vr--get-replacements (feedback feedback-limit)
   "Get replacements using emacs-style regexp."
@@ -588,13 +598,13 @@ visible all the time in the minibuffer."
               (while (and
                       looping
                       (condition-case err
-                          (re-search-forward regexp-string vr--target-buffer-end t)
+                          (funcall (if vr/plain 'search-forward 're-search-forward) regexp-string vr--target-buffer-end t)
                         ('invalid-regexp (progn (setq message-line (car (cdr err))) nil))))
                 (condition-case err
                     (progn
                       (if (or (not feedback) (not feedback-limit) (< i feedback-limit))
                           (setq replacements (cons
-                                              (let ((match-data (mapcar 'marker-position (match-data))))
+                                              (let ((match-data (vr--mapcar-nonnil 'marker-position (match-data))))
                                                 (list (query-replace-compile-replacement replace-string t) match-data i))
                                               replacements))
                         (setq vr--limit-reached t))
@@ -658,7 +668,7 @@ visible all the time in the minibuffer."
       (unless (or silent (string= "" message-line))
         (vr--minibuffer-message message-line))
       ;; needed to correctly position the mark after query replace (finished with 'automatic ('!'))
-      (set-match-data (mapcar (lambda (el) (+ cumulative-offset el)) last-match-data))
+      (set-match-data (vr--mapcar-nonnil (lambda (el) (+ cumulative-offset el)) last-match-data))
       replace-count)))
 
 (defun vr--set-target-buffer-start-end ()
@@ -783,14 +793,15 @@ visible all the time in the minibuffer."
           (deactivate-mark nil)
           (first-fake-cursor nil))
       (vr--feedback-function (vr--get-regexp-string) t nil (lambda (i j begin end)
-                                                             (with-current-buffer vr--target-buffer
-                                                               (goto-char end)
-                                                               (push-mark begin)
-                                                               ;; temporarily enable transient mark mode
-                                                               (activate-mark)
-                                                               (let ((fc (mc/create-fake-cursor-at-point)))
-                                                                 (unless first-fake-cursor
-                                                                   (setq first-fake-cursor fc))))))
+                                                             (when (zerop j)
+                                                               (with-current-buffer vr--target-buffer
+                                                                 (goto-char end)
+                                                                 (push-mark begin)
+                                                                 ;; temporarily enable transient mark mode
+                                                                 (activate-mark)
+                                                                 (let ((fc (mc/create-fake-cursor-at-point)))
+                                                                   (unless first-fake-cursor
+                                                                     (setq first-fake-cursor fc)))))))
 
       ;; one fake cursor too many, replace first one with
       ;; the regular cursor.
@@ -902,7 +913,7 @@ E [not supported in visual-regexp]"
         (while (and keep-going vr--query-replacements)
           ;; Advance replacement list
           (cl-multiple-value-bind (replacement match-data i) (car vr--query-replacements)
-            (setq match-data (mapcar (lambda (el) (+ cumulative-offset el)) match-data))
+            (setq match-data (vr--mapcar-nonnil (lambda (el) (+ cumulative-offset el)) match-data))
             (let ((begin (cl-first match-data))
                   (end (cl-second match-data))
                   (next-replacement-orig replacement))

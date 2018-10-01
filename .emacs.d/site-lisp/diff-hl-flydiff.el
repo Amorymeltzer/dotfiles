@@ -140,6 +140,8 @@ This requires the external program `diff' to be in your `exec-path'."
   (unless (or
            (not diff-hl-mode)
            (= diff-hl-flydiff-modified-tick (buffer-modified-tick))
+           (not buffer-file-name)
+           (not (file-exists-p buffer-file-name))
            (file-remote-p default-directory))
     (diff-hl-update)))
 
@@ -148,9 +150,9 @@ This requires the external program `diff' to be in your `exec-path'."
 
 ;;;###autoload
 (define-minor-mode diff-hl-flydiff-mode
-  "Highlight diffs on-the-fly"
-  :lighter ""
-  :global t
+  "Perform highlighting on-the-fly.
+This is a global minor mode.  It alters how `diff-hl-mode' works."
+  :lighter "" :global t
   (if diff-hl-flydiff-mode
       (progn
         (advice-add 'diff-hl-overlay-modified :override #'ignore)

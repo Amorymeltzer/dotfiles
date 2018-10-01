@@ -1,9 +1,8 @@
-;;; parent-mode.el --- get major mode's parent modes  -*- lexical-binding: t -*-
+;;; parent-mode.el --- get major mode's parent modes
 
 ;; Author: Fanael Linithien <fanael4@gmail.com>
 ;; URL: https://github.com/Fanael/parent-mode
-;; Version: 2.0
-;; Package-Requires: ((emacs "24"))
+;; Version: 2.3
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -42,9 +41,11 @@
 FUNC is first called for MODE, then for its parent, then for the parent's
 parent, and so on.
 
-MODE shall be a symbol.
+MODE shall be a symbol referring to a function.
 FUNC shall be a function taking one argument."
   (funcall func mode)
+  (when (not (fboundp mode))
+    (signal 'void-function (list mode)))
   (let ((modefunc (symbol-function mode)))
     (if (symbolp modefunc)
         ;; Hande all the modes that use (defalias 'foo-parent-mode (stuff)) as

@@ -6,7 +6,7 @@
 ;; URL:      https://github.com/dgutov/diff-hl
 ;; Keywords: vc, diff
 ;; Version:  1.8.4
-;; Package-Requires: ((cl-lib "0.2"))
+;; Package-Requires: ((cl-lib "0.2") (emacs "24.3"))
 
 ;; This file is part of GNU Emacs.
 
@@ -399,7 +399,7 @@ in the source file, or the last line of the hunk above it."
            `(let (beg-line end-line)
               (when (eobp)
                 (with-current-buffer ,buffer (diff-hl-remove-overlays))
-                (error "Buffer is up-to-date"))
+                (user-error "Buffer is up-to-date"))
               (let (diff-auto-refine-mode)
                 (diff-hl-diff-skip-to ,line))
               (save-excursion
@@ -420,7 +420,7 @@ in the source file, or the last line of the hunk above it."
                 (diff-refine-hunk))
               (unless (yes-or-no-p (format "Revert current hunk in %s? "
                                            ,(cl-caadr fileset)))
-                (error "Revert canceled"))
+                (user-error "Revert canceled"))
               (let ((diff-advance-after-apply-hunk nil))
                 (diff-apply-hunk t))
               (with-current-buffer ,buffer
@@ -447,7 +447,7 @@ in the source file, or the last line of the hunk above it."
                        (throw 'found (overlay-start o)))))))))
     (if pos
         (goto-char pos)
-      (error "No further hunks found"))))
+      (user-error "No further hunks found"))))
 
 (defun diff-hl-previous-hunk ()
   "Go to the beginning of the previous hunk in the current buffer."
@@ -458,7 +458,7 @@ in the source file, or the last line of the hunk above it."
   (interactive)
   (let ((hunk (diff-hl-hunk-overlay-at (point))))
     (unless hunk
-      (error "No hunk at point"))
+      (user-error "No hunk at point"))
     (goto-char (overlay-start hunk))
     (push-mark (overlay-end hunk) nil t)))
 
@@ -470,11 +470,18 @@ in the source file, or the last line of the hunk above it."
     map))
 (fset 'diff-hl-command-map diff-hl-command-map)
 
+(defvar diff-hl-lighter ""
+  "Mode line lighter for Diff Hl.
+
+The value of this variable is a mode line template as in
+`mode-line-format'.")
+
 ;;;###autoload
 (define-minor-mode diff-hl-mode
   "Toggle VC diff highlighting."
-  :lighter "" :keymap `(([remap vc-diff] . diff-hl-diff-goto-hunk)
-                        (,diff-hl-command-prefix . diff-hl-command-map))
+  :lighter diff-hl-lighter
+  :keymap `(([remap vc-diff] . diff-hl-diff-goto-hunk)
+            (,diff-hl-command-prefix . diff-hl-command-map))
   (if diff-hl-mode
       (progn
         (diff-hl-maybe-define-bitmaps)
@@ -542,7 +549,8 @@ in the source file, or the last line of the hunk above it."
                  ;; (diff-hl-mode could be non-nil there, even if
                  ;; buffer-file-name is nil):
                  (buffer-file-name buf)
-                 (file-in-directory-p (buffer-file-name buf) topdir))
+                 (file-in-directory-p (buffer-file-name buf) topdir)
+                 (file-exists-p (buffer-file-name buf)))
         (with-current-buffer buf
           (let* ((file buffer-file-name)
                  (backend (vc-backend file)))
