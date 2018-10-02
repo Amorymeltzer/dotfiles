@@ -186,7 +186,6 @@ if [[ -z $homebrew_all_flag ]]; then
 	    sudo -u $SUDO_USER brew upgrade
 
 	    cleaning 'brews'
-	    sudo -u $SUDO_USER brew cleanup -ns
 	    sudo -u $SUDO_USER brew cleanup -s
 	else
 	    echo -e "${Color_Green}brews already up-to-date!${Color_zOff}"
@@ -201,7 +200,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	    sudo -u $SUDO_USER brew cask upgrade
 
 	    cleaning 'casks'
-	    sudo -u $SUDO_USER brew cleanup
+	    sudo -u $SUDO_USER brew cleanup -s
 	else
 	    echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
 	fi
