@@ -951,6 +951,8 @@ alias pumpitup='maxvolume'
 alias haxx="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
 # Seriously though, just use pianobar/pandora
+alias pianobar='pianokeys && pianobar' # Use media keys with pianobar
+alias piano='pianobar'		       # Allow autocomplete to work
 alias pandora='pianobar'
 # old habits die hard
 alias mplayer='mpv'
