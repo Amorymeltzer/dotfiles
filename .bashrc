@@ -1322,29 +1322,6 @@ function weather() {
     fi
 }
 
-# FIXME TODO
-function sunrise()
-{
-    local zip
-    if [ ! $1 ]; then
-	zip="01720";
-	#	zip=$(curl -s api.hostip.info/get_html.php?ip=$(curl -s icanhazip.com) | sed -e'1d;3d' -e's/C.*: \(.*\)/\1/' -e's/ /%20/g' -e"s/'/%27/g" -e"s/-/%2d/g")
-    else
-	zip=$1;
-    fi
-    #  forecast=$(curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip" | perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';)
-    forecast=$(curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip")
-    if [[ -n "${forecast}" ]]; then
-	echo "Forecast for $zip";
-	#  sunrise=$(echo -n $forecast | perl -ne '/<sunrise>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';)
-	sunrise=$(echo -n $forecast | grep -iA 2 sunrise)
-	echo "$sunrise"
-    else
-	echo "Unable to find sunrise/sunset"
-    fi
-}
-alias sunset='sunrise'
-
 # From https://gist.github.com/komasaru/9635884
 # Busted, replace with https://www.aviationweather.gov/metar FIXME TODO
 function metar()
