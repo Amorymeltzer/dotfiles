@@ -1305,25 +1305,22 @@ function findlocation() {
 alias getcoordinates='findlocation'
 
 # Get the weather
-# Or just use curl wttr.in? FIXME TODO
 function weather() {
-    local zip
-    if [ ! $1 ]; then
-	zip="01720";
-	#	zip=$(curl -s api.hostip.info/get_html.php?ip=$(curl -s icanhazip.com) | sed -e'1d;3d' -e's/C.*: \(.*\)/\1/' -e's/ /%20/g' -e"s/'/%27/g" -e"s/-/%2d/g")
-    else
-	zip=$1;
+    local where
+    if [ $1 ]; then
+	where=$1;
     fi
-    forecast=$(curl -s "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=$zip" | perl -ne '/<title>([^<]+)/&&printf "%s: ",$1;/<fcttext>([^<]+)/&&print $1,"\n"';)
-    if [[ -n "${forecast}" ]]; then
-	echo "Forecast for $zip";
-	echo "$forecast"
+    if [[ $where =~ help ]]; then
+	curl wttr.in/:help
     else
-	echo "Unable to forecast weather"
+	forecast=$(curl -sH "Accept-Language: ${LANG%_*}" wttr.in/"$where")
+	if [[ -n "${forecast}" ]]; then
+	    echo "$forecast"
+	else
+	    echo "Unable to forecast weather"
+	fi
     fi
 }
-# Just today
-alias today='weather | head -n 2 | tail -n 1'
 
 # FIXME TODO
 function sunrise()
