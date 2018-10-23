@@ -37,6 +37,7 @@ precomposeunicode = false
 
 [commit]
 verbose = true
+gpgsign = true
 
 [diff]
 compactionHeuristic = true
