@@ -273,6 +273,8 @@ bind "set completion-prefix-display-length 2"
 bind "set page-completions off"
 # be more intellgigent about autocompleting in the middle of word
 bind "set skip-completed-text on"
+# change tab to cycle through matches
+# bind 'TAB: menu-complete'
 # ask if sure for >125 items intead of 100
 bind "set completion-query-items 125"
 # only if start with .
