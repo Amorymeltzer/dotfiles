@@ -1250,7 +1250,16 @@ pass ()
     echo "With spaces (easier to memorize): $pass"
     echo "Without (use this as the pass): $(echo $pass | tr -d ' ')"
 }
-
+# Same, but from /dev/urandom
+randpass ()
+{
+    local length=$1
+    if [[ -z $length ]]; then
+	length=8
+    fi
+    echo $(cat /dev/urandom | env LC_CTYPE=C tr -cd "[:alnum:]" | head -c $length)
+    echo $(cat /dev/urandom | env LC_CTYPE=C tr -cd "[:graph:]" | head -c $length)
+}
 
 # Dashboard stock prices, use ticker for price, stockclose for last close
 function marketupdate() {
