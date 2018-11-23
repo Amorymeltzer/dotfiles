@@ -1304,6 +1304,11 @@ function bitcoin() {
     echo -e "BTC: $five";
 }
 
+# Update crathighlighter
+function crathighlighter() {
+    (cd ~/Documents/perl/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl)
+}
+
 # Get coordinates
 function findlocation() {
     local place
