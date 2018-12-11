@@ -1291,19 +1291,6 @@ function robinhood-shell() {
     (cd ~/Documents/git/RobinhoodShell@anilshanbhag ; ./shell.py)
 }
 
-function btc() {
-    local five=$(curl -s 'https://www.coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
-    if [[ -n $five ]]; then
-	tail -n 1 ~/btc.csv
-	echo -e "$(date -u -v-5H +'%y-%m-%d %H:%M:%S')\t$five"
-	echo -e "$(date -u -v-5H +'%y-%m-%d %H:%M:%S')\t$five" >> ~/btc.csv
-    fi
-}
-function bitcoin() {
-    local five=$(curl -s 'https://www.coinbase.com/api/v1/currencies/exchange_rates' | perl -ne 'print "$1" if /btc_to_usd\":\"(.*?)\",/;';)
-    echo -e "BTC: $five";
-}
-
 # Update crathighlighter
 function crathighlighter() {
     (cd ~/Documents/perl/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl)
