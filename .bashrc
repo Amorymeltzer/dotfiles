@@ -1090,6 +1090,14 @@ alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 # Which processes are listening on ports
 alias eaves='lsof -iTCP -sTCP:LISTEN -P "$@"'
 
+# Change mac address https://jezenthomas.com/free-internet-on-trains/
+function remac {
+  sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -z
+  sudo ifconfig en0 ether $(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')
+  sudo networksetup -detectnewhardware
+  echo $(ifconfig en0 | grep ether)
+}
+
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
     alias "$method"="lwp-request -m '$method'"
 done
