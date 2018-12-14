@@ -214,6 +214,7 @@
 ;; I really need to migrate to flycheck
 (delete '("\\.js\\'" flymake-javascript-init) flymake-allowed-file-name-masks)
 (delete '("\\.css\\'" flymake-css-init) flymake-allowed-file-name-masks)
+(setq js-indent-level 8)
 
 ;; Static analysis can be slow, so only run flymake if I've not been typing for 5 seconds.
 ;; It will still run on save or hitting return.
