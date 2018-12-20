@@ -204,6 +204,16 @@
 ;; (whinify)
 
 
+;; js-mode stuff
+(setq js-indent-level 8)
+;; Use js2-mode https://github.com/mooz/js2-mode
+(require 'js2-mode)
+(require 'js2-imenu-extras)
+(add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Flymake stuff
 ;; Really should use flycheck if emacs >= 24 and revert back to flymake
@@ -214,7 +224,6 @@
 ;; I really need to migrate to flycheck
 (delete '("\\.js\\'" flymake-javascript-init) flymake-allowed-file-name-masks)
 (delete '("\\.css\\'" flymake-css-init) flymake-allowed-file-name-masks)
-(setq js-indent-level 8)
 
 ;; Static analysis can be slow, so only run flymake if I've not been typing for 5 seconds.
 ;; It will still run on save or hitting return.
