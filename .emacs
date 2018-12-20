@@ -213,6 +213,15 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
+;; js2-refactor https://github.com/magnars/js2-refactor.el
+;; Requires yasnippet and multiple-cursors
+;; https://github.com/joaotavora/yasnippet and https://github.com/magnars/multiple-cursors.el
+;; Should probably learn to use, seems useful
+(require 'js2-refactor)
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(js2r-add-keybindings-with-prefix "C-c C-m")
+(setq js2-skip-preprocessor-directives t)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Flymake stuff
