@@ -1841,19 +1841,6 @@ idle for SECS seconds." t)
     (format-time-string format time)))
 
 
-;;; Maybe set up a modemap for definitions?  ;;;;;; ##### FIXME TODO
-(autoload 'dictionary-search "dictionary"
-  "Ask for a word and search it in all dictionaries" t)
-(autoload 'dictionary-match-words "dictionary"
-  "Ask for a word and search all matching words in the dictionaries" t)
-(autoload 'dictionary "dictionary"
-  "Create a new dictionary buffer" t)
-(autoload 'dictionary-lookup-definition "dictionary"
-  "Unconditionally lookup the word at point." t)
-(global-set-key (kbd "C-c C-n") 'dictionary-search)
-(global-set-key (kbd "C-c C-m") 'dictionary-match-words)
-
-
 (defvar open-dictionary-hist)
 (defun open-dictionary (the-word)
   "Open Dictionary.app for the-word"
