@@ -219,7 +219,8 @@
 ;; Should probably learn to use, seems useful
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
-(js2r-add-keybindings-with-prefix "C-c C-m")
+;; (js2r-add-keybindings-with-prefix "C-c C-m")
+(js2r-add-keybindings-with-prefix "C-c m")
 (setq js2-skip-preprocessor-directives t)
 
 
