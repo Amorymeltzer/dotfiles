@@ -587,6 +587,7 @@ alias m='more'
 #alias c='cat'
 alias j="jobs"
 alias h='history 15'
+alias hig='history | grep -i'
 alias cl='clear'
 alias cls='clear'
 alias em='emacs'
