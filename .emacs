@@ -1324,8 +1324,8 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (global-hl-line-mode 1)
 ;; (column-highlight-mode 1)
 ;; Show when idle
-(toggle-hl-line-when-idle 1)
-(toggle-highlight-column-when-idle 1)
+;; (toggle-hl-line-when-idle 1)
+;; (toggle-highlight-column-when-idle 1)
 ;; Customize hl-line, etc. colors
 (set-face-attribute 'hl-line nil :background "black" :foreground "white")
 ;; (set-face-attribute 'col-highlight
