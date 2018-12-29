@@ -2152,6 +2152,17 @@ This checks in turn:
 ;; Search more than just commands but eh, I never use...
 (define-key 'help-command "a" 'apropos)
 
+;; helpful, a better help buffer
+;; https://github.com/Wilfred/helpful
+;; Depends on elisp-refs, loop, and shut-up
+(require 'helpful)
+(global-set-key (kbd "C-h f") #'helpful-callable)
+(global-set-key (kbd "C-h v") #'helpful-variable)
+(global-set-key (kbd "C-h k") #'helpful-key)
+(global-set-key (kbd "C-c C-d") #'helpful-at-point)
+(global-set-key (kbd "C-h F") #'helpful-function)
+(global-set-key (kbd "C-h C") #'helpful-command)
+
 
 ;; Don't have ruby-mode auto-insert coding utf-8 info on files
 (setq ruby-insert-encoding-magic-comment nil)
