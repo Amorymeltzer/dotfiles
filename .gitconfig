@@ -15,6 +15,7 @@ helper = osxkeychain
 editor = emacs
 # Use custom `.gitignore`
 excludesfile = ~/.global-gitignore
+pager = diff-so-fancy | less --tabs=4 -RFX
 
 # Treat spaces before tabs, lines that are indented with 8 or more spaces,
 # and all kinds of trailing whitespace as an error
@@ -155,9 +156,10 @@ pa = push Amorymeltzer
 pam = push Amorymeltzer master
 please = push --force-with-lease
 
-d = diff --word-diff
-df = diff --word-diff
-dc = diff --cached --word-diff
+d = diff
+dw = diff --word-diff
+dc = diff --cached
+dwc = diff --cached --word-diff
 ds = diff --patch-with-stat
 dsc = diff --cached --patch-with-stat
 dcs = diff --cached --patch-with-stat
@@ -258,7 +260,7 @@ textconv = hexdump -v -C
 
 [color]
 # Use colors in Git commands that are capable of colored output when outputting to the terminal
-ui = auto
+ui = true
 
 [color "branch"]
 current = cyan reverse
@@ -268,13 +270,21 @@ remote = green
 [color "diff"]
 meta = white
 frag = magenta bold
-old = red
-new = green
+old = red bold
+new = green bold
+commit = yellow bold
+whitespace = red reverse
 
 [color "status"]
 added = magenta
 changed = green
 untracked = cyan
+
+[color "diff-highlight"]
+oldNormal = red bold
+oldHighlight = red bold 52
+newNormal = green bold
+newHighlight = green bold 22
 
 [gc]
 auto = 256
@@ -310,4 +320,4 @@ required = true
 clean = git media clean %f
 smudge = git media smudge %f
 [rebase]
-	autostash = true
+autostash = true
