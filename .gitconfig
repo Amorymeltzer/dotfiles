@@ -231,6 +231,9 @@ dad = "!curl https://icanhazdadjoke.com/"
 [pull]
 ff = only
 
+[fetch]
+prune = true
+
 [rebase]
 # --autostash: Automatically stash before rebase; allows for dirty rebases
 autoStash = true
