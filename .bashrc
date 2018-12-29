@@ -79,7 +79,7 @@ function g {
     fi
 }
 
-alias gb='git b'
+alias gb='git branch'
 alias gcb='git copy-branch-name'
 alias gco='git co'
 alias gg='git go'

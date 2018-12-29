@@ -118,16 +118,17 @@ rl = reflog --decorate
 
 cl = clone
 
-b = branch
-br = branch
-
-# Show verbose output about tags, branches or remotes
+# Show verbose output
 tags = tag -l
-branches = branch -a
 remotes = remote -v
 
-branchdata = branch -a -vv
+b = branch
+br = branch
+bv = branch -vv
+branches = branch -vv
+ba = branch -a -vv
 brd = branch -a -vv
+branch-name = copy-branch-name
 
 # Create and/or go to a branch
 go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
