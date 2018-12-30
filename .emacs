@@ -19,17 +19,6 @@
 
 ;; Notes
 
-;; Calendar mode
-;; http://www.emacswiki.org/emacs/CalendarMode
-;; M-x calendar, then p C-h for commands beginning with p, try also g
-;; C-spc, move, M-= for time between dates
-;;C-x ], Move ahead a year.
-;;9 M-}, Find out what day is 9 months from the day at point.
-;;. 177 C-b, Find out what day was 177 days ago.
-;;8 C-n, Move ahead 8 weeks
-;;g w, Go to a given week
-;;3 d, show diary for 3 days
-
 ;; M-x customize-group, then option, gives customizable things for .emacs
 ;; F1 or C-h for help, then b for all bindings
 ;; Anything, then C-h for all that begin with it (C-x, C-c)
@@ -1161,50 +1150,6 @@ current buffer" t)
 (global-set-key (kbd "C-c M-X") 'execute-extended-command)
 (setq smex-prompt-string "Smx ")
 (setq smex-history-length 256)
-
-;;;;;;;;;;;;;;;;;;;
-;; Calendar/Diary stuff
-(setq diary-file "~/diary")
-;; (setq mark-diary-entries-in-calendar t)
-;; When M-x diary, default is 1
-(setq number-of-diary-entries 5)
-(setq mark-holidays-in-calendar t)
-(global-set-key (kbd "C-c c") 'calendar)
-;; Mark the current day
-(add-hook 'today-visible-calendar-hook 'calendar-mark-today)
-
-;; Davis, CA
-(setq calendar-location-name "Davis, CA"
-      calendar-latitude [38 52 north]
-      calendar-longitude [121 65 west])
-
-;; NYC
-;; (setq calendar-location-name "New York, NY"
-;;       calendar-latitude [40 80 north]
-;;       calendar-longitude [73 97 west])
-
-;;; Scrolling
-;; Nothing works?
-;; Fix foolish calendar-mode scrolling.
-(add-hook 'calendar-load-hook
-	  '(lambda ()
-	     (define-key calendar-mode-map ">" 'scroll-calendar-left)
-	     (define-key calendar-mode-map "<" 'scroll-calendar-right)
-	     (define-key calendar-mode-map "\C-x>" 'scroll-calendar-left)
-	     (define-key calendar-mode-map "\C-x<" 'scroll-calendar-right)))
-
-;; ;(defun p-calendar-prefs () (interactive)
-;; (add-hook 'calendar-load-hook
-;;	  (lambda()
-;;		 (define-key calendar-mode-map [M-right] 'calendar-forward-month)
-;;		 (define-key calendar-mode-map [M-left] 'calendar-backward-month)
-;;		 (define-key calendar-mode-map [C-M-left] 'calendar-backward-year)
-;;		 (define-key calendar-mode-map [M-C-right] 'calendar-forward-year)))
-
-;; (add-hook 'calendar-load-hooks 'p-calendar-prefs)
-;; (add-hook 'calendar-after-frame-setup-hooks 'p-calendar-prefs)
-
-;;;;;;;;;;;;;;;;;;;
 
 ;; Cleaner, more meaningful narrow-to-region
 ;; https://github.com/Bruce-Connor/fancy-narrow
