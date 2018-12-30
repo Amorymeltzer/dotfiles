@@ -660,6 +660,7 @@ function emptyalltrashes() {
 alias mkdir='mkdir -pv'
 # Deleting intermediate directories not as logical?
 alias rmdir='rmdir -p'
+alias rd='rmdir'
 
 # mkdir then cd
 function mkcd() {
