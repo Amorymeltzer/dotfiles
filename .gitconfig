@@ -290,6 +290,9 @@ oldHighlight = red bold 52
 newNormal = green bold
 newHighlight = green bold 22
 
+[icdiff]
+options = --color-map='change:magenta_bold,meta:white'
+
 [gc]
 auto = 256
 
