@@ -902,10 +902,11 @@ current buffer" t)
 ;; (flx-ido-mode 1)
 ;; (setq ido-use-faces nil)
 
-;; Not exactly sure but it sounds nice, right?  Use ido-ubiquitous
+;; Not exactly sure but it sounds nice, right?  Use ido-completing-read+
 (setq ido-everywhere t)
-;; https://github.com/DarwinAwardWinner/ido-ubiquitous
-(require 'ido-ubiquitous)
+;; https://github.com/DarwinAwardWinner/ido-completing-read-plus
+;; Formerly ido-ubiquitous
+(require 'ido-completing-read+)
 (ido-ubiquitous-mode t)
 
 ;; Use ido for yes-or-no
