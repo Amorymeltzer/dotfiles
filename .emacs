@@ -1938,7 +1938,6 @@ in the buffer." t)
     (url-hexify-string (if mark-active
 			   (buffer-substring (region-beginning) (region-end))
 			 (read-string "DOI link: "))))))
-(global-set-key (kbd "C-c d") 'doi)
 
 (defun emacswiki ()
   "Search the EmacsWiki for a region or specific query."
@@ -1950,7 +1949,6 @@ in the buffer." t)
 			   (buffer-substring (region-beginning) (region-end))
 			 (read-string "Emacs: ")))
     "+site%3Aemacswiki.org")))
-(global-set-key (kbd "C-c e") 'emacswiki)
 
 
 ;; browse-url-of-buffer will render the url assigned to a buffer.  This tells
@@ -2152,6 +2150,7 @@ This checks in turn:
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
 (global-set-key (kbd "C-h k") #'helpful-key)
+(global-set-key (kbd "C-c d") #'helpful-at-point)
 (global-set-key (kbd "C-c C-d") #'helpful-at-point)
 (global-set-key (kbd "C-h F") #'helpful-function)
 (global-set-key (kbd "C-h C") #'helpful-command)
