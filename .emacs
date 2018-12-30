@@ -1669,15 +1669,8 @@ week. With two prefix arguments, add day of week and time."
 ;; On duplicate filenames, show paths not <2>
 ;; Default in 24.4?
 (require 'uniquify)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(uniquify-after-kill-buffer-p t)
- ;; '(uniquify-buffer-name-style (quote reverse) nil (uniquify)))
- '(uniquify-buffer-name-style (quote post-forward) nil (uniquify)))
-
+(setq uniquify-after-kill-buffer-p t)
+(setq uniquify-buffer-name-style 'post-forward)
 
 (defun checksum-region (s e)
   "Print a checksum (currently md5) of the region."
