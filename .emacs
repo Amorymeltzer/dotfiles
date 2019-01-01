@@ -2583,15 +2583,6 @@ This checks in turn:
 ;; (global-set-key (kbd "C-SOMETHING") 'indent-or-expand)
 
 
-;; Neat trick, should use somehow...
-;; https://stackoverflow.com/a/18407606/2521092
-(defvar script-name "~/bin/marketupdate.sh")
-(defun call-my-script-with-word ()
-  (interactive)
-  (shell-command
-   (concat script-name " " (thing-at-point 'word))))
-
-
 ;; Diminish
 ;; Hide extraneous minor modeline crap I don't like
 ;; At the end so I nothing throws an error
