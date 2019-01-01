@@ -184,6 +184,9 @@
 (require 'keep-buffers)
 (keep-buffers-mode 1)
 
+;; Default 10
+(setq buffers-menu-max-size 30)
+
 ;; Subword mode (consider CamelCase chunks as words)
 (global-subword-mode 1)
 
@@ -2392,7 +2395,7 @@ This checks in turn:
 
 ;;; Byte-compile everthing in .emacs.d folder
 ;; Required for byte-compilation not to fail???
-(setq byte-compilation-scroll-output t)
+(setq compilation-scroll-output t)
 ;; In shell: emacs -batch -f batch-byte-compile ~/.emacs.d/**/*.el
 ;; Aliased(ish) to recompile_emacs
 (defun byte-compile-init-dir ()
