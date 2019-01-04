@@ -492,7 +492,8 @@ complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | g
 complete -F _python python3.4
 
 # z, the awesome helper for moving around to popular directories
-. ~/.z.sh
+# Installed via macports
+. /opt/local/etc/profile.d/z.sh
 
 
 # Make CPAN always select the default option
