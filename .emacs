@@ -1624,6 +1624,11 @@ week. With two prefix arguments, add day of week and time."
   (message (md5 (buffer-substring s e))))
 (defalias 'md5-region 'checksum-region)
 
+(defun region-length ()
+  "Calculate length of the selected region."
+  (interactive)
+  (message (format "%d" (- (region-end) (region-beginning)))))
+
 ;;; Modeline tickers, require request.el
 ;; Stock tickers, https://github.com/hagleitn/stock-ticker
 (autoload 'stock-ticker-global-mode "stock-ticker" "Display stock prives in
