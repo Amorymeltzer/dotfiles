@@ -300,6 +300,7 @@ When there's no active region, act on the buffer."
 
 ;; Control other windows easier
 (global-set-key (kbd "C-M-t") 'scroll-other-window-down)
+(defalias 'scroll-other-window-up 'scroll-other-window)
 ;; Mess around with defaults
 (global-set-key (kbd "M-,") 'beginning-of-buffer)
 (global-set-key (kbd "M-.") 'end-of-buffer)
