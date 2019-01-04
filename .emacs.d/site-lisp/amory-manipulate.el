@@ -278,8 +278,13 @@ When there's no active region, act on the buffer."
 
 ;; Easily switch to specific window using numbers (if >2)
 ;; https://github.com/dimitri/switch-window
-(require 'switch-window)
-(global-set-key (kbd "C-x C-o") 'switch-window)
+;; (require 'switch-window)
+;; (global-set-key (kbd "C-x C-o") 'switch-window)
+;; Use ace-window instead
+;; https://github.com/abo-abo/ace-window
+;; (require 'ace-window)
+(autoload 'ace-window "ace-window" "Quickly switch windows" t)
+(global-set-key (kbd "C-x C-o") 'ace-window)
 
 ;; FIXME TODO;;;;;;;;;; ##########
 ;; What's broken???
