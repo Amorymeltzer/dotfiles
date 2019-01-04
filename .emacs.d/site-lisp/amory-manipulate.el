@@ -1,5 +1,8 @@
 ;;; amory-manipulate.el --- Manipulate lines and comments, move around
 
+;; Split nicer
+(setq split-window-keep-point nil)
+
 ;; ;;;;;; ##### FIXME TODO
 (defun move-line-up ()
   "Move up the current line."
