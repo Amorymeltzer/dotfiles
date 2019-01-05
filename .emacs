@@ -99,6 +99,16 @@
 (require 'ac-html)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; yasnippet, loaded here to allow in hippie-expand
+;; https://github.com/joaotavora/yasnippet and
+;; https://github.com/AndreaCrotti/yasnippet-snippets
+(require 'yasnippet)
+(setq yas-snippet-dirs '("~/.emacs.d/site-lisp/snippets"))
+(setq yas-wrap-around-region t)		; Set region to $0
+(define-key yas-minor-mode-map (kbd "C-c C-i") 'yas-insert-snippet) ; C-c tab
+(yas-reload-all)
+(add-hook 'prog-mode-hook #'yas-minor-mode)
+
 ;; Default M-/ is dabbrev-expand, but this is broken? ;;;;; ###### FIXME TODO
 ;; (global-set-key "\M-/" 'auto-complete)
 ;; Hippie expand expands lines, kind of like above but indiscriminate
@@ -113,7 +123,8 @@
 
 ;; Sometimes hippie is a little TOO hip.  Reorder the list so that expand-line
 ;; and expand-list come much, much later, definitely after expand-dabbrev
-(setq hippie-expand-try-functions-list '(try-complete-file-name-partially
+(setq hippie-expand-try-functions-list '(yas-hippie-try-expand
+					 try-complete-file-name-partially
 					 try-complete-file-name
 					 try-expand-all-abbrevs
 					 try-expand-dabbrev
@@ -207,7 +218,7 @@
 
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
 ;; Requires yasnippet and multiple-cursors
-;; https://github.com/joaotavora/yasnippet and https://github.com/magnars/multiple-cursors.el
+;; https://github.com/magnars/multiple-cursors.el
 ;; Should probably learn to use, seems useful
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
