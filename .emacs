@@ -214,6 +214,11 @@
 ;; (js2r-add-keybindings-with-prefix "C-c C-m")
 (js2r-add-keybindings-with-prefix "C-c m")
 (setq js2-skip-preprocessor-directives t)
+;; emmet-mode expansions, super cool if I ever remember (use C-j)
+;; https://github.com/smihica/emmet-mode
+(autoload 'emmet-mode "emmet-mode")
+(add-hook 'js2-mode-hook  'emmet-mode)
+(add-hook 'css-mode-hook  'emmet-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2591,10 +2596,11 @@ This checks in turn:
 
 ;; Diminish
 ;; Hide extraneous minor modeline crap I don't like
-;; At the end so I nothing throws an error
+;; At the end so that nothing throws an error
 (require 'diminish)
 (diminish 'auto-complete-mode "ac")
 (diminish 'flymake-mode "Fly")
+(eval-after-load "emmet-mode" '(diminish 'emmet-mode "Emm"))
 (diminish 'isearch-mode)
 ;; (diminish 'jiggle-mode)
 (diminish 'abbrev-mode "Abv")
@@ -2627,6 +2633,8 @@ This checks in turn:
 
 (rename-modeline "lisp-mode" emacs-lisp-mode "Elisp")
 (rename-modeline "sh-script" sh-mode "Shell")
+(rename-modeline "js2-mode" js2-mode "Js2")
+(rename-modeline "js" js-mode "Js")
 
 ;; Follow-mode on the mode line
 ;; https://stackoverflow.com/q/11326350/2521092
