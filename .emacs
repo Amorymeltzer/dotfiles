@@ -77,6 +77,9 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Indent if possible but complete otherwise
+(setq-default tab-always-indent 'complete)
+
 ;; Auto complete
 ;; http://cx4a.org/software/auto-complete/manual.html#Configuration
 (require 'auto-complete-config)
@@ -84,7 +87,7 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/site-lisp/ac-dict")
 
 ;; Characters entered before started, up=efficient, down=slower
-;; (setq ac-auto-start 4)
+(setq ac-auto-start 3)
 ;; Turn auto menu off
 ;; (setq ac-auto-start nil)
 
