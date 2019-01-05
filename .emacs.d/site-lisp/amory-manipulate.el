@@ -184,7 +184,6 @@ two windows."
 
 
 ;; Display line numbers temporarily when calling goto-line
-;; Don't use goto-line ;;;;;; ##### FIXME TODO
 ;; Looks messed up if linum-relative is called FIXME TODO
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
 (defun goto-line-with-feedback ()
@@ -193,7 +192,9 @@ two windows."
   (unwind-protect
       (progn
 	(display-line-numbers-mode 1)
-	(goto-line (read-number "Goto line: ")))
+	(let ((linenum (read-number "Goto line: ")))
+	  (goto-char (point-min))
+	  (forward-line (1- linenum))))
     (display-line-numbers-mode -1)))
 
 ;; Show relative line number
