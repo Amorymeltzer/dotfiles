@@ -359,7 +359,7 @@ function _job_color()
     if [ $(jobs -s | wc -l) -gt "0" ]; then
 	echo -en ${Color_Red_Bold_Intense}
     elif [ $(jobs -r | wc -l) -gt "0" ] ; then
-	echo -en ${Color_Cyan}
+	echo -en ${Color_Yellow_Intense}
     fi
 }
 
