@@ -2867,3 +2867,4 @@ instead."
 ;; (when (require 'time-date nil t)
 ;;   (message "Emacs startup time: %d seconds." (time-to-seconds (time-since emacs-load-start-time))))
 (message "Emacs loaded at %s." (wm-format-time-string "%T %a %d %b %y"))
+(server-start)

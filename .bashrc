@@ -356,9 +356,9 @@ function _load_color()
 # Return a color according to running/suspended jobs.
 function _job_color()
 {
-    if [ $(jobs -s | wc -l) -gt "0" ]; then
+    if [ $(jobs -s | wc -l) -gt "0" ] || [ $(ls ${TMPDIR}/emacs$(id -u) | wc -l) -gt 0 ]; then
 	echo -en ${Color_Red_Bold_Intense}
-    elif [ $(jobs -r | wc -l) -gt "0" ] ; then
+    elif [ $(jobs -r | wc -l) -gt "0" ]; then
 	echo -en ${Color_Yellow_Intense}
     fi
 }
@@ -532,6 +532,22 @@ if [[ -f `command -v tidy` ]]; then
     export HTML_TIDY=~/.tidyrc
 fi
 
+## Emacs stuff
+# Recompile all elisp files, with proper warnings/output
+# Here to avoid the aliases below
+function recompile_emacs() {
+    emacs -batch --eval '(byte-recompile-directory "~/.emacs.d/" 0)'
+}
+alias ii=recompile_emacs
+# emacs daemon/emacsclient
+alias emd='\emacs --daemon '
+alias emacsclient='\emacsclient -cqu '
+alias emacs='emacsclient '
+export EDITOR='emacs'
+export ALTERNATE_EDITOR=""
+alias killemacs-server="\emacsclient -e '(kill-emacs)'"
+alias kemacs-server='killemacs-server'
+alias ke='kemacs-server'
 
 # Make customization easier
 alias bashrc='emacs ~/.bashrc'
@@ -591,8 +607,9 @@ alias h='history 15'
 alias hig='history | grep -i'
 alias cl='clear'
 alias cls='clear'
-alias em='emacs'
 alias e='$EDITOR'
+alias ec='emacsclient'
+alias em='emacs'
 alias count='wc -l'
 alias linecount='count'
 
@@ -875,12 +892,6 @@ function newbash() {
     fi
 }
 alias nbash='newbash'
-
-# Recompile all elisp files, with proper warnings/output
-function recompile_emacs() {
-    emacs -batch --eval '(byte-recompile-directory "~/.emacs.d/" 0)'
-}
-alias ii=recompile_emacs
 
 alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 

@@ -12,7 +12,7 @@ email = Amorymeltzer@gmail.com
 helper = osxkeychain
 
 [core]
-editor = emacs
+editor = emacsclient -cqu
 # Use custom `.gitignore`
 excludesfile = ~/.global-gitignore
 pager = diff-so-fancy | less --tabs=4 -RFX
