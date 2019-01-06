@@ -1502,7 +1502,7 @@ when in source code modes such as python-mode or perl-mode" t)
   "Interactively jump to another visible window based on it's
 `buffer-name' using `ido-completing-read'"
   (interactive)
-  (let* ((visible-buffers (mapcar '(lambda (window) (window-buffer window)) (window-list)))
+  (let* ((visible-buffers (mapcar #'(lambda (window) (window-buffer window)) (window-list)))
 	 (sorted-visible-buffers (dka-sort-by-other-list visible-buffers (buffer-list)))
 	 (rotated-buffer-list (rotate-list sorted-visible-buffers 1))
 	 (visible-buffer-names (mapcar (lambda (buffer) (buffer-name buffer)) rotated-buffer-list))
@@ -1511,7 +1511,7 @@ when in source code modes such as python-mode or perl-mode" t)
 					   nil t))
 	 (window-of-buffer
 	  (delq nil
-		(mapcar '(lambda (window)
+		(mapcar #'(lambda (window)
 			   (if (equal buffer-name (buffer-name (window-buffer window)))
 			       window nil)) (window-list)))))
     (select-window (car window-of-buffer))))
