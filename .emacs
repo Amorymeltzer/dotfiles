@@ -232,6 +232,7 @@
 ;; https://github.com/smihica/emmet-mode
 (autoload 'emmet-mode "emmet-mode")
 (add-hook 'js2-mode-hook  'emmet-mode)
+(add-hook 'html-mode-hook  'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode)
 
 
