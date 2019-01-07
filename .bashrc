@@ -533,12 +533,6 @@ if [[ -f `command -v tidy` ]]; then
 fi
 
 ## Emacs stuff
-# Recompile all elisp files, with proper warnings/output
-# Here to avoid the aliases below
-function recompile_emacs() {
-    emacs -batch --eval '(byte-recompile-directory "~/.emacs.d/" 0)'
-}
-alias ii=recompile_emacs
 # emacs daemon/emacsclient
 alias emd='\emacs --daemon '
 alias emacsclient='\emacsclient -cqu '
@@ -548,6 +542,11 @@ export ALTERNATE_EDITOR=""
 alias killemacs-server="\emacsclient -e '(kill-emacs)'"
 alias kemacs-server='killemacs-server'
 alias ke='kemacs-server'
+# Recompile all elisp files, with proper warnings/output
+function recompile_emacs() {
+    \emacs -batch --eval '(byte-recompile-directory "~/.emacs.d/" 0)'
+}
+alias ii=recompile_emacs
 
 # Make customization easier
 alias bashrc='emacs ~/.bashrc'
@@ -568,6 +567,7 @@ function gitignore() {
     fi
     emacs $ignore
 }
+
 #  alias reload="exec $SHELL -l"
 alias reload='. ~/.bashrc'
 
