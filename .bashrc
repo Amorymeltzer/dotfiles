@@ -356,7 +356,7 @@ function _load_color()
 # Return a color according to running/suspended jobs.
 function _job_color()
 {
-    if [ $(jobs -s | wc -l) -gt "0" ] || [ $(ls ${TMPDIR}/emacs$(id -u) | wc -l) -gt 0 ]; then
+    if [ $(jobs -s | wc -l) -gt "0" ]; then
 	echo -en ${Color_Red_Bold_Intense}
     elif [ $(jobs -r | wc -l) -gt "0" ]; then
 	echo -en ${Color_Yellow_Intense}
