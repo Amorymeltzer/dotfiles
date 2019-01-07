@@ -289,6 +289,10 @@ When there's no active region, act on the buffer."
 ;; (require 'ace-window)
 (autoload 'ace-window "ace-window" "Quickly switch windows" t)
 (global-set-key (kbd "C-x C-o") 'ace-window)
+(set-face-attribute 'aw-leading-char-face nil
+		    :foreground "deep sky blue"
+		    :weight 'bold
+		    :height 3.0)
 
 ;; FIXME TODO;;;;;;;;;; ##########
 ;; What's broken???
