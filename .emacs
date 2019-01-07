@@ -419,11 +419,10 @@ backups." t)
 (setq recentf-filename-handlers (quote abbreviate-file-name))
 ;; Same as above?
 ;; (setq recentf-menu-filter (quote recentf-relative-filter))
-(setq recentf-max-saved-items 100)
+;; Try not to save remote files
+(setq recentf-keep '(file-remote-p file-readable-p))
+(setq recentf-max-saved-items 256)   ; 20 items ought to be enough for anybody
 (setq recentf-max-menu-items 30)
-
-;; Maybe just use ido-choose-from-recentf instead 'cause that's the point of ido
-(global-set-key (kbd "C-x f") 'recentf-open-files)
 
 ;; Exclude boring files
 (add-to-list 'recentf-exclude "\\.el.gz\\'")
@@ -1020,6 +1019,8 @@ current buffer" t)
 			  nil t))))
 (global-set-key (kbd "C-c r") 'ido-choose-from-recentf)
 (global-set-key (kbd "C-c C-r") 'ido-choose-from-recentf)
+;; (global-set-key (kbd "C-x f") 'recentf-open-files)
+(global-set-key (kbd "C-x f") 'ido-choose-from-recentf)
 
 ;; Alt for ido recentf, pretty sweet since shorter names...
 ;; Shouldn't really have both?
