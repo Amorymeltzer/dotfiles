@@ -1498,10 +1498,9 @@ function writetest() {
     dd if=/dev/zero of=/dev/null bs=1048576 count=32768;
 }
 
-# Find a file with a pattern in name:
-# Excluding a bunch of useless locations
+# Find a file with a pattern in name, excluding a bunch of useless locations
 function ff() {
-    find . -path './.cpan' -prune -o -path './.config' -prune -o -path './Library' -prune -o -path './.fseventsd' -prune -o -path './.Spotlight-V100' -prune -o -path './.Trashes' -prune -o -type f -iname '*'$*'*' -ls;
+    find . -path './.cpan' -prune -o - path './.git' -prune -o -path './.config' -prune -o -path './Library' -prune -o -path './.fseventsd' -prune -o -path './.Spotlight-V100' -prune -o -path './.Trashes' -prune -o -type f -iname '*'$*'*' -ls;
 }
 
 # Remove empty directories under and including <path>s.
