@@ -1,17 +1,12 @@
 #!/usr/bin/env port-tclsh
 # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
 #
-# Show the svn log of what changed since this port was installed.
-
-
-set MY_VERSION 0.1
-
+# Show the git log of what changed since this port was installed.
+set MY_VERSION 0.2
 
 proc printUsage {} {
-    puts "Usage: $::argv0 \[-hvV\] \[-t macports-tcl-path\] port-name"
+    puts "Usage: $::argv0 \[-hvV\] port-name"
     puts "  -h    This help"
-    puts "  -t    Give a different location for the base MacPorts Tcl"
-    puts "        file (defaults to /Library/Tcl)"
     puts "  -v    verbose output"
     puts "  -V    show version and MacPorts version being used"
     puts ""
@@ -21,7 +16,6 @@ proc printUsage {} {
 
 # Begin
 
-set macportsTclPath /Library/Tcl
 set verbose 0
 set showVersion 0
 
@@ -30,15 +24,6 @@ while {[string index [lindex $::argv 0] 0] == "-" } {
         h {
             printUsage
             exit 0
-        }
-        t {
-            if {[llength $::argv] < 2} {
-                puts "-t needs a path"
-                printUsage
-                exit 1
-            }
-            set macportsTclPath [lindex $::argv 1]
-            set ::argv [lrange $::argv 1 end]
         }
         v {
              set verbose 1
@@ -119,18 +104,54 @@ foreach i $ilist {
 set regref [registry::open_entry $portname $version_selected $revision_selected $variant_selected $epoch_selected]
 set installedDate [registry::property_retrieve $regref date]
 
-# get the svn log since then
+set sinceDate "[clock format $installedDate -format {%Y-%m-%dT%H:%M:%SZ} -gmt 1]"
+
+# get the git log since then
 array set portInfo [lindex $portSearchResult 1]
-set portSvnUrl http://svn.macports.org/repository/macports/trunk/dports/$portInfo(portdir)/Portfile
-if {[catch {set log [exec svn log -r "{[clock format $installedDate -format {%Y-%m-%dT%H:%M:%SZ} -gmt 1]}:HEAD" $portSvnUrl]}]} {
-    puts "error getting svn log"
+
+set portGitUrl https://api.github.com/repos/macports/macports-ports/commits?path=$portInfo(portdir)/Portfile&since=$sinceDate
+
+set tempfile [mktemp "/tmp/mports.whatsnew.XXXXXXXX"]
+set curl_options {}
+if {[catch {curl fetch {*}$curl_options ${portGitUrl} $tempfile} error]} {
+    puts "error getting git log $error"
     exit 1
 }
 
-if {[llength [split $log "\n"]] == 1} {
-    puts "No changes have been committed for $portname since you installed $portname @${version_selected}_$revision_selected$variant_selected on [clock format $installedDate -format {%Y-%m-%d at %H:%M:%S}]."
+set log {}
+set chan [open $tempfile "r"]
+
+while {1} {
+    set line [gets $chan]
+    if {[eof $chan]} {
+        close $chan
+        break
+    }
+    # "message" : "git commit message"
+    if {[string match "*message*" $line]} {
+        lappend log [set gitmessage [lindex [split $line \"] 3]]
+    }
+}
+
+file delete -force $tempfile
+
+if {[llength [split $log "\n"]] == 0} {
+    puts "No changes have been committed for $portname since you installed version ${version_selected}_$revision_selected$variant_selected on [clock format $installedDate -format {%Y-%m-%d at %H:%M:%S}]."
     exit 0
 }
 
-puts "The following changes have been committed for $portname since you installed $portname @${version_selected}_$revision_selected$variant_selected on [clock format $installedDate -format {%Y-%m-%d at %H:%M:%S}]:\n"
-puts $log
+puts "The following changes have been committed for $portname since you installed version ${version_selected}_$revision_selected$variant_selected on [clock format $installedDate -format {%Y-%m-%d at %H:%M:%S}]:"
+# This is still a hack - need better logic/display
+foreach messageline [lrange $log 0 end] {
+    # each git message should have a blank line after first line/summary
+    set list_x [split [string map [list {\n\n} "\x00"] $messageline] "\x00"]
+    foreach x $list_x first 1 {
+        if {$first == 1} {
+            puts $x
+        } else {
+            puts -nonewline "  "
+            puts [string map {\\n "  "} $x]
+        }
+        if !{$verbose} break;
+    }
+}
