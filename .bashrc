@@ -820,8 +820,6 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # Homebrew/Cask
 # Make homebrew verbose by defaults
 # export HOMEBREW_VERBOSE=1
-# Symlink in /Applications
-export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook"
 alias ball='brew update ; brew outdated ; brew upgrade'
 alias bclean='brew cleanup ; brew cleanup -s'
 alias bsearch='brew search'
@@ -833,6 +831,8 @@ function homebrew-deps()
     brew list | while read cask; do echo -en "${Color_Blue_Bold}$cask ->${Color_zOff}"; brew deps $cask | awk '{printf(" %s ", $0)}'; echo ""; done
 }
 # Homebrew-cask
+# Symlink in /Applications
+export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook"
 alias cask='brew cask'
 alias call='cask outdated; cask upgrade'
 alias cinfo='brew cask info'
@@ -843,30 +843,6 @@ alias cdoctor='brew cask doctor'
 # Auto open appcast and homepage urls
 alias cask-repair='cask-repair -l origin -p Amorymeltzer -a -o'
 
-# Calculate :checkpoint from url
-function checkpoint()
-{
-    local url
-    if [[ $1 ]]; then
-	url=$1
-    else
-	{ read -t 0.1 url; }	# Read from pipe; timeout if nothing
-    fi
-    if [[ ! $url ]]; then
-	echo "No url provided"
-	return
-    fi
-
-    local checkpoint=$(curl --silent --compressed "$url" | sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256 | awk '{ print $1 }')
-
-    if [[ $checkpoint == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' ]]; then
-	echo "Error: Appcast shasum appears to be empty"
-    else
-	echo $checkpoint
-	echo -n $checkpoint | pbcopy
-	echo "checkpoint copied to clipboard"
-    fi
-}
 
 # bundle exec alias
 alias be='bundle exec'
