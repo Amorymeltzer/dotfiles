@@ -1297,6 +1297,10 @@ function robinhood-shell() {
 function crathighlighter() {
     (cd ~/Documents/perl/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl)
 }
+# Check twinkle
+function twinkleCheck() {
+    (cd ~/Documents/perl/wiki/ ; perl twinkleCheck.pl)
+}
 
 # Get coordinates
 function findlocation() {
