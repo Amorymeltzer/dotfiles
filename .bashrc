@@ -537,8 +537,11 @@ fi
 alias emd='\emacs --daemon '
 alias emacsclient='\emacsclient -cqu '
 alias emacs='emacsclient '
-export EDITOR='emacs'
+export EDITOR='emacsclient -cqu'
 export ALTERNATE_EDITOR=""
+alias e='$EDITOR '
+alias ec='emacs '
+alias em='emacs '
 alias killemacs-server="\emacsclient -e '(kill-emacs)'"
 alias kemacs-server='killemacs-server'
 alias ke='kemacs-server'
@@ -607,9 +610,6 @@ alias h='history 15'
 alias hig='history | grep -i'
 alias cl='clear'
 alias cls='clear'
-alias e='$EDITOR'
-alias ec='emacsclient'
-alias em='emacs'
 alias count='wc -l'
 alias linecount='count'
 
