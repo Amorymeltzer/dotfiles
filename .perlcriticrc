@@ -20,6 +20,12 @@ lines = 20
 [ValuesAndExpressions::ProhibitMagicNumbers]
 allowed_values = all_integers
 
+# ProhibitStringyEval rightly prevents "eval $thing" but
+# the allow_includes let's a few minor cases sneak in
+# that I apparently find useful ("eval use diagnostics")
+[Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval]
+allow_includes = 1
+
 # Bump these up from level 1 to level 2
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 severity = 2
@@ -31,15 +37,11 @@ severity = 1
 # Lower from level 3 to level 2
 [ErrorHandling::RequireCarping]
 severity = 2
+# Just turn off
+# [-ErrorHandling::RequireCarping]
 
-# ProhibitStringyEval rightly prevents "eval $thing" but
-# the allow_includes let's a few minor cases sneak in
-# that I apparently find useful ("eval use diagnostics")
-[Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval]
-allow_includes = 1
-
-# I do not agree with these at all, so never load them
-[-CodeLayout::ProhibitHardTabs]
+## I do not agree with these at all, so never load them
+# [-CodeLayout::ProhibitHardTabs]
 # Requires /m flag on regex (^ and $ match line not just string)
 [-RegularExpressions::RequireLineBoundaryMatching]
 # Require /s flag on regex (. matches \n)
@@ -48,3 +50,5 @@ allow_includes = 1
 [-RegularExpressions::ProhibitEscapedMetacharacters]
 # Don't whine about using die or warn instead of croak or carp
 [-ErrorHandling::RequireCarping]
+# Don't demand long numbers have underscores, that's absurd
+[-ValuesAndExpressions::RequireNumberSeparators]
