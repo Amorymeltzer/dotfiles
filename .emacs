@@ -809,6 +809,7 @@ current buffer" t)
 ;; https://github.com/winterTTr/ace-jump-mode
 (require 'ace-jump-mode)
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+(setq ace-jump-mode-scope 'frame)	; Only look in current frame, not all windows
 
 ;; Reorder so line with one prefix, char with two
 (setq ace-jump-mode-submode-list
