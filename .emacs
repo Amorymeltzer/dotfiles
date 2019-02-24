@@ -1329,8 +1329,8 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; These guys share faces
 (progn
   (set-face-attribute 'hl-paren-face nil :weight 'bold)
-  (set-face-attribute 'show-paren-match nil :background "blue"
-		      :foreground "magenta")
+  (set-face-attribute 'show-paren-match nil :background "black"
+		      :foreground nil)
   (set-face-attribute 'show-paren-mismatch nil :background "red")
   (setq hl-paren-colors (quote ("red" "white" "green" "cyan"
 				"red" "white" "green" "cyan"))))
