@@ -600,8 +600,8 @@ alias dp="cd ~/Documents/perl"
 alias dps="cd ~/Documents/perl/sandbox"
 alias dpk="cd ~/Documents/perl/ksp"
 alias dpw="cd ~/Documents/perl/wiki"
-alias drk="cd ~/Dropbox/R/kinship/"
 alias dws="cd ~/Documents/perl/wiki/sysopIndex"
+alias drk="cd ~/Documents/R/kinship/"
 alias eds="cd ~/.emacs.d/site-lisp/"
 alias m='more'
 #alias c='cat'
@@ -1556,7 +1556,7 @@ function listen-youtube {
 # Generate family tree without polutting current directory
 function family()
 {
-    Rscript ~/Dropbox/R/kinship/family_tree.R
+    Rscript ~/Documents/R/kinship/family_tree.R
     rm Rplots.pdf
 }
 
