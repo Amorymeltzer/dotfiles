@@ -144,6 +144,8 @@ rebm = rebase master
 rebd = rebase dev
 # Interactive rebase with the selected number of latest commits
 rebi = "!r() { git rebase -i HEAD~$1; }; r"
+# As above, but with the --exec option
+rebix = "!r() { git rebase -i -x \"$2\" HEAD~$1; }; r"
 
 # Push and Pull
 po = push origin
