@@ -200,6 +200,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	    # sudo -u $SUDO_USER brew cask upgrade
 	    # Skip items that require a newer macOS, should probably just
 	    # update cask file
+	    # Just ust brew cu https://github.com/buo/homebrew-cask-upgrade
 	    sudo -u $SUDO_USER brew cask outdated|grep -v geotag|grep -v latest|grep -v nosleep|grep -v rstudio|xargs sudo -u $SUDO_USER brew cask upgrade
 
 	    cleaning 'casks'
