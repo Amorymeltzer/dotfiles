@@ -87,7 +87,7 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/site-lisp/ac-dict")
 
 ;; Characters entered before started, up=efficient, down=slower
-(setq ac-auto-start 3)
+(setq ac-auto-start 5)
 ;; Turn auto menu off
 ;; (setq ac-auto-start nil)
 
