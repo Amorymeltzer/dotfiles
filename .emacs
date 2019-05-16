@@ -312,7 +312,9 @@
 (add-hook 'prog-mode-hook 'whitespace-mode)
 ;; Highlight tabs, spaces, lines, parts oflines >80 chars
 ;; http://www.emacswiki.org/cgi-bin/wiki/EightyColumnRule
-(setq whitespace-style '(face empty lines-tail trailing space-before-tab))
+;; (setq whitespace-style '(face empty lines-tail trailing space-before-tab))
+;; No trailing lines: gets annoying, redundant to fci-mode
+(setq whitespace-style '(face empty trailing space-before-tab))
 
 ;; Not needed in emacsen >= 23 because of lines-tail above
 ;; Auto-color lines over 80 in length .\{81\}
