@@ -194,14 +194,16 @@ if [[ -z $homebrew_all_flag ]]; then
 
     if [[ -z $brewcask_flag ]]; then
 	cask_todo=$(sudo -u $SUDO_USER brew cask outdated)
+	# Skip items that require a newer macOS, should probably just
+	# update cask file or use brew cu
+	# https://github.com/buo/homebrew-cask-upgrade
+	cask_todo=$(echo $cask_todo|grep -v geotag|grep -v apple-juice|grep -v suspicious-package|grep -v gpg-suite|grep -v iterm2|grep -v latest|grep -v nosleep|grep -v rstudio)
 	if [[ -n $cask_todo ]]; then
 	    updating 'casks'
 	    echo "$cask_todo"
 	    # sudo -u $SUDO_USER brew cask upgrade
-	    # Skip items that require a newer macOS, should probably just
-	    # update cask file or use brew cu
-	    # https://github.com/buo/homebrew-cask-upgrade
-	    sudo -u $SUDO_USER brew cask outdated|grep -v geotag|grep -v apple-juice|grep -v suspicious-package|grep -v gpg-suite|grep -v iterm2|grep -v latest|grep -v nosleep|grep -v rstudio|xargs sudo -u $SUDO_USER brew cask upgrade
+	    echo $cask_todo|xargs sudo -u $SUDO_USER brew cask upgrade
+
 
 	    cleaning 'casks'
 	    sudo -u $SUDO_USER brew cleanup -s
