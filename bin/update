@@ -101,7 +101,7 @@ if [[ -z $macports_all_flag ]]; then
 		echo -e "${Color_Green}No leaves to clean!${Color_zOff}"
 	    fi
 	    cleaning 'ports'
-	    port clean -v --all installed
+	    port clean --all installed
 	fi
     else
 	echo -e "${Color_Green}Ports already up-to-date!${Color_zOff}"
