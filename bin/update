@@ -179,7 +179,8 @@ if [[ -z $homebrew_all_flag ]]; then
     updating 'Homebrew repository'
     sudo -u $SUDO_USER brew update
     if [[ -z $homebrew_flag ]]; then
-	brew_todo=$(sudo -u $SUDO_USER brew outdated)
+	# Skip items that require a newer macOS
+	brew_todo=$(sudo -u $SUDO_USER brew outdated|grep -v wallpaper)
 	if [[ -n $brew_todo ]]; then
 	    updating 'brews'
 	    echo "$brew_todo"
