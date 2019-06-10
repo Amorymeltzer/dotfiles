@@ -51,6 +51,13 @@ def check(dirname):
                 messages.append("=")
             elif re.search(r'Your branch and .* have diverged.?', out):
                 messages.append("⇵")
+        elif 'rebase in progress' in out:
+            messages.insert(0, " \033[0;33m")
+            rebase = re.search("currently rebasing branch '(\S+)' on '(\w+)'", out)
+            messages.insert(0, rebase.group(2))
+            messages.insert(0, "\033[0;31m on \033[0;33m")
+            messages.insert(0, rebase.group(1))
+            messages.insert(0, "\033[0;31mRebasing \033[0;33m")
         elif 'HEAD detached' in out:
             messages.insert(0, ' ')
             messages.insert(0, "\033[0;31m!!ERROR - DETACHED HEAD!!\033[0;33m")
