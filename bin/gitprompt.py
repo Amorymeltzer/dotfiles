@@ -51,9 +51,9 @@ def check(dirname):
                 messages.append("=")
             elif re.search(r'Your branch and .* have diverged.?', out):
                 messages.append("⇵")
-        elif 'rebase in progress' in out:
+        elif 'rebase in progress; onto' in out:
             messages.insert(0, " \033[0;33m")
-            rebase = re.search("currently rebasing branch '(\S+)' on '(\w+)'", out)
+            rebase = re.search("rebas(?:e|ing) branch '(\S+)' on '(\w+)'", out)
             messages.insert(0, rebase.group(2))
             messages.insert(0, "\033[0;31m on \033[0;33m")
             messages.insert(0, rebase.group(1))
