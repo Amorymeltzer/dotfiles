@@ -61,7 +61,7 @@ if [[ -f `command -v hub` ]] ; then
 fi
 # Quick
 function g {
-    local ref=$(git symbolic-ref HEAD 2> /dev/null)
+    local ref=$(git rev-parse --is-inside-work-tree 2> /dev/null)
     if [[ $ref ]]; then
 	if [[ $# > 0 ]]; then
             git "$@"
