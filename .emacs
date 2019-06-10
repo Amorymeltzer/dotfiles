@@ -923,6 +923,11 @@ current buffer" t)
 ;; Formerly ido-ubiquitous
 (require 'ido-completing-read+)
 (ido-ubiquitous-mode t)
+;; Fix for weird issue https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28774
+(defun ido-name (item)
+  ;; Return file name for current item, whether in a normal list
+  ;; or a merged work directory list.
+  (concat (if (consp item) (car item) item)))
 
 ;; Use ido for yes-or-no
 ;; https://github.com/DarwinAwardWinner/ido-yes-or-no
