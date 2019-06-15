@@ -184,7 +184,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	if [[ -n $brew_todo ]]; then
 	    updating 'brews'
 	    echo "$brew_todo"
-	    sudo -u $SUDO_USER brew upgrade
+	    echo $brew_todo|xargs sudo -u $SUDO_USER brew upgrade
 
 	    cleaning 'brews'
 	    sudo -u $SUDO_USER brew cleanup -s
