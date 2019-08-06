@@ -13,6 +13,7 @@ mkdir "$folderpath"
 for i in $userlist
 do
     cp "$ksppath/saves/$i/persistent.sfs" "$folderpath/$i.persistent.sfs"
+    cp "$ksppath/saves/$i/persistent.loadmeta" "$folderpath/$i.persistent.loadmeta"
 done
 
 ls -lFGh "$folderpath/"
