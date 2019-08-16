@@ -17,4 +17,4 @@ do
     cp "$ksppath/saves/$i/persistent.loadmeta" "$folderpath/$i/persistent.loadmeta"
 done
 
-ls -lFGhR "$folderpath/"
+ls -lFGhR "$folderpath"
