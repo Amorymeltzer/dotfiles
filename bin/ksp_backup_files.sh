@@ -3,7 +3,7 @@
 # Simply copy pilot files to a save directory
 
 dateandtime=$(date +%Y.%m.%d_%H%M%S)
-folderpath='/Users/Amory/Dropbox/KSPstuff/pilot_backups/'$dateandtime
+folderpath='/Users/Amory/Documents/pilot_backups/'$dateandtime
 ksppath='/Applications/KSP_osx'
 
 userlist=$(ls -1 $ksppath'/saves' | grep -v scenarios | grep -v training)
