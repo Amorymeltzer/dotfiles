@@ -1298,7 +1298,7 @@ function robinhood-shell() {
 
 # Update crathighlighter
 function crathighlighter() {
-    (cd ~/Documents/perl/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl)
+    (cd ~/Documents/perl/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl "$@")
 }
 # Check twinkle
 function twinkleCheck() {
