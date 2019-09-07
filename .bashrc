@@ -539,6 +539,7 @@ alias emacsclient='\emacsclient -cqu '
 alias emacs='emacsclient '
 export EDITOR='emacsclient -cqu'
 export ALTERNATE_EDITOR=""
+export VISUAL='emacsclient'
 alias e='$EDITOR '
 alias ec='emacs '
 alias em='emacs '

@@ -13,6 +13,7 @@ export MANPATH="/opt/local/share/perl5.24/siteman:/opt/local/share/perl5.24/man:
 
 # emacs > vim
 export EDITOR="emacs"
+export VISUAL="emacs"
 # Ignore sequential duplicates in history
 export HISTCONTROL=erasedups:ignoreboth
 # Up history size
