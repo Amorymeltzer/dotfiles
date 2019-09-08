@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Source: https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
+
+NUM=${NUM-10} # default to 10 lines
+
+# This: `awk ' !x[$0]++'` removes duplicates.  See http://stackoverflow.com/questions/11532157
+git reflog | egrep -io "moving from ([^[:space:]]+)" | awk '{ print $3 }' | awk ' !x[$0]++' | egrep -v '^[a-f0-9]{40}$' | head -n $NUM
