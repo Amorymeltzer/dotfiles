@@ -7,6 +7,8 @@ export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin
 export PATH="/opt/local/libexec/perl5.24/sitebin:$PATH"
 # add ~/bin
 export PATH="$HOME/bin:$PATH"
+# add git-extra-commands https://github.com/unixorn/git-extra-commands
+export PATH="$PATH:$HOME/documents/git/git-extra-commands@unixorn/bin"
 
 # Add unloved perl modules
 export MANPATH="/opt/local/share/perl5.24/siteman:/opt/local/share/perl5.24/man:$MANPATH"
