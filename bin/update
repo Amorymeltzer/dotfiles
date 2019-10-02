@@ -200,7 +200,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	cask_todo=$(sudo -u $SUDO_USER brew cask outdated --greedy --verbose|grep -v latest)
 	if [[ -n $cask_todo ]]; then
 	    updating 'casks'
-	    echo "$cask_todo"
+	    # echo "$cask_todo"
 	    sudo -u $SUDO_USER brew cu -aqy --no-brew-update
 
 	    cleaning 'casks'
