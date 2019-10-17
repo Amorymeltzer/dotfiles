@@ -42,6 +42,7 @@ gpgsign = true
 
 [diff]
 compactionHeuristic = true
+noprefix = true
 
 [alias]
 h = help
