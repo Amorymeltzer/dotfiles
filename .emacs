@@ -106,7 +106,7 @@
 ;; https://github.com/joaotavora/yasnippet and
 ;; https://github.com/AndreaCrotti/yasnippet-snippets
 (require 'yasnippet)
-(setq yas-snippet-dirs '("~/.emacs.d/site-lisp/snippets"))
+(setq yas-snippet-dirs '("~/.emacs.d/snippets" "~/.emacs.d/site-lisp/snippets"))
 (setq yas-wrap-around-region t)		; Set region to $0
 (define-key yas-minor-mode-map (kbd "C-c C-i") 'yas-insert-snippet) ; C-c tab
 (yas-reload-all)
