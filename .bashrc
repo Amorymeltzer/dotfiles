@@ -572,6 +572,9 @@ function gitignore() {
     emacs $ignore
 }
 
+# Javascript alias, can also just use node
+alias jsc='/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc '
+
 #  alias reload="exec $SHELL -l"
 alias reload='. ~/.bashrc'
 
