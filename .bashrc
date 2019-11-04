@@ -488,6 +488,10 @@ fi
 # networksetup completion
 complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
 
+# Only run pip if virtualenv activated
+# export PIP_REQUIRE_VIRTUALENV=true
+# https://snarky.ca/why-you-should-use-python-m-pip/
+alias pip='python -m pip '
 # Completion weird, but give some of it to 3.4?  ;;;;;; ##### FIXME TODO
 complete -F _python python3.4
 
