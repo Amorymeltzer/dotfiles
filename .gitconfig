@@ -40,6 +40,9 @@ precomposeunicode = false
 verbose = true
 gpgsign = true
 
+[gpg]
+program = /usr/local/bin/gpg
+
 [diff]
 compactionHeuristic = true
 noprefix = true
