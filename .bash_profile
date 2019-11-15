@@ -1,6 +1,7 @@
 # Path ------------------------------------------------------------
-# add MacPorts then Homebrew (duplicates /usr/local/bin) FIXME TODO
-export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:$PATH"
+# add MacPorts ahead of Homebrew (already present from /etc/paths)
+echo $PATH
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # Add python execs, not sure if this is the best but so be it
 export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
 # Add perl execs; again, not sure if this is best
