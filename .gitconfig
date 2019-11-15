@@ -344,3 +344,5 @@ clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
 [tiny-scripts]
 	remote = origin
+[ghi]
+	token = !security find-internet-password -a Amorymeltzer -s github.com -l 'ghi token' -w
