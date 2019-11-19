@@ -1,6 +1,5 @@
 # Path ------------------------------------------------------------
 # add MacPorts ahead of Homebrew (already present from /etc/paths)
-echo $PATH
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # Add python execs, not sure if this is the best but so be it
 export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
@@ -9,7 +8,10 @@ export PATH="/opt/local/libexec/perl5.24/sitebin:$PATH"
 # add ~/bin
 export PATH="$HOME/bin:$PATH"
 # add git-extra-commands https://github.com/unixorn/git-extra-commands
-export PATH="$PATH:$HOME/documents/git/git-extra-commands@unixorn/bin"
+export PATH="$PATH:$HOME/Documents/git/git-extra-commands@unixorn/bin"
+# add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
+# Don't need 'em all but better than alias/function-ing just a handful
+export PATH="$PATH:$HOME/Documents/git/tiny-scripts@vitorgalvao"
 
 # Add unloved perl modules
 export MANPATH="/opt/local/share/perl5.24/siteman:/opt/local/share/perl5.24/man:$MANPATH"

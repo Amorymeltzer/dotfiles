@@ -849,11 +849,6 @@ alias cinfo='brew cask info'
 alias clist='brew cask list'
 alias cdoctor='brew cask doctor'
 
-# origin & Amorymeltzer instead of upstream & origin
-# Auto open appcast and homepage urls
-alias cask-repair='cask-repair -l origin -p Amorymeltzer -a -o'
-
-
 # bundle exec alias
 alias be='bundle exec'
 alias bej='be jekyll serve --watch'
