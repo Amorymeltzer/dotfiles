@@ -305,6 +305,12 @@
 ;; Uses ~/.perltidyrc
 (require 'perltidy)
 
+
+;; editorconfig https://editorconfig.org/
+;; https://github.com/editorconfig/editorconfig-emacs
+(require 'editorconfig)
+(editorconfig-mode 1)
+
 ;; Whitespace
 (require 'whitespace)
 ;; Turn on globally, probably if better just for programming modes
@@ -2628,6 +2634,7 @@ This checks in turn:
 (diminish 'isearch-mode)
 ;; (diminish 'jiggle-mode)
 (diminish 'abbrev-mode "Abv")
+(diminish 'editorconfig-mode)
 (diminish 'whitespace-mode)
 (diminish 'global-whitespace-mode)
 (diminish 'auto-fill-function)
