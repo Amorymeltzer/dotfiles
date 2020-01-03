@@ -193,9 +193,10 @@ div = divergence
 # Credit an author on the latest commit
 credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
-# Get short SHA-1 for object
-sha = rev-parse --short HEAD
-hash = rev-parse HEAD
+# Copy sha hashes.  Trim new lines since sh's echo doesn't accept -n
+hash = "!r() { rev=$(git rev-parse HEAD); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
+short = "!r() { rev=$(git rev-parse --short HEAD); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
+sha = short
 
 unstage = reset HEAD --
 re = reset
