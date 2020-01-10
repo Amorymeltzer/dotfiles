@@ -26,6 +26,11 @@ allowed_values = all_integers
 [Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval]
 allow_includes = 1
 
+# Backticks are mostly fine and significantly simpler than using IPC::Open3,
+# so allow them when there's a return value
+[InputOutput::ProhibitBacktickOperators]
+only_in_void_context = 1
+
 # Bump these up from level 1 to level 2
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 severity = 2
