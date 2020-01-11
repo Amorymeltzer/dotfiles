@@ -59,14 +59,14 @@ done
 
 # Efficiently colorize
 updating () {
-    echo -e "${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
+    echo -e "$(date -u +'%H:%M') ${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 cleaning () {
-    echo -e "${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
+    echo -e "$(date -u +'%H:%M') ${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 # FIXME TODO
 checking () {
-    echo -e "${Color_Green}Checking ${Color_Magenta_Intense}$1${Color_zOff}..."
+    echo -e "$(date -u +'%H:%M') ${Color_Green}Checking ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 
 # Ask for sudo early
