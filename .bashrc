@@ -1209,6 +1209,7 @@ function diary()
     fi
     local title=$(date +"%A, %B %d, %Y")
     printf "## $title\n\n" > $today
+    printf "### Morning\n\n### Afternoon\n\n### Evening\n" >> $today
     echo "Created $today"
 }
 
