@@ -1203,14 +1203,13 @@ function backup-file-with-timestamp()
 function diary()
 {
     local today=$(date +"%Y-%m-%d").md
-    if [[ -e $today ]]; then
-	echo "$today already exists"
-	return
+    if [[ ! -f $today ]]; then
+	local title=$(date +"%A, %B %d, %Y")
+	printf "## $title\n\n" > $today
+	printf "### Morning\n\n### Afternoon\n\n### Evening\n" >> $today
     fi
-    local title=$(date +"%A, %B %d, %Y")
-    printf "## $title\n\n" > $today
-    printf "### Morning\n\n### Afternoon\n\n### Evening\n" >> $today
-    echo "Created $today"
+
+    emacs "$today"
 }
 
 # PlistBuddy alias, because sometimes `defaults` just doesn't cut it
