@@ -75,6 +75,7 @@ a = add
 aa = add -A
 all = add -A
 aas = "!git add -A; git status --short --branch"
+aac = "!git add -A; git commit -m"
 aca = "!git add -A; git commit --amend"
 acc = "!git add -A; git commit --amend --no-edit"
 
