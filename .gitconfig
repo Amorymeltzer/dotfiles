@@ -74,10 +74,12 @@ commend = commit --amend --no-edit
 a = add
 aa = add -A
 all = add -A
-aas = "!git add -A; git status --short --branch"
-aac = "!git add -A; git commit -m"
-aca = "!git add -A; git commit --amend"
-acc = "!git add -A; git commit --amend --no-edit"
+# Don't do anything unless there are any staged changes
+# More specific (staged) than diff-index
+aas = "!git add -A; git diff --staged --name-only --quiet || git status --short --branch"
+acm = "!git add -A; git diff --staged --name-only --quiet || git commit -m"
+aca = "!git add -A; git diff --staged --name-only --quiet || git commit --amend"
+acc = "!git add -A; git diff --staged --name-only --quiet || git commit --amend --no-edit"
 
 scan = "!~/bin/gscan"
 
