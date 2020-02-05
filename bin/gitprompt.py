@@ -32,8 +32,11 @@ def check(dirname):
             if 'Changes to be committed' in out:
                 messages.append("\033[0;35m!\033[0;33m")
         if 'On branch ' in out:
+            sha = run('git rev-parse --short HEAD 2>/dev/null')
+            messages.insert(0, "\033[0;30m@\033[0;33m"+sha+" ")
+
             branch = re.search('^On branch (.*)\n', out)
-            messages.insert(0, '\033[0;33m ')
+            messages.insert(0, '\033[0;33m')
             messages.insert(0, branch.group(1))
             if not re.search('^master$', branch.group(1)):
                 messages.insert(0, "\033[0;97m")
