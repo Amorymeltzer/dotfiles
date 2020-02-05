@@ -153,6 +153,9 @@ list-large-files = big-object-report
 
 rb = rebase
 reb = rebase
+rebc = rebase --continue
+reba = rebase --abort
+rebs = rebase --skip
 rbm = rebase master
 rebm = rebase master
 rebd = rebase dev
