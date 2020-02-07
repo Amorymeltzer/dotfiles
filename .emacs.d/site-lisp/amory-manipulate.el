@@ -82,17 +82,11 @@
   (let ((start-column (current-column)))
     (save-excursion
       (mark-line-and-copy) ; save-excursion restores mark
-      (back-to-indentation)
-      (insert comment-start)
-      (if (equal major-mode 'emacs-lisp-mode)
-	  (progn
-	    (insert comment-start)
-	    (insert comment-padding)))
       (forward-line 1)
       (yank))
-    (forward-line 1)
+    (comment-line 1)
     (move-to-column start-column))
-  (message "line dup'ed"))
+  (message "line commented and dup'ed"))
 
 (global-set-key "\M-k" 'mark-line-and-copy)
 (global-set-key (kbd "C-c C-y") 'duplicate-line)
