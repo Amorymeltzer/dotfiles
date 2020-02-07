@@ -1198,7 +1198,7 @@ current buffer" t)
 (autoload 'hide/show-comments-toggle "hide-comnt"
   "Toggle hiding/showing of comments in the active region or whole buffer." t)
 (defalias 'toggle-comments 'hide/show-comments-toggle)
-(global-set-key (kbd "C-x ;") 'toggle-comments)
+(global-set-key (kbd "C-x M-;") 'toggle-comments)
 ;; (global-set-key (kbd "C-x ;") 'comment-or-uncomment-region)
 ;; (global-set-key (kbd "C-x #") 'comment-or-uncomment-region)
 
