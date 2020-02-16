@@ -200,9 +200,6 @@ gnc = goodness --cached
 # FIXME TODO: Colorize
 div = divergence
 
-# Credit an author on the latest commit
-credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
-
 # Copy sha hashes.  Trim new lines since sh's echo doesn't accept -n
 hash = "!r() { h=${1:-HEAD}; rev=$(git rev-parse $h); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
 sha = "!r() { h=${1:-HEAD}; rev=$(git rev-parse --short $h); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
