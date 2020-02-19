@@ -1570,6 +1570,14 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key [(control c) (s)] 'shell-command)
 ;; C-c a to go to a terminal shell (ansi-term)
 (global-set-key [(control c) (a)] 'ansi-term)
+;; Copy current buffer file contents to clipboard
+(defun pbcopy-buffer ()
+  "Copy the contents of the current buffer to the GUI clipboard"
+  (interactive)
+  (shell-command-on-region (point-min) (point-max) "pbcopy")
+  (message "Copied contents of %s" buffer-file-name))
+(global-set-key [(control c) (p)] 'pbcopy-buffer)
+
 
 ;; Exit in (ansi-)term returns to the emacs buffer
 (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
