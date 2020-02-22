@@ -9,7 +9,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-bmMpPgrRnNcCekEKhH]
+Usage: $(basename $0) [-bmMpPgrRnNekEKcChH]
 
   -b		skip updating macports base, but 'port sync' to update tree
   -m		check for macports updates but don't upgrade
@@ -21,11 +21,11 @@ Usage: $(basename $0) [-bmMpPgrRnNcCekEKhH]
   -R		skip all ruby actions
   -n		check for npm nodejs updates (global) but don't upgrade
   -N		skip all npm nodejs actions
-  -c		check for cpan updates but don't upgrade
-  -C		skip all cpan actions
   -e		pull homebrew and hombrew-cask changes but don't upgrade homebrew
   -k		skip all homebrew-cask updates
   -E -K		skip all homebrew and homebrew-cask updates
+  -c		check for cpan updates but don't upgrade
+  -C		skip all cpan actions
   -h -H		this help
 END_HELP
 }
@@ -43,11 +43,11 @@ while getopts 'bcCeEgkKmMnNpPrRhH' opt; do
 	R) ruby_all_flag='2';;
 	n) npm_flag='1';;
 	N) npm_all_flag='2';;
-	c) cpan_flag='1';;
-	C) cpan_all_flag='2';;
 	e) homebrew_flag='1';;
 	k) brewcask_flag='1';;
 	E|K) homebrew_all_flag='2';;
+	c) cpan_flag='1';;
+	C) cpan_all_flag='2';;
 	h|H) help $0
 	     exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
@@ -158,22 +158,6 @@ if [[ -z $npm_all_flag ]]; then
     fi
 fi
 
-if [[ -z $cpan_all_flag ]]; then
-    checking 'CPAN modules'
-    cpan_todo=$(cpan-outdated --verbose)
-    if [[ -n $cpan_todo ]]; then
-	echo "$cpan_todo"
-	if [[ -z $cpan_flag ]]; then
-	    updating 'CPAN modules'
-	    cpan-outdated -p | xargs cpan -i
-	    cleaning 'CPAN directories'
-	    cpanclean;
-	fi
-    else
-	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
-    fi
-fi
-
 ## Should probably make this verbose or something
 if [[ -z $homebrew_all_flag ]]; then
     updating 'Homebrew repository'
@@ -210,3 +194,20 @@ if [[ -z $homebrew_all_flag ]]; then
 	fi
     fi
 fi
+
+if [[ -z $cpan_all_flag ]]; then
+    checking 'CPAN modules'
+    cpan_todo=$(cpan-outdated --verbose)
+    if [[ -n $cpan_todo ]]; then
+	echo "$cpan_todo"
+	if [[ -z $cpan_flag ]]; then
+	    updating 'CPAN modules'
+	    cpan-outdated -p | xargs cpan -i
+	    cleaning 'CPAN directories'
+	    cpanclean;
+	fi
+    else
+	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
+    fi
+fi
+
