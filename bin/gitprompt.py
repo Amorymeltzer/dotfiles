@@ -25,50 +25,44 @@ def check(dirname):
         if re.search(r'nothing to commit.?.?working tree clean.?', out):
             messages.append("=")
         else:
-            if 'Changes not staged for commit' in out:
-                messages.append("\033[0;32m+\033[0;33m")
             if 'Untracked files' in out:
                 messages.append("\033[0;36m?\033[0;33m")
+            if 'Changes not staged for commit' in out:
+                messages.append("\033[0;32m+\033[0;33m")
             if 'Changes to be committed' in out:
                 messages.append("\033[0;35m!\033[0;33m")
+            if 'Unmerged paths' in out:
+                messages.append("\033[0;31mU\033[0;33m") # diff --check maybe better
+
         if 'On branch ' in out:
             sha = run('git rev-parse --short HEAD 2>/dev/null')
-            messages.insert(0, "\033[0;30m@\033[0;33m"+sha+" ")
+            messages.insert(0, "\033[0;30m@\033[0;33m" + sha + " ")
 
             branch = re.search('^On branch (.*)\n', out)
-            messages.insert(0, '\033[0;33m')
-            messages.insert(0, branch.group(1))
+            messages.insert(0, branch.group(1) + "\033[0;33m")
             if not re.search('^master$', branch.group(1)):
                 messages.insert(0, "\033[0;97m")
             if 'Your branch is ahead of ' in out:
-                messages.append("→ ")
                 p = re.search("Your branch is ahead of .* by (\d+) commit", out)
-                messages.append(p.group(1))
+                messages.append("→ " + p.group(1))
             elif 'Your branch is behind ' in out:
                 # Of course the left unicode arrow is different than the right
-                messages.append("← (")
                 p = re.search("Your branch is behind .* by (\d+) commit", out)
-                messages.append(p.group(1))
-                messages.append("\033[0;33m)")
+                messages.append("← (" + p.group(1))
+                messages.append(")")
             elif 'Your branch is up to date with ' in out:
                 messages.append("=")
             elif re.search(r'Your branch and .* have diverged.?', out):
                 messages.append("⇵")
         elif 'rebase in progress; onto' in out:
-            messages.insert(0, "\033[0;33m")
-            if 'both modified' in out:
-                messages.insert(0, "\033[0;31mUU")
             rebase = re.search("rebas(?:e|ing) branch '(\S+)' on '(\w+)'", out)
-            messages.insert(0, rebase.group(2) + " ")
-            messages.insert(0, "\033[0;31m on \033[0;33m")
-            messages.insert(0, rebase.group(1))
-            messages.insert(0, "\033[0;31mRebasing \033[0;33m")
+            messages.insert(0, "\033[0;31m on \033[0;33m" + rebase.group(2) + " ")
+            messages.insert(0, "\033[0;31mRebasing \033[0;33m" + rebase.group(1))
         elif 'HEAD detached' in out:
-            messages.insert(0, ' ')
-            messages.insert(0, "\033[0;31m!!ERROR - DETACHED HEAD!!\033[0;33m")
+            messages.insert(0, "\033[0;31m!!ERROR - DETACHED HEAD!! ")
         else:
-            messages.insert(0, ' ')
-            messages.insert(0, "\033[0;31m!!ERROR - NOT ON A BRANCH!!\033[0;33m")
+            messages.insert(0, "\033[0;31m!!ERROR - NOT ON A BRANCH!! ")
+        messages.append("\033[0;33m")
     else:
         messages = ["-"]
 
