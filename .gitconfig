@@ -151,7 +151,8 @@ branch-name = copy-branch-name
 recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 
 # Create and/or go to a branch
-go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+# With git 2.23, uses switch -c; can do the same with checkout -b
+go = "!f() { git switch -c \"$1\" 2> /dev/null || git switch \"$1\"; }; f"
 
 # Easily rememberable
 remove-merged-branches = delete-merged-branches
