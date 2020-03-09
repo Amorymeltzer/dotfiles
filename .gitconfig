@@ -180,6 +180,7 @@ pod = push origin dev
 pum = pull --rebase origin master
 # Personal remote
 pa = push Amorymeltzer
+pau = push -u Amorymeltzer
 pam = push Amorymeltzer master
 please = push --force-with-lease
 
