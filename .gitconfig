@@ -196,6 +196,10 @@ icd = icdiff
 ic = icdiff
 icdc = icdiff --cached
 icc = icdiff --cached
+# Compare commit to the state before it
+dp = "!f() { c=${1:-HEAD}; git diff $c~ $c; }; f"
+idp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
+idpm = "!f() { c=${1:-HEAD}; git icdiff $c~ $c | more; }; f"
 
 patience = diff --patience
 
