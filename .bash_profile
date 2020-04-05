@@ -74,3 +74,6 @@ weather ?Qn0			# Uses wttr.in
 # The system copyright notice, the date and time of the last login, the
 # message of the day as well as other information is silenced via .hushlogin
 echo -ne "${Color_Red}Local time: ${Color_zOff}" ; date +'%a %b %d %H:%M:%S %Z %Y'
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
