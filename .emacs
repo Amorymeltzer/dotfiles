@@ -1944,6 +1944,16 @@ in the buffer." t)
 			 (read-string "Emacs: ")))
     "+site%3Aemacswiki.org")))
 
+(defun mdn ()
+  "Search Mozilla's MDN with a query or region if any."
+  (interactive)
+  (browse-url
+   (concat
+    "https://developer.mozilla.org/en-US/search?q="
+    (url-hexify-string (if mark-active
+			   (buffer-substring (region-beginning) (region-end))
+			 (read-string "Search MDN docs: "))))))
+(global-set-key (kbd "C-c j") 'mdn)
 
 ;; browse-url-of-buffer will render the url assigned to a buffer.  This tells
 ;; Emacs how to map a given filename to a url. Check out skewer
