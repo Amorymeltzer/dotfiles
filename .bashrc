@@ -1306,7 +1306,7 @@ function crathighlighter() {
 }
 # Check twinkle
 function twinkleCheck() {
-    (cd ~/Documents/perl/wiki/ ; perl twinkleCheck.pl $@)
+    (cd ~/Documents/perl/wiki/twinkle/ ; perl twinkleCheck.pl $@)
 }
 
 # Get coordinates
