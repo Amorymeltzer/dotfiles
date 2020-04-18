@@ -173,7 +173,7 @@ rebix = "!r() { git rebase -i -x \"$2\" HEAD~$1; }; r"
 
 # Push and Pull
 po = push origin
-pao = push -u origin
+pou = push -u origin
 pom = push origin master
 pog = push origin gh-pages
 pod = push origin dev
