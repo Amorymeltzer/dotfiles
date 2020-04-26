@@ -831,6 +831,8 @@ alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-what
 # Homebrew/Cask
 # Make homebrew verbose by defaults
 # export HOMEBREW_VERBOSE=1
+# Don't build from source
+export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=1
 alias ball='brew update ; brew outdated ; brew upgrade'
 alias bclean='brew cleanup ; brew cleanup -s'
 alias bsearch='brew search'
