@@ -170,6 +170,7 @@ rebd = rebase dev
 rebi = "!r() { git rebase -i HEAD~$1; }; r"
 # As above, but with the --exec option
 rebix = "!r() { git rebase -i -x \"$2\" HEAD~$1; }; r"
+rebim = rebase -i master
 
 # Push and Pull
 po = push origin
