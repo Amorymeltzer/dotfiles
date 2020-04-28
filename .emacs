@@ -1955,6 +1955,17 @@ in the buffer." t)
 			 (read-string "Search MDN docs: "))))))
 (global-set-key (kbd "C-c j") 'mdn)
 
+(defun devdocs ()
+  "Search devdocs.io with a query or region if any."
+  (interactive)
+  (browse-url
+   (concat
+    "https://devdocs.io/#q="
+    (url-hexify-string (if mark-active
+			   (buffer-substring (region-beginning) (region-end))
+			 (read-string "Search devdocs.io: "))))))
+(global-set-key (kbd "C-c d") 'devdocs)
+
 ;; browse-url-of-buffer will render the url assigned to a buffer.  This tells
 ;; Emacs how to map a given filename to a url. Check out skewer
 ;; https://github.com/skeeto/skewer-mode
@@ -2154,7 +2165,6 @@ This checks in turn:
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
 (global-set-key (kbd "C-h k") #'helpful-key)
-(global-set-key (kbd "C-c d") #'helpful-at-point)
 (global-set-key (kbd "C-c C-d") #'helpful-at-point)
 (global-set-key (kbd "C-h F") #'helpful-function)
 (global-set-key (kbd "C-h C") #'helpful-command)
