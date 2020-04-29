@@ -439,9 +439,10 @@ function prompt_command {
 
     # create a $fill of all screen width minus the time string and a space:
     let fillsize=${COLUMNS}	# fullscreen
-    if [[ $OSTYPE == darwin* && $(which battery.py) ]]; then
-	battery=$(echo -n `battery.py` 2>/dev/null)
-	let fillsize=${fillsize}-11 # room for battery charge
+    if [[ $(which battery) ]]; then
+	battery=$(battery -a 2>/dev/null | tr -d ' ')
+	# room for battery charge plus the color control codes
+	let fillsize=${fillsize}-${#battery}+12
     fi
 
     if [[ $(which hr) ]]; then
