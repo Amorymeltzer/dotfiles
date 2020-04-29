@@ -303,7 +303,11 @@ bind "set completion-map-case on"
 #    trap 'echo -ne "\033[00m"' DEBUG
 
 ### Used for load_color below, but theoretically useful
-NCPU=$(sysctl -n hw.ncpu)	# Number of CPUs
+if [[ $(uname -s) == 'Darwin' ]]; then  # OSX CPUs
+    NCPU=$(sysctl -n hw.ncpu)
+elif [[ $(uname -s) == 'Linux' ]]; then # Linux CPUs
+    NCPU=$(grep -c ^processor /proc/cpuinfo)
+fi
 SLOAD=$(( 100*${NCPU} ))	# Small load
 MLOAD=$(( 200*${NCPU} ))	# Medium load
 XLOAD=$(( 400*${NCPU} ))	# Large load
@@ -429,7 +433,7 @@ function prompt_command {
 
     # create a $fill of all screen width minus the time string and a space:
     let fillsize=${COLUMNS}	# fullscreen
-    if [[ $(which battery.py) ]]; then
+    if [[ $(uname -s) == 'Darwin' && $(which battery.py) ]]; then
 	battery=$(echo -n `battery.py` 2>/dev/null)
 	let fillsize=${fillsize}-11 # room for battery charge
     fi
@@ -487,7 +491,9 @@ if type __git_complete &> /dev/null; then
     __git_complete g __git_main
 fi
 # networksetup completion
-complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
+if [[ $(uname -s) == 'Darwin' ]]; then
+    complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
+fi
 
 # Only run pip if virtualenv activated
 # export PIP_REQUIRE_VIRTUALENV=true
