@@ -74,7 +74,7 @@ echo -e "${Color_zOff} ("`uname -m`")"
 if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; then
     echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_zOff}" # only short ones
 fi
-echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $3" "$4}'
+echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $2$3$4}'
 weather ?Qn0			# Uses wttr.in
 
 # Default designed to always take up same space without leading zero for day,
