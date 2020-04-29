@@ -12,6 +12,8 @@ export PATH="$PATH:$HOME/Documents/git/git-extra-commands@unixorn/bin"
 # add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
 # Don't need 'em all but better than alias/function-ing just a handful
 export PATH="$PATH:$HOME/Documents/git/tiny-scripts@vitorgalvao"
+# Add $HOME's node_modules
+export PATH="$PATH:$(npm bin)"
 
 # Add unloved perl modules
 export MANPATH="/opt/local/share/perl5.24/siteman:/opt/local/share/perl5.24/man:$MANPATH"
