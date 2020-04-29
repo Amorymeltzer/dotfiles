@@ -510,7 +510,7 @@ complete -F _python python3.4
 
 # z, the awesome helper for moving around to popular directories
 # Installed via macports
-if [[ -f `command -v z` ]]; then
+if [[ -e /opt/local/etc/profile.d/z.sh ]]; then
     . /opt/local/etc/profile.d/z.sh
 fi
 
