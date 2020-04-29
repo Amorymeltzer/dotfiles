@@ -180,6 +180,8 @@ pog = push origin gh-pages
 pod = push origin dev
 # Use rebase to prevent unnecessary commits
 pum = pull --rebase origin master
+puo = pull --rebase origin
+pu = pull --rebase 
 # Personal remote
 pa = push Amorymeltzer
 pau = push -u Amorymeltzer
