@@ -1318,6 +1318,8 @@ function crathighlighter() {
 function twinkleCheck() {
     (cd ~/Documents/perl/wiki/twinkle/ ; perl twinkleCheck.pl $@)
 }
+# Easy
+alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge amorymeltzer@login.tools.wmflabs.org'
 
 # Get coordinates
 function findlocation() {
