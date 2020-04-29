@@ -319,7 +319,7 @@ function _cnx_color()
     if [[ ! $SSH_TTY ]]; then
 	echo -en ${Color_Red}
     else
-	echo -en ${Color_Black}${Color_Green_zBackground}
+	echo -en ${Color_White}${Color_Black_zBackground}
     fi
 }
 
@@ -504,7 +504,9 @@ complete -F _python python3.4
 
 # z, the awesome helper for moving around to popular directories
 # Installed via macports
-. /opt/local/etc/profile.d/z.sh
+if [[ -f `command -v z` ]]; then
+    . /opt/local/etc/profile.d/z.sh
+fi
 
 
 # Make CPAN always select the default option
