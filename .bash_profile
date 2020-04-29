@@ -61,10 +61,12 @@ source ~/.bashrc
 
 # Welcome Messsage --------------------------------------------------
 echo -ne "Welcome to${Color_Green}" `hostname -s` "${Color_zOff}on"
-if [[ $(uname -s) == 'Darwin' ]]; then
+if [[ $OSTYPE == darwin* ]]; then
     echo -ne "${Color_Green}" `sw_vers -productName` `sw_vers -productVersion`
-elif [[ $(uname -s) == 'Linux' ]]; then
+elif [[ $OSTYPE == linux* ]]; then
     echo -ne "${Color_Green}" `uname -o`
+else
+    echo -ne "${Color_Green}" `uname -a`
 fi
 echo -e "${Color_zOff} ("`uname -m`")"
 if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; then

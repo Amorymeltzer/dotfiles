@@ -302,11 +302,11 @@ bind "set completion-map-case on"
 # Seems unnecessary right now
 #    trap 'echo -ne "\033[00m"' DEBUG
 
-### Used for load_color below, but theoretically useful
-if [[ $(uname -s) == 'Darwin' ]]; then  # OSX CPUs
+### Number of CPUs; used for load_color below, but theoretically useful
+if [[ $OSTYPE == darwin* ]]; then
     NCPU=$(sysctl -n hw.ncpu)
-elif [[ $(uname -s) == 'Linux' ]]; then # Linux CPUs
-    NCPU=$(grep -c ^processor /proc/cpuinfo)
+else
+    NCPU=$(nproc)
 fi
 SLOAD=$(( 100*${NCPU} ))	# Small load
 MLOAD=$(( 200*${NCPU} ))	# Medium load
@@ -433,7 +433,7 @@ function prompt_command {
 
     # create a $fill of all screen width minus the time string and a space:
     let fillsize=${COLUMNS}	# fullscreen
-    if [[ $(uname -s) == 'Darwin' && $(which battery.py) ]]; then
+    if [[ $OSTYPE == darwin* && $(which battery.py) ]]; then
 	battery=$(echo -n `battery.py` 2>/dev/null)
 	let fillsize=${fillsize}-11 # room for battery charge
     fi
@@ -491,7 +491,7 @@ if type __git_complete &> /dev/null; then
     __git_complete g __git_main
 fi
 # networksetup completion
-if [[ $(uname -s) == 'Darwin' ]]; then
+if [[ $OSTYPE == darwin* ]]; then
     complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
 fi
 
@@ -1075,12 +1075,14 @@ function ip()
 alias myip='ip'
 # Only have a local if on wifi?  Maybe option this to change depending on wifi V ethernet???
 # ;;;;;; ##### FIXME TODO
+# $OSTYPE == darwin*
 alias localip='ipconfig getifaddr en0'
 alias ips="ifconfig -a | grep -o 'inet6\? \(\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\)\|[a-fA-F0-9:]\+\)' | sed -e 's/inet6* //'"
 alias ipz='dig +short myip.opendns.com @resolver1.opendns.com'
 alias ipaddr="ifconfig -a | grep 'inet' | grep 'broadcast' | awk '{ print $2 }'"
 alias ipinfo='http -b ipinfo.io/json'
 
+# $OSTYPE == darwin* FIXME TODO
 function ssid()
 {
     local ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | grep " SSID" | sed "s/.*: //")
