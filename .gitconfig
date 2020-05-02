@@ -15,7 +15,9 @@ helper = osxkeychain
 editor = emacsclient -cqu
 # Use custom `.gitignore`
 excludesfile = ~/.global-gitignore
+
 # pager = diff-so-fancy | less --tabs=4 -RFX
+## Use of delta (currently a mac-specific binary) may be overridden by $GITPAGER in .bashrc
 # After much deliberation, this is fine.  Color options are confusing as hell;
 # I wish there were more customization, and the bat themes are excellent but
 # imperfect and a big shift.  What I really want is this+icdiff...
