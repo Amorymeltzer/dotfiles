@@ -249,7 +249,7 @@
 
 ;; Static analysis can be slow, so only run flymake if I've not been typing for 5 seconds.
 ;; It will still run on save or hitting return.
-(setq flymake-no-changes-timeout 5)
+(setq flymake-no-changes-timeout 3)
 
 ;; Disable in-place checking, and tell it to use ~/.emacs.d/tmp/ for the temp files.
 (setq temporary-file-directory "~/.emacs.d/tmp/")
