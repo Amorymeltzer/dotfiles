@@ -1,28 +1,41 @@
 # Path ------------------------------------------------------------
-# add MacPorts ahead of Homebrew (already present from /etc/paths)
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-# Add python execs, not sure if this is the best but so be it
-export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
-# Add perl execs
-# perl should be successfully available from macports/homebrew, so get the
-# current version and build up some appropriate paths.  Used in .bashrc too
-# trim leading v and trailing subversion
-export PERL5=$(perl -e'print substr($^V, 1, -2)')
-export PATH="/opt/local/libexec/perl$PERL5:$PATH"
-# A lot of duplicates from the above but some new folks (pod2man)
-export PATH="/opt/local/libexec/perl$PERL5/sitebin:$PATH"
-# add ~/bin
-export PATH="$HOME/bin:$PATH"
-# add git-extra-commands https://github.com/unixorn/git-extra-commands
-export PATH="$PATH:$HOME/Documents/git/git-extra-commands@unixorn/bin"
-# add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
-# Don't need 'em all but better than alias/function-ing just a handful
-export PATH="$PATH:$HOME/Documents/git/tiny-scripts@vitorgalvao"
+# Differentiate between home machine and ssh, which will be missing these
+# goodies and likely needs different items, local::lib perl, etc.
+if [[ $SSH_TTY ]]; then
+    # This from cpan
+    PATH="/home/amorymeltzer/perl5/bin${PATH:+:${PATH}}"; export PATH;
+    PERL5LIB="/home/amorymeltzer/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+    PERL_LOCAL_LIB_ROOT="/home/amorymeltzer/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+    PERL_MB_OPT="--install_base \"/home/amorymeltzer/perl5\""; export PERL_MB_OPT;
+    PERL_MM_OPT="INSTALL_BASE=/home/amorymeltzer/perl5"; export PERL_MM_OPT;
+else
+    # Add python execs, not sure if this is the best but so be it
+    export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
+    # Add MacPorts ahead of Homebrew (already present from /etc/paths) and the above
+    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+    # Add perl execs
+    # perl should be successfully available from macports/homebrew, so get the
+    # current version and build up some appropriate paths.  Ideally, this
+    # would come after macports and homebrew, but it needs the perl installed
+    # there.  Too lazy to have this handle insertion.  Used in .bashrc too.
+    export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
+    export PATH="/opt/local/libexec/perl$PERL5:$PATH"
+    # A lot of duplicates from the above but some new folks (pod2man)
+    export PATH="/opt/local/libexec/perl$PERL5/sitebin:$PATH"
+
+    # Add git-extra-commands https://github.com/unixorn/git-extra-commands
+    export PATH="$PATH:$HOME/Documents/git/git-extra-commands@unixorn/bin"
+    # Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
+    # Don't need 'em all but better than alias/function-ing just a handful
+    export PATH="$PATH:$HOME/Documents/git/tiny-scripts@vitorgalvao"
+
+    # Add unloved perl modules manpages
+    export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
+fi
 # Add $HOME's node_modules
 export PATH="$PATH:$(npm bin)"
-
-# Add unloved perl modules
-export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
+# Add ~/bin ahead of everybody
+export PATH="$HOME/bin:$PATH"
 
 # emacs > vim
 export EDITOR="emacs"
