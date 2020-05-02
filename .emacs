@@ -320,6 +320,7 @@
 ;; http://www.emacswiki.org/cgi-bin/wiki/EightyColumnRule
 ;; (setq whitespace-style '(face empty lines-tail trailing space-before-tab))
 ;; No trailing lines: gets annoying, redundant to fci-mode
+;; (setq whitespace-style '(face empty trailing space-before-tab))
 (setq whitespace-style '(face empty trailing space-before-tab))
 
 ;; Not needed in emacsen >= 23 because of lines-tail above
@@ -1207,10 +1208,12 @@ current buffer" t)
 	      comment-auto-fill-only-comments t)
 (add-hook 'prog-mode-hook 'auto-fill-mode)
 ;; https://github.com/alpaker/Fill-Column-Indicator
-(require 'fill-column-indicator)
-(setq fci-rule-color "#000000"
-      fci-rule-column '80)
-(add-hook 'prog-mode-hook 'fci-mode)
+;; Disabled to make copying easier, wish it could be just for comments
+;; Maybe can use trailing lines for that?
+;; (require 'fill-column-indicator)
+;; (setq fci-rule-color "#000000"
+;;       fci-rule-column '80)
+;; (add-hook 'prog-mode-hook 'fci-mode)
 
 
 ;; I can't tell if this does anything different from M-q but the author
