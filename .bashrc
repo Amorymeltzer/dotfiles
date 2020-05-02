@@ -447,9 +447,9 @@ function prompt_command {
 
     # create a $fill of all screen width minus the time string and a space:
     let fillsize=${COLUMNS}	# fullscreen
-    if [[ $(which battery) ]]; then
+    # room for battery charge plus the color control codes, not if sshing
+    if [[ ! $SSH_TTY && $(which battery) ]]; then
 	battery=$(battery -a 2>/dev/null | tr -d ' ')
-	# room for battery charge plus the color control codes
 	let fillsize=${fillsize}-${#battery}+12
     fi
 
