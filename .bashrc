@@ -535,7 +535,7 @@ function explain_perlcritic() {
 _explain_perlcritic()		# ;;;;;; ##### FIXME TODO
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
-    local list="$(\ls /opt/local/share/perl5.24/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
+    local list="$(\ls /opt/local/share/perl$PERL5/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
     local clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')"
 
     COMPREPLY=($(compgen -W "$clean" -- "$cur"))

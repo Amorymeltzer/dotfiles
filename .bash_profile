@@ -3,8 +3,14 @@
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # Add python execs, not sure if this is the best but so be it
 export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
-# Add perl execs; again, not sure if this is best
-export PATH="/opt/local/libexec/perl5.24/sitebin:$PATH"
+# Add perl execs
+# perl should be successfully available from macports/homebrew, so get the
+# current version and build up some appropriate paths.  Used in .bashrc too
+# trim leading v and trailing subversion
+export PERL5=$(perl -e'print substr($^V, 1, -2)')
+export PATH="/opt/local/libexec/perl$PERL5:$PATH"
+# A lot of duplicates from the above but some new folks (pod2man)
+export PATH="/opt/local/libexec/perl$PERL5/sitebin:$PATH"
 # add ~/bin
 export PATH="$HOME/bin:$PATH"
 # add git-extra-commands https://github.com/unixorn/git-extra-commands
@@ -16,7 +22,7 @@ export PATH="$PATH:$HOME/Documents/git/tiny-scripts@vitorgalvao"
 export PATH="$PATH:$(npm bin)"
 
 # Add unloved perl modules
-export MANPATH="/opt/local/share/perl5.24/siteman:/opt/local/share/perl5.24/man:$MANPATH"
+export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
 
 # emacs > vim
 export EDITOR="emacs"
