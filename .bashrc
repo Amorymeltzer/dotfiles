@@ -60,6 +60,8 @@ alias treed='tree -aC -I ".git" --dirsfirst "$@" | less -FRNX'
 alias tree='tree -Csuh'
 
 ### Git stuff
+# Should fix git signing when ssh'd, no issues locally?
+export GPG_TTY=$(tty)
 # Alias hub as git for github https://github.com/github/hub
 if [[ -f `command -v hub` ]] ; then
     alias git='hub'
