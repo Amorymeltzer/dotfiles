@@ -51,7 +51,7 @@ verbose = true
 gpgsign = true
 
 [gpg]
-program = /usr/local/bin/gpg
+program = gpg
 
 [diff]
 compactionHeuristic = true
