@@ -68,7 +68,7 @@ if [[ -f `command -v hub` ]] ; then
     complete -F _git hub
 fi
 # Override .gitconfig pager if needed, ensure delta exists and is executable
-if [[ ! -f `command -v delta` || -f `delta -V &>/dev/null` ]]; then
+if [[ ! -f `command -v delta` || ! `delta -V 2>/dev/null` ]]; then
     if [[ -f `command -v diff-so-fancy` ]]; then
 	export GIT_PAGER='diff-so-fancy | less --tabs=4 -RFX'
     else
