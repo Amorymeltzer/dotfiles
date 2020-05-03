@@ -332,7 +332,7 @@ XLOAD=$(( 400*${NCPU} ))	# Large load
 # Highlight hostname when connected via SSH
 function _cnx_color()
 {
-    if [[ ! $SSH_TTY ]]; then
+    if [[ ! $SSH_TTY && ! $INSTANCE_PROJECT ]]; then
 	echo -en ${Color_Red}
     else
 	echo -en ${Color_White}${Color_Black_zBackground}

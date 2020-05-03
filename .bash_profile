@@ -1,7 +1,8 @@
 # Path ------------------------------------------------------------
 # Differentiate between home machine and ssh, which will be missing these
 # goodies and likely needs different items, local::lib perl, etc.
-if [[ $SSH_TTY ]]; then
+# toolforge tool account isn't SSH_TTY, but does have the same env variable
+if [[ $SSH_TTY || $INSTANCE_PROJECT ]]; then
     # This from cpan
     PATH="/home/amorymeltzer/perl5/bin${PATH:+:${PATH}}"; export PATH;
     PERL5LIB="/home/amorymeltzer/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
