@@ -332,7 +332,7 @@ XLOAD=$(( 400*${NCPU} ))	# Large load
 # Highlight hostname when connected via SSH
 function _cnx_color()
 {
-    if [[ ! $SSH_TTY && ! $INSTANCE_PROJECT ]]; then
+    if [[ ! $SSH_TTY && ! $INSTANCEPROJECT ]]; then
 	echo -en ${Color_Red}
     else
 	echo -en ${Color_White}${Color_Black_zBackground}
@@ -450,7 +450,7 @@ function prompt_command {
     # create a $fill of all screen width minus the time string and a space:
     let fillsize=${COLUMNS}	# fullscreen
     # room for battery charge plus the color control codes, not if sshing
-    if [[ ! $SSH_TTY && $(which battery) ]]; then
+    if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && $(which battery) ]]; then
 	battery=$(battery -a 2>/dev/null | tr -d ' ')
 	let fillsize=${fillsize}-${#battery}+12
     fi
