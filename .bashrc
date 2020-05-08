@@ -67,14 +67,6 @@ if [[ -f `command -v hub` ]] ; then
     alias git='hub'
     complete -F _git hub
 fi
-# Override .gitconfig pager if needed, ensure delta exists and is executable
-if [[ ! -f `command -v delta` || ! `delta -V 2>/dev/null` ]]; then
-    if [[ -f `command -v diff-so-fancy` ]]; then
-	export GIT_PAGER='diff-so-fancy | less --tabs=4 -RFX'
-    else
-	export GIT_PAGER='less --tabs=4 -RFX'
-    fi
-fi
 # Quick
 function g {
     local ref=$(git rev-parse --is-inside-work-tree 2> /dev/null)

@@ -1,0 +1,19 @@
+# Fill this with any options you want based off your local environment, such
+# as different gpg locations or editors, or aliases or functions dependent on
+# local sources, then move it to ~/.config/git/local-config (or what have you)
+
+[core]
+editor = emacsclient -cqu
+
+# pager = diff-so-fancy | less --tabs=4 -RFX
+# After much deliberation, this is fine.  Color options are confusing as hell;
+# I wish there were more customization, and the bat themes are excellent but
+# imperfect and a big shift.  What I really want is this+icdiff... Issue 169
+# https://github.com/dandavison/delta
+pager = delta --highlight-removed
+
+[interactive]
+diffFilter = delta --color-only
+
+[gpg]
+program = /usr/local/bin/gpg

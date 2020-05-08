@@ -12,17 +12,9 @@ email = Amorymeltzer@gmail.com
 helper = osxkeychain
 
 [core]
-editor = emacsclient -cqu
 # Use custom `.gitignore`
 excludesfile = ~/.global-gitignore
-
-# pager = diff-so-fancy | less --tabs=4 -RFX
-## Use of delta (currently a mac-specific binary) may be overridden by $GITPAGER in .bashrc
-# After much deliberation, this is fine.  Color options are confusing as hell;
-# I wish there were more customization, and the bat themes are excellent but
-# imperfect and a big shift.  What I really want is this+icdiff...
-# https://github.com/dandavison/delta
-pager = delta --highlight-removed
+# editor and pager set in include
 
 # Treat spaces before tabs, lines that are indented with 8 or more spaces,
 # and all kinds of trailing whitespace as an error
@@ -43,15 +35,11 @@ precomposeunicode = false
 # Via: http://git.io/QXnAqw
 # abbrev = 12
 
-[interactive]
-diffFilter = delta --color-only
-
 [commit]
 verbose = true
 gpgsign = true
+# gpg.program set in include
 
-[gpg]
-program = gpg
 
 [diff]
 compactionHeuristic = true
@@ -95,8 +83,6 @@ aas = "!git add -A; git diff --staged --name-only --quiet || git status --short 
 acm = "!git add -A; git diff --staged --name-only --quiet || git commit -m"
 aca = "!git add -A; git diff --staged --name-only --quiet || git commit --amend"
 acc = "!git add -A; git diff --staged --name-only --quiet || git commit --amend --no-edit"
-
-scan = "!~/bin/gscan"
 
 co = checkout
 com = checkout master
@@ -205,14 +191,8 @@ dwc = diff --cached --word-diff
 ds = diff --patch-with-stat
 dsc = diff --cached --patch-with-stat
 dcs = diff --cached --patch-with-stat
-# Use icdiff tool https://github.com/jeffkaufman/icdiff
-icd = icdiff
-ic = icdiff
-icdc = icdiff --cached
-icc = icdiff --cached
 # Compare commit to the state before it
 dp = "!f() { c=${1:-HEAD}; git diff $c~ $c; }; f"
-idp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
 
 patience = diff --patience
 
@@ -281,7 +261,7 @@ ff = only
 prune = true
 
 [rebase]
-# --autostash: Automatically stash before rebase; allows for dirty rebases
+# Automatically stash before rebase; allows for dirty rebases
 autoStash = true
 
 [help]
@@ -335,10 +315,6 @@ oldHighlight = red bold 52
 newNormal = green bold
 newHighlight = green bold 22
 
-[icdiff]
-options = --color-map='change:magenta_bold,meta:white' --tabs=4
-pager = less
-
 [gc]
 auto = 256
 
@@ -379,7 +355,9 @@ process = git-lfs filter-process
 required = true
 clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
-[tiny-scripts]
-	remote = origin
-[ghi]
-	token = !security find-internet-password -a Amorymeltzer -s github.com -l 'ghi token' -w
+
+# Customize based on local environment, etc.
+# eg: core.editor, core.pager, gpg, icdiff, ghi
+# Example file at ~/.local-config.example
+[include]
+path = ~/.config/git/local-config
