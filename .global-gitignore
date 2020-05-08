@@ -36,6 +36,8 @@ nytprof.out
 \#*\#
 emacs.desktop
 emacs.desktop.lock
+.emacs.desktop
+.emacs.desktop.lock
 ac-comphist.dat
 bookmarks
 history
