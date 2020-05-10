@@ -109,6 +109,7 @@ alias gcm='g cm'
 alias gl='g l1 -5'
 alias gl1='g l1'
 alias gld='g ld5'
+alias glm='g lm'
 alias greh='g reh'
 
 # Setup some colors to use later in interactive shell or scripts
