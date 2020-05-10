@@ -329,6 +329,7 @@ log = true
 
 [log]
 date = local
+abbrevCommit = true
 
 # URL shorthands
 [url "git@github.com:"]
