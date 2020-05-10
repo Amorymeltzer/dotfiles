@@ -29,7 +29,7 @@ date = auto:human-local
 date = auto:human-local
 
 [icdiff]
-options = --color-map='change:magenta_bold,meta:white' --tabs=4
+options = --color-map='add:green,change:magenta,description:blue,line-numbers:white,meta:white,separator:blue,subtract:red' --tabs=4
 pager = less
 
 [tiny-scripts]

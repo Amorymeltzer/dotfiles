@@ -300,10 +300,10 @@ remote = green
 
 [color "diff"]
 meta = white
-frag = magenta bold
-old = red bold
-new = green bold
-commit = yellow bold
+frag = magenta
+old = red
+new = green
+commit = yellow
 whitespace = red reverse
 
 [color "status"]
@@ -311,10 +311,11 @@ added = magenta
 changed = green
 untracked = cyan
 
+# Mainly for diff-so-fancy
 [color "diff-highlight"]
-oldNormal = red bold
+oldNormal = red# bold
 oldHighlight = red bold 52
-newNormal = green bold
+newNormal = green# bold
 newHighlight = green bold 22
 
 [color "blame"]
