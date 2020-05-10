@@ -22,6 +22,12 @@ program = /usr/local/bin/gpg
 ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local
 ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local -5
 
+[log]
+date = auto:human-local
+
+[blame]
+date = auto:human-local
+
 [icdiff]
 options = --color-map='change:magenta_bold,meta:white' --tabs=4
 pager = less

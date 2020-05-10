@@ -317,6 +317,9 @@ oldHighlight = red bold 52
 newNormal = green bold
 newHighlight = green bold 22
 
+[color "blame"]
+highlightRecent = yellow, 36 months ago, blue, 1 months ago, white
+
 [gc]
 auto = 256
 
@@ -333,6 +336,11 @@ log = true
 # --date=human added in 2.21, used in local-config, see also ld aliases
 date = local
 abbrevCommit = true
+
+[blame]
+coloring = highlightRecent
+# human in local-config
+date = local
 
 # URL shorthands
 [url "git@github.com:"]
