@@ -103,8 +103,10 @@ l5 = log --decorate --graph -5
 l1 = log --oneline --decorate
 l15 = log --oneline --decorate -5
 
+# Potentially overridden in local-config to use date=human after 2.21, see also [log]
 ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
 ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative -5
+
 lf = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
 lf5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short -5
 # Yet another one: https://github.com/jfrazelle/mac-dev-setup#bash-completions
@@ -328,6 +330,7 @@ followTags = true
 log = true
 
 [log]
+# --date=human added in 2.21, used in local-config, see also ld aliases
 date = local
 abbrevCommit = true
 
