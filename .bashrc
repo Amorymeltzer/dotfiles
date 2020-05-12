@@ -1334,7 +1334,7 @@ function twinkleCheck() {
     (cd ~/Documents/perl/wiki/twinkle/ ; perl twinkleCheck.pl $@)
 }
 # Easy
-alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge amorymeltzer@login.tools.wmflabs.org'
+alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge amorymeltzer@login.toolforge.org'
 
 # Get coordinates
 function findlocation() {
