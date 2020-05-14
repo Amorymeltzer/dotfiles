@@ -755,6 +755,11 @@ function diskusage() {
 function psu {
     ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command'
 }
+# Find and kill processes by name.  Be careful!
+killsearch() {
+  ps ax | grep "$1" | grep -v grep | cut -f1 -d ' ' | xargs kill
+}
+
 
 # Top by memory, not in delta
 alias topm='top -o vsize'
@@ -861,8 +866,7 @@ alias bs='bsearch '
 alias binfo='brew info'
 alias blist='brew list'
 alias bdoctor='brew doctor'
-function homebrew-deps()
-{
+function homebrew-deps() {
     brew list | while read cask; do echo -en "${Color_Blue_Bold}$cask ->${Color_zOff}"; brew deps $cask | awk '{printf(" %s ", $0)}'; echo ""; done
 }
 # Homebrew-cask
