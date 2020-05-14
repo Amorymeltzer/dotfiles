@@ -46,6 +46,19 @@ __git_sequencer_status ()
 }
 
 
+
+
+pcmode=yes
+ps1pc_start="$1"
+ps1pc_end="$2"
+printf_format="${3:-$printf_format}"
+# set PS1 to a plain prompt so that we can
+# simply return early if the prompt should not
+# be decorated
+PS1="$ps1pc_start$ps1pc_end"
+
+
+
 # Default output if not in git directory
 out='-'
 
@@ -98,7 +111,7 @@ else
     fi
 
     if [ -n "$b" ]; then
-	:
+	:			# bash builtin for true, just to initialize or something
     elif [ -h "$gitdir/HEAD" ]; then
 	# symlink symbolic ref
 	b="$(git symbolic-ref HEAD 2>/dev/null)"
@@ -111,22 +124,7 @@ else
 	b="${head#ref: }"
 	if [ "$head" = "$b" ]; then
 	    detached=yes
-	    b="$(
-				case "${GIT_PS1_DESCRIBE_STYLE-}" in
-				(contains)
-					git describe --contains HEAD ;;
-				(branch)
-					git describe --contains --all HEAD ;;
-				(tag)
-					git describe --tags HEAD ;;
-				(describe)
-					git describe HEAD ;;
-				(* | default)
-					git describe --tags --exact-match HEAD ;;
-				esac 2>/dev/null)" ||
-
-		b="$short_sha..."
-	    b="($b)"
+	    b="$(git describe --contains --all HEAD)"
 	fi
     fi
 fi
@@ -143,12 +141,14 @@ c=""
 p=""
 
 if [ "true" = "$inside_gitdir" ]; then
+    # Not sure I care about this?  Not sure what it does...
     if [ "true" = "$bare_repo" ]; then
 	c="BARE:"
     else
 	b="GIT_DIR!"
     fi
 elif [ "true" = "$inside_worktree" ]; then
+    # Probably ALWAYS want this
     if [ -n "${GIT_PS1_SHOWDIRTYSTATE-}" ] &&
 	   [ "$(git config --bool bash.showDirtyState)" != "false" ]
     then
@@ -158,6 +158,7 @@ elif [ "true" = "$inside_worktree" ]; then
 	    i="#"
 	fi
     fi
+    # Couldn't hurt, now that I'm trying to keep stash clean...
     if [ -n "${GIT_PS1_SHOWSTASHSTATE-}" ] &&
 	   git rev-parse --verify --quiet refs/stash >/dev/null
     then
@@ -168,6 +169,7 @@ elif [ "true" = "$inside_worktree" ]; then
 	   [ "$(git config --bool bash.showUntrackedFiles)" != "false" ] &&
 	   git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>/dev/null
     then
+	# HUH
 	u="%${ZSH_VERSION+%}"
     fi
 
@@ -176,32 +178,43 @@ elif [ "true" = "$inside_worktree" ]; then
     fi
 fi
 
+# just a space by default
 z="${GIT_PS1_STATESEPARATOR-" "}"
 
-# NO color option unless in PROMPT_COMMAND mode
-if [[ $pcmode = yes ]] && [[ -n "${GIT_PS1_SHOWCOLORHINTS-}" ]]; then
-    __git_ps1_colorize_gitstring
-fi
-
+# Remove refs/heads/ from string, a good example of where git status would be simpler
 b=${b##refs/heads/}
-if [[ $pcmode = yes ]] && [[ $ps1_expanded = yes ]]; then
-    __git_ps1_branch_name=$b
-    b="\${__git_ps1_branch_name}"
-fi
+# Not needed on bash AFAICT
+# __git_ps1_branch_name=$b
+# b="\${__git_ps1_branch_name}"
 
+# KEY:
+# w=dirty state symbol (*) for unstaged
+# i=dirty state symbol (+) for staged
+# s=symbol ($) to indicate something being stashed
+# u=shell expansion, soe % on bash and %%(?) on zsh.  Not sure why...
+# c=BARE or empty
+# b=
+# f=string combining w, i, s, and u, so probably *+$.
+# z=separator, just a space
+# ${f:+$z$f}: if empty, nothing; if present, then separator then f itself
+# r=rebasing/bisecting/cherry/reverting/etc.  Should customize more
+# p=differential from upstream, expand
 f="$w$i$s$u"
 gitstring="$c$b${f:+$z$f}$r$p"
+echo $gitstring
 
-if [[ $pcmode = yes ]]; then
-    if [ "${__git_printf_supports_v-}" != yes ]; then
-	gitstring=$(printf -- "$printf_format" "$gitdiritstring")
-    else
-	printf -v gitstring -- "$printf_format" "$gitdiritstring"
-    fi
-    PS1="$ps1pc_start$gitdiritstring$ps1pc_end"
+# check whether printf supports -v
+# bash does...? but can just set to var
+__git_printf_supports_v=
+printf -v __git_printf_supports_v -- '%s' yes >/dev/null 2>&1
+
+if [ "${__git_printf_supports_v-}" != yes ]; then
+    gitstring=$(printf -- "$printf_format" "$gitstring")
 else
-    printf -- "$printf_format" "$gitdiritstring"
+    printf -v gitstring -- "$printf_format" "$gitstring"
 fi
+# PS1="$ps1pc_start$gitstring$ps1pc_end"
+out="$ps1pc_start$gitstring$ps1pc_end"
 
 echo $out
 
