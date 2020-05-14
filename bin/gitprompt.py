@@ -55,9 +55,10 @@ def check(dirname):
             elif re.search(r'Your branch and .* have diverged.?', out):
                 messages.append("⇵")
         elif 'rebase in progress; onto' in out:
+            sha = run('git rev-parse --short HEAD 2>/dev/null')
             rebase = re.search("rebas(?:e|ing) branch '(\S+)' on '(\w+)'", out)
-            messages.insert(0, "\033[0;31m on \033[0;33m" + rebase.group(2) + " ")
-            messages.insert(0, "\033[0;31mRebasing \033[0;33m" + rebase.group(1))
+            messages.insert(0, "\033[0;31m onto \033[0;33m" + rebase.group(2) + " ")
+            messages.insert(0, "\033[0;31mRebasing \033[0;33m" + rebase.group(1) + "\033[0;30m@\033[0;33m" + sha)
         elif 'HEAD detached' in out:
             messages.insert(0, "\033[0;31m!!ERROR - DETACHED HEAD!! ")
         else:
