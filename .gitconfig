@@ -40,11 +40,6 @@ verbose = true
 gpgsign = true
 # gpg.program set in include
 
-
-[diff]
-compactionHeuristic = true
-noprefix = true
-
 [alias]
 h = help
 cfg = config --global
@@ -145,6 +140,8 @@ bv = branch -vv
 branches = branch -vv
 ba = branch -a -vv
 brd = branch -a -vv
+branches-local = !git branch -av | grep -v remotes
+brl = !git branch -av | grep -v remotes
 branch-name = copy-branch-name
 # https://stackoverflow.com/a/5188364/2521092
 # Only show most recent 15
@@ -268,9 +265,16 @@ prune = true
 # Automatically stash before rebase; allows for dirty rebases
 autoStash = true
 
+[apply]
+whitespace = warn
+
 [help]
 # If there's only suggestion from a typo, automatically call it after 1.5s
 autocorrect = 15
+
+[diff]
+compactionHeuristic = true
+noprefix = true
 
 # Special diffs for special cases
 [diff "bin"]
