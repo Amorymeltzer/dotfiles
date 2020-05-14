@@ -264,6 +264,8 @@ prune = true
 [rebase]
 # Automatically stash before rebase; allows for dirty rebases
 autoStash = true
+# warn but proceed if commits dropped via exclusion, use drop instead
+missingCommitsCheck = warn
 
 [apply]
 whitespace = warn
