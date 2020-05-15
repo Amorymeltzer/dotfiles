@@ -8,44 +8,61 @@
 # __git_eread requires 2 arguments, the file path and the name of the
 # variable, in that order.
 ### STILL USEFUL FOR rebase/cherrypick/revert ###
-__git_eread ()
-{
-	test -r "$1" && IFS=$'\r\n' read "$2" <"$1"
+__git_eread () {
+    test -r "$1" && IFS=$'\r\n' read "$2" <"$1"
+}
+
+# Helper function to wrap colors around a variabled
+# There has got to be a smarter way to do this FIXME TODO
+__wrap_color () {
+    local color
+    case $2 in
+	Black) color=${Color_Black};;
+	Red) color=${Color_Red};;
+	Green) color=${Color_Green};;
+	Yellow) color=${Color_Yellow};;
+	Blue) color=${Color_Blue};;
+	Magenta) color=${Color_Magenta};;
+	Cyan) color=${Color_Cyan};;
+	White) color=${Color_White};;
+
+	*) color=${Color_Yellow} # default
+    esac
+    echo -ne $color$1${Color_Yellow}
 }
 
 # see if a cherry-pick or revert is in progress, if the user has committed a
 # conflict resolution with 'git commit' in the middle of a sequence of picks or
 # reverts then CHERRY_PICK_HEAD/REVERT_HEAD will not exist so we have to read
 # the todo file.
-#### Should expand with sequencer (if available?) to get steps
+#### Should expand with /sequencer (if available?) to get steps
 #### todo count for steps left???
 #### abort-safety for... done with already done
 #### head is fine???  No onto?
-__git_sequencer_status ()
-{
-	local todo
-	if test -f "$gitdir/CHERRY_PICK_HEAD"
-	then
+__git_sequencer_status () {
+    local todo
+    if test -f "$gitdir/CHERRY_PICK_HEAD"
+    then
+	r="Cherry-picking"
+	return 0;
+    elif test -f "$gitdir/REVERT_HEAD"
+    then
+	r="Reverting"
+	return 0;
+    elif __git_eread "$gitdir/sequencer/todo" todo
+    then
+	case "$todo" in
+	    p[\ \	]|pick[\ \	]*)
 		r="Cherry-picking"
-		return 0;
-	elif test -f "$gitdir/REVERT_HEAD"
-	then
+		return 0
+		;;
+	    revert[\ \	]*)
 		r="Reverting"
-		return 0;
-	elif __git_eread "$gitdir/sequencer/todo" todo
-	then
-		case "$todo" in
-		p[\ \	]|pick[\ \	]*)
-			r="Cherry-picking"
-			return 0
+		return 0
 		;;
-		revert[\ \	]*)
-			r="Reverting"
-			return 0
-		;;
-		esac
-	fi
-	return 1
+	esac
+    fi
+    return 1
 }
 
 
@@ -57,7 +74,7 @@ repo_info="$(git rev-parse --git-dir --is-inside-git-dir --is-bare-repository --
 rev_parse_exit_code="$?"
 
 if [ -z "$repo_info" ]; then
-    echo $out
+    echo -n $out
 fi
 
 if [ "$rev_parse_exit_code" = "0" ]; then
@@ -80,11 +97,15 @@ b=""
 step=""
 total=""
 # NEED TO FIGURE OUT ACTION FIXME TODO
-# Can get head/stopped-sha then grep it in todo.backup, find first column
+# cat done+rebase-todo, grep sha (head?  stopped-sha?), find first column
+# Lean toward last line of done if not?  Like break or something
+# Should just copy these directories
+
 # stopped-sha = edit
 # Might need to use done(+next)...
-# Maybe investigate amend?
-# ALSO: Get ONTO for action, and current head FIXME TODO
+# Maybe investigate amend?  Presence indicates e (versus r)
+
+#### Find shared and unique files
 ## edit
 ## head: HEAD|REBASE_HEAD|rm/amend|end of rm/done onto: rm/onto return: rm/orig-head
 # amend
@@ -115,6 +136,18 @@ total=""
 # msgnum
 # onto
 # orig-head
+## break
+# done
+# end
+# git-rebase-todo
+# git-rebase-todo.backup
+# gpg_sign_opt
+# head-name
+# interactive
+# msgnum
+# onto
+# orig-head
+
 if [ -d "$gitdir/rebase-merge" ]; then
     __git_eread "$gitdir/rebase-merge/head-name" b
     __git_eread "$gitdir/rebase-merge/msgnum" step
@@ -123,7 +156,7 @@ if [ -d "$gitdir/rebase-merge" ]; then
     __git_eread "$gitdir/rebase-merge/onto" o
     if [ -n "$o" ]; then
 	o=$(git rev-parse --short "$o")
-	o="onto $o"
+	o="$(__wrap_color "onto" "Red") $o"
     fi
 else
     if [ -d "$gitdir/rebase-apply" ]; then
@@ -154,7 +187,7 @@ else
 	head=""
 	# Quit, what state is this?  No head...
 	if ! __git_eread "$gitdir/HEAD" head; then
-	    echo $out
+	    echo -n $out
 	fi
 	# is it a symbolic ref?
 	b="${head#ref: }"
@@ -165,9 +198,13 @@ else
     fi
 fi
 
+if [[ -n "$r" ]]; then
+    r=$(__wrap_color "$r" "Red")
+fi
 # How far along in the rebase we are
+# Consider moving to end of gitstring??? FIXME TODO
 if [ -n "$step" ] && [ -n "$total" ]; then
-    r="$r ($step/$total)"
+    r="$r $(__wrap_color "($step/$total)" "Blue")"
 fi
 
 w=""
@@ -189,21 +226,26 @@ elif [ "true" = "$inside_worktree" ]; then
     # Need to deal with fact that =! will show up for U
     # git itself sugests using status or diff-files (--porcelain), probably
     # the former FIXME TODO
-    git diff --no-ext-diff --quiet || w="+"	     # Unstaged
-    git diff --no-ext-diff --cached --quiet || i="!" # Staged
+    # git diff --no-ext-diff --quiet || w="+"	     # Unstaged
+    git diff --no-ext-diff --quiet || w=$(__wrap_color "+" "Green")	     # Unstaged
+    # git diff --no-ext-diff --cached --quiet || i="!" # Staged
+    git diff --no-ext-diff --cached --quiet || i=$(__wrap_color "!" "Magenta") # Staged
     # huh???  No sha and no cached, so... ???  something like detached???
     if [ -z "$short_sha" ] && [ -z "$i" ]; then
-	i="#"
+	# i="#"
+	i=$(__wrap_color "#" "Red")
     fi
     # Untracked
     if git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>/dev/null
     then
-	u="?"
+	# u="?"
+	u=$(__wrap_color "?" "Cyan")
     fi
     # Stash
     if git rev-parse --verify --quiet refs/stash >/dev/null
     then
-	s="$"
+	# s="$"
+	s=$(__wrap_color "$" "Green")
     fi
 
 fi
@@ -214,9 +256,17 @@ b=${b##refs/heads/}
 # __git_ps1_branch_name=$b
 # b="\${__git_ps1_branch_name}"
 
+if [[ "$b" != "master" ]]; then
+    b=$(__wrap_color "$b" "White")
+fi
+
+# @ separator
+at=$(__wrap_color "@" "Black")
 
 ######## ###########
 count="$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)"
+## Alternatively, if doing sit status --porcelain for the above file status,
+## could do --branch here, parse for ahead, behind (maybe also ## branchname..upstream)
 # calculate the result
 # note the tabs
 case "$count" in
@@ -250,8 +300,7 @@ esac
 f="$w$i$u$s"
 # ${f:-=}: above dirty state, = if not
 # gitstring="$c$b${f:+$z$f}$r$p"
-gitstring="${r:+$r:$z}$c$b@$short_sha${o:+$z$o}$z${f:-=}$p"
-
+gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 # Ensure gitstring is string, etc.
 printf -v gitstring '%s' "$gitstring"
 out="$gitstring"
