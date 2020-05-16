@@ -145,7 +145,8 @@ if [ -d "$gitdir/rebase-merge" ]; then
     # Get action, probably needs work FIXME TODO
     d=$(tail -n 1 "$gitdir/rebase-merge/done" 2>/dev/null)
     if [[ -n "$d" ]]; then
-	if [[ "$d" != "break" ]]; then
+	a="$d"
+	if [[ "$a" != "break" ]]; then
 	    a=$(echo -n "$d" | grep "$short_sha" | cut -f 1 -d ' ')
 	    # Weirdness with merges and shit, hopefully don't get here
 	    # Could be smarter and check for stopped and amend
@@ -327,7 +328,7 @@ esac
 # r=rebasing/bisecting/cherry/reverting/etc.  ACTION: Should customize more, put first
 # p=differential from upstream, expand
 
-f="$uw$i$x$s"
+f="$u$w$i$x$s"
 # ${f:-=}: above dirty state, = if not
 gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 # Ensure gitstring is string, etc.
