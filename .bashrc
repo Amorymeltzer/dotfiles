@@ -428,7 +428,7 @@ function prompt_command {
     fi
 
     psbegin="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
-    psmiddle="\h\[$Color_Cyan\]]-[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.py)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]$(holiday_greeting)\n\[$Color_Cyan\]└─"
+    psmiddle="\h\[$Color_Cyan\]]-[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.sh)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]$(holiday_greeting)\n\[$Color_Cyan\]└─"
 
     if ((${ERRORS} > 0)); then
 	PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$"
