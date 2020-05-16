@@ -7,7 +7,7 @@
 # Helper function to read the first line of a file into a variable.
 # __git_eread requires 2 arguments, the file path and the name of the
 # variable, in that order.
-### STILL USEFUL FOR rebase/cherrypick/revert ###
+### CAN USE FOR SINGLE LINE???
 __git_eread () {
     test -r "$1" && IFS=$'\r\n' read "$2" <"$1"
 }
@@ -92,71 +92,62 @@ gitdir="${repo_info%$'\n'*}"
 z=" "
 
 r=""
+a=""
 o=""
 b=""
 step=""
 total=""
-# NEED TO FIGURE OUT ACTION FIXME TODO
-# cat done+rebase-todo, grep sha (head?  stopped-sha?), find first column
-# Lean toward last line of done if not?  Like break or something
-# Should just copy these directories
 
-# stopped-sha = edit
-# Might need to use done(+next)...
-# Maybe investigate amend?  Presence indicates e (versus r)
+### REBASE NOTES ###
+# If there's a conflcit, presence of .git/MERGE_MSG should do it?
+# stopped-sha = edit or conflict
+# Investigate amend?  Presence indicates e (versus r)
 
-#### Find shared and unique files
-## edit
-## head: HEAD|REBASE_HEAD|rm/amend|end of rm/done onto: rm/onto return: rm/orig-head
-# amend
-# author-script
-# done
-# end
-# git-rebase-todo
-# git-rebase-todo.backup
-# gpg_sign_opt
-# head-name
-# interactive
+
+#### REBASE FILES ####
+##### .git #####
+# REBASE_HEAD points to current, when would be different than short_sha???
+# Present for edit, not reword, break
+##### SHARED #####
+# author-script: Name, email, date
+# done: Which steps done/applied, includes current action
+# end: Number of steps
+# git-rebase-todo: Left
+# git-rebase-todo.backup: What the initial interactive menu was like (pick, pick, pick)
+# gpg_sign_opt: -S, yeah
+# head-name: Branch
+# interactive: Present if interactive, or stopped for any reason(?)
+# drop-redundant-commit: Present if option is provided (not interactive)
+# msgnum: What step we're on
+# onto: Base revision for the rebase (not included in rebase)
+# orig-head: Original head before rebase
+##### MODE-SPECIFIC #####
+##### EDIT #####
+# amend: sha of the revision we're currently editing
 # message
-# msgnum
-# onto
-# orig-head
 # patch
 # stopped-sha
-## reword
-## head: HEAD||end of rm/done onto: rm/onto return: rm/orig-head
-# author-script
-# done
-# end
-# git-rebase-todo
-# git-rebase-todo.backup
-# gpg_sign_opt
-# head-name
-# interactive
-# msgnum
-# onto
-# orig-head
-## break
-# done
-# end
-# git-rebase-todo
-# git-rebase-todo.backup
-# gpg_sign_opt
-# head-name
-# interactive
-# msgnum
-# onto
-# orig-head
+##### REWORD #####
+# (none)
+##### BREAK #####
+# (none)
 
 if [ -d "$gitdir/rebase-merge" ]; then
     __git_eread "$gitdir/rebase-merge/head-name" b
     __git_eread "$gitdir/rebase-merge/msgnum" step
     __git_eread "$gitdir/rebase-merge/end" total
     r="Rebasing"
-    __git_eread "$gitdir/rebase-merge/onto" o
-    if [ -n "$o" ]; then
+    if __git_eread "$gitdir/rebase-merge/onto" o; then
 	o=$(git rev-parse --short "$o")
 	o="$(__wrap_color "onto" "Red") $o"
+    fi
+    # Get action, probably needs work FIXME TODO
+    d=$(tail -n 1 "$gitdir/rebase-merge/done" 2>/dev/null)
+    if [[ -n "$d" ]]; then
+	a="$d"
+	if [[ "$a" != "break" ]]; then
+	    a=$(echo -n "$a" | grep "$short_sha" | cut -f 1 -d ' ')
+	fi
     fi
 else
     if [ -d "$gitdir/rebase-apply" ]; then
@@ -203,9 +194,11 @@ if [[ -n "$r" ]]; then
 fi
 # How far along in the rebase we are
 # Consider moving to end of gitstring??? FIXME TODO
+# Don't overwrite $a?? FIXME TODO
 if [ -n "$step" ] && [ -n "$total" ]; then
-    r="$r $(__wrap_color "($step/$total)" "Blue")"
+    a="(${a:+$a$z}$step/$total)"
 fi
+r="$r $(__wrap_color "$a" "Blue")"
 
 w=""
 i=""
@@ -226,9 +219,7 @@ elif [ "true" = "$inside_worktree" ]; then
     # Need to deal with fact that =! will show up for U
     # git itself sugests using status or diff-files (--porcelain), probably
     # the former FIXME TODO
-    # git diff --no-ext-diff --quiet || w="+"	     # Unstaged
     git diff --no-ext-diff --quiet || w=$(__wrap_color "+" "Green")	     # Unstaged
-    # git diff --no-ext-diff --cached --quiet || i="!" # Staged
     git diff --no-ext-diff --cached --quiet || i=$(__wrap_color "!" "Magenta") # Staged
     # huh???  No sha and no cached, so... ???  something like detached???
     if [ -z "$short_sha" ] && [ -z "$i" ]; then
