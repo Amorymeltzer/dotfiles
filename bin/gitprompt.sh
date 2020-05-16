@@ -75,6 +75,7 @@ rev_parse_exit_code="$?"
 
 if [ -z "$repo_info" ]; then
     echo -n $out
+    exit
 fi
 
 if [ "$rev_parse_exit_code" = "0" ]; then
@@ -123,10 +124,10 @@ total=""
 # orig-head: Original head before rebase
 ##### MODE-SPECIFIC #####
 ##### EDIT #####
-# amend: sha of the revision we're currently editing
+# amend: sha of the revision we're currently adjusting
 # message
 # patch
-# stopped-sha
+# stopped-sha: sha where we stopped, not the same as amend if rebasing merges???
 ##### REWORD #####
 # (none)
 ##### BREAK #####
@@ -144,9 +145,17 @@ if [ -d "$gitdir/rebase-merge" ]; then
     # Get action, probably needs work FIXME TODO
     d=$(tail -n 1 "$gitdir/rebase-merge/done" 2>/dev/null)
     if [[ -n "$d" ]]; then
-	a="$d"
-	if [[ "$a" != "break" ]]; then
-	    a=$(echo -n "$a" | grep "$short_sha" | cut -f 1 -d ' ')
+	if [[ "$d" != "break" ]]; then
+	    a=$(echo -n "$d" | grep "$short_sha" | cut -f 1 -d ' ')
+	    # Weirdness with merges and shit, hopefully don't get here
+	    # Could be smarter and check for stopped and amend
+	    # then output extra info if present and different
+	    if [[ -z "$a" ]]; then
+		__git_eread "$gitdir/rebase-merge/stopped-sha" stopped
+		stopped=$(git rev-parse --short "$stopped")
+		echo $stopped
+		a=$(echo -n "$d" | grep "$stopped" | cut -f 1 -d ' ')
+	    fi
 	fi
     fi
 else
@@ -179,6 +188,7 @@ else
 	# Quit, what state is this?  No head...
 	if ! __git_eread "$gitdir/HEAD" head; then
 	    echo -n $out
+	    exit
 	fi
 	# is it a symbolic ref?
 	b="${head#ref: }"
@@ -191,14 +201,13 @@ fi
 
 if [[ -n "$r" ]]; then
     r=$(__wrap_color "$r" "Red")
+    # How far along in the rebase we are
+    # Consider moving to end of gitstring??? FIXME TODO
+    if [ -n "$step" ] && [ -n "$total" ]; then
+	a="(${a:+$a$z}$step/$total)"
+    fi
+    r="$r $(__wrap_color "$a" "Blue")"
 fi
-# How far along in the rebase we are
-# Consider moving to end of gitstring??? FIXME TODO
-# Don't overwrite $a?? FIXME TODO
-if [ -n "$step" ] && [ -n "$total" ]; then
-    a="(${a:+$a$z}$step/$total)"
-fi
-r="$r $(__wrap_color "$a" "Blue")"
 
 w=""
 i=""
@@ -318,13 +327,11 @@ esac
 # r=rebasing/bisecting/cherry/reverting/etc.  ACTION: Should customize more, put first
 # p=differential from upstream, expand
 
-# f="$w$i$s$u"
 f="$uw$i$x$s"
 # ${f:-=}: above dirty state, = if not
-# gitstring="$c$b${f:+$z$f}$r$p"
 gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 # Ensure gitstring is string, etc.
 printf -v gitstring '%s' "$gitstring"
 out="$gitstring"
 
-echo $out
+echo -n $out
