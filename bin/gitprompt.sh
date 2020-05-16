@@ -204,6 +204,7 @@ w=""
 i=""
 s=""
 u=""
+x=""
 c=""
 p=""
 
@@ -215,27 +216,57 @@ if [ "true" = "$inside_gitdir" ]; then
 	b="GIT_DIR!$z"
     fi
 elif [ "true" = "$inside_worktree" ]; then
-    # WHAT ABOUT UNMERGED U FIXME TODO
-    # Need to deal with fact that =! will show up for U
-    # git itself sugests using status or diff-files (--porcelain), probably
-    # the former FIXME TODO
-    git diff --no-ext-diff --quiet || w=$(__wrap_color "+" "Green")	     # Unstaged
-    git diff --no-ext-diff --cached --quiet || i=$(__wrap_color "!" "Magenta") # Staged
-    # huh???  No sha and no cached, so... ???  something like detached???
+
+    ##### GIT STATUS KEY #####
+    # X          Y     Meaning
+    # -------------------------------------------------
+    #          [AMD]   not updated
+    # M        [ MD]   updated in index
+    # A        [ MD]   added to index
+    # D                deleted from index
+    # R        [ MD]   renamed in index
+    # C        [ MD]   copied in index
+    # [MARC]           index and work tree matches
+    # [ MARC]     M    work tree changed since index
+    # [ MARC]     D    deleted in work tree
+    # [ D]        R    renamed in work tree
+    # [ D]        C    copied in work tree
+    # -------------------------------------------------
+    # D           D    unmerged, both deleted
+    # A           U    unmerged, added by us
+    # U           D    unmerged, deleted by them
+    # U           A    unmerged, added by them
+    # D           U    unmerged, deleted by us
+    # A           A    unmerged, both added
+    # U           U    unmerged, both modified
+    # -------------------------------------------------
+    # ?           ?    untracked
+    # !           !    ignored
+    # -------------------------------------------------
+
+    # Spaces and newlines are a bitch in bash, and porcelain=v2 is
+    # inconsistent in the leading character for untracked, etc.
+    status=$(git status --porcelain|cut -c 1-2|sed 's/ ./unstaged/'|sed 's/. /staged/'|sort|uniq)
+    for stat in $status; do
+	case "$stat" in
+	    unstaged) w=$(__wrap_color "+" "Green");;
+	    staged) i=$(__wrap_color "!" "Magenta");;
+	    "??") u=$(__wrap_color "?" "Cyan");;
+	    UU) x=$(__wrap_color "U" "Red");;
+	esac
+    done
+    # Old, imperfect:
+    # git diff --no-ext-diff --quiet || w=$(__wrap_color "+" "Green")	     # Unstaged
+    # git diff --no-ext-diff --cached --quiet || i=$(__wrap_color "!" "Magenta") # Staged
+    # if git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>/dev/null
+
+    # Not entirely sure what this does yet...
     if [ -z "$short_sha" ] && [ -z "$i" ]; then
-	# i="#"
 	i=$(__wrap_color "#" "Red")
-    fi
-    # Untracked
-    if git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>/dev/null
-    then
-	# u="?"
-	u=$(__wrap_color "?" "Cyan")
     fi
     # Stash
     if git rev-parse --verify --quiet refs/stash >/dev/null
     then
-	# s="$"
 	s=$(__wrap_color "$" "Green")
     fi
 
@@ -288,7 +319,7 @@ esac
 # p=differential from upstream, expand
 
 # f="$w$i$s$u"
-f="$w$i$u$s"
+f="$uw$i$x$s"
 # ${f:-=}: above dirty state, = if not
 # gitstring="$c$b${f:+$z$f}$r$p"
 gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
