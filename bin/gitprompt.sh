@@ -311,7 +311,8 @@ case "$count" in
     *"	0") # behind upstream
 	p="←$z${count%	0}";;
     *)	    # diverged from upstream
-	p="⇵+$z${count#*	}-${count%	*}";;
+	# p="$z${count#*	}⇵$z${count%	*}";;
+	p="$z↓${count#*	}↑${count%	*}";;
 esac
 
 # KEY:
