@@ -153,9 +153,8 @@ if [ -d "$gitdir/rebase-merge" ]; then
 	    # then output extra info if present and different
 	    if [[ -z "$a" ]]; then
 		__git_eread "$gitdir/rebase-merge/stopped-sha" stopped
-		stopped=$(git rev-parse --short "$stopped")
-		echo $stopped
-		a=$(echo -n "$d" | grep "$stopped" | cut -f 1 -d ' ')
+		stopped=$(git rev-parse --short "$stopped") # Just in case
+		a="stopped at $stopped"
 	    fi
 	fi
     fi
