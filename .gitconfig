@@ -131,7 +131,7 @@ rl = reflog --decorate
 cl = clone
 
 # Show verbose output
-tags = tag -l
+tags = tag -n
 remotes = remote -v
 
 b = branch
