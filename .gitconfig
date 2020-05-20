@@ -246,6 +246,10 @@ fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen 
 # Find commits by commit message
 fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%an] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
+# Show number of commits by minimum length
+# Josh Stone @cuviper https://blog.cuviper.com/2013/11/10/how-short-can-git-abbreviate/
+uniq-abbrev=!git rev-list --all --abbrev=0 --abbrev-commit | awk '{ a[length] += 1 } END { for (len in a) print len, a[len] }'
+
 # https://gist.github.com/phinze/83387035c233db7c521e by @phinze
 # git timespan FROMREF [TOREF] [FORMAT]
 # TOREF: defaults to HEAD
