@@ -259,12 +259,12 @@ elif [ "true" = "$inside_worktree" ]; then
     # Currently ignores D[RC] s well as various merge states
     status=$(git status --porcelain|cut -c 1-2|sed 's/ ./unstaged/'|sed 's/. /staged/'|sed 's/[MARC][MD]/both/'|sort|uniq)
     for stat in $status; do
-	case "$stat" in
+	case $stat in
 	    both) w=$(__wrap_color "+" "Green")
 		  i=$(__wrap_color "!" "Magenta");;
 	    unstaged) w=$(__wrap_color "+" "Green");;
 	    staged) i=$(__wrap_color "!" "Magenta");;
-	    "??") u=$(__wrap_color "?" "Cyan");;
+	    ??) u=$(__wrap_color "?" "Cyan");;
 	    UU) x=$(__wrap_color "U" "Red");;
 	    *) e=$(__wrap_color "FIX" "Red");;
 	esac
