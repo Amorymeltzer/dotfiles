@@ -37,7 +37,7 @@ precomposeunicode = false
 
 [commit]
 verbose = true
-gpgsign = true
+gpgSign = true
 # gpg.program set in include
 
 [alias]
@@ -350,6 +350,11 @@ log = true
 # --date=human added in 2.21, used in local-config, see also ld aliases
 date = local
 abbrevCommit = true
+
+[tag]
+# Implies annotated, which is good behavior anyway
+gpgSign = true
+# gpg.program set in include
 
 [blame]
 coloring = highlightRecent
