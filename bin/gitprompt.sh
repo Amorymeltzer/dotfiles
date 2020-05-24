@@ -264,7 +264,7 @@ elif [ "true" = "$inside_worktree" ]; then
 		  i=$(__wrap_color "!" "Magenta");;
 	    unstaged) w=$(__wrap_color "+" "Green");;
 	    staged) i=$(__wrap_color "!" "Magenta");;
-	    ??) u=$(__wrap_color "?" "Cyan");;
+	    \?\?) u=$(__wrap_color "?" "Cyan");;
 	    UU) x=$(__wrap_color "U" "Red");;
 	    *) e=$(__wrap_color "FIX" "Red");;
 	esac
