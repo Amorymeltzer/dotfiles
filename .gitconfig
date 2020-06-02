@@ -307,7 +307,7 @@ textconv = hexdump -v -C
 ui = true
 
 [color "branch"]
-current = cyan reverse
+current = cyan
 local = normal
 remote = green
 
@@ -320,9 +320,12 @@ commit = yellow
 whitespace = red reverse
 
 [color "status"]
+# header = normal
+branch = cyan
 added = magenta
 changed = green
 untracked = cyan
+unmerged = red
 
 # Mainly for diff-so-fancy
 [color "diff-highlight"]
