@@ -49,7 +49,7 @@ export HISTFILESIZE=$HISTSIZE
 # Display timestamp
 # export HISTTIMEFORMAT='[%D %H:%M] '
 export HISTTIMEFORMAT='[%F %T] '
-export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cdl:pwd:* --help:* -h:btc:clear:exit:logout:history*:h:pg'
+export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cdl:pwd:clear:exit:logout:pg'
 
 
 # Append all history to same file, don't overwrite
