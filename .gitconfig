@@ -292,6 +292,8 @@ whitespace = warn
 # --date=human added in 2.21, used in local-config, see also ld aliases
 date = local
 abbrevCommit = true
+# Follow file rename/move, only if one file
+follow = true
 
 [help]
 # If there's only suggestion from a typo, automatically call it after 1.5s
