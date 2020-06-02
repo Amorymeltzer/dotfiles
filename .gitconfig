@@ -114,6 +114,13 @@ llm = log --decorate master..head
 # TODO
 #ls = ls-files
 
+# Should prefer this so that autocomplete distinguishes between cherry-pick and cherry
+cp = cherry-pick
+cpa = cherry-pick --abort
+cpc = cherry-pick --continue
+cps = cherry-pick --skip
+cpq = cherry-pick --quit
+
 # View abbreviated SHA, description, and history graph of the latest 20 commits
 graph = log --pretty=oneline --graph --abbrev-commit --decorate
 
@@ -158,9 +165,10 @@ list-large-files = big-object-report
 
 rb = rebase
 reb = rebase
-rebc = rebase --continue
 reba = rebase --abort
+rebc = rebase --continue
 rebs = rebase --skip
+rebq = rebase --quit
 rbm = rebase master
 rebm = rebase master
 rebd = rebase dev
