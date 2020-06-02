@@ -302,6 +302,9 @@ textconv = hexdump -v -C
 binary = true
 textconv = hexdump -v -C
 
+[diff "plist"]
+textconv = plutil -p
+
 [color]
 # Use colors in Git commands that are capable of colored output when outputting to the terminal
 ui = true
