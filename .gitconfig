@@ -265,6 +265,7 @@ dad = "!curl https://icanhazdadjoke.com/"
 default = simple
 # Make `git push` push relevant annotated tags when pushing branches out.
 followTags = true
+gpgSign = true
 
 [pull]
 ff = only
