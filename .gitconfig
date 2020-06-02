@@ -79,6 +79,10 @@ acm = "!git add -A; git diff --staged --name-only --quiet || git commit -m"
 aca = "!git add -A; git diff --staged --name-only --quiet || git commit --amend"
 acc = "!git add -A; git diff --staged --name-only --quiet || git commit --amend --no-edit"
 
+# ZOMG AWESOME, --interactive is such a pain
+ap  = add -p
+ai  = add -p
+
 co = checkout
 com = checkout master
 cog = checkout gh-pages
@@ -302,6 +306,10 @@ date = local
 abbrevCommit = true
 # Follow file rename/move, only if one file
 follow = true
+
+[interactive]
+# Mainly for add -p, but don't require pressing enter to proceed
+singleKey = true
 
 [help]
 # If there's only suggestion from a typo, automatically call it after 1.5s
