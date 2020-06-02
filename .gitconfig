@@ -190,6 +190,7 @@ d = diff
 dw = diff --word-diff
 dc = diff --cached
 dwc = diff --cached --word-diff
+dn = diff --name-only
 ds = diff --patch-with-stat
 dsc = diff --cached --patch-with-stat
 dcs = diff --cached --patch-with-stat
