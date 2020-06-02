@@ -260,11 +260,20 @@ timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --for
 
 dad = "!curl https://icanhazdadjoke.com/"
 
+[push]
+default = simple
+# Make `git push` push relevant annotated tags when pushing branches out.
+followTags = true
+
 [pull]
 ff = only
 
 [fetch]
 prune = true
+
+[merge]
+# Include summaries of merged commits in newly created merge commit messages
+log = true
 
 [rebase]
 # Automatically stash before rebase; allows for dirty rebases
@@ -274,6 +283,11 @@ missingCommitsCheck = warn
 
 [apply]
 whitespace = warn
+
+[log]
+# --date=human added in 2.21, used in local-config, see also ld aliases
+date = local
+abbrevCommit = true
 
 [help]
 # If there's only suggestion from a typo, automatically call it after 1.5s
@@ -343,20 +357,6 @@ highlightRecent = yellow, 36 months ago, blue, 1 months ago, white
 [gc]
 auto = 256
 
-[push]
-default = simple
-# Make `git push` push relevant annotated tags when pushing branches out.
-followTags = true
-
-[merge]
-# Include summaries of merged commits in newly created merge commit messages
-log = true
-
-[log]
-# --date=human added in 2.21, used in local-config, see also ld aliases
-date = local
-abbrevCommit = true
-
 [tag]
 # Implies annotated, which is good behavior anyway
 gpgSign = true
@@ -366,20 +366,6 @@ gpgSign = true
 coloring = highlightRecent
 # human in local-config
 date = local
-
-# URL shorthands
-[url "git@github.com:"]
-insteadOf = "gh:"
-pushInsteadOf = "github:"
-pushInsteadOf = "git://github.com/"
-[url "git://github.com/"]
-insteadOf = "github:"
-[url "git@gist.github.com:"]
-insteadOf = "gst:"
-pushInsteadOf = "gist:"
-pushInsteadOf = "git://gist.github.com/"
-[url "git://gist.github.com/"]
-insteadOf = "gist:"
 
 [filter "media"]
 required = true
