@@ -202,7 +202,12 @@ if [[ -z $cpan_all_flag ]]; then
 	echo "$cpan_todo"
 	if [[ -z $cpan_flag ]]; then
 	    updating 'CPAN modules'
-	    cpan-outdated -p | xargs cpan -i
+	    # Should probably just cut -f 1 -d ' '
+	    if [[ -f `command -v cpanm` ]]; then
+		cpan-outdated -p | cpanm
+	    else
+		cpan-outdated -p | xargs cpan -i
+	    fi
 	    cleaning 'CPAN directories'
 	    cpanclean;
 	fi
@@ -210,4 +215,3 @@ if [[ -z $cpan_all_flag ]]; then
 	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
     fi
 fi
-
