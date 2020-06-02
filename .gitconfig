@@ -42,6 +42,7 @@ gpgSign = true
 
 [alias]
 h = help
+hc = help config
 cfg = config --global
 
 # Depends on hub
@@ -93,9 +94,19 @@ god = checkout dev
 wc = whatchanged
 
 stat = status
-st = status
 s = status --short --branch
 sn = status --untracked=no
+
+# stash
+st = stash
+stp = stash pop
+pop = stash pop
+sta = stash apply
+stpu = stash push
+std = stash drop
+drop = stash drop
+stl = stash list
+
 # Should do something more interesting/useful/unified with these
 l = log --decorate --graph
 l5 = log --decorate --graph -5
@@ -307,6 +318,16 @@ abbrevCommit = true
 # Follow file rename/move, only if one file
 follow = true
 
+[stash]
+# stash show shows diff along with stat (showStat defaults to true)
+showPatch = true
+
+[status]
+showStash = true
+
+[rebase]
+autoStash = true
+
 [interactive]
 # Mainly for add -p, but don't require pressing enter to proceed
 singleKey = true
@@ -393,8 +414,7 @@ date = local
 required = true
 clean = git media clean %f
 smudge = git media smudge %f
-[rebase]
-autostash = true
+
 [filter "lfs"]
 process = git-lfs filter-process
 required = true
