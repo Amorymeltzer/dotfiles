@@ -670,7 +670,7 @@ function peek() {
 
 
 # Enable aliases to be sudo'ed
-if [[ -z ~/Documents/git/lockquote/lock-quote ]]; then
+if [[ -x ~/Documents/git/lockquote/lock-quote ]]; then
     # http://www.gnu.org/software/bash/manual/bashref.html#Aliases says: "If the
     # last character of the alias value is a space or tab character, then the next
     # command word following the alias is also checked for alias expansion."
