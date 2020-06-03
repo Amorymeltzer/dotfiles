@@ -79,8 +79,6 @@ aas = "!git add -A; git diff --staged --name-only --quiet || git status --short 
 acm = "!git add -A; git diff --staged --name-only --quiet || git commit -m"
 aca = "!git add -A; git diff --staged --name-only --quiet || git commit --amend"
 acc = "!git add -A; git diff --staged --name-only --quiet || git commit --amend --no-edit"
-
-# ZOMG AWESOME, --interactive is such a pain
 ap  = add -p
 ai  = add -p
 
@@ -102,7 +100,10 @@ st = stash
 stp = stash pop
 pop = stash pop
 sta = stash apply
-stpu = stash push
+stu = stash push
+stup = stash push -p		# Or just stash -p
+stum = stash push -m
+stump = stash push -pm
 std = stash drop
 drop = stash drop
 stl = stash list
@@ -321,7 +322,7 @@ abbrevCommit = true
 follow = true
 
 [stash]
-# stash show shows diff along with stat (showStat defaults to true)
+# stash show shows diff along with stat (showStat, defaults to true) like stash show -p
 showPatch = true
 
 [status]
