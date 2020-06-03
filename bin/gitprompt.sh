@@ -193,7 +193,7 @@ else
 	# is it a symbolic ref?
 	b="${head#ref: }"
 	if [ "$head" = "$b" ]; then
-	    detached=yes
+	    detached=yes	# Not really... unused anyway, so can remove?
 	    b="$(git describe --contains --all HEAD)"
 	fi
     fi
@@ -205,8 +205,9 @@ if [[ -n "$r" ]]; then
     # Consider moving to end of gitstring??? FIXME TODO
     if [ -n "$step" ] && [ -n "$total" ]; then
 	a="(${a:+$a$z}$step/$total)"
+	a="$(__wrap_color "$a" "Blue")"
     fi
-    r="$r $(__wrap_color "$a" "Blue")"
+    r="$r${a:+$z$a}"
 fi
 
 w=""
