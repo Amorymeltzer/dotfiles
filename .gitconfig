@@ -288,7 +288,8 @@ dad = "!curl https://icanhazdadjoke.com/"
 default = simple
 # Make `git push` push relevant annotated tags when pushing branches out.
 followTags = true
-gpgSign = true
+# Currently unsupported by GitHub https://github.community/t/push-signed/938/4
+# gpgSign = true
 
 [pull]
 ff = only
