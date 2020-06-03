@@ -106,6 +106,7 @@ stpu = stash push
 std = stash drop
 drop = stash drop
 stl = stash list
+sts = stash show
 
 # Should do something more interesting/useful/unified with these
 l = log --decorate --graph
