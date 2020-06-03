@@ -1,0 +1,49 @@
+# Customize based on local environment, etc.
+# eg: core.editor, core.pager, gpg, icdiff, ghi
+# Example file at ~/.local-gitconfig.example
+
+[core]
+editor = emacsclient -cqu
+
+# pager = diff-so-fancy | less --tabs=4 -RFX
+# After much deliberation, this is fine.  Color options are confusing as hell;
+# I wish there were more customization, and the bat themes are excellent but
+# imperfect and a big shift.  What I really want is this+icdiff... Issue 169
+# https://github.com/dandavison/delta
+pager = delta --highlight-removed
+
+[interactive]
+diffFilter = delta --color-only
+
+[gpg]
+program = /usr/local/bin/gpg
+
+[alias]
+ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local
+ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local -5
+
+# Use icdiff tool https://github.com/jeffkaufman/icdiff
+icd = icdiff
+ic = icdiff
+icdc = icdiff --cached
+icc = icdiff --cached
+idp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
+
+scan = "!~/bin/gscan"
+
+[log]
+date = auto:human-local
+
+[blame]
+date = auto:human-local
+
+[icdiff]
+# options = --color-map='change:magenta_bold,meta:white' --tabs=4
+options = --color-map='add:green,change:magenta,description:blue,line-numbers:white,meta:white,separator:blue,subtract:red' --tabs=4
+pager = less
+
+[tiny-scripts]
+remote = origin
+
+[ghi]
+token = !security find-internet-password -a $(git config --get github.user) -s github.com -l 'ghi token' -w
