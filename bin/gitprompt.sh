@@ -193,7 +193,7 @@ else
 	# is it a symbolic ref?
 	b="${head#ref: }"
 	if [ "$head" = "$b" ]; then
-	    detached=yes	# Not really... unused anyway, so can remove?
+	    detached=yes	# Used to colorize detched head in red
 	    b="$(git describe --contains --all HEAD)"
 	fi
     fi
@@ -295,7 +295,11 @@ b=${b##refs/heads/}
 # b="\${__git_ps1_branch_name}"
 
 if [[ "$b" != "master" ]]; then
-    b=$(__wrap_color "$b" "White")
+    if [[ "$detached" = 'yes' ]]; then
+	b=$(__wrap_color "$b" "Red")
+    else
+	b=$(__wrap_color "$b" "White")
+    fi
 fi
 
 # @ separator
