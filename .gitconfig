@@ -420,6 +420,10 @@ coloring = highlightRecent
 # human in local-config
 date = local
 
+[rerere]
+# Tries to remember resolutions of merge conflicts for the next time, seems useful in theory?
+enabled = true
+
 [filter "media"]
 required = true
 clean = git media clean %f
