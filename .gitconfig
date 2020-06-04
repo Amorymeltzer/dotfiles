@@ -125,14 +125,14 @@ lf5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an
 lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) (%ar)%C(bold blue)<%an>%Creset' --abbrev-commit
 #grog = git log --graph --abbrev-commit --decorate --all --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)"
 
-lm = log --oneline --decorate master..head
-llm = log --decorate master..head
+lm = log --oneline --decorate master..HEAD
+llm = log --decorate master..HEAD
 
-lum = log --oneline --decorate @{upstream}..head
-llum = log --decorate @{upstream}..head
+lum = log --oneline --decorate @{upstream}..HEAD
+llum = log --decorate @{upstream}..HEAD
 # Probably not that useful, but technically possible...
-lmu = log --oneline --decorate head..@{upstream}
-llmu = log --decorate head..@{upstream}
+lmu = log --oneline --decorate HEAD..@{upstream}
+llmu = log --decorate HEAD..@{upstream}
 
 # TODO
 #ls = ls-files
@@ -216,7 +216,7 @@ pod = push origin dev
 # Use rebase to prevent unnecessary commits
 pum = pull --rebase origin master
 puo = pull --rebase origin
-pu = pull --rebase 
+pu = pull --rebase
 # Personal remote
 pa = push Amorymeltzer
 pau = push -u Amorymeltzer
