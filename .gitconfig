@@ -243,6 +243,13 @@ re = reset
 reh = reset --hard
 res = reset --soft
 
+# m just too simple/easy for merge
+mg = merge
+mgd = merge dev
+mga = merge --abort
+mgc = merge --continue
+mgq = merge --quit
+
 # Assume/Unassume changes
 assume = update-index --assume-unchanged
 unassume = update-index --no-assume-unchanged
