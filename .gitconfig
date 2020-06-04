@@ -202,6 +202,11 @@ rebi = "!r() { git rebase -i HEAD~$1; }; r"
 rebix = "!r() { git rebase -i -x \"$2\" HEAD~$1; }; r"
 rebim = rebase -i master
 
+# Aww yeah.  Autoplace fixes where needed in interactive rebase with --autosquash or rebase.autoSquash
+fixup = commit --fixup
+# git-extras has a squash command
+squash-fixup = commit --squash
+
 # Push and Pull
 po = push origin
 pou = push -u origin
@@ -327,6 +332,8 @@ log = true
 [rebase]
 # Automatically stash before rebase; allows for dirty rebases
 autoStash = true
+# Automatically file squash! or fixup! prefixed commits where appropriate, --no-autosquash to turn off for incompatible options
+autoSquash = true
 # warn but proceed if commits dropped via exclusion, use drop instead
 missingCommitsCheck = warn
 
@@ -346,9 +353,6 @@ showPatch = true
 
 [status]
 showStash = true
-
-[rebase]
-autoStash = true
 
 [interactive]
 # Mainly for add -p, but don't require pressing enter to proceed
