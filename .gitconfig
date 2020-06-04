@@ -128,6 +128,12 @@ lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s
 lm = log --oneline --decorate master..head
 llm = log --decorate master..head
 
+lum = log --oneline --decorate @{upstream}..head
+llum = log --decorate @{upstream}..head
+# Probably not that useful, but technically possible...
+lmu = log --oneline --decorate head..@{upstream}
+llmu = log --decorate head..@{upstream}
+
 # TODO
 #ls = ls-files
 
@@ -189,6 +195,7 @@ rebq = rebase --quit
 rbm = rebase master
 rebm = rebase master
 rebd = rebase dev
+rebu = rebase @{upstream}
 # Interactive rebase with the selected number of latest commits
 rebi = "!r() { git rebase -i HEAD~$1; }; r"
 # As above, but with the --exec option
@@ -219,6 +226,9 @@ dn = diff --name-only
 ds = diff --patch-with-stat
 dsc = diff --cached --patch-with-stat
 dcs = diff --cached --patch-with-stat
+du  = diff @{upstream}
+dun = diff --name-only @{upstream}
+duc = diff --cached @{upstream}
 # Compare commit to the state before it
 dp = "!f() { c=${1:-HEAD}; git diff $c~ $c; }; f"
 
@@ -242,6 +252,8 @@ unstage = reset HEAD --
 re = reset
 reh = reset --hard
 res = reset --soft
+rehu = reset --hard @{upstream}
+resu = reset --soft @{upstream}
 
 # m just too simple/easy for merge
 mg = merge
