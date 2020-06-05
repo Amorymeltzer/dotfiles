@@ -159,10 +159,11 @@ tags = tag -n
 remotes = remote -v
 
 br = branch
-# Could do something fancy with @{-1} to delete the last branch, but seems
-# vaguely risky in case it's master or something.  Still, -D outputs the sha,
-# so can easily restore?
+# git-extras also has delete-branch, which does upstream
 brd = branch -D
+# Vaguely risky, but -D outputs the sha, so can easily restore
+# Will fail if not a branch (e.g. checkout -> detached head then back to normal)
+delete-last-branch = branch -D @{-1}
 # Would prefer this as -simple and -long as just branches, but aliases can't
 # overwrite scripts, and unixorn added a bunch of pluralizing scripts in #117
 branches = branch -a
