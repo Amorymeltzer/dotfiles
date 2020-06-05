@@ -49,7 +49,7 @@ notifications = "!browser https://github.com/notifications"
 allpulls = "!browser https://github.com/pulls"
 allissues = "!browser https://github.com/issues"
 
-init-commit = "!git init && git commit --alow-empty -m 'Initial commit'"
+init-commit = "!git init && git commit --allow-empty -m 'Initial commit'"
 
 c = commit
 cm = commit -m
