@@ -127,6 +127,19 @@ llum = log --decorate @{upstream}..HEAD
 lmu = log --oneline --decorate HEAD..@{upstream}
 llmu = log --decorate HEAD..@{upstream}
 
+# Show new commits, most useful if done right after a pull or fetch
+# --name-status to show files and status change (could do --stat too)
+# https://git.wiki.kernel.org/index.php/Aliases
+# Should probably use $@ in more places to allow subsequent flags to pass
+
+# @ == HEAD, but head is complicated
+# Can prefix with a ref (master, dev, etc.), otherwise assumes current branch
+# @{1} is the previous value of the ref (eg. prior to an amend), which is
+# *almost* the same as ORIG_HEAD, which is the previous value of head before a
+# drastic/risky operation (man gitrevisions and https://stackoverflow.com/a/967611/2521092)
+# @{0} is thus @ aka HEAD
+new = !git log --name-status $1@{1}..$1@{0} "$@"
+
 # TODO
 #ls = ls-files
 
@@ -162,7 +175,7 @@ br = branch
 # git-extras also has delete-branch, which does upstream
 brd = branch -D
 # Vaguely risky, but -D outputs the sha, so can easily restore
-# Will fail if not a branch (e.g. checkout -> detached head then back to normal)
+# Will fail if not a branch (e.g. we had checked out a commit, resulting in a detached head)
 delete-last-branch = branch -D @{-1}
 # Would prefer this as -simple and -long as just branches, but aliases can't
 # overwrite scripts, and unixorn added a bunch of pluralizing scripts in #117
