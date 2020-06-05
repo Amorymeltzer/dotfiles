@@ -140,6 +140,7 @@ llmu = log --decorate HEAD..@{upstream}
 # @{0} is thus @ aka HEAD
 new = !git log --name-status $1@{1}..$1@{0} "$@"
 
+
 # TODO
 #ls = ls-files
 
@@ -238,6 +239,7 @@ d = diff
 dw = diff --word-diff
 dc = diff --cached
 dwc = diff --cached --word-diff
+patience = diff --patience
 dn = diff --name-only
 ds = diff --patch-with-stat
 dsc = diff --cached --patch-with-stat
@@ -248,16 +250,10 @@ duc = diff --cached @{upstream}
 # Compare commit to the state before it
 dp = "!f() { c=${1:-HEAD}; git diff $c~ $c; }; f"
 
-patience = diff --patience
-
 # Goodness (summary of diff lines added/removed/total)
 # FIXME TODO: Colorize
 gn = goodness
 gnc = goodness --cached
-
-# Divergence (commits we added and commits remote added)
-# FIXME TODO: Colorize
-div = divergence
 
 # Copy sha hashes.  Trim new lines since sh's echo doesn't accept -n
 hash = "!r() { h=${1:-HEAD}; rev=$(git rev-parse $h); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
@@ -292,6 +288,9 @@ ignored = "!git clean -ndX | sed 's/Would remove //g'"
 # List of leftover conflict markers
 # See https://stackoverflow.com/a/49382772/2521092
 conflict-markers = diff --check
+
+# Script to clustergit check all repos
+scan = "!~/bin/gscan"
 
 # List all aliases
 aliases = "!git config -l | grep alias | cut -c 7-"

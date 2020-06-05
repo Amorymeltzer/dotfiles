@@ -29,8 +29,6 @@ icdc = icdiff --cached
 icc = icdiff --cached
 idp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
 
-scan = "!~/bin/gscan"
-
 # Depends on hub
 home = browse
 repo = browse
@@ -38,6 +36,11 @@ pulls = browse -- pulls
 issues = browse -- issues
 mypulls = browse -- pulls/amorymeltzer
 commits = browse -- commits
+
+# Depends on git-extras
+# Divergence = commits we added and commits remote added, similar to llum, etc.
+# FIXME TODO: Colorize
+div = divergence
 
 [log]
 date = auto:human-local
