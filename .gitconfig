@@ -154,15 +154,19 @@ cl = clone
 tags = tag -n
 remotes = remote -v
 
-b = branch
 br = branch
-bv = branch -vv
-branches = branch -vv
-ba = branch -a -vv
-brd = branch -a -vv
-branches-local = !git branch -av | grep -v remotes
-brl = !git branch -av | grep -v remotes
+# Could do something fancy with @{-1} to delete the last branch, but seems
+# vaguely risky in case it's master or something.  Still, -D outputs the sha,
+# so can easily restore?
+brd = branch -D
+# Would prefer this as -simple and -long as just branches, but aliases can't
+# overwrite scripts, and unixorn added a bunch of pluralizing scripts in #117
+branches = branch -a
+local-branches = "!git branch -a --color | grep -v remotes"
+branches-long = branch -a -vv
+local-branches-long = "!git branch -avv --color | grep -v remotes"
 branch-name = copy-branch-name
+
 # https://stackoverflow.com/a/5188364/2521092
 # Only show most recent 15
 recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
@@ -380,7 +384,8 @@ textconv = hexdump -v -C
 textconv = plutil -p
 
 [color]
-# Use colors in Git commands that are capable of colored output when outputting to the terminal
+# Use colors in Git commands that are capable of colored output when output is
+# to the terminal, not pipes or files (use --color when appropriate)
 ui = true
 
 [color "branch"]
