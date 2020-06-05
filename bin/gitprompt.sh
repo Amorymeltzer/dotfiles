@@ -143,11 +143,11 @@ if [ -d "$gitdir/rebase-merge" ]; then
 	o="$(__wrap_color "onto" "Red") $o"
     fi
     # Get action, probably needs work FIXME TODO
-    d=$(tail -n 1 "$gitdir/rebase-merge/done" 2>/dev/null)
-    if [[ -n "$d" ]]; then
-	a="$d"
+    done=$(tail -n 1 "$gitdir/rebase-merge/done" 2>/dev/null)
+    if [[ -n "$done" ]]; then
+	a="$done"
 	if [[ "$a" != "break" ]]; then
-	    a=$(echo -n "$d" | grep "$short_sha" | cut -f 1 -d ' ')
+	    a=$(echo -n "$done" | grep "$short_sha" | cut -f 1 -d ' ')
 	    # Weirdness with merges and shit, hopefully don't get here
 	    # Could be smarter and check for stopped and amend
 	    # then output extra info if present and different
@@ -212,10 +212,14 @@ fi
 
 w=""
 i=""
-s=""
 u=""
+t=""
+d=""
 x=""
+y=""
+n=""
 e=""
+s=""
 c=""
 p=""
 
@@ -255,19 +259,28 @@ elif [ "true" = "$inside_worktree" ]; then
     # !           !    ignored
     # -------------------------------------------------
 
-    # Spaces and newlines are a bitch in bash, and porcelain=v2 is
-    # inconsistent in the leading character for untracked, etc.
-    # Currently ignores D[RC] s well as various merge states
-    status=$(git status --porcelain|cut -c 1-2|sed 's/ ./unstaged/'|sed 's/. /staged/'|sed 's/[MARC][MD]/both/'|sed 's/??/untracked/'|sort|uniq)
-    for stat in $status; do
-	case $stat in
-	    both) w=$(__wrap_color "+" "Green")
-		  i=$(__wrap_color "!" "Magenta");;
-	    unstaged) w=$(__wrap_color "+" "Green");;
-	    staged) i=$(__wrap_color "!" "Magenta");;
+    # porcelain=v2 is inconsistent in the leading character for untracked
+    # ?? is hard to match properly in a case, behaves very weirdly
+    status=$(git status --porcelain|cut -c 1-2|sed 's/??/untracked/'|sort|uniq)
+    IFS=$'\n' status=($status)
+    for stat in "${status[@]}"; do
+	case "$stat" in
+	    # Green=not staged, magenta=staged
+	    # Currently ignores [ D][RC] and could maybe do better with
+	    # renames (R )
+	    [MARC][MD]) w=$(__wrap_color "+" "Green")
+			i=$(__wrap_color "!" "Magenta");;
+	    ' '[MARC]) w=$(__wrap_color "+" "Green");;
+	    [MARC]' ') i=$(__wrap_color "!" "Magenta");;
 	    untracked) u=$(__wrap_color "?" "Cyan");;
+	    ' T') t=$(__wrap_color "T" "Green");;
+	    'T ') t=$(__wrap_color "T" "Magenta");;
+	    ' D') d=$(__wrap_color "D" "Green");;
+	    'D ') d=$(__wrap_color "D" "Magenta");;
+	    # Various merge states in red
 	    UU) x=$(__wrap_color "U" "Red");;
-	    DU) x=$(__wrap_color "D" "Red");;
+	    DD|DU|UD) y=$(__wrap_color "D" "Red");;
+	    AA|AU|UA) n=$(__wrap_color "A" "Red");;
 	    *) e=$(__wrap_color "FIX" "Red");;
 	esac
     done
@@ -326,20 +339,26 @@ case "$count" in
 esac
 
 # KEY:
-# w=dirty state symbol (*) for unstaged
-# i=dirty state symbol (+) for staged (or # if weird???)
+# w=symbol (+) for unstaged
+# i=symbol (!) for staged
+# u=symbol (?) for untracked
+# t=symbol (T) for typechange
+# d=symbol (D) for deleted
+# x=symbol (U) for merge: conflicts/modified
+# y=symbol (D) for merge: deleted
+# n=symbol (A) for merge: added
+# e=symbol (FIX) for others
 # s=symbol ($) to indicate something is stashed
-# u=symbol (%) for untracked files
 # c=BARE or empty
 # b=branch name
 # o=rebasing onto commit
-# f=string combining w, i, s, and u, so probably *+$.
+# f=string combining above, so probably something like *+$.
 # z=separator, just a space
 # ${f:+$z$f}: if empty, nothing; if present, then separator then f itself
 # r=rebasing/bisecting/cherry/reverting/etc.  ACTION: Should customize more, put first
 # p=differential from upstream, expand
 
-f="$u$w$i$x$s$e"
+f="$u$w$t$d$i$n$x$y$s$e"
 # ${f:-=}: above dirty state, = if not
 gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 # Ensure gitstring is string, etc.
