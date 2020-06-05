@@ -1,6 +1,6 @@
 # Fill this with any options you want based off your local environment, such
 # as different gpg locations or editors, or aliases or functions dependent on
-# local sources, then move it to ~/.config/git/local-config (or what have you)
+# local sources, then move it to ~/.local-gitconfig
 
 [core]
 editor = emacsclient -cqu
@@ -21,6 +21,23 @@ program = /usr/local/bin/gpg
 [alias]
 ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local
 ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local -5
+
+# Use icdiff tool https://github.com/jeffkaufman/icdiff
+icd = icdiff
+ic = icdiff
+icdc = icdiff --cached
+icc = icdiff --cached
+idp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
+
+scan = "!~/bin/gscan"
+
+# Depends on hub
+home = browse
+repo = browse
+pulls = browse -- pulls
+issues = browse -- issues
+mypulls = browse -- pulls/amorymeltzer
+commits = browse -- commits
 
 [log]
 date = auto:human-local

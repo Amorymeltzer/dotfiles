@@ -31,6 +31,14 @@ idp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
 
 scan = "!~/bin/gscan"
 
+# Depends on hub
+home = browse
+repo = browse
+pulls = browse -- pulls
+issues = browse -- issues
+mypulls = browse -- pulls/amorymeltzer
+commits = browse -- commits
+
 [log]
 date = auto:human-local
 

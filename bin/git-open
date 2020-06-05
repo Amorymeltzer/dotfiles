@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
+# from @groodt: https://github.com/groodt/dotfiles/blob/18773b62e104b318aba94cfbf19692de6b139e89/bin/github-open
 
-## Usage: github-open FILE [LINE]
+## Usage: git open FILE [LINE]
 ## Open GitHub file/blob page for FILE on LINE. FILE is the path to the
 ## file on disk; it must exist and be tracked with the current HEAD
 ## revision. LINE is the line number or line number range (e.g., 10-50).
 ##
 ## Open foo/bar.rb in browser:
-##   $ github-open foo/bar.rb
+##   $ git open foo/bar.rb
 ##
 ## Open foo/bar in browser w/ lines 50-57 highlighted:
-##   $ github-open foo/bar.rb 50-57
+##   $ git open foo/bar.rb 50-57
 ##
 ## Open current file in vim on line 20:
 ##   :!github-open % 20

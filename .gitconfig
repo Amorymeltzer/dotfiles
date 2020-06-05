@@ -45,21 +45,10 @@ h = help
 hc = help config
 cfg = config --global
 
-# Depends on hub
-home = browse
-repo = browse
-pulls = browse -- pulls
-issues = browse -- issues
-mypulls = browse -- pulls/amorymeltzer
-commits = browse -- commits
-
 notifications = "!browser https://github.com/notifications"
 allpulls = "!browser https://github.com/pulls"
 allissues = "!browser https://github.com/issues"
 
-open = "!github-open "
-
-first-commit = "!git init && git commit --alow-empty -m 'Initial commit'"
 init-commit = "!git init && git commit --alow-empty -m 'Initial commit'"
 
 c = commit
