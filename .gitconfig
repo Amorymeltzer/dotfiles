@@ -317,6 +317,8 @@ prune = true
 [merge]
 # Include summaries of merged commits in newly created merge commit messages
 log = true
+# Display base with ||| between ours and theirs, seems useful if a bit weird
+conflictStyle = diff3
 
 [rebase]
 # Automatically stash before rebase; allows for dirty rebases
