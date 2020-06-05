@@ -157,11 +157,15 @@ graph = log --pretty=oneline --graph --abbrev-commit --decorate
 # Like "git show myfile", but uses the last commit that changed "myfile".
 showlast = log -n 1 -p
 last = log -n 1 -p
+
 # List contributors by number of commits
 contributors = "!git --no-pager shortlog --summary --numbered --no-merges"
 top-contributors = "!t() { c=${1:-10}; git --no-pager shortlog --summary --numbered --no-merges | head -n $c; }; t"
 contributors-merges = "!git --no-pager shortlog --summary --numbered"
 top-contributors-merges = "!t() { c=${1:-10}; git --no-pager shortlog --summary --numbered | head -n $c; }; t"
+# Provide sha or --author=Name/Email
+# -i ignores case
+whois = "!git log -i -1 --pretty='format:%an <%ae>'"
 
 difflog = log -u
 rl = reflog --decorate
