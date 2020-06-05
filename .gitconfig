@@ -55,10 +55,14 @@ c = commit
 cm = commit -m
 amend = commit --amend
 commend = commit --amend --no-edit
+# These two not quite sensible, but roughly mirror the aca/acc behavior below
+ca = commit --amend
+cc = commit --amend --no-edit
 amend-resetauthor = commit --amend --reset-author
 commend-resetauthor = commit --amend --no-edit --reset-author
 amr = commit --amend --reset-author
 cor = commit --amend --no-edit --reset-author
+
 a = add
 aa = add -A
 all = add -A
