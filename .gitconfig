@@ -235,6 +235,11 @@ rebis = "!git rebase -i $(git split-from)"
 fixup = commit --fixup
 # git-extras has a squash command
 squash-fixup = commit --squash
+# Do the above but automatically move into a rebase
+# Need to verify then save sha since since refs like head~2 are treated
+# differently by commit and rebase -i (specifically around merges)
+fixup-pick = "!sha=$(git rev-parse $1) && git commit --fixup $sha && git rebase -i $sha^ #"
+squash-fixup-pick = "!sha=$(git rev-parse $1) && git commit --squash $sha && git rebase -i $sha^ #"
 
 # Push and Pull
 po = push origin
