@@ -467,6 +467,12 @@ newHighlight = green bold 22
 [color "blame"]
 highlightRecent = yellow, 36 months ago, blue, 1 months ago, white
 
+[color "interactive"]
+# prompt = blue #bold
+header = magenta bold		# Not sure what this applies to...
+help = yellow
+error = red bold # Takes the help color unless otherwise specificed, default is red bold
+
 [gc]
 auto = 256
 
