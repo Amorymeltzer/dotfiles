@@ -294,6 +294,9 @@ ignored = "!git clean -ndX | sed 's/Would remove //g'"
 # List of leftover conflict markers
 # See https://stackoverflow.com/a/49382772/2521092
 conflict-markers = diff --check
+# Open merge conflicts in editor
+edit-unmerged = "!git diff --name-only --diff-filter=U | xargs $VISUAL"
+add-unmerged = "!git diff --name-only --diff-filter=U | xargs git add"
 
 # Script to clustergit check all repos
 scan = "!~/bin/gscan"
