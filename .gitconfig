@@ -263,6 +263,8 @@ gnc = goodness --cached
 hash = "!r() { h=${1:-HEAD}; rev=$(git rev-parse $h); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
 sha = "!r() { h=${1:-HEAD}; rev=$(git rev-parse --short $h); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
 short = sha
+# Find collisions from a given prefix
+collisions = "!r() { git rev-list --all | grep ^$1 | while read commit; do git --no-pager log -n1 --pretty=format:'%H %ci %an %s%n' $commit; done; }; r"
 
 unstage = reset HEAD --
 re = reset
