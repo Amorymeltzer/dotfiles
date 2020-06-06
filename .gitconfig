@@ -127,6 +127,12 @@ llum = log --decorate @{upstream}..HEAD
 lmu = log --oneline --decorate HEAD..@{upstream}
 llmu = log --decorate HEAD..@{upstream}
 
+# Find the commit this commit split off from
+# Feels like --fork-point should help but no???
+# The trailing # means the $1 and $2 arguments don't get gobbled up along the
+# way, should probably make better use of this throughout this config
+split-from = "!git merge-base ${1:-master} ${2:-HEAD} #"
+
 # Show new commits, most useful if done right after a pull or fetch
 # --name-status to show files and status change (could do --stat too)
 # https://git.wiki.kernel.org/index.php/Aliases
@@ -139,7 +145,6 @@ llmu = log --decorate HEAD..@{upstream}
 # drastic/risky operation (man gitrevisions and https://stackoverflow.com/a/967611/2521092)
 # @{0} is thus @ aka HEAD
 new = !git log --name-status $1@{1}..$1@{0} "$@"
-
 
 # TODO
 #ls = ls-files
