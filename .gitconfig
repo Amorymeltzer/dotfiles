@@ -289,8 +289,8 @@ unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 
 ignored = "!git clean -ndX | sed 's/Would remove //g'"
 
-# Show list of files in a conflict state, loaded elsewhere but here for comparison
-# conflicts = "!git ls-files -u | awk '{print $4}' | sort -u"
+# Show list of files in a conflict state, also present in git-extra-commands
+conflicts = "!git ls-files -u | awk '{print $4}' | sort -u"
 # List of leftover conflict markers
 # See https://stackoverflow.com/a/49382772/2521092
 conflict-markers = diff --check
