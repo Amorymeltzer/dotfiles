@@ -301,6 +301,10 @@ add-unmerged = "!git diff --name-only --diff-filter=U | xargs git add"
 # Script to clustergit check all repos
 scan = "!~/bin/gscan"
 
+# Should really learn to use gitk: faster than kraken or vs, and like 85% of all the other apps
+# gui for blame or browser (or citool)
+k = !gitk
+
 # List all aliases
 aliases = "!git config -l | grep alias | cut -c 7-"
 # All options
