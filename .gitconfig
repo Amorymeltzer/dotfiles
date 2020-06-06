@@ -222,9 +222,10 @@ rebm = rebase master
 rebd = rebase dev
 rebu = rebase @{upstream}
 # Interactive rebase with the selected number of latest commits
-rebi = "!r() { git rebase -i HEAD~$1; }; r"
+# Allow for additional flags after
+rebi = "!git rebase -i HEAD~$1 \"${@:2}\" #"
 # As above, but with the --exec option
-rebix = "!r() { git rebase -i -x \"$2\" HEAD~$1; }; r"
+rebix = "!git rebase -i -x \"$2\" HEAD~$1 \"${@:3}\" #"
 rebim = rebase -i master
 
 # Aww yeah.  Autoplace fixes where needed in interactive rebase with --autosquash or rebase.autoSquash
