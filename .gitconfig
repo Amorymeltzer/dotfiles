@@ -227,6 +227,9 @@ rebi = "!git rebase -i HEAD~$1 \"${@:2}\" #"
 # As above, but with the --exec option
 rebix = "!git rebase -i -x \"$2\" HEAD~$1 \"${@:3}\" #"
 rebim = rebase -i master
+# Relies on split-from alias, rebases commits since splitting this branch
+rebis = "!git rebase -i $(git split-from)"
+
 
 # Aww yeah.  Autoplace fixes where needed in interactive rebase with --autosquash or rebase.autoSquash
 fixup = commit --fixup
