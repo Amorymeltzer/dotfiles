@@ -65,7 +65,6 @@ export GPG_TTY=$(tty)
 # Alias hub as git for github https://github.com/github/hub
 if [[ -f `command -v hub` ]] ; then
     alias git='hub'
-    complete -F _git hub
 fi
 # Quick
 function g {

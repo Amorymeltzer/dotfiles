@@ -90,6 +90,7 @@ sn = status --untracked=no
 
 # stash
 st = stash
+# Completion treats these as "stash" so won't complete with the list, which sucks
 stp = stash pop
 pop = stash pop
 sta = stash apply
