@@ -78,12 +78,11 @@ function g {
 	    git l1 -1
 	    git status --short --branch
 	fi
-    elif [[ $1 = 'scan' || $1 = 'help' || $1 = 'browse' || $1 = 'grab' ]]; then
-	git "$@"
-    elif [[ $1 = 'config' || $1 = 'version' || $1 = 'notifications' ]]; then
-	git "$@"
     else
-	echo "Not a git repository"
+	case "$1" in
+	    scan|'help'|h|browse|grab|config|cfg|version|notifications) git "$@";;
+	    *) echo "Not a git repository"
+	esac
     fi
 }
 
