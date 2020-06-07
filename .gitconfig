@@ -104,21 +104,26 @@ stl = stash list
 sts = stash show
 stb = stash branch
 
-# Should do something more interesting/useful/unified with these
-l = log --decorate --graph
-l5 = log --decorate --graph -5
-l1 = log --oneline --decorate
-l15 = log --oneline --decorate -5
+# Various log shorthands and improvements, some accessed via .bashrc aliases
+l = log --oneline
+l5 = log --oneline -5
+
+full = log --pretty=fuller
+lf1 = log --pretty=fuller -1
+
+# All commits, and all important/labeled commits
+la = log --graph --decorate --oneline --all
+las = log --graph --decorate --oneline --all --simplify-by-decoration
+
+ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
+ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short -5
 
 # Potentially overridden in local-config to use date=human after 2.21, see also [log]
-ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
-ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative -5
+lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
+lr5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%3Cblue\\ [%an]" --decorate --date=relative -5
+lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %Cgreen(A: %cr, C: %ar)%C(blue) [%an]%Creset' --abbrev-commit --date=relative
 
-lf = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
-lf5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short -5
-# Yet another one: https://github.com/jfrazelle/mac-dev-setup#bash-completions
-lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) (%ar)%C(bold blue)<%an>%Creset' --abbrev-commit
-#grog = git log --graph --abbrev-commit --decorate --all --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)"
+graph = lg
 
 lm = log --oneline --decorate master..HEAD
 llm = log --decorate master..HEAD
@@ -129,11 +134,6 @@ llum = log --decorate @{upstream}..HEAD
 lmu = log --oneline --decorate HEAD..@{upstream}
 llmu = log --decorate HEAD..@{upstream}
 
-# Find the commit this commit split off from
-# Feels like --fork-point should help but no???
-# The trailing # means the $1 and $2 arguments don't get gobbled up along the
-# way, should probably make better use of this throughout this config
-split-from = "!git merge-base ${1:-master} ${2:-HEAD} #"
 
 # Show new commits, most useful if done right after a pull or fetch
 # --name-status to show files and status change (could do --stat too)
@@ -148,8 +148,6 @@ split-from = "!git merge-base ${1:-master} ${2:-HEAD} #"
 # @{0} is thus @ aka HEAD
 new = !git log --name-status $1@{1}..$1@{0} "$@"
 
-# TODO
-#ls = ls-files
 
 # Should prefer this so that autocomplete distinguishes between cherry-pick and cherry
 cp = cherry-pick
@@ -157,9 +155,6 @@ cpa = cherry-pick --abort
 cpc = cherry-pick --continue
 cps = cherry-pick --skip
 cpq = cherry-pick --quit
-
-# View abbreviated SHA, description, and history graph of the latest 20 commits
-graph = log --pretty=oneline --graph --abbrev-commit --decorate
 
 # Like "git show myfile", but uses the last commit that changed "myfile".
 showlast = log -n 1 -p
@@ -211,6 +206,12 @@ go = "!f() { git switch -c \"$1\" 2> /dev/null || git switch \"$1\"; }; f"
 # Easily rememberable
 remove-merged-branches = delete-merged-branches
 list-large-files = big-object-report
+
+# Find the commit this commit split off from
+# Feels like --fork-point should help but no???
+# The trailing # means the $1 and $2 arguments don't get gobbled up along the
+# way, should probably make better use of this throughout this config
+split-from = "!git merge-base ${1:-master} ${2:-HEAD} #"
 
 
 rb = rebase

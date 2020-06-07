@@ -74,7 +74,7 @@ function g {
             git "$@"
 	else
             git time-since-last-commit
-	    git l1 -1
+	    git l5
 	    git status --short --branch
 	fi
     else
@@ -105,9 +105,12 @@ alias gds='g ds'
 alias gdsc='g dsc'
 alias gdcs='g dsc'
 alias gcm='g cm'
-alias gl='g l1 -5'
-alias gl1='g l1'
+alias gl='g l5'
+alias gl1='g l'
+alias gfu='g lf1'
 alias gld='g ld5'
+alias glr='g lr5'
+alias glg='g lg'
 alias glm='g lm'
 alias gllm='g llm'
 alias greh='g reh'

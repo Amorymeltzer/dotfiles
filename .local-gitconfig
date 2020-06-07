@@ -19,8 +19,9 @@ diffFilter = delta --color-only
 program = /usr/local/bin/gpg
 
 [alias]
-ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local
-ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local -5
+lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local
+lr5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local -5
+lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %Cgreen(A: %cr, C: %ar)%C(blue) [%an]%Creset' --abbrev-commit --date=human-local
 
 # Use icdiff tool https://github.com/jeffkaufman/icdiff
 icd = icdiff
