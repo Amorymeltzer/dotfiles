@@ -102,6 +102,7 @@ std = stash drop
 drop = stash drop
 stl = stash list
 sts = stash show
+stb = stash branch
 
 # Should do something more interesting/useful/unified with these
 l = log --decorate --graph
