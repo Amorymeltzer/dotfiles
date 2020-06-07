@@ -309,13 +309,14 @@ unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 ignored = "!git clean -ndX | sed 's/Would remove //g'"
 
 # Show list of files in a conflict state, also present in git-extra-commands
+# faster than diff --name-only --diff-filter=U
 conflicts = "!git ls-files -u | awk '{print $4}' | sort -u"
 # List of leftover conflict markers
 # See https://stackoverflow.com/a/49382772/2521092
 conflict-markers = diff --check
 # Open merge conflicts in editor
-edit-unmerged = "!git diff --name-only --diff-filter=U | xargs $VISUAL"
-add-unmerged = "!git diff --name-only --diff-filter=U | xargs git add"
+edit-unmerged = "!git conflicts | xargs $VISUAL"
+add-unmerged = "!git conflicts | xargs git add"
 
 # Script to clustergit check all repos
 scan = "!~/bin/gscan"
