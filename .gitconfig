@@ -305,6 +305,9 @@ mga = merge --abort
 mgc = merge --continue
 mgq = merge --quit
 
+# Merge changes when GitHub suggestions have been merged
+merge-suggestions = merge --ff-only @{push}
+
 # Assume/Unassume changes
 assume = update-index --assume-unchanged
 unassume = update-index --no-assume-unchanged
