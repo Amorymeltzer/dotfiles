@@ -118,7 +118,7 @@ las = log --graph --decorate --oneline --all --simplify-by-decoration
 ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
 ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short -5
 
-# Potentially overridden in local-config to use date=human after 2.21, see also [log]
+# Potentially overridden in local-config to use date=human after 2.21, see also recent-branches-by-commit and [log]
 lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
 lr5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%3Cblue\\ [%an]" --decorate --date=relative -5
 lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %Cgreen(A: %cr, C: %ar)%C(blue) [%an]%Creset' --abbrev-commit --date=relative
@@ -195,9 +195,12 @@ branches-long = branch -a -vv
 local-branches-long = "!git branch -avv --color | grep -v remotes"
 branch-name = copy-branch-name
 
+# More detailed script in unixorn, with dates
+recent-branches-by-checkout = "!git reflog -n 100 | egrep -io \"moving from ([^[:space:]]+)\" | awk '{ print $3 }' | awk ' !x[$0]++' | egrep -v '^[a-f0-9]{40}$' | head -n 10"
 # https://stackoverflow.com/a/5188364/2521092
-# Only show most recent 15
-recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+# Only show most recent 15, could also use branch --sort=-committerdate as of 2.7
+# Potentially overridden in local-config to use date=human after 2.21, see also lor and [log]
+recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(color:red)%(objectname:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset)) %(contents:subject) %(color:blue)[%(authorname)]%(color:reset)'
 
 # Create and/or go to a branch
 # With git 2.23, uses switch -c; can do the same with checkout -b
@@ -400,7 +403,7 @@ missingCommitsCheck = warn
 whitespace = warn
 
 [log]
-# --date=human added in 2.21, used in local-config, see also ld aliases
+# --date=human added in 2.21, used in local-config, see also lr and recent-branches-by-commit
 date = local
 abbrevCommit = true
 # Follow file rename/move, only if one file
