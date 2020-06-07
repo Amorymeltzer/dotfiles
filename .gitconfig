@@ -274,6 +274,11 @@ duc = diff --cached @{upstream}
 # Compare commit to the state before it
 dp = "!f() { c=${1:-HEAD}; git diff $c~ $c; }; f"
 
+# Easier difftool, but default to gui (at least until smerge/emerge makes sense...)
+# git diff-tool --tool-help for options
+dt = difftool -g
+mt = mergetool -g
+
 # Goodness (summary of diff lines added/removed/total)
 # FIXME TODO: Colorize
 gn = goodness
@@ -374,6 +379,10 @@ prune = true
 log = true
 # Display base with ||| between ours and theirs, seems useful if a bit weird
 conflictStyle = diff3
+guitool = opendiff
+
+[mergetool]
+prompt = false
 
 [rebase]
 # Automatically stash before rebase; allows for dirty rebases
@@ -411,6 +420,10 @@ autocorrect = 15
 [diff]
 compactionHeuristic = true
 noprefix = true
+guitool = opendiff
+
+[difftool]
+prompt = false
 
 # Special diffs for special cases
 [diff "bin"]
