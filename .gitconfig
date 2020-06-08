@@ -196,7 +196,7 @@ local-branches-long = "!git branch -avv --color | grep -v remotes"
 branch-name = copy-branch-name
 
 # More detailed script in unixorn, with dates
-recent-branches-by-checkout = "!git reflog -n 100 | egrep -io \"moving from ([^[:space:]]+)\" | awk '{ print $3 }' | awk ' !x[$0]++' | egrep -v '^[a-f0-9]{40}$' | head -n 10"
+recently-checkedout-branches = "!git reflog -n 100 | egrep -io \"moving from ([^[:space:]]+)\" | awk '{ print $3 }' | awk ' !x[$0]++' | egrep -v '^[a-f0-9]{40}$' | head -n 10"
 # https://stackoverflow.com/a/5188364/2521092
 # Only show most recent 15, could also use branch --sort=-committerdate as of 2.7
 # Potentially overridden in local-config to use date=human after 2.21, see also lor and [log]
