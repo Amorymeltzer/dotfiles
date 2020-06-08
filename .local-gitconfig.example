@@ -30,6 +30,9 @@ ic = icdiff
 icdc = icdiff --cached
 icc = icdiff --cached
 idp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
+ics = "!git icdiff $(git split-from)"
+icsc = "!git icdiff --cached $(git split-from)"
+
 
 # Depends on hub
 home = browse

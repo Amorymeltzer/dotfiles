@@ -269,14 +269,14 @@ dc = diff --cached
 dwc = diff --cached --word-diff
 patience = diff --patience
 dn = diff --name-only
-ds = diff --patch-with-stat
-dsc = diff --cached --patch-with-stat
-dcs = diff --cached --patch-with-stat
 du  = diff @{upstream}
 dun = diff --name-only @{upstream}
 duc = diff --cached @{upstream}
 # Compare commit to the state before it
 dp = "!f() { c=${1:-HEAD}; git diff $c~ $c; }; f"
+# Relies on split-from alias, diffs since splitting this branch
+ds = "!git diff $(git split-from)"
+dsc = "!git diff --cached $(git split-from)"
 
 # Easier difftool, but default to gui (at least until smerge/emerge makes sense...)
 # git diff-tool --tool-help for options
