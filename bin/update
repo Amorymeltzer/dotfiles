@@ -91,17 +91,17 @@ if [[ -z $macports_all_flag ]]; then
 	    updating 'Macports'
 	    port upgrade outdated
 	    cleaning 'Macports'
-	    port -v uninstall inactive;
+	    port uninstall inactive;
 	    if [[ -n $(port echo leaves) ]]; then
 		echo -e "${Color_Green}Logging leaves${Color_zOff}..."
 		port echo leaves >> ~/port_leaves_log.txt;
 		cleaning 'leaves'
-		port -v uninstall leaves;
+		port uninstall leaves;
 	    else
 		echo -e "${Color_Green}No leaves to clean!${Color_zOff}"
 	    fi
 	    cleaning 'ports'
-	    port clean --all installed
+	    port -q clean --all installed
 	fi
     else
 	echo -e "${Color_Green}Ports already up-to-date!${Color_zOff}"
