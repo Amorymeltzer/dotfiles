@@ -1259,6 +1259,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (defalias 'bash-mode 'sh-mode)
 (add-to-list 'auto-mode-alist
 	     '("\\.completion" . bash-mode))
+(remove-hook 'sh-mode-hook 'sh-electric-here-document-mode t)
 
 ;; Default mode
 (setq-default major-mode 'text-mode)
