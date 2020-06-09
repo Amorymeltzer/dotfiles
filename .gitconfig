@@ -531,3 +531,4 @@ smudge = git-lfs smudge -- %f
 # Example file at ~/.local-gitconfig.example
 [include]
 path = ~/.local-gitconfig
+path = ~/.config/git/priv-gitconfig
