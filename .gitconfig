@@ -43,7 +43,7 @@ gpgSign = true
 [alias]
 h = help
 hc = help config
-cfg = config --global
+cfg = config
 
 notifications = "!browser https://github.com/notifications"
 allpulls = "!browser https://github.com/pulls"
