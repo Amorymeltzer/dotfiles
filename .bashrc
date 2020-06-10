@@ -898,10 +898,12 @@ alias nperl='newperl'
 
 # Same for bash
 function newbash() {
-    if [ -a $1 ]; then
-	echo -e "$1 already exists";
+    if [ $# -eq 0 ]; then
+	echo "No arguments provided";
+    elif [ -a $1 ]; then
+	echo "$1 already exists";
     else
-	echo -e "#!/usr/bin/env bash\n# $1 by Amory Meltzer\n# " > $1 ; chmod 755 $1 ; emacs +3:3 $1 ;
+	echo "#!/usr/bin/env bash\n# $1 by Amory Meltzer\n# " > $1 ; chmod 755 $1 ; emacs +3:3 $1 ;
     fi
 }
 alias nbash='newbash'
