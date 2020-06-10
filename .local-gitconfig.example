@@ -32,6 +32,8 @@ icc = icdiff --cached
 idp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
 ics = "!git icdiff $(git split-from)"
 icsc = "!git icdiff --cached $(git split-from)"
+icm = icdiff master
+icmc = icdiff --cached master
 
 
 # Depends on hub
