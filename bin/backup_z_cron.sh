@@ -4,6 +4,10 @@
 # Run every five minutes via cron
 # Could be simple with awk, but this is clearer and will provide better reminders
 
+### I *think* this is related to checking out a repo in git that removes
+### certain paths or files, which if it's dotfiles, could mess up z complete,
+### and if it's a path in z's history, will remove/reset that item
+
 z="$(wc -l < ~/.z | tr -d ' ')"
 b="$(wc -l < ~/.z.bk | tr -d ' ')"
 
