@@ -325,6 +325,10 @@ mgq = merge --quit
 # Merge changes when GitHub suggestions have been merged
 merge-suggestions = merge --ff-only @{push}
 
+# Find commit in which this commit was merged
+# -n is processed before things like --reverse, so we need to pipe to head
+merge-commit = "!git log $1..HEAD --ancestry-path --merges --reverse --format='%H' | head -n 1 | xargs git lf1 #"
+
 # Assume/Unassume changes
 assume = update-index --assume-unchanged
 unassume = update-index --no-assume-unchanged
