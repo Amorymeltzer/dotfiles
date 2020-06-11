@@ -47,6 +47,12 @@ git = !exec git
 h = help
 hc = help config
 cfg = config
+cfgg = config --get
+# List all aliases
+aliases = "!git config -l | grep alias | cut -c 7-"
+# All options
+configs = config -l
+
 
 notifications = "!browser https://github.com/notifications"
 allpulls = "!browser https://github.com/pulls"
@@ -344,11 +350,6 @@ scan = "!~/bin/gscan"
 # Should really learn to use gitk: faster than kraken or vs, and like 85% of all the other apps
 # gui for blame or browser (or citool)
 k = !gitk
-
-# List all aliases
-aliases = "!git config -l | grep alias | cut -c 7-"
-# All options
-configs = config -l
 
 # Find branches containing commit
 fb = "!f() { git branch -a --contains $1; }; f"
