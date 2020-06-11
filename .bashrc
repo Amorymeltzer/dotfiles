@@ -73,8 +73,7 @@ function g {
 	if [[ $# > 0 ]]; then
             git "$@"
 	else
-            git time-since-last-commit
-	    git l5
+	    git lr5
 	    git status --short --branch
 	fi
     else
