@@ -137,11 +137,11 @@ graph = lg
 lm = log --oneline --decorate master..HEAD
 llm = log --decorate master..HEAD
 
-lum = log --oneline --decorate @{upstream}..HEAD
-llum = log --decorate @{upstream}..HEAD
+luh = log --oneline --decorate @{upstream}..HEAD
+lluh = log --decorate @{upstream}..HEAD
 # Probably not that useful, but technically possible...
-lmu = log --oneline --decorate HEAD..@{upstream}
-llmu = log --decorate HEAD..@{upstream}
+lhu = log --oneline --decorate HEAD..@{upstream}
+llhu = log --decorate HEAD..@{upstream}
 
 # Relies on split-from alias, log of commits since splitting this branch
 ls = "!git log $(git split-from)..head"
