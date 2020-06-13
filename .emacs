@@ -1334,6 +1334,11 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (require 'find-file-in-project)
 ;; (global-set-key (kbd "C-x f") 'find-file-in-project)
 
+;; smerge-mode, for resolving git conflicts/merges
+;; Should really tweak the faces used... FIXME TODO
+;; default prefix is C-c ^, which is a pain
+(setq smerge-command-prefix "\C-ce")
+
 ;; Highlight ( and ) Highlight phrase if no matching paren.
 (show-paren-mode t)
 (setq show-paren-style 'expression
