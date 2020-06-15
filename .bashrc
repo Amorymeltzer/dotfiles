@@ -18,6 +18,7 @@ export TERM=xterm-color
 # Change for different colors, to magenta
 #  export GREP_OPTIONS='--color=auto' GREP_COLOR='0;35'
 alias grep='grep --color=auto '
+alias egrep='egrep --color=auto '
 export GREP_COLOR='0;35'
 
 # ls colors
