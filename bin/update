@@ -102,10 +102,10 @@ if [[ -z $macports_all_flag ]]; then
 	    fi
 
 	    # Check leaves for installation candidates, reset 8 June 2020
-	    readarray -t big_leaves < <(cut -f 1 -d ' ' ~/port_leaves_log.txt | sort | uniq -c | sort -r | head -n 5 | cut -f 3,4 -d ' ')
+	    readarray -t big_leaves < <(cut -f 1 -d ' ' ~/port_leaves_log.txt | sort | uniq -c | sort -r | head -n 5 | cut -f 4,5 -d ' ')
 	    for leaf in "${big_leaves[@]}"; do
 		count="${leaf%%' '*}"
-		if [ $count -ge 25 ]; then
+		if [ "$count" -ge 25 ]; then
 		    echo -e "${Color_White}${leaf#*' '} is a good candidate for installation ($count)${Color_zOff}"
 		fi
 	    done
