@@ -164,7 +164,6 @@ new = !git log --name-status $1@{1}..$1@{0} "$@"
 cp = cherry-pick
 cpa = cherry-pick --abort
 cpc = cherry-pick --continue
-cps = cherry-pick --skip
 cpq = cherry-pick --quit
 
 # Like "git show myfile", but uses the last commit that changed "myfile".
@@ -320,7 +319,6 @@ mg = merge
 mgd = merge dev
 mga = merge --abort
 mgc = merge --continue
-mgq = merge --quit
 
 # Merge changes when GitHub suggestions have been merged
 merge-suggestions = merge --ff-only @{push}

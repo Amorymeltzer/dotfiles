@@ -24,6 +24,10 @@ lr5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an
 lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %Cgreen(A: %cr, C: %ar)%C(blue) [%an]%Creset' --abbrev-commit --date=human-local
 recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(color:red)%(objectname:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:human-local)%(color:reset)) %(contents:subject) %(color:blue)[%(authorname)]%(color:reset)'
 
+# Only learned these flags in 2.23
+cps = cherry-pick --skip
+mgq = merge --quit
+
 # Use icdiff tool https://github.com/jeffkaufman/icdiff
 icd = icdiff
 ic = icdiff
