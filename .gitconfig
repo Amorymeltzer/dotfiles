@@ -465,6 +465,11 @@ textconv = hexdump -v -C
 [diff "plist"]
 textconv = plutil -p
 
+[blame]
+coloring = highlightRecent
+# human in local-config
+date = local
+
 [color]
 # Use colors in Git commands that are capable of colored output when output is
 # to the terminal, not pipes or files (use --color when appropriate)
@@ -499,7 +504,7 @@ newNormal = green# bold
 newHighlight = green bold 22
 
 [color "blame"]
-highlightRecent = yellow, 36 months ago, blue, 1 months ago, white
+highlightRecent = yellow, 36 months ago, blue, 6 months ago, cyan, 1 months ago, brightwhite
 
 [color "interactive"]
 # prompt = blue #bold
@@ -514,11 +519,6 @@ auto = 256
 # Implies annotated, which is good behavior anyway
 gpgSign = true
 # gpg.program set in include
-
-[blame]
-coloring = highlightRecent
-# human in local-config
-date = local
 
 [rerere]
 # Tries to remember resolutions of merge conflicts for the next time, seems useful in theory?
