@@ -1932,6 +1932,16 @@ in the buffer." t)
 			 (read-string "Search enWikipedia: "))))))
 (global-set-key (kbd "C-c w") 'wikipedia)
 
+(defun mediawiki ()
+  "Check mediawiki.org API pages with a query or region if any."
+  (interactive)
+  (browse-url
+   (concat
+    "https://www.mediawiki.org/wiki/API:"
+    (url-hexify-string (if mark-active
+			   (buffer-substring (region-beginning) (region-end))
+			 (read-string "mediawiki API: "))))))
+
 (defun doi ()
   "Resolve a DOI link."
   (interactive)
