@@ -146,7 +146,7 @@ if [ -d "$gitdir/rebase-merge" ]; then
     done=$(tail -n 1 "$gitdir/rebase-merge/done" 2>/dev/null)
     if [[ -n "$done" ]]; then
 	a="$done"
-	if [[ "$a" != "break" ]]; then
+	if [[ "$a" != "break" && `echo "$done" | cut -f 1 -d ' '` != "exec" ]]; then
 	    a=$(echo -n "$done" | grep "$short_sha" | cut -f 1 -d ' ')
 	    # Weirdness with merges and shit, hopefully don't get here
 	    # Could be smarter and check for stopped and amend
