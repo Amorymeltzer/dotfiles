@@ -45,6 +45,49 @@
 ;; Enter debugger on error
 (setq debug-on-error t)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package
+(require 'package)
+;; In theory it'd be nice to set package-archive-priorities, but in practice
+;; there's no overlap between MELPA and GNU ELPA.  Added in 25.1
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Only include releases
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+
+;; Set by custom rather than by hand to make installation easier
+(custom-set-variables
+ '(package-selected-packages
+   '(ac-html ace-jump-mode ace-window anzu applescript-mode auto-complete browse-kill-ring btc-ticker buffer-move bug-hunter color-identifiers-mode command-log-mode csv-mode diminish dna-mode editorconfig emmet-mode eprime-mode expand-region fancy-narrow fic-mode fill-column-indicator fillcode find-file-in-project fireplace flx-ido flymake-cursor flymake-perlcritic flymake-php google-translate goto-last-change guide-key helpful highlight-escape-sequences highlight-numbers highlight-parentheses highlight-symbol howdoi html-to-markdown htmlize hungry-delete ido-at-point ido-complete-space-or-hyphen ido-completing-read+ ido-hacks ido-vertical-mode ido-yes-or-no js2-mode js2-refactor key-chord linum-relative markdown-mode md-readme php-mode plur poker pretty-mode rainbow-identifiers recentf-ext reveal-in-osx-finder smart-shift smex smooth-scrolling ssh-config-mode stock-ticker switch-window transpose-frame typing-game undo-tree unicode-troll-stopper visual-regexp visual-regexp-steroids volatile-highlights wc-goal-mode wc-mode which-key whole-line-or-region window-numbering wrap-region writegood-mode xkcd yasnippet yasnippet-snippets)))
+
+;; Manual package installs, ideally some can be removed
+;; 'bash-org
+;; 'hl-line+
+;; 'hl-spotlight
+;; 'col-highlight
+;; 'vline
+;; 'growl BUT MAYBE SEE ALERT???
+;; 'hide-comnt
+;; 'idle-highlight-mode
+;; 'jiggle
+;; 'keep-buffers
+;; 'keywiz
+;; 'kill-ring-ido
+;; 'notify but maybe see ALERT???
+;; 'perl-find-library
+;; 'perltidy
+;; 'pick-backup
+;; 'random-idle-quote
+;; 'thing-opt
+;; 'thingatpt+
+;; 'tidy
+;; 'u-mandelbrot
+
+;; This must come before configurations of installed packages
+(package-initialize)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 ;; When I was a child, I spake as a child,
 ;; I understood as a child, I thought as a child:
 ;; but when I became a man, I put away childish things.
@@ -53,7 +96,7 @@
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
   (when (fboundp mode) (funcall mode -1)))
 
-;; Load everybody proper-like
+;; Load everybody local, will take precedence over elpa directory
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 ;; Prefer newer files even if not .elc
 (setq load-prefer-newer t)
@@ -84,7 +127,6 @@
 ;; http://cx4a.org/software/auto-complete/manual.html#Configuration
 (require 'auto-complete-config)
 (ac-config-default)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/site-lisp/ac-dict")
 
 ;; Characters entered before started, up=efficient, down=slower
 (setq ac-auto-start 5)
@@ -106,7 +148,6 @@
 ;; https://github.com/joaotavora/yasnippet and
 ;; https://github.com/AndreaCrotti/yasnippet-snippets
 (require 'yasnippet)
-(setq yas-snippet-dirs '("~/.emacs.d/snippets" "~/.emacs.d/site-lisp/snippets"))
 (setq yas-wrap-around-region t)		; Set region to $0
 (define-key yas-minor-mode-map (kbd "C-c C-i") 'yas-insert-snippet) ; C-c tab
 (yas-reload-all)
@@ -203,11 +244,6 @@
 
 ;; Subword mode (consider CamelCase chunks as words)
 (global-subword-mode 1)
-
-
-;; Whinewhinewhine
-;; (load-library "whine")
-;; (whinify)
 
 
 ;; js-mode stuff
@@ -613,12 +649,6 @@ current buffer" t)
    ("`" "`" nil (markdown-mode ruby-mode))))
 
 
-;; Print a buffer.  Requires htmlize and coral.  See
-;; http://www.emacswiki.org/emacs/MacPrintMode
-;; (when (require 'mac-print-mode nil t)
-;;   (mac-print-mode 1))
-
-
 (defun visit-most-recent-file ()
   "Visits the most recently open file in `recentf-list' that is not already being visited."
   (interactive)
@@ -914,7 +944,7 @@ current buffer" t)
 ;; Make M-w a bit like C-w.  Still kind of weird?
 ;; Overlaps with something else ;;;;;; ##### FIXME TODO
 (require 'whole-line-or-region)
-(whole-line-or-region-mode 1)
+(whole-line-or-region-global-mode 1)
 (global-set-key (kbd "M-w") 'whole-line-or-region-kill-ring-save)
 
 ;;;;;;;;;;;;;;;;;;;
@@ -936,10 +966,7 @@ current buffer" t)
 ;; Fuzzy-ish matching
 (setq ido-enable-flex-matching t)
 ;; Better fuzzy matching, does the above need to be turned on?
-;; MUCH slower, plus highlighting error? ;;;;;;; ####### TODO FIXME
-;; (require 'ido-better-flex)
-;; (ido-better-flex/disable)
-;; Ditto above
+;; Was slower, possible highlighting error? ;;;;;;; ####### TODO FIXME
 ;; (require 'flx-ido)
 ;; (flx-ido-mode 1)
 ;; (setq ido-use-faces nil)
@@ -1258,12 +1285,6 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Comment-starter color
 (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground "red")
 
-;; (require 'boxquote)
-;; Better than boxquote
-;; (require 'rebox2)
-;; (setq rebox-style-loop '(24 16))
-;; (global-set-key [(meta q)] 'rebox-dwim)
-;; (global-set-key [(shift meta q)] 'rebox-cycle)
 
 ;; open my init files
 (defun dot-emacs ()
@@ -1323,7 +1344,9 @@ when in source code modes such as python-mode or perl-mode" t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hi-lite current line
 ;; As an alternative to the builtin, use Drew Adams' hl-line+
+;; requires hl-spotlight
 ;; col-highlight requires vline.el as well
+;; Try out others?? https://www.emacswiki.org/emacs/HighlightCurrentLine FIXME TODO
 (require 'hl-line+)
 (require 'col-highlight)
 ;; (global-hl-line-mode 1)
@@ -1350,7 +1373,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (delete 'Git vc-handled-backends) ;; delete git from list of backends
 (setq vc-handled-backends nil) ;; delete all backends
 
-;; Useful for git related work
+;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
 ;; (global-set-key (kbd "C-x f") 'find-file-in-project)
 
@@ -1387,6 +1410,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; ;;;;;; ##### FIXME TODO FIX COLORS BEFORE GOING FORWARD
 ;; (highlight-symbol-mode t)
 
+;; requires idle-highlight-mode https://github.com/nonsequitur/idle-highlight-mode
 ;; (defun my-highlight-idling-hook ()
 ;;   (make-local-variable 'column-number-mode)
 ;;   (column-number-mode t)
@@ -1774,7 +1798,7 @@ round to ones, tens, etc."
 ;; Maybe tweak to get a list for studying?
 (autoload 'keywiz "keywiz" "Keywiz keybindings guessing game" t)
 ;; Poker
-(autoload 'poker-play "poker" "Play some hands of poker" t)
+(autoload 'poker "poker" "Play a game of texas hold 'em poker" t)
 ;; Mandelbrot set
 (autoload 'u-mandelbrot "u-mandelbrot" "Make a mandelbrot fractal" t)
 
@@ -1791,8 +1815,7 @@ round to ones, tens, etc."
 trolls" t)
 
 ;; From https://github.com/purcell/emacs-xkcd
-;; (require 'emacs-xkcd)
-;; (require 'xkcd); or this?
+;; (require 'xkcd);
 
 ;; Requires howdoi to be installed (python)
 (autoload 'howdoi "howdoi" "Instant SX answers" t)
@@ -2180,8 +2203,9 @@ This checks in turn:
 
 ;;; Should probably figure out a way to diminish these fuckers
 ;; Colors numbers
-;; https://github.com/Fanael/number-font-lock-mode
-(autoload 'number-font-lock-mode "number-font-lock-mode" "Syntax highlighting of numeric literals" t)
+;; https://github.com/Fanael/highlight-numbers
+;; Should... do elsewhere?  Remove?  prog-mode-map? Customize color??? FIXME TODO
+(autoload 'highlight-numbers-mode "highlight-numbers" "Highlight numeric literals in source code" t)
 ;; Color identifiers based on their name
 ;; https://github.com/Fanael/rainbow-identifiers
 (autoload 'rainbow-identifiers-mode "rainbow-identifiers" "Color identifiers based on their name" t)
@@ -2198,7 +2222,6 @@ This checks in turn:
 
 ;; helpful, a better help buffer
 ;; https://github.com/Wilfred/helpful
-;; Depends on elisp-refs, loop, and shut-up
 (require 'helpful)
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -2447,12 +2470,6 @@ This checks in turn:
   (interactive "p")
   (join-following-line (- n)))
 
-
-;; Control itunes, pointless
-;; https://github.com/tavisrudd/emacs.d/blob/master/osx-itunes.el
-;; https://github.com/bodhi/emacs.d/blob/master/site-lisp/osx-osascript.el
-;; (require 'osx-itunes)
-;; (setq itunes-key [f6])
 
 
 ;; See how annoying it truly is
@@ -2708,7 +2725,7 @@ This checks in turn:
 ;; (diminish 'font-lock-mode "Fn")
 (diminish 'visual-line-mode "vl")
 (diminish 'fic-mode)
-(diminish 'whole-line-or-region-mode)
+(diminish 'whole-line-or-region-local-mode)
 (diminish 'highlight-parentheses-mode)
 (diminish 'undo-tree-mode)
 (diminish 'highlight-symbol-mode "hls")
@@ -2952,3 +2969,43 @@ instead."
 ;;   (message "Emacs startup time: %d seconds." (time-to-seconds (time-since emacs-load-start-time))))
 (message "Emacs loaded at %s." (wm-format-time-string "%T %a %d %b %y"))
 (server-start)
+
+
+
+;;;;Package todos
+;; CONSIDER
+;; paradox, other package stuff
+;; fill-function-arguments
+;; More ace-jump-stuff
+;; more ido stuff
+;; more auto-complete stuff, company mode?
+;; cl-libify ????
+;; discover-js2-refactor
+;; More js/2 stuff?  node/npm
+;; ivy?
+;; More yasnippet stuff?
+;; frecentf and other recentf stuff?
+;; highlight stuff
+;; Sort words but include symbol???? not whitespace https://www.emacswiki.org/emacs/SortWords
+;; frog-menu and jump-buffer?
+;; magit, github, etc https://endlessparentheses.com/it-s-magit-and-you-re-the-magician.html
+;; howdoyou instead of howdoi
+;; window-number or numbering????
+;; applescript-mode or apples?
+;; Use plur???
+;; flyspell stuff?  Turn on?  Add?  Imrpve
+;; Try out flx-ido, see if better
+;; Try replacements for hl-line+ https://www.emacswiki.org/emacs/HighlightCurrentLine
+;; shut-up, maybe for scripts?? https://github.com/cask/shut-up
+;; pianobar
+
+;; MAYBE REMOVE
+;; more require->autoload stuff (like for fireplace, eprime, dna, etc.)
+;; fancy-narrow
+;; maybe plur?  or use?
+;; btc ticker?? Maybe switch
+;; Remove typing game, etc?
+;; command-log-mode??
+
+;; flymake-perlcritic is using an old version of flymake, can't delete from
+;; site-lisp until moving to flycheck
