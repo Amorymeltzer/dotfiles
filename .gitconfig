@@ -161,10 +161,11 @@ new = !git log --name-status $1@{1}..$1@{0} "$@"
 
 
 # Should prefer this so that autocomplete distinguishes between cherry-pick and cherry
-cp = cherry-pick
-cpa = cherry-pick --abort
-cpc = cherry-pick --continue
-cpq = cherry-pick --quit
+# git-extras has git-cp
+chp = cherry-pick
+chpa = cherry-pick --abort
+chpc = cherry-pick --continue
+chpq = cherry-pick --quit
 
 # Like "git show myfile", but uses the last commit that changed "myfile".
 showlast = log -n 1 -p
