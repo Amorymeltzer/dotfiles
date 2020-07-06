@@ -214,6 +214,7 @@ w=""
 i=""
 u=""
 t=""
+m=""
 d=""
 x=""
 y=""
@@ -267,14 +268,16 @@ elif [ "true" = "$inside_worktree" ]; then
 	case "$stat" in
 	    # Green=not staged, magenta=staged
 	    # Currently ignores [ D][RC] and could maybe do better with
-	    # renames (R )
+	    # renames (R), copies (C), and deletions (D)
 	    [MARC][MD]) w=$(__wrap_color "+" "Green")
 			i=$(__wrap_color "!" "Magenta");;
-	    ' '[MARC]) w=$(__wrap_color "+" "Green");;
-	    [MARC]' ') i=$(__wrap_color "!" "Magenta");;
+	    ' '[MAC]) w=$(__wrap_color "+" "Green");;
+	    [MAC]' ') i=$(__wrap_color "!" "Magenta");;
 	    untracked) u=$(__wrap_color "?" "Cyan");;
 	    ' T') t=$(__wrap_color "T" "Green");;
 	    'T ') t=$(__wrap_color "T" "Magenta");;
+	    ' R') m=$(__wrap_color "R" "Green");;
+	    'R ') m=$(__wrap_color "R" "Magenta");;
 	    ' D') d=$(__wrap_color "D" "Green");;
 	    'D ') d=$(__wrap_color "D" "Magenta");;
 	    # Various merge states in red
@@ -343,6 +346,7 @@ esac
 # i=symbol (!) for staged
 # u=symbol (?) for untracked
 # t=symbol (T) for typechange
+# m=symbol (R) for renames
 # d=symbol (D) for deleted
 # x=symbol (U) for merge: conflicts/modified
 # y=symbol (D) for merge: deleted
@@ -358,7 +362,7 @@ esac
 # r=rebasing/bisecting/cherry/reverting/etc.  ACTION: Should customize more, put first
 # p=differential from upstream, expand
 
-f="$u$w$t$d$i$n$x$y$s$e"
+f="$u$w$t$m$d$i$n$x$y$s$e"
 # ${f:-=}: above dirty state, = if not
 gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 # Ensure gitstring is string, etc.
