@@ -7,20 +7,22 @@ limit='4200'
 function get_help {
     cat <<END_HELP
 
-Usage: $(basename $0) -u @username -o <date-valid relative date> [-l number]
+Usage: $(basename $0) -u @username -o <date-valid relative date> [-l number] [-f]
 
   -u		Username, including the leading @.  Required.
   -o		A relative date reference, such as 7m or 42y.  Required.
   -l		How many to tweets to search.  Optional
+  -f		Delete favorites instead.
   -h		this help
 END_HELP
 }
 
-while getopts 'u:o:l:h' opt; do
+while getopts 'u:o:l:hf' opt; do
     case $opt in
 	u) twip=$OPTARG;;
 	o) ago=$OPTARG;;
 	l) limit=$OPTARG;;
+	f) favs='1';;
 	h) get_help $0
 	   exit 0;;
     esac
@@ -63,6 +65,10 @@ for tweet in "${tweets[@]}"; do
     date="${date//-}" # Lose the hyphens
 
     if [ "$date" -lt "$ago" ]; then
-	t delete status "$id"
+	if [[ -z $favs ]]; then
+	    t delete favorite "$id"
+	else
+	    t delete status "$id"
+	fi
     fi
 done
