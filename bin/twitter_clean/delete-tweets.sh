@@ -4,19 +4,37 @@
 
 limit='4200'
 
-twip='@'$1
+function get_help {
+    cat <<END_HELP
+
+Usage: $(basename $0) -u @username -o <date-valid relative date> [-l number]
+
+  -u		Username, including the leading @.  Required.
+  -o		A relative date reference, such as 7m or 42y.  Required.
+  -l		How many to tweets to search.  Optional
+  -h		this help
+END_HELP
+}
+
+while getopts 'u:o:l:h' opt; do
+    case $opt in
+	u) twip=$OPTARG;;
+	o) ago=$OPTARG;;
+	l) limit=$OPTARG;;
+	h) get_help $0
+	   exit 0;;
+    esac
+done
+
+
 if [[ -z "$twip" ]]; then
     echo "You must provide a username"
-fi
-
-ago=$2
-if [[ -z "$ago" ]]; then
-    echo "You must provide a valid relative reference to a date in the past that date can parse, e.g. 6m"
     exit 1
 fi
 
-if [[ -n "$3" ]]; then
-    limit=$3
+if [[ -z "$ago" ]]; then
+    echo "You must provide a valid relative reference to a date in the past that date can parse, e.g. 6m"
+    exit 1
 fi
 
 # Very simple/basic date handling
@@ -30,7 +48,6 @@ if [ "$now" -lt "$ago" ]; then
     echo "The reference must be to a past time"
     exit 1
 fi
-
 
 # Get tweets
 readarray -t tweets < <(t timeline $twip --csv --number $limit)
