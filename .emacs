@@ -1661,7 +1661,6 @@ week. With two prefix arguments, add day of week and time."
 		      ((equal prefix '(4)) "%Y-%m-%d %a")
 		      ((equal prefix '(16)) "%Y-%m-%d %H:%M:%S"))))
     (insert (format-time-string format))))
-(global-set-key (kbd "C-c .") 'insert-date)
 
 
 ;; On duplicate filenames, show paths not <2>
