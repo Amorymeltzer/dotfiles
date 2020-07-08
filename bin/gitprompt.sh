@@ -342,17 +342,17 @@ case "$count" in
 esac
 
 # KEY:
+# u=symbol (?) for untracked
 # w=symbol (+) for unstaged
 # i=symbol (!) for staged
-# u=symbol (?) for untracked
 # t=symbol (T) for typechange
 # m=symbol (R) for renames
 # d=symbol (D) for deleted
 # x=symbol (U) for merge: conflicts/modified
 # y=symbol (D) for merge: deleted
 # n=symbol (A) for merge: added
-# e=symbol (FIX) for others
 # s=symbol ($) to indicate something is stashed
+# e=symbol (FIX) for others
 # c=BARE or empty
 # b=branch name
 # o=rebasing onto commit
@@ -362,7 +362,7 @@ esac
 # r=rebasing/bisecting/cherry/reverting/etc.  ACTION: Should customize more, put first
 # p=differential from upstream, expand
 
-f="$u$w$t$m$d$i$n$x$y$s$e"
+f="$u$w$i$t$m$d$n$x$y$s$e"
 # ${f:-=}: above dirty state, = if not
 gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 # Ensure gitstring is string, etc.
