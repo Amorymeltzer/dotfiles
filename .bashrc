@@ -1238,14 +1238,18 @@ function backup-file-with-timestamp()
 # New markdown file with current date
 function diary()
 {
-    local today=$(date +"%Y-%m-%d").md
-    if [[ ! -f $today ]]; then
-	local title=$(date +"%A, %B %d, %Y")
-	printf "## $title\n\n" > $today
-	printf "### Morning\n\n### Afternoon\n\n### Evening\n" >> $today
+    # Display a random entry
+    if [[ $1 ]]; then
+	   cat $(ls -1 | shuf | head -n 1)
+    else
+	local today=$(date +"%Y-%m-%d").md
+	if [[ ! -f $today ]]; then
+	    local title=$(date +"%A, %B %d, %Y")
+	    printf "## $title\n\n" > $today
+	    printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
+	fi
+	emacs "$today"
     fi
-
-    emacs "$today"
 }
 
 # PlistBuddy alias, because sometimes `defaults` just doesn't cut it
