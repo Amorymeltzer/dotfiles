@@ -4,4 +4,4 @@
 # Doesn't really do the job.  From https://stackoverflow.com/a/6511327/2521092
 
 
-perl -MList::Util=shuffle -e 'print shuffle(<STDIN>);'
+perl -MList::Util=shuffle -e 'print shuffle(<>);' "$@";
