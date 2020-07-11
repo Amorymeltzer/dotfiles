@@ -669,22 +669,8 @@ function peek() {
     (cd "$1" && perl "$2");
 }
 
-
-# Enable aliases to be sudo'ed
-if [[ -x ~/Documents/git/lockquote/lock-quote ]]; then
-    # http://www.gnu.org/software/bash/manual/bashref.html#Aliases says: "If the
-    # last character of the alias value is a space or tab character, then the next
-    # command word following the alias is also checked for alias expansion."
-    alias sudo='sudo ~/Documents/git/lockquote/lock-quote && sudo -E '
-
-    # Hook lock-quote scripts into sudo.  Not ideal but fits the right profile:
-    # uses sudo, not overly common but often enough to change moderately frequently
-    # -E preserves environment, eg colors
-    # -H preserves home?  Or something?
-    alias lock-quote='sudo ~/Documents/git/lockquote/lock-quote'
-    # Get current quote
-    alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist LoginwindowText'
-fi
+# Get current lockscreen quote
+alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist LoginwindowText'
 
 # thefuck https://github.com/nvbn/thefuck
 if which thefuck > /dev/null; then
