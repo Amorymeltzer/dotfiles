@@ -144,7 +144,8 @@ lhu = log --oneline --decorate HEAD..@{upstream}
 llhu = log --decorate HEAD..@{upstream}
 
 # Relies on split-from alias, log of commits since splitting this branch
-ls = "!git log $(git split-from)..head"
+ls = "!git log --oneline $(git split-from)..head"
+lls = "!git log $(git split-from)..head"
 
 # Show new commits, most useful if done right after a pull or fetch
 # --name-status to show files and status change (could do --stat too)
