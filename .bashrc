@@ -1232,6 +1232,11 @@ function diary()
 	if [[ ! -f $today ]]; then
 	    local title=$(date +"%A, %B %d, %Y")
 	    printf "## $title\n\n" > $today
+	    local notes=$(cat notes)
+	    if [[ -n $notes ]]; then
+	       printf "### Thoughts ###\n" >> $today
+	       echo "$notes" >> $today
+	    fi
 	    printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
 	fi
 	emacs "$today"
