@@ -60,6 +60,9 @@ alias lda='lad'
 alias treed='tree -aC -I ".git" --dirsfirst "$@" | less -FRNX'
 alias tree='tree -Csuh'
 
+# Preserve environment
+alias sudo='sudo -E '
+
 ### Git stuff
 # Should fix git signing when ssh'd, no issues locally?
 export GPG_TTY=$(tty)
