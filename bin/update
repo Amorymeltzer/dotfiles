@@ -155,14 +155,14 @@ fi
 if [[ -z $npm_all_flag ]]; then
     checking 'npm nodejs packages (global)'
     # Means I miss out on the cool coloring in the output
-    npm_todo=$(npm outdated --global)
+    npm_todo=$(sudo -u $SUDO_USER npm outdated --global)
     if [[ -n $npm_todo ]]; then
 	echo "$npm_todo"
 	if [[ -z $npm_flag ]]; then
 	    updating 'npm nodejs packages (global)'
 	    # skip column headers, pass package names to npm install since
 	    # global implies caret semver https://github.com/npm/cli/issues/746
-	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | xargs npm install --global
+	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | xargs sudo -u $SUDO_USER npm install --global
 	fi
     else
 	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
