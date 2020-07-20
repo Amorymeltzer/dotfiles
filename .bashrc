@@ -1226,7 +1226,11 @@ function diary()
 {
     # Display a random entry
     if [[ $1 ]]; then
-	   cat $(ls -1 | shuf | head -n 1)
+	if [[ "$1" == "notes" ]]; then
+	    emacs notes
+	else
+	    cat $(ls -1 | shuf | head -n 1)
+	fi
     else
 	local today=$(date +"%Y-%m-%d").md
 	if [[ ! -f $today ]]; then
