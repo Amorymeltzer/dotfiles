@@ -582,15 +582,15 @@ function recompile_emacs() {
 alias ii=recompile_emacs
 
 # Make customization easier
-alias bashrc='emacs ~/.bashrc'
-alias rc='emacs ~/.bashrc'
-alias eb='emacs ~/.bashrc'
-alias bashprofile='emacs ~/.bash_profile'
-alias bp='emacs ~/.bash_profile'
-alias ep='emacs ~/.bash_profile'
-alias ee='emacs ~/.emacs'
-alias eg='emacs ~/.gitconfig'
-alias gitconfig='emacs ~/.gitconfig'
+alias bashrc='$EDITOR ~/.bashrc'
+alias rc='$EDITOR ~/.bashrc'
+alias eb='$EDITOR ~/.bashrc'
+alias bashprofile='$EDITOR ~/.bash_profile'
+alias bp='$EDITOR ~/.bash_profile'
+alias ep='$EDITOR ~/.bash_profile'
+alias ee='$EDITOR ~/.$EDITOR'
+alias eg='$EDITOR ~/.gitconfig'
+alias gitconfig='$EDITOR ~/.gitconfig'
 function gitignore() {
     local ignore=".gitignore"
     if [[ ! -f $ignore ]]; then
@@ -598,7 +598,7 @@ function gitignore() {
     elif [[ -n $1 && $1 = "g" ]]; then
 	ignore="~/.global-gitignore"
     fi
-    emacs $ignore
+    $EDITOR $ignore
 }
 
 # Javascript alias, can also just use node
@@ -880,7 +880,7 @@ function newperl() {
     if [ -a $1 ]; then
 	echo -e "$1 already exists";
     else
-	echo -e "#!/usr/bin/env perl\n# $1 by Amory Meltzer\n# \n\nuse strict;\nuse warnings;\nuse diagnostics;\n" > $1 ; chmod 755 $1 ; emacs +3:3 $1 ;
+	echo -e "#!/usr/bin/env perl\n# $1 by Amory Meltzer\n# \n\nuse strict;\nuse warnings;\nuse diagnostics;\n" > $1 ; chmod 755 $1 ; $EDITOR +3:3 $1 ;
     fi
 }
 alias nperl='newperl'
@@ -892,7 +892,7 @@ function newbash() {
     elif [ -a $1 ]; then
 	echo "$1 already exists";
     else
-	echo "#!/usr/bin/env bash\n# $1 by Amory Meltzer\n# " > $1 ; chmod 755 $1 ; emacs +3:3 $1 ;
+	echo "#!/usr/bin/env bash\n# $1 by Amory Meltzer\n# " > $1 ; chmod 755 $1 ; $EDITOR +3:3 $1 ;
     fi
 }
 alias nbash='newbash'
@@ -1227,7 +1227,7 @@ function diary()
     # Display a random entry
     if [[ $1 ]]; then
 	if [[ "$1" == "notes" ]]; then
-	    emacs notes
+	    $EDITOR notes
 	else
 	    cat $(ls -1 | shuf | head -n 1)
 	fi
@@ -1243,7 +1243,7 @@ function diary()
 	    fi
 	    printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
 	fi
-	emacs "$today"
+	$EDITOR "$today"
     fi
 }
 
