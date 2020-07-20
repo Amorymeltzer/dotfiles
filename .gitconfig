@@ -328,7 +328,7 @@ merge-suggestions = merge --ff-only @{push}
 # Find commit in which this commit was merged
 # -n is processed before things like --reverse, so we need to pipe to head
 merge-commit = "!git log $1..HEAD --ancestry-path --merges --reverse --format='%H' | head -n 1 | xargs git lf1 #"
-mg-commit = merge-commit
+mg-c = merge-commit
 
 # Assume/Unassume changes
 assume = update-index --assume-unchanged
