@@ -6,11 +6,9 @@
 editor = emacsclient -cqu
 
 # pager = diff-so-fancy | less --tabs=4 -RFX
-# After much deliberation, this is fine.  Color options are confusing as hell;
-# I wish there were more customization, and the bat themes are excellent but
-# imperfect and a big shift.  What I really want is this+icdiff... Issue 169
+# Fuck yeah delta is awesome
 # https://github.com/dandavison/delta
-pager = delta --highlight-removed
+pager = delta --minus-style 'syntax 52'  --minus-emph-style 'syntax auto' --minus-non-emph-style 'syntax normal' --plus-style 'syntax auto' --plus-emph-style 'syntax auto' --plus-non-emph-style 'auto normal'
 
 [interactive]
 diffFilter = delta --color-only
