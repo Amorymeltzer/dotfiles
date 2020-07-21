@@ -8,13 +8,32 @@ editor = emacsclient -cqu
 # pager = diff-so-fancy | less --tabs=4 -RFX
 # Fuck yeah delta is awesome
 # https://github.com/dandavison/delta
-pager = delta --minus-style 'syntax 52'  --minus-emph-style 'syntax auto' --minus-non-emph-style 'syntax normal' --plus-style 'syntax auto' --plus-emph-style 'syntax auto' --plus-non-emph-style 'auto normal'
+pager = delta --features inline-line-styles
 
 [interactive]
 diffFilter = delta --color-only
 
 [gpg]
 program = /usr/local/bin/gpg
+
+[delta]
+features = inline-line-styles side-styles
+
+[delta "inline-line-styles"]
+minus-style = syntax 52
+minus-emph-style = syntax auto
+minus-non-emph-style = syntax normal
+plus-style = syntax auto
+plus-emph-style = syntax auto
+plus-non-emph-style = auto normal
+#keep-plus-minus-markers = true
+max-line-distance = 0.7 	# Default 0.6
+
+[delta "side-styles"]
+side-by-side = true
+# Tighter from default of 4 spaces
+line-numbers-left-format = │{nm:^2}│
+line-numbers-right-format= │{np:^2}│
 
 [alias]
 lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local
@@ -40,6 +59,21 @@ ics = "!git icdiff $(git split-from)"
 icsc = "!git icdiff --cached $(git split-from)"
 
 
+# delta side-by-side, might eventually replace icdiff
+# $@ passes parameters to diff, not delta; trailing # ensure flags, non-replacements, etc.
+si = "!git diff $@ | delta --features 'side-styles inline-line-styles' #"
+sid = si
+sic = si --cached
+sidc = sic
+sim = si master
+simc = si --cached master
+siu = si @{upstream}
+siuc = si --cached @{upstream}
+sip = "!f() { c=${1:-HEAD}; git si $c~ $c; }; f"
+sis = "!git si $(git split-from)"
+sisc = "!git si --cached $(git split-from)"
+
+
 # Depends on hub
 home = browse
 repo = browse
@@ -60,6 +94,7 @@ date = auto:human-local
 date = auto:human-local
 
 [icdiff]
+# options = --color-map='change:magenta_bold,meta:white' --tabs=4
 options = --color-map='add:green,change:magenta,description:blue,line-numbers:white,meta:white,separator:blue,subtract:red' --tabs=4
 pager = less
 
