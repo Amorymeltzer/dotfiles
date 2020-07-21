@@ -2509,7 +2509,7 @@ This checks in turn:
 (key-chord-define-global "zz" 'er/contract-region)
 (key-chord-define-global "uu" 'undo-tree-undo)
 ;; (key-chord-define prog-mode-map "rr" 'undo-tree-redo) ; not in text
-(key-chord-define-global "--" 'undo-tree-redo)
+(key-chord-define prog-mode-map "--" 'undo-tree-redo) ; not in text or conf mode?
 
 ;; Avoid reaching for shift for common symbols
 ;; http://endlessparentheses.com/banishing-the-shift-key-with-key-chord-in-emacs.html
