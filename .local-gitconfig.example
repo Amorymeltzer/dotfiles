@@ -8,7 +8,7 @@ editor = emacsclient -cqu
 # pager = diff-so-fancy | less --tabs=4 -RFX
 # Fuck yeah delta is awesome
 # https://github.com/dandavison/delta
-pager = delta --features inline-line-styles
+pager = delta
 
 [interactive]
 diffFilter = delta --color-only
@@ -17,7 +17,7 @@ diffFilter = delta --color-only
 program = /usr/local/bin/gpg
 
 [delta]
-features = inline-line-styles side-styles
+features = inline-line-styles
 
 [delta "inline-line-styles"]
 minus-style = syntax 52
