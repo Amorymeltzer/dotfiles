@@ -61,7 +61,7 @@ icsc = "!git icdiff --cached $(git split-from)"
 
 # delta side-by-side, might eventually replace icdiff
 # $@ passes parameters to diff, not delta; trailing # ensure flags, non-replacements, etc.
-si = "!git diff $@ | delta --features 'side-styles inline-line-styles' #"
+si = "!git diff --no-color $@ | delta --features 'side-styles inline-line-styles' #"
 sid = si
 sic = si --cached
 sidc = sic
