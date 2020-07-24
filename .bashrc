@@ -907,6 +907,33 @@ function server() {
     python -m SimpleHTTPServer "$port"
 }
 
+# Functions to start/stop mysql server (installed via dmg, not macports/homebrew)
+function mysqlstart() {
+    unset TMPDIR	 # Not sure why but this is apparently quite necessary
+    if [[ -n `ls /usr/local/mysql/data/*.pid 2>/dev/null` ]]; then
+	echo "mysql server is already running"
+	if [ -e "/usr/local/mysql/data/mysqld.local.pid" ]; then
+	    echo "Use system preferences to turn it off"
+	else
+	    echo "Use mysqlstop to turn it off"
+	fi
+	return 1
+    fi
+    sudo /usr/local/mysql/support-files/mysql.server start
+}
+function mysqlstop() {
+    if [[ ! -n `ls /usr/local/mysql/data/*.pid 2>/dev/null` ]]; then
+	echo "mysql server isn't running"
+	echo "Use mysqlstart to turn it on"
+	return 1
+    fi
+    if [[ -e "/usr/local/mysql/data/mysqld.local.pid" ]]; then
+	echo "mysql server is running, but use system preferences to turn it off"
+	return 1
+    fi
+    sudo /usr/local/mysql/support-files/mysql.server stop
+}
+
 # https://transfer.sh function
 # Modified slightly
 function transfer() {
