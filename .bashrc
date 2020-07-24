@@ -908,6 +908,7 @@ function server() {
 }
 
 # Functions to start/stop mysql server (installed via dmg, not macports/homebrew)
+# Names are awful for completion
 function mysqlstart() {
     unset TMPDIR	 # Not sure why but this is apparently quite necessary
     if [[ -n `ls /usr/local/mysql/data/*.pid 2>/dev/null` ]]; then
@@ -932,6 +933,18 @@ function mysqlstop() {
 	return 1
     fi
     sudo /usr/local/mysql/support-files/mysql.server stop
+}
+function mysqlstatus() {
+    if [[ -n `ls /usr/local/mysql/data/*.pid 2>/dev/null` ]]; then
+	echo -n "Running"
+	if [ -e "/usr/local/mysql/data/mysqld.local.pid" ]; then
+	    echo " via system preferences"
+	else
+	    echo " via command line"
+	fi
+    else
+	echo "Not running"
+    fi
 }
 
 # https://transfer.sh function
