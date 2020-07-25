@@ -519,8 +519,9 @@ alias pip='python -m pip '
 complete -F _python python3.4
 
 # z, the awesome helper for moving around to popular directories
-# Installed via macports
+# Installed via macports: https://github.com/rupa/z
 if [[ -e /opt/local/etc/profile.d/z.sh ]]; then
+    export _Z_MAX_SCORE=13000	# Up from 9000, entries persist longer
     . /opt/local/etc/profile.d/z.sh
 fi
 
