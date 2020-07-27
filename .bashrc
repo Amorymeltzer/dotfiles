@@ -880,7 +880,7 @@ alias jes='jekyll serve --watch'
 # Quickly open and make a new perl file executable and with headers
 function newperl() {
     if [ -a $1 ]; then
-	echo -e "$1 already exists";
+	echo "$1 already exists";
     else
 	echo -e "#!/usr/bin/env perl\n# $1 by Amory Meltzer\n# \n\nuse strict;\nuse warnings;\nuse diagnostics;\n" > $1 ; chmod 755 $1 ; $EDITOR +3:3 $1 ;
     fi
@@ -894,7 +894,7 @@ function newbash() {
     elif [ -a $1 ]; then
 	echo "$1 already exists";
     else
-	echo "#!/usr/bin/env bash\n# $1 by Amory Meltzer\n# " > $1 ; chmod 755 $1 ; $EDITOR +3:3 $1 ;
+	echo -e "#!/usr/bin/env bash\n# $1 by Amory Meltzer\n# " > $1 ; chmod 755 $1 ; $EDITOR +3:3 $1 ;
     fi
 }
 alias nbash='newbash'
