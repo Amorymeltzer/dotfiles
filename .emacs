@@ -218,6 +218,9 @@
 (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+;; js2-jump-to-definition takes this over, annoying
+(define-key js2-mode-map (kbd "M-.") 'end-of-buffer)
+
 
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
 ;; Requires yasnippet and multiple-cursors
