@@ -239,6 +239,15 @@
 (add-hook 'css-mode-hook  'emmet-mode)
 
 
+;; php-mode https://github.com/emacs-php/php-mode
+;; Relies on flymake-php: https://github.com/purcell/flymake-php
+;; which in turn relies on flymake-easy: https://github.com/purcell/flymake-easy
+(autoload 'php-mode "php-mode" "Major mode for editing PHP code." t)
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Flymake stuff
 ;; Really should use flycheck if emacs >= 24 and revert back to flymake
@@ -287,6 +296,14 @@
 (setq flymake-perlcritic-command "~/bin/flymake_perlcritic")
 (require 'flymake-perlcritic)
 (setq flymake-perlcritic-severity 2)
+
+;; https://github.com/purcell/flymake-easy
+(require 'flymake-easy)
+
+;; https://github.com/purcell/flymake-php
+(require 'flymake-php)
+(add-hook 'php-mode-hook 'flymake-php-load)
+
 
 ;; C-c C-v to go to next error
 (global-set-key (kbd "C-c '") 'flymake-goto-next-error)
