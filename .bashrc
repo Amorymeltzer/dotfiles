@@ -1440,6 +1440,11 @@ function thisforthat {
 }
 alias sobasically='thisforthat'
 
+function dad {
+    curl https://icanhazdadjoke.com/
+    echo
+}
+
 # Print the given text in the center of the screen.
 function center {
     local width=$(tput cols);
