@@ -229,7 +229,7 @@ if [ "true" = "$inside_gitdir" ]; then
     if [ "true" = "$bare_repo" ]; then
 	c="BARE:"
     else
-	b="GIT_DIR!$z"
+	b="GIT_DIR!"
     fi
 elif [ "true" = "$inside_worktree" ]; then
 
