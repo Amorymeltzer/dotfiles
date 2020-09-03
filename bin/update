@@ -179,7 +179,8 @@ if [[ -z $homebrew_all_flag ]]; then
 	if [[ -n $brew_todo ]]; then
 	    updating 'brews'
 	    echo "$brew_todo"
-	    echo $brew_todo|xargs sudo -u $SUDO_USER brew upgrade
+	    # brew upgrade now handles casks, but I still prefer cu
+	    echo $brew_todo|xargs sudo -u $SUDO_USER brew upgrade --formula
 
 	    cleaning 'brews'
 	    sudo -u $SUDO_USER brew cleanup -s
