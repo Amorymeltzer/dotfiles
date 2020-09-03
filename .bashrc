@@ -589,7 +589,7 @@ alias eb='$EDITOR ~/.bashrc'
 alias bashprofile='$EDITOR ~/.bash_profile'
 alias bp='$EDITOR ~/.bash_profile'
 alias ep='$EDITOR ~/.bash_profile'
-alias ee='$EDITOR ~/.$EDITOR'
+alias ee='$EDITOR ~/.emacs'
 alias eg='$EDITOR ~/.gitconfig'
 alias gitconfig='$EDITOR ~/.gitconfig'
 function gitignore() {
