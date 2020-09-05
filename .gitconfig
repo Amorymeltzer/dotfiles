@@ -137,9 +137,13 @@ graph = lg
 lm = log --oneline --decorate master..HEAD
 llm = log --decorate master..HEAD
 
+loh = log --oneline --decorate origin/HEAD..HEAD
+lloh = log --decorate origin/HEAD..HEAD
 luh = log --oneline --decorate @{upstream}..HEAD
 lluh = log --decorate @{upstream}..HEAD
 # Probably not that useful, but technically possible...
+lho = log --oneline --decorate HEAD..origin/HEAD
+llho = log --decorate HEAD..origin/HEAD
 lhu = log --oneline --decorate HEAD..@{upstream}
 llhu = log --decorate HEAD..@{upstream}
 
