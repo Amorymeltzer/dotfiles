@@ -342,7 +342,7 @@ Record that in `paradox--backups', but do nothing if
 (setq flymake-no-changes-timeout 3)
 
 ;; Disable in-place checking, and tell it to use ~/.emacs.d/tmp/ for the temp files.
-(setq temporary-file-directory "~/.emacs.d/tmp/")
+(setq temporary-file-directory (expand-file-name "tmp/" user-emacs-directory))
 (setq flymake-run-in-place nil)
 
 ;; Only need these two if you plan to debug Flymake.
@@ -477,14 +477,13 @@ Record that in `paradox--backups', but do nothing if
 ;; (modify-frame-parameters (selected-frame) '((name)))
 
 ;; create a backup file directory
+;; ` rather than ' needed to selectively evaluate item marked by ,
+;; https://emacs.stackexchange.com/a/7487/2051
 (setq backup-directory-alist
-      '(("." . "~/.emacs.d/backups")))
-
-
+      `(("." . ,(expand-file-name "backups" user-emacs-directory))))
 ;; Save every on inputs and idle
 (setq auto-save-interval 300) ; default 100
 (setq auto-save-timeout 90) ; default 30
-
 ;; Versions
 (setq delete-old-versions t
       backup-by-copying t
@@ -521,7 +520,7 @@ backups." t)
 ;; Pointless if saving buffers as below?
 (require 'recentf)
 (recentf-mode 1)
-(setq recentf-save-file "~/.emacs.d/recentf")
+(setq recentf-save-file (expand-file-name "recentf" user-emacs-directory))
 ;; Uses ~ instead of full path
 (setq recentf-filename-handlers (quote abbreviate-file-name))
 ;; Same as above?
@@ -719,7 +718,7 @@ current buffer" t)
       desktop-base-file-name "emacs.desktop"
       ;; Don't try to save if file is locked, I'll always be quick
       desktop-not-loaded-hook (quote (desktop-save-mode-off))
-      desktop-path (quote ("~/.emacs.d/" "~"))) ; Just in case
+      desktop-path (quote (user-emacs-directory "~"))) ; Just in case
 
 
 ;; Load the desktop *after* all init stuff is done.  Does what???
@@ -754,7 +753,7 @@ current buffer" t)
 				  (garbage-collect)
 				  (wm-save-desktop-with-message)))
       "idle-timer (see \\[run-with-idle-timer]) to save desktop \\[cancel-timer] to cancel it."))
-(setq desktop-dirname "~/.emacs.d/")
+(setq desktop-dirname user-emacs-directory)
 (defun wm-save-desktop-with-message ()
   (interactive)
   (desktop-save desktop-dirname)
@@ -789,7 +788,7 @@ current buffer" t)
 ;; Any overlap with desktop or persistency?
 (require 'saveplace)
 (setq-default save-place t)
-(setq save-place-file "~/.emacs.d/saved-places")
+(setq save-place-file (expand-file-name "saved-places" user-emacs-directory))
 
 
 ;; Save clipboard strings into kill ring before replacing them.
@@ -807,7 +806,7 @@ current buffer" t)
 ;; C-x r d to delete
 (global-set-key "\C-xrd" 'bookmark-delete)
 ;; where to save the bookmarks
-(setq bookmark-default-file "~/.emacs.d/bookmarks")
+(setq bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
 ;; each command that sets a bookmark will also save your bookmarks
 (setq bookmark-save-flag 1)
 
@@ -1041,7 +1040,7 @@ current buffer" t)
 (ido-at-point-mode)
 
 ;; Specify save file in ~/.emacs.d/ folder
-(setq ido-save-directory-list-file "~/.emacs.d/ido.last"
+(setq ido-save-directory-list-file (expand-file-name "ido.last" user-emacs-directory)
       ;; Kind of keeps buffer names around via recentf in case things get closed
       ido-use-virtual-buffers t
       ;; Probably good/useful
@@ -1269,7 +1268,7 @@ current buffer" t)
 ;; https://github.com/nonsequitur/smex/
 (require 'smex)
 ;; Specify save file in ~/.emacs.d/ folder, MUST be before initializing
-(setq smex-save-file "~/.emacs.d/smex-items")
+(setq smex-save-file (expand-file-name "smex-items" user-emacs-directory))
 (smex-initialize)
 
 ;; Only a slight speed enhancement, but let's be honest: I'm not loading tons
