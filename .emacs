@@ -525,6 +525,7 @@ backups." t)
 (add-to-list 'recentf-exclude "\\.ido.last\\'")
 (add-to-list 'recentf-exclude "\\.smex-items\\'")
 (add-to-list 'recentf-exclude "\\.recentf\\'")
+(add-to-list 'recentf-exclude "\\node_modules\\'")
 
 ;; Cleanup timer
 ;; (setq recentf-auto-cleanup 300)
@@ -982,11 +983,11 @@ current buffer" t)
 ;; C-s, C-r cycle
 ;; C-f, C-b switch to file or buffer mode
 ;; C-j new file with entered text
+(require 'ido)
+(ido-mode t) ; is this the best place for this?
 
-;; ido-hacks.el is better
 ;; https://github.com/scottjad/ido-hacks
 (require 'ido-hacks)
-(ido-mode t) ; is this the best place for this?
 (ido-hacks-mode 1)
 ;; Complete space/hyphen in ido like M-x
 ;; https://github.com/doitian/ido-complete-space-or-hyphen
@@ -995,7 +996,7 @@ current buffer" t)
 ;; Fuzzy-ish matching
 (setq ido-enable-flex-matching t)
 ;; Better fuzzy matching, does the above need to be turned on?
-;; Was slower, possible highlighting error? ;;;;;;; ####### TODO FIXME
+;; Was slower, but now... just not as good?
 ;; (require 'flx-ido)
 ;; (flx-ido-mode 1)
 ;; (setq ido-use-faces nil)
@@ -1025,7 +1026,6 @@ current buffer" t)
 ;; https://github.com/katspaugh/ido-at-point
 (require 'ido-at-point)
 (ido-at-point-mode)
-(setq ido-at-point-fuzzy t)
 
 ;; Specify save file in ~/.emacs.d/ folder
 (setq ido-save-directory-list-file "~/.emacs.d/ido.last"
@@ -1038,8 +1038,11 @@ current buffer" t)
       ido-enter-matching-directory 'first)
 ;; Not exactly sure but it sounds nice, right?
 (ido-load-history)
-;; No .DS files
+
 (add-to-list 'ido-ignore-files "\\.DS_Store")
+(add-to-list 'ido-ignore-files "\\.el.gz\\'")
+(add-to-list 'ido-ignore-files "\\.elc\\'")
+(add-to-list 'ido-ignore-directories "node_modules")
 
 ;; Sort ido filelist by modified time instead of alphabetically, buries .
 (defun ido-sort-mtime ()
@@ -2303,8 +2306,8 @@ This checks in turn:
 ;; Jump to a definition in the current file (holy shit this is awesome)
 ;; Does this automatically use ido?  Others think it doesn't but I do...
 (global-set-key (kbd "C-c i") 'imenu)
-;; Unnecessary
-;; (set-default 'imenu-auto-rescan t)
+;; Always rescan buffers
+(set-default 'imenu-auto-rescan t)
 
 ;; Face stuff
 
