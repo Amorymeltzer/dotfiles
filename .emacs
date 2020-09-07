@@ -280,6 +280,7 @@
 (require 'js2-mode)
 (require 'js2-imenu-extras)
 (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
+(js2-imenu-extras-setup)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 ;; js2-jump-to-definition takes this over, annoying
