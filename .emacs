@@ -106,11 +106,23 @@
 ;; 'tidy
 ;; 'u-mandelbrot
 
+
 (require 'paradox)
 ;; Stored in a place like ~/.authinfo.gpg, ~/.authinfo, etc.
 ;; See https://github.com/Malabarba/paradox/issues/147#issuecomment-409336111
 (setq paradox-github-token
        (cadr(auth-source-user-and-password "api.github.com" "Amorymeltzer^paradox")))
+
+;; Quieter startup, see https://github.com/Malabarba/paradox/pull/183
+;; (setq paradox-less-verbose t)
+(defun paradox--override-definition (sym newdef)
+  "Temporarily override SYM's function definition with NEWDEF.
+Record that in `paradox--backups', but do nothing if
+`paradox--backups' reports that it is already overriden."
+  (unless (memq sym paradox--backups)
+    (advice-add sym :override newdef '((name . :paradox-override)))
+    (add-to-list 'paradox--backups sym)))
+
 (paradox-enable)
 
 ;; This must come before configurations of installed packages
@@ -137,12 +149,12 @@
 		(with-output-to-string (call-process "hostname"
 						     nil standard-output))))
 
-;; UTF-8 always, please
-(setq locale-coding-system 'utf-8) ; please
-(set-terminal-coding-system 'utf-8) ; pretty
-(set-keyboard-coding-system 'utf-8) ; pretty
-(set-selection-coding-system 'utf-8) ; please
-(prefer-coding-system 'utf-8) ; with sugar on top
+;; UTF-8 always, always, always
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 (set-language-environment "UTF-8")
 ;; (setq-default buffer-file-coding-system 'utf-8-unix)
 
@@ -177,6 +189,7 @@
 ;; https://github.com/AndreaCrotti/yasnippet-snippets
 (require 'yasnippet)
 (setq yas-wrap-around-region t)		; Set region to $0
+(setq yas-verbosity 2)			; Fewer messages on startup
 (define-key yas-minor-mode-map (kbd "C-c C-i") 'yas-insert-snippet) ; C-c tab
 (yas-reload-all)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
