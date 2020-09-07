@@ -57,8 +57,26 @@
 
 ;; Set by custom rather than by hand to make installation easier
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(ac-html ace-jump-mode ace-window anzu applescript-mode auto-complete browse-kill-ring btc-ticker buffer-move bug-hunter color-identifiers-mode command-log-mode csv-mode diminish dna-mode editorconfig emmet-mode eprime-mode expand-region fancy-narrow fic-mode fill-column-indicator fillcode find-file-in-project fireplace flx-ido flymake-cursor flymake-perlcritic flymake-php google-translate goto-last-change guide-key helpful highlight-escape-sequences highlight-numbers highlight-parentheses highlight-symbol howdoi html-to-markdown htmlize hungry-delete ido-at-point ido-complete-space-or-hyphen ido-completing-read+ ido-hacks ido-vertical-mode ido-yes-or-no js2-mode js2-refactor key-chord linum-relative markdown-mode md-readme php-mode plur poker pretty-mode rainbow-identifiers recentf-ext reveal-in-osx-finder smart-shift smex smooth-scrolling ssh-config-mode stock-ticker switch-window transpose-frame typing-game undo-tree unicode-troll-stopper visual-regexp visual-regexp-steroids volatile-highlights wc-goal-mode wc-mode which-key whole-line-or-region window-numbering wrap-region writegood-mode xkcd yasnippet yasnippet-snippets)))
+   '(paradox ac-html ace-jump-mode ace-window anzu applescript-mode auto-complete browse-kill-ring btc-ticker buffer-move bug-hunter color-identifiers-mode command-log-mode csv-mode diminish dna-mode editorconfig emmet-mode eprime-mode expand-region fancy-narrow fic-mode fill-column-indicator fillcode find-file-in-project fireplace flx-ido flymake-cursor flymake-perlcritic flymake-php google-translate goto-last-change guide-key helpful highlight-escape-sequences highlight-numbers highlight-parentheses highlight-symbol howdoi html-to-markdown htmlize hungry-delete ido-at-point ido-complete-space-or-hyphen ido-completing-read+ ido-hacks ido-vertical-mode ido-yes-or-no js2-mode js2-refactor key-chord linum-relative markdown-mode md-readme php-mode plur poker pretty-mode rainbow-identifiers recentf-ext reveal-in-osx-finder smart-shift smex smooth-scrolling ssh-config-mode stock-ticker switch-window transpose-frame typing-game undo-tree unicode-troll-stopper visual-regexp visual-regexp-steroids volatile-highlights wc-goal-mode wc-mode which-key whole-line-or-region window-numbering wrap-region writegood-mode xkcd yasnippet yasnippet-snippets))
+ '(paradox-automatically-star t)
+ '(paradox-column-width-package 20)
+ '(paradox-display-download-count t)
+ '(paradox-use-homepage-buttons nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(paradox-download-face ((t (:foreground "cyan"))))
+ '(paradox-highlight-face ((t (:inherit font-lock-variable-name-face :weight bold))))
+ '(paradox-homepage-button-face ((t (:inherit font-lock-comment-face :underline nil))))
+ '(paradox-mode-line-face ((t (:weight normal)))))
+
 
 ;; Manual package installs, ideally some can be removed
 ;; 'bash-org
@@ -82,6 +100,13 @@
 ;; 'thingatpt+
 ;; 'tidy
 ;; 'u-mandelbrot
+
+(require 'paradox)
+;; Stored in a place like ~/.authinfo.gpg, ~/.authinfo, etc.
+;; See https://github.com/Malabarba/paradox/issues/147#issuecomment-409336111
+(setq paradox-github-token
+       (cadr(auth-source-user-and-password "api.github.com" "Amorymeltzer^paradox")))
+(paradox-enable)
 
 ;; This must come before configurations of installed packages
 (package-initialize)
