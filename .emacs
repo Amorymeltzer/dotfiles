@@ -45,6 +45,11 @@
 ;; Enter debugger on error
 (setq debug-on-error t)
 
+;; Local lisp, will take precedence over elpa directory
+(add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
+;; Prefer newer files even if not .elc
+(setq load-prefer-newer t)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package
@@ -120,11 +125,9 @@
 ;; No menu bar
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
   (when (fboundp mode) (funcall mode -1)))
-
-;; Load everybody local, will take precedence over elpa directory
-(add-to-list 'load-path "~/.emacs.d/site-lisp/")
-;; Prefer newer files even if not .elc
-(setq load-prefer-newer t)
+;; Prevent the startup message and splash screen
+(setq inhibit-startup-echo-area-message "t"
+      inhibit-startup-message t)
 
 ;; It'sa me
 (setq user-mail-address "Amorymeltzer@gmail.com"
@@ -1352,10 +1355,6 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key (kbd "C-c }") 'shrink-window)
 ;; (global-set-key (kbd "<C-right>") 'enlarge-window-horizontally)
 
-
-;; Prevent the startup message and splash screen
-(setq inhibit-startup-echo-area-message "Amory"
-      inhibit-startup-message t)
 
 ;; See what you type in real-time
 (setq echo-keystrokes 0.01)
