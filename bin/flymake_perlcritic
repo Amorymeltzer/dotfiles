@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
-#  Wrapper around perlcritic and perl -c for Emacs flymake.
+# Wrapper around perlcritic and perl -c for Emacs flymake.
+# https://github.com/illusori/emacs-flymake-perlcritic
 
 showhelp() {
     echo "flymake_perlcritic [-I <include-dir>] [-h] <source-file>

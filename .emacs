@@ -363,10 +363,9 @@ Record that in `paradox--backups', but do nothing if
 ;;Turn on automatically
 (add-hook 'find-file-hook 'flymake-find-file-hook)
 
-;; flymake-perlcritic stuff.  If flymake_perlcritic isn't in your $PATH you'll
-;; need to give the full path here
+;; flymake-perlcritic stuff.  Requires flymake_perlcritic file, should be
+;; present in your $PATH; if not, set the flymake-perlcritic-command
 ;; https://github.com/illusori/emacs-flymake-perlcritic
-(setq flymake-perlcritic-command "~/bin/flymake_perlcritic")
 (require 'flymake-perlcritic)
 (setq flymake-perlcritic-severity 2)
 
