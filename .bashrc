@@ -485,6 +485,10 @@ trap _exit EXIT
 
 
 ## Sourcin'
+# Some personal/private stuff
+# USER_NAME, NAME, EMAIL
+# WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
+source "$HOME/.config/bash/priv-env.sh"
 # Advanced bash completion (http://www.caliban.org/bash/index.shtml#completion)
 # Defaults, pip, and gem completion
 # (https://github.com/revans/bash-it/blob/master/completion)
@@ -624,7 +628,6 @@ alias dt="cd ~/dotfiles"
 alias dr="cd ~/Dropbox"
 alias de="cd ~/Desktop"
 alias dg="cd ~/Documents/git"
-alias dga="cd ~/Documents/git/amorymeltzer.github.io"
 alias dgt="cd ~/Documents/git/twinkle@azatoth"
 alias dgm="cd ~/Documents/git/twinkle@azatoth/modules"
 alias dgj="dgm"
@@ -877,27 +880,28 @@ alias be='bundle exec'
 alias bej='be jekyll serve --watch'
 alias jes='jekyll serve --watch'
 
-# Quickly open and make a new perl file executable and with headers
-function newperl() {
-    if [ -a $1 ]; then
-	echo "$1 already exists";
-    else
-	echo -e "#!/usr/bin/env perl\n# $1 by Amory Meltzer\n# \n\nuse strict;\nuse warnings;\nuse diagnostics;\n" > $1 ; chmod 755 $1 ; $EDITOR +3:3 $1 ;
-    fi
-}
-alias nperl='newperl'
-
-# Same for bash
-function newbash() {
+# Quickly open and make a new file executable; emacs will add headers and move
+# point to the appropriate location if there's a well-defined skeleton
+function newscript() {
     if [ $# -eq 0 ]; then
 	echo "No arguments provided";
-    elif [ -a $1 ]; then
-	echo "$1 already exists";
     else
-	echo -e "#!/usr/bin/env bash\n# $1 by Amory Meltzer\n# " > $1 ; chmod 755 $1 ; $EDITOR +3:3 $1 ;
+	if [ -a $1 ]; then
+	    echo "$1 already exists, opening";
+	else
+	    touch $1
+	    chmod 755 $1
+	fi
+	$EDITOR $1
     fi
 }
-alias nbash='newbash'
+# Deprecated
+function newperl() {
+    echo "Use newscript instead!"
+    sleep 1
+    newscript $1
+}
+alias newbash="newperl "
 
 alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 
@@ -1384,7 +1388,7 @@ function twinkleCheck() {
     (cd ~/Documents/perl/wiki/twinkle/ ; perl twinkleCheck.pl $@)
 }
 # Easy
-alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge amorymeltzer@login.toolforge.org'
+alias toolforge="ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org"
 
 # Get coordinates
 function findlocation() {

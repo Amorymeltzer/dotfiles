@@ -144,14 +144,6 @@ Record that in `paradox--backups', but do nothing if
 (setq inhibit-startup-echo-area-message "t"
       inhibit-startup-message t)
 
-;; It'sa me
-(setq user-mail-address "Amorymeltzer@gmail.com"
-      user-full-name "Amory Meltzer"
-      hostname (replace-regexp-in-string
-		"\\(^[[:space:]\n]*\\|[[:space:]\n]*$\\)" ""
-		(with-output-to-string (call-process "hostname"
-						     nil standard-output))))
-
 ;; UTF-8 always, always, always
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -658,7 +650,7 @@ current buffer" t)
   '(progn
      ;; Perl
      (define-auto-insert '("\\.pl\\'" . "Perl skeleton") '(nil "#!/usr/bin/env perl" \n
-							       "# FOO by Amory Meltzer" \n
+							       "# FOO by " user-full-name \n
 							       "# " _ \n
 							       \n "use strict;" \n
 							       "use warnings;" \n
@@ -666,7 +658,7 @@ current buffer" t)
 
      ;; shell script
      (define-auto-insert '("\\.\\(ba\\)?sh\\'" . "Bash skeleton") '(nil "#!/usr/bin/env bash" \n
-									"# FOO by Amory Meltzer" \n
+									"# FOO by " user-full-name \n
 									"# " _ ))
 
      ;; Python

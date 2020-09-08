@@ -3,9 +3,9 @@
 # Twitter backup script, modified from:
 # http://blog.jphpsf.com/2012/05/07/backing-up-your-twitter-account-with-t/
 
-export DAY=$(date +'%Y-%m-%d_%H%M%S')
-export FOLDERPATH='/Users/Amory/Dropbox/twitter_backup/'$DAY
-twitname='@amorymeltzer'
+DAY=$(date +'%Y-%m-%d_%H%M%S')
+FOLDERPATH="$HOME/Dropbox/twitter_backup/"$DAY
+twitname=$TWITTER_USERNAME
 
 mkdir "$FOLDERPATH"
 
@@ -30,10 +30,10 @@ t followings --csv > $FOLDERPATH/followings-$DAY.csv
 
 # echo "Backing up lists..."
 # listlist=$(t lists)
-# listlist=$(echo $listlist | sed -e 's/\@Amorymeltzer\///g')
+# listlist=$(echo $listlist | sed -e 's/$twitname\///g')
 # for i in $listlist
 # do
-#     t list members @amorymeltzer/$i --csv > $FOLDERPATH/list-$i-$DAY.csv
+#     t list members $twitname/$i --csv > $FOLDERPATH/list-$i-$DAY.csv
 # done
 
 echo -e "\nBacked up the following:"

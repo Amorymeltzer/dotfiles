@@ -1,13 +1,6 @@
 [hub]
 protocol = https
 
-[github]
-user = Amorymeltzer
-
-[user]
-name = Amory Meltzer
-email = tryharder
-
 [credential]
 helper = osxkeychain
 
@@ -544,4 +537,5 @@ smudge = git-lfs smudge -- %f
 # Example file at ~/.local-gitconfig.example
 [include]
 path = ~/.local-gitconfig
+# user.name, user.email, github.user
 path = ~/.config/git/priv-gitconfig

@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 # imessage over the commandline
-# Might be dead post-Mavericks
+# Might be dead post-High Sierra (10.13)
 # Heavily cribbed from https://gist.github.com/roldershaw/7311547
+# and https://stackoverflow.com/a/19483011/2521092
 
 if [[ $# -ne 2 ]] ; then
     echo "Usage: $(basename $0) <email/phone> <message>"
 else
     /usr/bin/osascript -e 'tell application "Messages"
-        send "'"$2"'" to buddy "'"$1"'" of service "E:Amorymeltzer@gmail.com"
+        set targetService to 1st service whose service type = iMessage
+        set targetBuddy to buddy "'"$1"'" of targetService
+        send "'"$2"'" to targetBuddy
         end tell'
     echo "Message sent"
 fi
