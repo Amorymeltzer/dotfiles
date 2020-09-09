@@ -702,6 +702,7 @@ current buffer" t)
 (global-set-key (kbd "C-c z") 'reveal-in-osx-finder)
 
 ;; Save a list of open files in ~/.emacs.d/.emacs.desktop(.lock)
+;; Not great with emacsclient server?
 (desktop-save-mode t)
 ;; Automatically unless nonexistant
 (setq desktop-save 'ask-if-new
@@ -779,6 +780,7 @@ current buffer" t)
 
 ;; Open at last place visited in a file
 ;; Any overlap with desktop or persistency?
+;; Note great with emacsclient
 (require 'saveplace)
 (setq-default save-place t)
 (setq save-place-file (expand-file-name "saved-places" user-emacs-directory))
@@ -3001,8 +3003,6 @@ instead."
 ;; (when (require 'time-date nil t)
 ;;   (message "Emacs startup time: %d seconds." (time-to-seconds (time-since emacs-load-start-time))))
 (message "Emacs loaded at %s." (wm-format-time-string "%T %a %d %b %y"))
-(server-start)
-
 
 
 ;;;;Package todos
