@@ -12,8 +12,7 @@
 ;; "While any text editor can save your files, only Emacs can save your soul.";;
 ;; -Per Abrahamsen                                                            ;;
 ;;                                                                            ;;
-;; "Anyone with a 4-line .emacs file is suspicious."                          ;;
-;; -Dino Chiesa                                                               ;;
+;; "Anyone with a 4-line .emacs file is suspicious." -Dino Chiesa             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
