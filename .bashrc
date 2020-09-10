@@ -1270,15 +1270,18 @@ function backup-file-with-timestamp()
 # New markdown file with current date
 function diary()
 {
-    # Display a random entry
+    local today=$(date +"%Y-%m-%d").md
     if [[ $1 ]]; then
 	if [[ "$1" == "notes" ]]; then
 	    $EDITOR notes
+	elif [[ "$1" == "last" ]]; then
+	    # Display latest entry, not including today's
+	    cat $(ls -1tr *.md | tail -n 2 | grep -v $today)
 	else
+	    # Display a random entry
 	    cat $(ls -1 | shuf | head -n 1)
 	fi
     else
-	local today=$(date +"%Y-%m-%d").md
 	if [[ ! -f $today ]]; then
 	    local title=$(date +"%A, %B %d, %Y")
 	    printf "## $title\n\n" > $today
