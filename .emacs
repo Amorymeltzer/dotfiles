@@ -281,13 +281,8 @@ Record that in `paradox--backups', but do nothing if
 (global-subword-mode 1)
 
 
-;; js-mode stuff
-(setq js-indent-level 8)
-;; Use js2-mode https://github.com/mooz/js2-mode
+;; Use js2-mode instead of js-mode https://github.com/mooz/js2-mode
 (require 'js2-mode)
-(require 'js2-imenu-extras)
-(add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
-(js2-imenu-extras-setup)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 ;; js2-jump-to-definition takes this over, annoying
@@ -299,6 +294,10 @@ Record that in `paradox--backups', but do nothing if
 	    (when (string-match "twinkle@azatoth" (buffer-file-name))
 	      (setq js2-additional-externs
 		    '("$" "mw" "Morebits" "Twinkle")))))
+;; Part of js2-mode package
+(require 'js2-imenu-extras)
+(add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
+(js2-imenu-extras-setup)
 
 
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
@@ -309,7 +308,11 @@ Record that in `paradox--backups', but do nothing if
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 ;; (js2r-add-keybindings-with-prefix "C-c C-m")
 (js2r-add-keybindings-with-prefix "C-c m")
-(setq js2-skip-preprocessor-directives t)
+;; js2-refactor does not work in a buffer that has Javascript parse
+;; errors. This tells js2-mode to treat hashbangs as comments, preventing them
+;; from causing parse errors
+;; (setq js2-skip-preprocessor-directives t)
+
 ;; emmet-mode expansions, super cool if I ever remember (use C-j)
 ;; https://github.com/smihica/emmet-mode
 (autoload 'emmet-mode "emmet-mode")
