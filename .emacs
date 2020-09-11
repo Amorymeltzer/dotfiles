@@ -283,6 +283,8 @@ Record that in `paradox--backups', but do nothing if
 
 ;; Use js2-mode instead of js-mode https://github.com/mooz/js2-mode
 (require 'js2-mode)
+;; Highlight more built-in functions
+(setq js2-highlight-level 3)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 ;; js2-jump-to-definition takes this over, annoying
@@ -306,6 +308,7 @@ Record that in `paradox--backups', but do nothing if
 ;; Should probably learn to use, seems useful
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
+(setq js2r-prefered-quote-type 2)	; single, not double
 ;; (js2r-add-keybindings-with-prefix "C-c C-m")
 (js2r-add-keybindings-with-prefix "C-c m")
 ;; js2-refactor does not work in a buffer that has Javascript parse
