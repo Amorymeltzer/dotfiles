@@ -34,9 +34,6 @@ gpgSign = true
 # gpg.program set in include
 
 [alias]
-# Fix mindless `git git log` stuff
-git = !exec git
-
 h = help
 hc = help config
 cfg = config
