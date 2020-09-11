@@ -293,6 +293,13 @@ Record that in `paradox--backups', but do nothing if
 ;; js2-jump-to-definition takes this over, annoying
 (define-key js2-mode-map (kbd "M-.") 'end-of-buffer)
 
+;; Add globals for Twinkle development, temporary until I get flycheck up and running
+(add-hook 'js2-mode-hook
+	  (lambda ()
+	    (when (string-match "twinkle@azatoth" (buffer-file-name))
+	      (setq js2-additional-externs
+		    '("$" "mw" "Morebits" "Twinkle")))))
+
 
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
 ;; Requires yasnippet and multiple-cursors
