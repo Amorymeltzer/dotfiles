@@ -566,20 +566,20 @@ if [[ -f `command -v tidy` ]]; then
     export HTML_TIDY=~/.tidyrc
 fi
 
-## Emacs stuff
+# Emacs stuff.  Makes which/type confused, but order is important
 # emacs daemon/emacsclient
 alias emd='\emacs --daemon '
+alias killemacs-server="\emacsclient -e '(kill-emacs)'"
+alias kemacs-server='killemacs-server'
+alias ke='kemacs-server'
 alias emacsclient='\emacsclient -cqu '
 alias emacs='emacsclient '
-export EDITOR='emacsclient -cqu'
+export EDITOR='emacs '
 export ALTERNATE_EDITOR=""
 export VISUAL="$EDITOR "
 alias e="$EDITOR "
 alias ec="$EDITOR "
 alias em="$EDITOR "
-alias killemacs-server="\emacsclient -e '(kill-emacs)'"
-alias kemacs-server='killemacs-server'
-alias ke='kemacs-server'
 # Recompile all elisp files, with proper warnings/output
 function recompile_emacs() {
     \emacs -batch --eval '(byte-recompile-directory "~/.emacs.d/" 0)'
