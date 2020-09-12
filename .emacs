@@ -641,8 +641,11 @@ buffer or region to mardown and display it in a separate window."
   t)
 
 ;; htmlize-buffer/file
-;; https://github.com/emacsmirror/htmlize
-(require 'htmlize)
+;; https://github.com/hniksic/emacs-htmlize
+(autoload 'htmlize-buffer "htmllize" "Convert buffer to HTML, preserving colors and decorations.")
+(autoload 'htmlize-file "htmllize" "Load file, fontify it, convert it to HTML, and save the result.")
+(autoload 'htmlize-region "htmllize" "Convert the region to HTML, preserving colors and decorations.")
+(autoload 'htmlize-many-files "htmllize" "Convert files to HTML and save the corresponding HTML versions.")
 
 (defun linkify-region-html (start end)
   (interactive "r")
@@ -1874,7 +1877,7 @@ round to ones, tens, etc."
 
 ;; emacs-fireplace by @johanvts.  Because emacs
 ;; https://github.com/johanvts/emacs-fireplace
-(require 'fireplace)
+(autoload 'fireplace "fireplace" "Light a cozy fire.")
 
 ;; Stop unicode trolls https://github.com/camsaul/emacs-unicode-troll-stopper
 ;; MELPA help FIXME TODO
@@ -1972,8 +1975,7 @@ idle for SECS seconds." t)
 (autoload 'writegood-mode "writegood-mode" "Colorize issues with the writing
 in the buffer." t)
 ;; eprime-mode https://github.com/AndrewHynes/eprime-mode
-;; Don't allow forms of "to be"
-(require 'eprime-mode)
+(autoload 'eprime-mode "eprime-mode" "Check text conforms to E', disallowing forms of \"to be\".")
 
 ;; JUST USE WEBJUMP!!!!
 (global-set-key (kbd "C-x g") 'webjump)
