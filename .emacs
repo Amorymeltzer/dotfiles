@@ -599,6 +599,10 @@ backups." t)
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
+;; Edit git commit messages in markdown, since mostly for github
+;; Probably want to remove/change this once installing magit
+(add-to-list 'auto-mode-alist
+             '("/\\.git/COMMIT_EDITMSG\\'" . markdown-mode))
 
 ;; Should add some more here
 ;; Also need to make interactives for bold, italics, headers, etc
@@ -714,9 +718,10 @@ current buffer" t)
 (wrap-region-global-mode t)
 (wrap-region-add-wrappers
  '(
-   ("/" "/" nil ruby-mode)
    ("/* " " */" "#" (java-mode js2-mode js-mode css-mode))
-   ("`" "`" nil (markdown-mode ruby-mode))))
+   ("*" "*" nil markdown-mode)
+   ("`" "`" nil (markdown-mode ruby-mode))
+   ("/" "/" nil ruby-mode)))
 
 
 (defun visit-most-recent-file ()
