@@ -187,6 +187,9 @@ cl = clone
 tags = tag -n
 remotes = remote -v
 
+# Probably branch is more expect, but honestly, I use this more
+b = blame
+
 br = branch
 # git-extras also has delete-branch, which does upstream
 brd = branch -D
