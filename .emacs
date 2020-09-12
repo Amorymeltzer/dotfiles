@@ -283,8 +283,11 @@ Record that in `paradox--backups', but do nothing if
 
 ;; Use js2-mode instead of js-mode https://github.com/mooz/js2-mode
 (require 'js2-mode)
-;; Highlight more built-in functions
-(setq js2-highlight-level 3)
+(setq
+ js2-highlight-level 3		    ; highlight more built-in functions
+ js2-mode-indent-ignore-first-tab t ; make first tab doesn't toggle between valid indents
+ js2-strict-inconsistent-return-warning nil ; turn off
+ js2-strict-trailing-comma-warning t)	    ; trailing commas in array/objects
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 ;; js2-jump-to-definition takes this over, annoying
