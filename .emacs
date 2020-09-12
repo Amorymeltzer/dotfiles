@@ -1304,10 +1304,10 @@ current buffer" t)
 
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
+;; This is the old M-x
 (global-set-key (kbd "C-c M-X") 'execute-extended-command)
 (setq smex-prompt-string "Smx ")
-(setq smex-history-length 256)
+(setq smex-history-length 512)
 
 ;; Cleaner, more meaningful narrow-to-region
 ;; https://github.com/Bruce-Connor/fancy-narrow
