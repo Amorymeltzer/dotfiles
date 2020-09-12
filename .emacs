@@ -175,7 +175,18 @@ Record that in `paradox--backups', but do nothing if
 ;;
 ;;
 ;; ac-html mode, from https://github.com/cheunghy/ac-html
-(require 'ac-html)
+(defun setup-ac-for-html ()
+  (require 'ac-html)
+  ;; I guess?
+  (require 'ac-html-default-data-provider)
+  (ac-html-enable-data-provider 'ac-html-default-data-provider)
+  (ac-html-setup)
+  (setq ac-sources '(ac-source-html-tag
+                     ac-source-html-attr
+                     ac-source-html-attrv))
+  (auto-complete-mode))
+(add-hook 'html-mode-hook 'setup-ac-for-html)
+(add-hook 'mhtml-mode-hook 'setup-ac-for-html)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; yasnippet, loaded here to allow in hippie-expand
@@ -326,6 +337,9 @@ Record that in `paradox--backups', but do nothing if
 (add-hook 'html-mode-hook  'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode)
 
+;; mhtml-mode probably better (default since 26), but some bug (maybe with
+;; fic-mode?) makes it wig out. Regex taken from auto-mode-alist itself
+(add-to-list 'auto-mode-alist '("\\.[sx]?html?\\(\\.[a-zA-Z_]+\\)?\\'" . html-mode))
 
 ;; php-mode https://github.com/emacs-php/php-mode
 ;; Relies on flymake-php: https://github.com/purcell/flymake-php
@@ -3023,16 +3037,13 @@ instead."
 
 ;;;;Package todos
 ;; CONSIDER
-;; paradox, other package stuff
-;; fill-function-arguments
 ;; More ace-jump-stuff
 ;; more ido stuff
 ;; more auto-complete stuff, company mode?
-;; cl-libify ????
 ;; discover-js2-refactor
 ;; More js/2 stuff?  node/npm
 ;; ivy?
-;; More yasnippet stuff?
+;; More yasnippet stuff? (helm/ivy)
 ;; frecentf and other recentf stuff?
 ;; highlight stuff
 ;; Sort words but include symbol???? not whitespace https://www.emacswiki.org/emacs/SortWords
