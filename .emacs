@@ -66,7 +66,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(paradox ac-html ace-jump-mode ace-window anzu applescript-mode auto-complete browse-kill-ring btc-ticker buffer-move bug-hunter color-identifiers-mode command-log-mode csv-mode diminish dna-mode editorconfig emmet-mode eprime-mode expand-region fancy-narrow fic-mode fill-column-indicator fillcode find-file-in-project fireplace flx-ido flymake-cursor flymake-perlcritic flymake-php google-translate goto-last-change guide-key helpful highlight-escape-sequences highlight-numbers highlight-parentheses highlight-symbol howdoi html-to-markdown htmlize hungry-delete ido-at-point ido-complete-space-or-hyphen ido-completing-read+ ido-hacks ido-vertical-mode ido-yes-or-no js2-mode js2-refactor key-chord linum-relative markdown-mode md-readme php-mode plur poker pretty-mode rainbow-identifiers recentf-ext reveal-in-osx-finder smart-shift smex smooth-scrolling ssh-config-mode stock-ticker switch-window transpose-frame typing-game undo-tree unicode-troll-stopper visual-regexp visual-regexp-steroids volatile-highlights wc-goal-mode wc-mode which-key whole-line-or-region window-numbering wrap-region writegood-mode xkcd yasnippet yasnippet-snippets))
+   '(paradox ac-html ace-jump-mode ace-window anzu applescript-mode auto-complete browse-kill-ring btc-ticker buffer-move bug-hunter color-identifiers-mode csv-mode diminish dna-mode editorconfig emmet-mode eprime-mode expand-region fancy-narrow fic-mode fill-column-indicator fillcode find-file-in-project fireplace flx-ido flymake-cursor flymake-perlcritic flymake-php google-translate goto-last-change guide-key helpful highlight-escape-sequences highlight-numbers highlight-parentheses highlight-symbol howdoi html-to-markdown htmlize hungry-delete ido-at-point ido-complete-space-or-hyphen ido-completing-read+ ido-hacks ido-vertical-mode ido-yes-or-no js2-mode js2-refactor key-chord linum-relative markdown-mode md-readme php-mode plur poker pretty-mode rainbow-identifiers recentf-ext reveal-in-osx-finder smart-shift smex smooth-scrolling ssh-config-mode stock-ticker switch-window transpose-frame typing-game undo-tree unicode-troll-stopper visual-regexp visual-regexp-steroids volatile-highlights wc-goal-mode wc-mode which-key whole-line-or-region window-numbering wrap-region writegood-mode xkcd yasnippet yasnippet-snippets))
  '(paradox-column-width-package 20)
  '(paradox-display-download-count t)
  '(paradox-use-homepage-buttons nil))
@@ -2140,13 +2140,6 @@ point or the words in the active region." t)
 ;; Post to bash.org via Emacs!  Here mainly as an example of cool capabilities
 ;; (require 'bash-org)
 
-;; In case I ever want to screencast Emacs
-;; https://github.com/lewang/command-log-mode
-(autoload 'clm/open-command-log-buffer "command-log-mode" "Log
-keyboard commands to a buffer.  Useful for screencasting Emacs."
-  t)
-;; (add-hook 'prog-mode-hook 'command-log-mode)
-
 
 ;; DNA mode, mucks with keybindings
 (autoload 'dna-mode "dna-mode" "Major mode for dna" t)
@@ -3074,7 +3067,6 @@ instead."
 ;; maybe plur?  or use?
 ;; btc ticker?? Maybe switch
 ;; Remove typing game, etc?
-;; command-log-mode??
 
 ;; flymake-perlcritic is using an old version of flymake, can't delete from
 ;; site-lisp until moving to flycheck
