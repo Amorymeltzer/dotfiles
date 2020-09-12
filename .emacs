@@ -300,7 +300,9 @@ Record that in `paradox--backups', but do nothing if
  js2-strict-inconsistent-return-warning nil ; turn off
  js2-strict-trailing-comma-warning t)	    ; trailing commas in array/objects
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+(add-to-list 'interpreter-mode-alist
+	     '(("node" . js2-mode)
+	       ("nodejs" . js2-mode)))
 ;; js2-jump-to-definition takes this over, annoying
 (define-key js2-mode-map (kbd "M-.") 'end-of-buffer)
 
@@ -710,7 +712,7 @@ current buffer" t)
 (wrap-region-add-wrappers
  '(
    ("/" "/" nil ruby-mode)
-   ("/* " " */" "#" (java-mode javascript-mode css-mode))
+   ("/* " " */" "#" (java-mode js2-mode js-mode css-mode))
    ("`" "`" nil (markdown-mode ruby-mode))))
 
 
