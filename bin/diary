@@ -3,21 +3,12 @@
 # Simple script to handle a simple diary
 
 today=$(date +"%Y-%m-%d").md
-if [[ $1 ]]; then
-    if [[ "$1" == "notes" ]]; then
-	$EDITOR notes
-    elif [[ "$1" == "last" ]]; then
-	# Display latest entry, not including today's
-	cat $(ls -1tr *.md | tail -n 2 | grep -v $today)
-    else
-	# Display a random entry
-	cat $(ls -1 | shuf | head -n 1)
-    fi
-else
+
+function newDay {
     if [[ ! -f $today ]]; then
-	local title=$(date +"%A, %B %d, %Y")
+	title=$(date +"%A, %B %d, %Y")
 	printf "## $title\n\n" > $today
-	local notes=$(cat notes)
+	notes=$(cat notes)
 	if [[ -n $notes ]]; then
 	    printf "### Thoughts ###\n" >> $today
 	    echo "$notes" >> $today
@@ -25,4 +16,18 @@ else
 	printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
     fi
     $EDITOR "$today"
+}
+
+if [[ ! $1 ]]; then
+    newDay
+else
+    case "$1" in
+	"notes") $EDITOR notes;;
+	"last")
+	    # Display latest entry, not including today's
+	    cat $(ls -1tr *.md | tail -n 2 | grep -v $today) ;;
+	"rand")
+	    # Display a random entry
+	    cat $(ls -1 | shuf | head -n 1) ;;
+    esac
 fi
