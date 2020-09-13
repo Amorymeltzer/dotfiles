@@ -34,7 +34,7 @@ else
 	    "notes") $EDITOR notes;;
 	    "last")
 		# Display latest entry, not including today's
-		cat $(ls -1tr *.md | tail -n 2 | grep -v $today) ;;
+		cat $(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1) ;;
 	    "rand")
 		# Display a random entry
 		cat $(ls -1 | shuf | head -n 1) ;;
