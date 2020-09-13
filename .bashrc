@@ -1267,34 +1267,6 @@ function backup-file-with-timestamp()
     done
 }
 
-# New markdown file with current date
-function diary()
-{
-    local today=$(date +"%Y-%m-%d").md
-    if [[ $1 ]]; then
-	if [[ "$1" == "notes" ]]; then
-	    $EDITOR notes
-	elif [[ "$1" == "last" ]]; then
-	    # Display latest entry, not including today's
-	    cat $(ls -1tr *.md | tail -n 2 | grep -v $today)
-	else
-	    # Display a random entry
-	    cat $(ls -1 | shuf | head -n 1)
-	fi
-    else
-	if [[ ! -f $today ]]; then
-	    local title=$(date +"%A, %B %d, %Y")
-	    printf "## $title\n\n" > $today
-	    local notes=$(cat notes)
-	    if [[ -n $notes ]]; then
-	       printf "### Thoughts ###\n" >> $today
-	       echo "$notes" >> $today
-	    fi
-	    printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
-	fi
-	$EDITOR "$today"
-    fi
-}
 
 # PlistBuddy alias, because sometimes `defaults` just doesn't cut it
 alias plistbuddy="/usr/libexec/PlistBuddy"
