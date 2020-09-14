@@ -40,7 +40,7 @@ function newDay {
 	fi
 	printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
     fi
-    $EDITOR "$today"
+    $VISUAL "$today"
 }
 
 if [[ ! $1 ]]; then
@@ -56,7 +56,7 @@ else
 	fi
     else
 	case "$1" in
-	    "notes") $EDITOR notes;;
+	    "notes") $VISUAL notes;;
 	    "last")
 		# Display latest entry, not including today's
 		cat $(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1) ;;

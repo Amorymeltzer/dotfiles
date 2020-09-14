@@ -9,6 +9,11 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
     PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
     PERL_MM_OPT="INSTALL_BASE=/$HOME/perl5"; export PERL_MM_OPT;
+
+    # Don't know if it's old versions (24.5) of emacs or the ssh environment,
+    # but having trouble using emacsclient here
+    # Also worth noting that export doesn't take in aliases
+    export EDITOR='emacs '
 else
     # Add python execs, not sure if this is the best but so be it
     export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
@@ -32,15 +37,20 @@ else
 
     # Add unloved perl modules manpages
     export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
+
+    # Also worth noting that export doesn't take in aliases
+    export EDITOR='emacsclient -cqu '
 fi
 # Add $HOME's node_modules
 export PATH="$PATH:$(npm bin)"
 # Add ~/bin ahead of everybody
 export PATH="$HOME/bin:$PATH"
 
-# emacs > vim
-export EDITOR="emacs"
-export VISUAL="emacs"
+# Modern day, I always want a visual editor
+# https://unix.stackexchange.com/q/4859/43935
+export VISUAL="$EDITOR "
+
+
 # Ignore sequential duplicates in history
 export HISTCONTROL=erasedups:ignoreboth
 # Up history size

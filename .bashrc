@@ -574,28 +574,23 @@ alias kemacs-server='killemacs-server'
 alias ke='kemacs-server'
 alias emacsclient='\emacsclient -cqu '
 alias emacs='emacsclient '
-export EDITOR='emacsclient -cqu ' # Apparently export doesn't take in aliases
-export ALTERNATE_EDITOR=""
-export VISUAL="$EDITOR "
-alias e="$EDITOR "
-alias ec="$EDITOR "
-alias em="$EDITOR "
 # Recompile all elisp files, with proper warnings/output
 function recompile_emacs() {
     \emacs -batch --eval '(byte-recompile-directory "~/.emacs.d/" 0)'
 }
 alias ii=recompile_emacs
 
+alias e="$VISUAL "
 # Make customization easier
-alias bashrc='$EDITOR ~/.bashrc'
-alias rc='$EDITOR ~/.bashrc'
-alias eb='$EDITOR ~/.bashrc'
-alias bashprofile='$EDITOR ~/.bash_profile'
-alias bp='$EDITOR ~/.bash_profile'
-alias ep='$EDITOR ~/.bash_profile'
-alias ee='$EDITOR ~/.emacs'
-alias eg='$EDITOR ~/.gitconfig'
-alias gitconfig='$EDITOR ~/.gitconfig'
+alias bashrc='$VISUAL ~/.bashrc'
+alias rc='$VISUAL ~/.bashrc'
+alias eb='$VISUAL ~/.bashrc'
+alias bashprofile='$VISUAL ~/.bash_profile'
+alias bp='$VISUAL ~/.bash_profile'
+alias ep='$VISUAL ~/.bash_profile'
+alias ee='$VISUAL ~/.emacs'
+alias eg='$VISUAL ~/.gitconfig'
+alias gitconfig='$VISUAL ~/.gitconfig'
 function gitignore() {
     local ignore=".gitignore"
     if [[ ! -f $ignore ]]; then
@@ -603,7 +598,7 @@ function gitignore() {
     elif [[ -n $1 && $1 = "g" ]]; then
 	ignore="~/.global-gitignore"
     fi
-    $EDITOR $ignore
+    $VISUAL $ignore
 }
 
 # Javascript alias, can also just use node
@@ -892,7 +887,7 @@ function newscript() {
 	    touch $1
 	    chmod 755 $1
 	fi
-	$EDITOR $1
+	$VISUAL $1
     fi
 }
 # Deprecated
