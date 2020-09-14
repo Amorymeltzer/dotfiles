@@ -10,6 +10,7 @@ Usage: $(basename $0) [-h]
   been started yet, it will create the file with, and populate it with the
   content of a "notes" file.  Other options:
 
+  new		Create a new file, without opening
   notes		Edit the notes file
   last		Display the last diary entry
   rand		Display a random diary entry
@@ -40,11 +41,11 @@ function newDay {
 	fi
 	printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
     fi
-    $VISUAL "$today"
 }
 
 if [[ ! $1 ]]; then
     newDay
+    $VISUAL "$today"
 else
     # Show a specific date
     if [[ $1 =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
@@ -56,13 +57,14 @@ else
 	fi
     else
 	case "$1" in
+	    "new") newDay;;
 	    "notes") $VISUAL notes;;
 	    "last")
 		# Display latest entry, not including today's
-		cat $(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1) ;;
+		cat $(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1);;
 	    "rand")
 		# Display a random entry
-		cat $(ls -1 | shuf | head -n 1) ;;
+		cat $(ls -1 | shuf | head -n 1);;
 	    "stats")
 		# Basic stats, should expand this (days done (since date?), etc.)
 		# This should be find but whatever
