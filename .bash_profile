@@ -42,10 +42,13 @@ else
     export EDITOR='emacsclient -cqu '
 fi
 # Add $HOME's node_modules
-export PATH="$PATH:$(npm bin)"
+if [[ `command -v npm` ]]; then
+    export PATH="$PATH:$(npm bin)"
+fi
 # Add ~/bin ahead of everybody
-export PATH="$HOME/bin:$PATH"
-
+if [[ -d "$HOME/bin" ]]; then
+    export PATH="$HOME/bin:$PATH"
+fi
 # Modern day, I always want a visual editor
 # https://unix.stackexchange.com/q/4859/43935
 export VISUAL="$EDITOR "
