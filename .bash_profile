@@ -25,18 +25,21 @@ else
     # would come after macports and homebrew, but it needs the perl installed
     # there.  Too lazy to have this handle insertion.  Used in .bashrc too.
     export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
-    export PATH="/opt/local/libexec/perl$PERL5:$PATH"
-    # A lot of duplicates from the above but some new folks (pod2man)
-    export PATH="/opt/local/libexec/perl$PERL5/sitebin:$PATH"
+
+    # Wrapped quotes and trailing space is annoying, but probably more
+    # portable not to hardcode these
+    perl5_vendorbin=$(perl -V::vendorbin:|tr -d ' '|tr -d \')
+    perl5_sitebin=$(perl -V::sitebin:|tr -d ' '|tr -d \')
+    export PATH="$perl5_sitebin:$perl5_vendorbin:$PATH"
+    # Add unloved perl modules manpages, not as easy as above since perl -V
+    # lists man/man1, man/man3, siteman/man1, siteman/man3
+    export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
 
     # Add git-extra-commands https://github.com/unixorn/git-extra-commands
     export PATH="$PATH:$HOME/Documents/git/git-extra-commands@unixorn/bin"
     # Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
     # Don't need 'em all but better than alias/function-ing just a handful
     export PATH="$PATH:$HOME/Documents/git/tiny-scripts@vitorgalvao"
-
-    # Add unloved perl modules manpages
-    export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
 
     # Also worth noting that export doesn't take in aliases
     export EDITOR='emacsclient -cqu '
