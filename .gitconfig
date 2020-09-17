@@ -374,6 +374,9 @@ uniq-abbrev=!git rev-list --all --abbrev=0 --abbrev-commit | awk '{ a[length] +=
 # available via: brew install dateutils, apt-get install dateutils, etc
 timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --format=%ai ${2:-HEAD}); ddiff -f ${3:-%mm-%dd-%Hh-%Mm} \"$one\" \"$two\"; }; f"
 
+# Just for the sake of it
+doc = !git --html-path
+
 [push]
 default = simple
 # Make `git push` push relevant annotated tags when pushing branches out.
