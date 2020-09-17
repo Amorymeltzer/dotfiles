@@ -12,7 +12,7 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
 
     # Don't know if it's old versions (24.5) of emacs or the ssh environment,
     # but having trouble using emacsclient here
-    # Also worth noting that export doesn't take in aliases
+    # Worth noting that export doesn't take in aliases
     export EDITOR='emacs '
 else
     # Add python execs, not sure if this is the best but so be it
@@ -35,14 +35,19 @@ else
     # lists man/man1, man/man3, siteman/man1, siteman/man3
     export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
 
-    # Add git-extra-commands https://github.com/unixorn/git-extra-commands
-    export PATH="$PATH:$HOME/Documents/git/git-extra-commands@unixorn/bin"
-    # Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
-    # Don't need 'em all but better than alias/function-ing just a handful
-    export PATH="$PATH:$HOME/Documents/git/tiny-scripts@vitorgalvao"
-
-    # Also worth noting that export doesn't take in aliases
+    # Worth noting that export doesn't take in aliases
     export EDITOR='emacsclient -cqu '
+
+    cloned_dir="$HOME/Documents/git"
+    if [[ -d "$cloned_dir/git-extra-commands@unixorn" ]]; then
+	# Add git-extra-commands https://github.com/unixorn/git-extra-commands
+	export PATH="$PATH:$cloned_dir/git-extra-commands@unixorn/bin"
+    fi
+    if [[ -d "$cloned_dir/tiny-scripts@vitorgalvao" ]]; then
+	# Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
+	# Don't need 'em all but better than alias/function-ing just a handful
+	export PATH="$PATH:$cloned_dir/tiny-scripts@vitorgalvao"
+    fi
 fi
 # Add $HOME's node_modules
 if [[ `command -v npm` ]]; then
