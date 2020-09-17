@@ -1,3 +1,18 @@
+# Some helpful environment vars and configs
+
+# Used in .bashrc as well
+# Generic default
+export GIT_PERS_DIR="$HOME"
+export PERL_PERS_DIR="$HOME"
+
+# Make CPAN always select the default option
+export PERL_MM_USE_DEFAULT=1
+
+# Perl major version, e.g. 5.30.  Used below for building up some paths, but
+# also briefly used in .bashrc a bit.  Could also do -V::version:,
+# PERL_VERSION, etc., but all need massaging
+export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
+
 # Path ------------------------------------------------------------
 # Differentiate between home machine and ssh, which will be missing these
 # goodies and likely needs different items, local::lib perl, etc.
@@ -15,39 +30,47 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     # Worth noting that export doesn't take in aliases
     export EDITOR='emacs '
 else
+    # Used in .bashrc as well
+    export GIT_PERS_DIR="$HOME/Documents/git"
+    export PERL_PERS_DIR="$HOME/Documents/perl"
+
     # Add python execs, not sure if this is the best but so be it
     export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
     # Add MacPorts ahead of Homebrew (already present from /etc/paths) and the above
     export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-    # Add perl execs
-    # perl should be successfully available from macports/homebrew, so get the
-    # current version and build up some appropriate paths.  Ideally, this
-    # would come after macports and homebrew, but it needs the perl installed
-    # there.  Too lazy to have this handle insertion.  Used in .bashrc too.
-    export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
 
+    ## Add perl execs
+    # perl should be successfully available from macports/homebrew by now, so
+    # get the current version and build up some appropriate paths.  Ideally,
+    # this would come after macports and homebrew, but it uses the perl
+    # installed there.  Too lazy to have this handle insertion.
+
+    # Perhaps the next time I upgrade perl, I'll wait before installing
+    # anything, and set PERL5LIB, etc. to something like the above.  Might be
+    # easier (https://formyfriendswithmacs.com/macports.html) but seemsa  pain
+    # to actively convert the current setup.
     # Wrapped quotes and trailing space is annoying, but probably more
     # portable not to hardcode these
     perl5_vendorbin=$(perl -V::vendorbin:|tr -d ' '|tr -d \')
     perl5_sitebin=$(perl -V::sitebin:|tr -d ' '|tr -d \')
     export PATH="$perl5_sitebin:$perl5_vendorbin:$PATH"
-    # Add unloved perl modules manpages, not as easy as above since perl -V
-    # lists man/man1, man/man3, siteman/man1, siteman/man3
+
+    if [[ -d "$GIT_PERS_DIR/git-extra-commands@unixorn" ]]; then
+	# Add git-extra-commands https://github.com/unixorn/git-extra-commands
+	export PATH="$PATH:$GIT_PERS_DIR/git-extra-commands@unixorn/bin"
+    fi
+    if [[ -d "$GIT_PERS_DIR/tiny-scripts@vitorgalvao" ]]; then
+	# Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
+	# Don't need 'em all but better than alias/function-ing just a handful
+	export PATH="$PATH:$GIT_PERS_DIR/tiny-scripts@vitorgalvao"
+    fi
+
+    # Add unloved perl modules' manpages to the manpath, not as easy as above
+    # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
     export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
 
     # Worth noting that export doesn't take in aliases
     export EDITOR='emacsclient -cqu '
-
-    cloned_dir="$HOME/Documents/git"
-    if [[ -d "$cloned_dir/git-extra-commands@unixorn" ]]; then
-	# Add git-extra-commands https://github.com/unixorn/git-extra-commands
-	export PATH="$PATH:$cloned_dir/git-extra-commands@unixorn/bin"
-    fi
-    if [[ -d "$cloned_dir/tiny-scripts@vitorgalvao" ]]; then
-	# Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
-	# Don't need 'em all but better than alias/function-ing just a handful
-	export PATH="$PATH:$cloned_dir/tiny-scripts@vitorgalvao"
-    fi
 fi
 # Add $HOME's node_modules
 if [[ `command -v npm` ]]; then

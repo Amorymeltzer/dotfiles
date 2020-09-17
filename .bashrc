@@ -530,9 +530,8 @@ if [[ -e /opt/local/etc/profile.d/z.sh ]]; then
 fi
 
 
-# Make CPAN always select the default option
-export PERL_MM_USE_DEFAULT=1
 # Make perl -d automatically use NYTProf.  See also dprofpp
+# Needs to be dependent on existing FIXME TODO
 export PERL5DB='use Devel::NYTProf'
 # Access Perl::Critic documentation
 function explain_perlcritic() {
@@ -622,20 +621,20 @@ alias bin="cd ~/bin"
 alias dt="cd ~/dotfiles"
 alias dr="cd ~/Dropbox"
 alias de="cd ~/Desktop"
-alias dg="cd ~/Documents/git"
-alias dgt="cd ~/Documents/git/twinkle@azatoth"
-alias dgm="cd ~/Documents/git/twinkle@azatoth/modules"
+alias dg="cd $GIT_PERS_DIR"
+alias dgt="cd $GIT_PERS_DIR/twinkle@azatoth"
+alias dgm="cd $GIT_PERS_DIR/twinkle@azatoth/modules"
 alias dgj="dgm"
 alias dgh="cd /usr/local/Homebrew"
 alias dgc="cd /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask"
-alias dgs="cd ~/Documents/git/mls"
-alias dgw="cd ~/Documents/git/mediawiki"
-alias dp="cd ~/Documents/perl"
-alias dps="cd ~/Documents/perl/sandbox"
-alias dpk="cd ~/Documents/perl/ksp"
-alias dpw="cd ~/Documents/perl/wiki"
-alias dpc="cd ~/Documents/perl/wiki/crathighlighter"
-alias dws="cd ~/Documents/perl/wiki/sysopIndex"
+alias dgs="cd $GIT_PERS_DIR/mls"
+alias dgw="cd $GIT_PERS_DIR/mediawiki"
+alias dp="cd $PERL_PERS_DIR"
+alias dps="cd $PERL_PERS_DIR/sandbox"
+alias dpk="cd $PERL_PERS_DIR/ksp"
+alias dpw="cd $PERL_PERS_DIR/wiki"
+alias dpc="cd $PERL_PERS_DIR/wiki/crathighlighter"
+alias dws="cd $PERL_PERS_DIR/wiki/sysopIndex"
 alias drk="cd ~/Documents/R/kinship/"
 alias eds="cd ~/.emacs.d/site-lisp/"
 alias m='more'
@@ -1336,26 +1335,26 @@ function marketupdate() {
 }
 alias mu='marketupdate'
 alias stockmarket='ticker'
-alias inflation="perl ~/Documents/perl/sandbox/inflation.pl"
+alias inflation="perl $PERL_PERS_DIR/sandbox/inflation.pl"
 
 # Robinhood dashboard
 # https://github.com/bcwik9/robinhood-on-rails
 function robinhood() {
-    (cd ~/Documents/git/robinhood-on-rails@bcwik9/ ; exec bundle exec rails server & sleep 1 & browser http://localhost:3000/)
+    (cd $GIT_PERS_DIR/robinhood-on-rails@bcwik9/ ; exec bundle exec rails server & sleep 1 & browser http://localhost:3000/)
 }
 # Shell
 # https://github.com/anilshanbhag/RobinhoodShell
 function robinhood-shell() {
-    (cd ~/Documents/git/RobinhoodShell@anilshanbhag ; ./shell.py)
+    (cd $GIT_PERS_DIR/RobinhoodShell@anilshanbhag ; ./shell.py)
 }
 
 # Update crathighlighter
 function crathighlighter() {
-    (cd ~/Documents/perl/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl "$@")
+    (cd $PERL_PERS_DIR/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl "$@")
 }
 # Check twinkle
 function twinkleCheck() {
-    (cd ~/Documents/perl/wiki/twinkle/ ; perl twinkleCheck.pl $@)
+    (cd $PERL_PERS_DIR/wiki/twinkle/ ; perl twinkleCheck.pl $@)
 }
 # Easy
 alias toolforge="ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org"
