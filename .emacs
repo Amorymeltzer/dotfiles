@@ -1018,11 +1018,20 @@ current buffer" t)
 ;; (jiggle-searches-too 1)
 
 
-;; Make M-w a bit like C-w.  Still kind of weird?
-;; Overlaps with something else ;;;;;; ##### FIXME TODO
+;; Make M-w a bit like C-w, etc.
 (require 'whole-line-or-region)
 (whole-line-or-region-global-mode 1)
 (global-set-key (kbd "M-w") 'whole-line-or-region-kill-ring-save)
+;; whole-line-or-region-comment-dwim-2 fully takes over comment-dwim, but I
+;; like the "new comment" behavior from comment-dwim, so this undoes that a
+;; bit. In practive, I think I'd prefer M-; to be wlr and C-x ; to c-d, but
+;; whatever.  comment-dwim is moderately better than comment-line, which was
+;; new in emacs 25.
+(substitute-key-definition 'whole-line-or-region-comment-dwim-2 'comment-dwim whole-line-or-region-local-mode-map)
+(global-set-key (kbd "C-x ;") 'whole-line-or-region-comment-dwim-2)
+
+(global-set-key (kbd "M-k") 'comment-kill)
+
 
 ;;;;;;;;;;;;;;;;;;;
 ;; IDO, Interactively Do Things
@@ -1510,6 +1519,7 @@ when in source code modes such as python-mode or perl-mode" t)
   ;; highlight on modeline?
   (set-face-attribute 'mode-line-highlight nil :background "red")
   ;; other window, fringe lines
+  ;; Should be more clear, need 256 colors FIXME TODO
   (set-face-attribute 'mode-line-inactive nil :background "black"))
 
 ;; Display depth indicator, kind of weird but may be useful
@@ -1656,8 +1666,8 @@ when in source code modes such as python-mode or perl-mode" t)
 	 (window-of-buffer
 	  (delq nil
 		(mapcar #'(lambda (window)
-			   (if (equal buffer-name (buffer-name (window-buffer window)))
-			       window nil)) (window-list)))))
+			    (if (equal buffer-name (buffer-name (window-buffer window)))
+				window nil)) (window-list)))))
     (select-window (car window-of-buffer))))
 
 (global-set-key (kbd "C-c C-o") 'jump-to-window)

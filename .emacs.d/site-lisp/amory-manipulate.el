@@ -52,9 +52,9 @@
 ;; (global-set-key (kbd "M-t p") 'transpose-params)
 
 ;; Copy to kill ring, exists mainly for the below
+;; Can use whole-line-or-region-kill-ring-save for interactive
 (defun mark-line-and-copy ()
   "Copy the current line into the kill ring."
-  (interactive)
   (save-excursion
     (beginning-of-line)
     (push-mark)
@@ -88,13 +88,8 @@
     (move-to-column start-column))
   (message "line commented and dup'ed"))
 
-(global-set-key "\M-k" 'mark-line-and-copy)
 (global-set-key (kbd "C-c C-y") 'duplicate-line)
 (global-set-key (kbd "C-c y") 'duplicate-and-comment-line)
-
-;; New in emacs 25
-;; Too similar to below comment-dwim-next-line stuff? FIXME TODO
-(global-set-key (kbd "C-x ;") 'comment-line)
 
 
 (defun yank-and-down ()
@@ -132,6 +127,7 @@
 (global-set-key (kbd "C-x 2") 'split-window-down-and-move)
 
 
+;; FIXME TODO
 (defun window-swap-split ()
   "Vertical split shows more of each line, horizontal split shows more
 lines. This code toggles between them. It only works for frames with exactly
@@ -339,8 +335,9 @@ line instead. With argument LINEOFFSET not nil or 1, behave like
 (global-set-key (kbd "C-a") 'smart-beginning-of-line)
 
 
-;; Goto lask change in buffer
+;; Goto last change in buffer
 ;; https://github.com/camdez/goto-last-change.el
+;; FIXME TODO
 (autoload 'goto-last-change "goto-last-change" "Set point to the position of
 the last change." t)
 (global-set-key "\C-x\C-\\" 'goto-last-change)
