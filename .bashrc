@@ -533,19 +533,22 @@ fi
 # Make perl -d automatically use NYTProf.  See also dprofpp
 # Needs to be dependent on existing FIXME TODO
 export PERL5DB='use Devel::NYTProf'
-# Access Perl::Critic documentation
-function explain_perlcritic() {
-    perldoc Perl::Critic::Policy::"$1"
-}
-_explain_perlcritic()		# ;;;;;; ##### FIXME TODO
-{
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    local list="$(\ls /opt/local/share/perl$PERL5/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
-    local clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')"
 
-    COMPREPLY=($(compgen -W "$clean" -- "$cur"))
-}
-complete -F _explain_perlcritic explain_perlcritic
+# Access Perl::Critic documentation
+if [[ -f `command -v perlcritic` ]]; then
+    function explain_perlcritic() {
+	perldoc Perl::Critic::Policy::"$1"
+    }
+    _explain_perlcritic()		# ;;;;;; ##### FIXME TODO
+    {
+	local cur="${COMP_WORDS[COMP_CWORD]}"
+	local list="$(\ls /opt/local/share/perl$PERL5/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
+	local clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')"
+
+	COMPREPLY=($(compgen -W "$clean" -- "$cur"))
+    }
+    complete -F _explain_perlcritic explain_perlcritic
+fi
 # shorthand for perlfunc
 function pf() {
     if [ $# -eq 0 ]; then
@@ -625,8 +628,6 @@ alias dg="cd $GIT_PERS_DIR"
 alias dgt="cd $GIT_PERS_DIR/twinkle@azatoth"
 alias dgm="cd $GIT_PERS_DIR/twinkle@azatoth/modules"
 alias dgj="dgm"
-alias dgh="cd /usr/local/Homebrew"
-alias dgc="cd /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask"
 alias dgs="cd $GIT_PERS_DIR/mls"
 alias dgw="cd $GIT_PERS_DIR/mediawiki"
 alias dp="cd $PERL_PERS_DIR"
@@ -748,7 +749,7 @@ function psu {
 }
 # Find and kill processes by name.  Be careful!
 killsearch() {
-  ps ax | grep "$1" | grep -v grep | cut -f1 -d ' ' | xargs kill
+    ps ax | grep "$1" | grep -v grep | cut -f1 -d ' ' | xargs kill
 }
 
 
@@ -823,51 +824,63 @@ alias vlc='open -a vlc'
 alias excel='open -a microsoft\ excel'
 
 # Macports
-alias pecho='port echo'
-alias psync='sudo port sync'
-alias pself='sudo port selfupdate'
-alias pall='sudo port selfupdate && port outdated && sudo port upgrade outdated'
-alias pout='port outdated'
-alias pug='sudo port upgrade outdated'
-alias puo='pug'
-alias pleaves='port echo leaves'
-alias pclean='sudo port clean -v --all installed'
-alias pactive='port echo active'
-alias pinactive='port echo inactive'
-alias pinfo='port info'
-alias psearch='port search'
-function pmoreinfo() {
-    psearch $1 | grep @ | cut -f 1 -d ' ' | while read prt; do pinfo $prt; done;
-}
-alias pin='sudo port install'
-alias pun='sudo port uninstall'
-# Macports changelog
-# https://trac.macports.org/browser/contrib/port-whatsnew/port-whatsnew
-alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
+if [[ -f `command -v port` ]]; then
+    alias pecho='port echo'
+    alias psync='sudo port sync'
+    alias pself='sudo port selfupdate'
+    alias pall='sudo port selfupdate && port outdated && sudo port upgrade outdated'
+    alias pout='port outdated'
+    alias pug='sudo port upgrade outdated'
+    alias puo='pug'
+    alias pleaves='port echo leaves'
+    alias pclean='sudo port clean -v --all installed'
+    alias pactive='port echo active'
+    alias pinactive='port echo inactive'
+    alias pinfo='port info'
+    alias psearch='port search'
+    alias pin='sudo port install'
+    alias pun='sudo port uninstall'
+
+    function pmoreinfo() {
+	psearch $1 | grep @ | cut -f 1 -d ' ' | while read prt; do pinfo $prt; done;
+    }
+
+    # Macports changelog
+    # https://trac.macports.org/browser/contrib/port-whatsnew/port-whatsnew
+    alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
+fi
 
 # Homebrew/Cask
-# Make homebrew verbose by defaults
-# export HOMEBREW_VERBOSE=1
-# Don't build from source
-export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=1
-alias ball='brew update ; brew outdated ; brew upgrade'
-alias bclean='brew cleanup ; brew cleanup -s'
-alias bsearch='brew search'
-alias bs='bsearch '
-alias binfo='brew info'
-alias blist='brew list'
-alias bdoctor='brew doctor'
-function homebrew-deps() {
-    brew list | while read cask; do echo -en "${Color_Blue_Bold}$cask ->${Color_zOff}"; brew deps $cask | awk '{printf(" %s ", $0)}'; echo ""; done
-}
-# Homebrew-cask
-# Symlink in /Applications
-export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook"
-alias cask='brew cask'
-alias call='cask outdated; cask upgrade'
-alias cinfo='brew cask info'
-alias clist='brew cask list'
-alias cdoctor='brew cask doctor'
+if [[ -f `command -v brew` ]]; then
+    brew_repo=$(brew --repo)
+    alias dgh="cd $brew_repo"
+    alias dgc="cd $brew_repo/Library/Taps/homebrew/homebrew-cask"
+
+    # Make homebrew verbose by defaults
+    # export HOMEBREW_VERBOSE=1
+    # Don't build from source
+    export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=1
+    alias ball='brew update ; brew outdated ; brew upgrade'
+    alias bclean='brew cleanup ; brew cleanup -s'
+    alias bsearch='brew search'
+    alias bs='bsearch '
+    alias binfo='brew info'
+    alias blist='brew list'
+    alias bdoctor='brew doctor'
+
+    function homebrew-deps() {
+	brew list | while read cask; do echo -en "${Color_Blue_Bold}$cask ->${Color_zOff}"; brew deps $cask | awk '{printf(" %s ", $0)}'; echo ""; done
+    }
+
+    # Homebrew-cask
+    # Symlink in /Applications
+    export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook"
+    alias cask='brew cask'
+    alias call='cask outdated; cask upgrade'
+    alias cinfo='brew cask info'
+    alias clist='brew cask list'
+    alias cdoctor='brew cask doctor'
+fi
 
 # bundle exec alias
 alias be='bundle exec'
@@ -1153,10 +1166,10 @@ alias eaves='lsof -iTCP -sTCP:LISTEN -P "$@"'
 
 # Change mac address https://jezenthomas.com/free-internet-on-trains/
 function remac {
-  sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -z
-  sudo ifconfig en0 ether $(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')
-  sudo networksetup -detectnewhardware
-  echo $(ifconfig en0 | grep ether)
+    sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -z
+    sudo ifconfig en0 ether $(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')
+    sudo networksetup -detectnewhardware
+    echo $(ifconfig en0 | grep ether)
 }
 
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
@@ -1486,11 +1499,11 @@ function getcertnames() {
     echo # newline
 
     local tmp=$(echo -e "GET / HTTP/1.0\nEOT" \
-		       | openssl s_client -connect "${domain}:443" 2>&1);
+		    | openssl s_client -connect "${domain}:443" 2>&1);
 
     if [[ "${tmp}" = *"-----BEGIN CERTIFICATE-----"* ]]; then
 	local certText=$(echo "${tmp}" \
-				| openssl x509 -text -certopt "no_header, no_serial, no_version, \
+			     | openssl x509 -text -certopt "no_header, no_serial, no_version, \
 			no_signame, no_validity, no_issuer, no_pubkey, no_sigdump, no_aux");
 	echo "Common Name:"
 	echo # newline
