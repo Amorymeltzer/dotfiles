@@ -139,9 +139,9 @@ if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; th
     echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_zOff}" # only short ones
 fi
 echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $2$3$4}'
-if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && $(which weather) ]]; then
-    weather ?Qn0		# Uses wttr.in
-fi
+# if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && $(which weather) ]]; then
+#     weather ?Qn0		# Uses wttr.in
+# fi
 
 # Default designed to always take up same space without leading zero for day,
 # meaning dates before the 10th get two spaces, that bugs me
