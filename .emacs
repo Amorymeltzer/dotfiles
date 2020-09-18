@@ -87,7 +87,6 @@
 ;; 'col-highlight
 ;; 'vline
 ;; 'hide-comnt
-;; 'idle-highlight-mode
 ;; 'keep-buffers
 ;; 'keywiz
 ;; 'kill-ring-ido
@@ -1469,25 +1468,15 @@ when in source code modes such as python-mode or perl-mode" t)
   (setq hl-paren-colors (quote ("red" "white" "green" "cyan"
 				"red" "white" "green" "cyan"))))
 
-;; Allow highlighting of phrases.  idle-highlight is way too sticky.
+;; Allow highlighting of phrases.
 ;; Maybe hook for prog modes (perl, etc.)  ;;;;;;;; ####### FIXME TODO
 ;; https://github.com/nschum/highlight-symbol.el
 (require 'highlight-symbol)
-;; (require 'idle-highlight-mode)
 (setq highlight-symbol-idle-delay 1) ; default 0.5
 ;; (setq highlight-symbol-list
 ;; ;;;;;; ##### FIXME TODO FIX COLORS BEFORE GOING FORWARD
 ;; (highlight-symbol-mode t)
 
-;; requires idle-highlight-mode https://github.com/nonsequitur/idle-highlight-mode
-;; (defun my-highlight-idling-hook ()
-;;   (make-local-variable 'column-number-mode)
-;;   (column-number-mode t)
-;;   (if window-system (hl-line-mode t))
-;;   (idle-highlight-mode))
-
-;; (add-hook 'emacs-lisp-mode-hook 'my-highlight-idling-hook)
-;; (add-hook 'perl-mode-hook 'my-highlight-idling-hook)
 
 ;; list-colors-display for basic colors, list-faces-display for color options
 ;; See the rest: https://www.gnu.org/software/emacs/manual/html_node/emacs/Standard-Faces.html#Standard-Faces
