@@ -92,7 +92,6 @@
 ;; 'keep-buffers
 ;; 'keywiz
 ;; 'kill-ring-ido
-;; 'perl-find-library
 ;; 'perltidy
 ;; 'pick-backup
 ;; 'thing-opt
@@ -2249,14 +2248,7 @@ This checks in turn:
 (add-hook 'cperl-mode-hook 'my-cperl-strictwarnings)
 
 ;; Perldoc in emacs
-;; (defun perldoc (module) "Equivalent to `perldoc module`"
-;; (interactive "MModule: ")
-;; (shell-command (concat "perldoc " module)))
-
-;; More complete, but the default in cperl-perldoc is nicer
-;; (require 'perl-find-library)
 (defalias 'perldoc 'cperl-perldoc)
-
 ;; Perl mode alias to make cperl default for .pl
 (defalias 'perl-mode 'cperl-mode)
 
