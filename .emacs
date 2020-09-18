@@ -96,7 +96,6 @@
 ;; 'perl-find-library
 ;; 'perltidy
 ;; 'pick-backup
-;; 'random-idle-quote
 ;; 'thing-opt
 ;; 'thingatpt+
 ;; 'tidy
@@ -1908,10 +1907,6 @@ trolls" t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Idling stuff
-
-;; Random emacs usage quote in minibuffer when idle.  Clogs up  *messages*
-(autoload 'random-idle-quote "random-idle-quote" "Display emacs usage quote" t)
-;; (random-idle-quote)
 
 ;; Zone out
 (autoload 'zone "zone" "Zone out, completely" t)
