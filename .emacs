@@ -89,7 +89,6 @@
 ;; 'vline
 ;; 'hide-comnt
 ;; 'idle-highlight-mode
-;; 'jiggle
 ;; 'keep-buffers
 ;; 'keywiz
 ;; 'kill-ring-ido
@@ -1004,15 +1003,6 @@ current buffer" t)
 ;; Long history, remove dupes
 (setq history-length 1000
       history-delete-duplicates t)
-
-
-;; Jiggle a bit when moving from buffer to buffer.  Opens up the compilation
-;; log all the time, which sucks.  Hence, this is turned off
-;; (require 'jiggle)
-;; (jiggle-mode 1)
-;; (setq jiggle-how-many-times 5)
-;; Also jiggle when movings through searches
-;; (jiggle-searches-too 1)
 
 
 ;; Make M-w a bit like C-w, etc.
@@ -2782,7 +2772,6 @@ This checks in turn:
 (diminish 'flymake-mode "Fly")
 (eval-after-load "emmet-mode" '(diminish 'emmet-mode "Emm"))
 (diminish 'isearch-mode)
-;; (diminish 'jiggle-mode)
 (diminish 'abbrev-mode "Abv")
 (diminish 'editorconfig-mode)
 (diminish 'whitespace-mode)
