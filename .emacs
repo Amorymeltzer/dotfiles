@@ -82,7 +82,6 @@
 
 
 ;; Manual package installs, ideally some can be removed
-;; 'bash-org
 ;; 'hl-line+
 ;; 'hl-spotlight
 ;; 'col-highlight
@@ -2127,10 +2126,6 @@ point or the words in the active region." t)
       google-translate-enable-ido-completion 1
       google-translate-show-phonetic 1)
 (global-set-key "\C-ct" 'google-translate-query-translate)
-
-
-;; Post to bash.org via Emacs!  Here mainly as an example of cool capabilities
-;; (require 'bash-org)
 
 
 ;; DNA mode, mucks with keybindings
