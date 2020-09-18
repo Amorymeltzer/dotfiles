@@ -636,6 +636,7 @@ alias dpk="cd $PERL_PERS_DIR/ksp"
 alias dpw="cd $PERL_PERS_DIR/wiki"
 alias dpc="cd $PERL_PERS_DIR/wiki/crathighlighter"
 alias dws="cd $PERL_PERS_DIR/wiki/sysopIndex"
+alias dwu="cd $PERL_PERS_DIR/wiki/userScripts"
 alias drk="cd ~/Documents/R/kinship/"
 alias eds="cd ~/.emacs.d/site-lisp/"
 alias m='more'
