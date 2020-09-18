@@ -107,8 +107,8 @@ stb = stash branch
 l = log --oneline
 l5 = log --oneline -5
 
-full = log --pretty=fuller
-lf1 = log --pretty=fuller -1
+full = log --pretty=fuller --notes
+lf1 = log --pretty=fuller --notes -1
 
 # All commits, and all important/labeled commits
 la = log --graph --decorate --oneline --all
@@ -125,17 +125,17 @@ lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %
 graph = lg
 
 lm = log --oneline --decorate master..HEAD
-llm = log --decorate master..HEAD
+llm = log --notes --decorate master..HEAD
 
 loh = log --oneline --decorate origin/HEAD..HEAD
-lloh = log --decorate origin/HEAD..HEAD
+lloh = log --notes --decorate origin/HEAD..HEAD
 luh = log --oneline --decorate @{upstream}..HEAD
-lluh = log --decorate @{upstream}..HEAD
+lluh = log --notes --decorate @{upstream}..HEAD
 # Probably not that useful, but technically possible...
 lho = log --oneline --decorate HEAD..origin/HEAD
-llho = log --decorate HEAD..origin/HEAD
+llho = log --notes --decorate HEAD..origin/HEAD
 lhu = log --oneline --decorate HEAD..@{upstream}
-llhu = log --decorate HEAD..@{upstream}
+llhu = log --notes --decorate HEAD..@{upstream}
 
 # Relies on split-from alias, log of commits since splitting this branch
 ls = "!git log --oneline $(git split-from)..head"
