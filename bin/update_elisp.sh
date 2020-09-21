@@ -7,5 +7,6 @@
        ("melpa" . "http://melpa.org/packages/")))
        package-menu-async nil)
 (list-packages)
+(if package-menu--new-package-list (message package-menu--new-package-list))
 (package-menu-mark-upgrades)
 (package-menu-execute t)
