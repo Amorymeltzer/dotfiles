@@ -9,7 +9,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-bmMpPgrRnNekEKcChH]
+Usage: $(basename $0) [-bmMpPgrRnNekEKcCLhH]
 
   -b		skip updating macports base, but 'port sync' to update tree
   -m		check for macports updates but don't upgrade
@@ -26,12 +26,13 @@ Usage: $(basename $0) [-bmMpPgrRnNekEKcChH]
   -E -K		skip all homebrew and homebrew-cask updates
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
+  -L		skip all emacs lisp actions
   -h -H		this help
 END_HELP
 }
 
 # Parse commandline options
-while getopts 'bcCeEgkKmMnNpPrRhH' opt; do
+while getopts 'bcCeEgkKLmMnNpPrRhH' opt; do
     case $opt in
 	b) base_flag='1';;
 	m) macports_flag='1';;
@@ -48,6 +49,7 @@ while getopts 'bcCeEgkKmMnNpPrRhH' opt; do
 	E|K) homebrew_all_flag='2';;
 	c) cpan_flag='1';;
 	C) cpan_all_flag='2';;
+	L) emacs_all_flag='2';;
 	h|H) help $0
 	     exit 0;;
 	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
@@ -226,4 +228,9 @@ if [[ -z $cpan_all_flag ]]; then
     else
 	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
     fi
+fi
+
+if [[ -z $emacs_all_flag ]]; then
+    updating 'emacs lisp packages'
+    sudo -u $SUDO_USER update_elisp.sh;
 fi
