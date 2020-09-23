@@ -42,8 +42,9 @@ else
     ## Add perl execs
     # perl should be successfully available from macports/homebrew by now, so
     # get the current version and build up some appropriate paths.  Ideally,
-    # this would come after macports and homebrew, but it uses the perl
+    # this would come before macports and homebrew, but it uses the perl
     # installed there.  Too lazy to have this handle insertion.
+    export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
 
     # Perhaps the next time I upgrade perl, I'll wait before installing
     # anything, and set PERL5LIB, etc. to something like the above.  Might be
@@ -67,7 +68,7 @@ else
 
     # Add unloved perl modules' manpages to the manpath, not as easy as above
     # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
-    export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$MANPATH"
+    export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$(manpath)"
 
     # Worth noting that export doesn't take in aliases
     export EDITOR='emacsclient -cqu '
