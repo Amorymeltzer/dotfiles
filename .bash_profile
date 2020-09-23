@@ -72,9 +72,13 @@ else
     # Worth noting that export doesn't take in aliases
     export EDITOR='emacsclient -cqu '
 fi
-# Add $HOME's node_modules
+# Add $HOME's node_modules, if present
+# Should probably be higher up, and generic
 if [[ `command -v npm` ]]; then
-    export PATH="$PATH:$(npm bin)"
+    npm_bin=$(npm bin)
+    if [[ -d "$npm_bin" ]]; then
+	export PATH="$PATH:$(npm bin)"
+    fi
 fi
 # Add ~/bin ahead of everybody
 if [[ -d "$HOME/bin" ]]; then
