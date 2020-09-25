@@ -122,12 +122,12 @@ fi
 
 if [[ -z $python_all_flag ]]; then
     checking 'pip python packages'
-    python_todo=$(sudo -u $SUDO_USER pip list -o)
+    python_todo=$(sudo -u $SUDO_USER pip list --outdated --user)
     if [[ -n $python_todo ]]; then
 	echo "$python_todo"
 	if [[ -z $python_flag ]]; then
 	    updating 'pip python packages'
-	    pipupgrade;
+	    sudo -u $SUDO_USER pipupgrade;
 	fi
     else
 	echo -e "${Color_Green}pip python packages already up-to-date!${Color_zOff}"

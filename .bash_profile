@@ -30,14 +30,22 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     # Worth noting that export doesn't take in aliases
     export EDITOR='emacs '
 else
+    # Add MacPorts ahead of Homebrew (already present from /etc/paths) and the above
+    # Required for getting proper perl and python versions/paths set
+    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+
+    # Add python execs
+    # global; not preferred but just in case
+    # With various installations (*cough macports cough*) there are a bunch of
+    # symlinks to follow, so this actually gets the full bin path
+    # https://stackoverflow.com/q/749711/2521092
+    export PATH="$(python -c 'import os;print(os.path.join(os.__file__.split("lib/")[0],"bin","python"))'):$PATH"
+    # local; preferable to global
+    export PATH="$(python -m site --user-base)/bin:$PATH"
+
     # Used in .bashrc as well
     export GIT_PERS_DIR="$HOME/Documents/git"
     export PERL_PERS_DIR="$HOME/Documents/perl"
-
-    # Add python execs, not sure if this is the best but so be it
-    export PATH="/opt/local/Library/Frameworks/Python.framework/Versions/Current/bin:$PATH"
-    # Add MacPorts ahead of Homebrew (already present from /etc/paths) and the above
-    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 
     ## Add perl execs
     # perl should be successfully available from macports/homebrew by now, so
