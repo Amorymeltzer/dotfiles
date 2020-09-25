@@ -14,8 +14,33 @@ export PERL_MM_USE_DEFAULT=1
 export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
 
 # Path ------------------------------------------------------------
-# Differentiate between home machine and ssh, which will be missing these
-# goodies and likely needs different items, local::lib perl, etc.
+# Hold onto original path, defined first from /etc/profile, which on macOS
+# uses /usr/libexec/path_helper to read /etc/paths and then add items from
+# /etc/paths.d/.  In this way, we ensure that the additional items below show
+# up in our desired order, or closer, at least, without unsightly duplications
+# or going through the extra effort of bash variable expansion to insert
+# in-place.  The main disadvantage here is that items in /usr/local/bin are
+# not as high as might be desired.
+# Order will be: ~/bin:macports:perl:local_npm:python:etc:git_repos
+orig_path=$PATH
+new_path=''
+# Add MacPorts (if present), ahead of Homebrew (/usr/local already present
+# from /etc/paths); required for getting proper perl/python versions/paths
+macports_pathstring=''
+if [[ -d "/opt/local/bin" ]]; then
+    macports_pathstring="/opt/local/bin"
+fi
+if [[ -d "/opt/local/sbin" ]]; then
+    macports_pathstring="$macports_pathstring:/opt/local/sbin"
+fi
+if [[ -n "$macports_pathstring" ]]; then
+    export PATH="$macports_pathstring:$PATH"
+    new_path="$macports_pathstring"
+fi
+
+# Differentiate between home machine and ssh for perl, which need different
+# items, local::lib perl, etc.
+# Also for editor alias, since old emacsen on ssh are funky
 # toolforge tool account isn't SSH_TTY, but does have the same env variable
 if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     # This from cpan
@@ -30,19 +55,6 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     # Worth noting that export doesn't take in aliases
     export EDITOR='emacs '
 else
-    # Add MacPorts ahead of Homebrew (already present from /etc/paths) and the above
-    # Required for getting proper perl and python versions/paths set
-    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-
-    # Add python execs
-    # global; not preferred but just in case
-    # With various installations (*cough macports cough*) there are a bunch of
-    # symlinks to follow, so this actually gets the full bin path
-    # https://stackoverflow.com/q/749711/2521092
-    export PATH="$(python -c 'import os;print(os.path.join(os.__file__.split("lib/")[0],"bin","python"))'):$PATH"
-    # local; preferable to global
-    export PATH="$(python -m site --user-base)/bin:$PATH"
-
     # Used in .bashrc as well
     export GIT_PERS_DIR="$HOME/Documents/git"
     export PERL_PERS_DIR="$HOME/Documents/perl"
@@ -62,17 +74,7 @@ else
     # portable not to hardcode these
     perl5_vendorbin=$(perl -V::vendorbin:|tr -d ' '|tr -d \')
     perl5_sitebin=$(perl -V::sitebin:|tr -d ' '|tr -d \')
-    export PATH="$perl5_sitebin:$perl5_vendorbin:$PATH"
-
-    if [[ -d "$GIT_PERS_DIR/git-extra-commands@unixorn" ]]; then
-	# Add git-extra-commands https://github.com/unixorn/git-extra-commands
-	export PATH="$PATH:$GIT_PERS_DIR/git-extra-commands@unixorn/bin"
-    fi
-    if [[ -d "$GIT_PERS_DIR/tiny-scripts@vitorgalvao" ]]; then
-	# Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
-	# Don't need 'em all but better than alias/function-ing just a handful
-	export PATH="$PATH:$GIT_PERS_DIR/tiny-scripts@vitorgalvao"
-    fi
+    new_path="$new_path:$perl5_sitebin:$perl5_vendorbin"
 
     # Add unloved perl modules' manpages to the manpath, not as easy as above
     # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
@@ -81,22 +83,51 @@ else
     # Worth noting that export doesn't take in aliases
     export EDITOR='emacsclient -cqu '
 fi
+
 # Add $HOME's node_modules, if present
-# Should probably be higher up, and generic
+# Globally installed modules should already be on the path
 if [[ `command -v npm` ]]; then
     npm_bin=$(npm bin)
     if [[ -d "$npm_bin" ]]; then
-	export PATH="$PATH:$(npm bin)"
+	# export PATH="$PATH:$(npm bin)"
+	new_path="$new_path:$(npm bin)"
     fi
 fi
+
+# Add python execs
+# local; preferable to global
+new_path="$new_path:$(python -m site --user-base)/bin"
+# global; not preferred but just in case
+# With various installations (*cough macports cough*) there are a bunch of
+# symlinks to follow, so this actually gets the full bin path
+# https://stackoverflow.com/q/749711/2521092
+new_path="$new_path:$(python -c 'import os;print(os.path.join(os.__file__.split("lib/")[0],"bin","python"))')"
+
+# Tack on original path
+new_path="$new_path:$orig_path"
+
+# Latecomers
+if [[ -d "$GIT_PERS_DIR/git-extra-commands@unixorn" ]]; then
+    # Add git-extra-commands https://github.com/unixorn/git-extra-commands
+    new_path="$new_path:$GIT_PERS_DIR/git-extra-commands@unixorn/bin"
+fi
+if [[ -d "$GIT_PERS_DIR/tiny-scripts@vitorgalvao" ]]; then
+    # Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
+    # Don't need 'em all but better than alias/function-ing just a handful
+    new_path="$new_path:$GIT_PERS_DIR/tiny-scripts@vitorgalvao"
+fi
+
 # Add ~/bin ahead of everybody
 if [[ -d "$HOME/bin" ]]; then
-    export PATH="$HOME/bin:$PATH"
+    new_path="$HOME/bin:$new_path"
 fi
+
+# Finally done building path, export it
+export PATH="$new_path"
+
 # Modern day, I always want a visual editor
 # https://unix.stackexchange.com/q/4859/43935
 export VISUAL="$EDITOR "
-
 
 # Ignore sequential duplicates in history
 export HISTCONTROL=erasedups:ignoreboth
