@@ -1,17 +1,14 @@
-# Some helpful environment vars and configs
+## Some helpful environment vars and configs
+# Worth noting that export doesn't take in aliases
+export EDITOR='emacsclient -cqu '
+
+# Make CPAN always select the default option
+export PERL_MM_USE_DEFAULT=1
 
 # Used in .bashrc as well
 # Generic default
 export GIT_PERS_DIR="$HOME"
 export PERL_PERS_DIR="$HOME"
-
-# Make CPAN always select the default option
-export PERL_MM_USE_DEFAULT=1
-
-# Perl major version, e.g. 5.30.  Used below for building up some paths, but
-# also briefly used in .bashrc a bit.  Could also do -V::version:,
-# PERL_VERSION, etc., but all need massaging
-export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
 
 # Path ------------------------------------------------------------
 # Hold onto original path, defined first from /etc/profile, which on macOS
@@ -38,9 +35,15 @@ if [[ -n "$macports_pathstring" ]]; then
     new_path="$macports_pathstring"
 fi
 
-# Differentiate between home machine and ssh for perl, which need different
-# items, local::lib perl, etc.
-# Also for editor alias, since old emacsen on ssh are funky
+# Perl major version, e.g. 5.30.  Used below for building up some paths, but
+# also briefly used in .bashrc a bit.  Here because newer perls (from
+# macports/homebrew) are now available in path.  Could also do -V::version:,
+# PERL_VERSION, etc., but all need massaging.
+export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
+
+
+# Differentiate between home machine and ssh, mainly for perl, which needs
+# different items (local::lib perl, etc.)
 # toolforge tool account isn't SSH_TTY, but does have the same env variable
 if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     # This from cpan
@@ -50,22 +53,11 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
     PERL_MM_OPT="INSTALL_BASE=/$HOME/perl5"; export PERL_MM_OPT;
 
-    # Don't know if it's old versions (24.5) of emacs or the ssh environment,
-    # but having trouble using emacsclient here
-    # Worth noting that export doesn't take in aliases
+    # Don't know if it's old (24.5) emacsen or the ssh environment, but having
+    # trouble using emacsclient here
     export EDITOR='emacs '
 else
-    # Used in .bashrc as well
-    export GIT_PERS_DIR="$HOME/Documents/git"
-    export PERL_PERS_DIR="$HOME/Documents/perl"
-
     ## Add perl execs
-    # perl should be successfully available from macports/homebrew by now, so
-    # get the current version and build up some appropriate paths.  Ideally,
-    # this would come before macports and homebrew, but it uses the perl
-    # installed there.  Too lazy to have this handle insertion.
-    export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
-
     # Perhaps the next time I upgrade perl, I'll wait before installing
     # anything, and set PERL5LIB, etc. to something like the above.  Might be
     # easier (https://formyfriendswithmacs.com/macports.html) but seemsa  pain
@@ -80,8 +72,9 @@ else
     # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
     export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$(manpath)"
 
-    # Worth noting that export doesn't take in aliases
-    export EDITOR='emacsclient -cqu '
+    # Stuck on some 2007-era organization
+    export GIT_PERS_DIR="$HOME/Documents/git"
+    export PERL_PERS_DIR="$HOME/Documents/perl"
 fi
 
 # Add $HOME's node_modules, if present
