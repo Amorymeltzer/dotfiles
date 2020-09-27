@@ -489,19 +489,25 @@ trap _exit EXIT
 
 
 ## Sourcin'
-# Some personal/private stuff
+# Some personal/private stuff, used in various places bash and lisp
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
 source "$HOME/.config/bash/priv-env.sh"
-# Advanced bash completion (http://www.caliban.org/bash/index.shtml#completion)
-# Defaults, pip, and gem completion
-# (https://github.com/revans/bash-it/blob/master/completion)
-# Most of the rest symlinked from /opt/local/share/bash-completion/completions
-# based on what I had installed
+# Advanced bash completion https://github.com/scop/bash-completion
+# Should probably unify these two...
+# Standard location, sources /usr/share/bash-completion/bash_completion
+std_completion="/etc/bash_completion"
+[ -r "$std_completion" ] && [ -f "$std_completion" ] && source "$std_completion";
+# Macports, sources /opt/local/share/bash-completion/bash_completion
+macports_completion="/opt/local/etc/bash_completion"
+[ -r "$macports_completion" ] && [ -f "$macports_completion" ] && source "$macports_completion";
+# Supplement the above with some missing items (brew, pip, gem), some mac-specific
+# ones (defaults, eject), and some personal pecadilloes
 for file in ~/.completions.d/*; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
+
 
 # whois, etc. auto-completion based on entries in known_hosts.
 # [[ -e "$HOME/.ssh/config" ]] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
@@ -1614,31 +1620,31 @@ function binaryclock() {
 function aac {
     # Get best audio, convert it to AAC, and save it to the current directory.
     youtube-dl --default-search=ytsearch: \
-               --restrict-filenames \
-               --format=bestaudio \
-               --extract-audio \
-               --audio-format=aac \
-               --audio-quality=1 "$*"
+	       --restrict-filenames \
+	       --format=bestaudio \
+	       --extract-audio \
+	       --audio-format=aac \
+	       --audio-quality=1 "$*"
 }
 function mp3 {
     # Get best audio, convert it to MP3, and save it to the current directory.
     youtube-dl --default-search=ytsearch: \
-               --restrict-filenames \
-               --format=bestaudio \
-               --extract-audio \
-               --audio-format=mp3 \
-               --audio-quality=1 "$*"
+	       --restrict-filenames \
+	       --format=bestaudio \
+	       --extract-audio \
+	       --audio-format=mp3 \
+	       --audio-quality=1 "$*"
 }
 function listen-youtube {
     # Skip DASH manifest for speed purposes. This might actually disable being
     # able to specify things like 'bestaudio' as the requested format, but try
     # anyway. Use "$*" so that quoting the requested song isn't necessary.
     youtube-dl --default-search=ytsearch: \
-               --youtube-skip-dash-manifest \
-               --output="${TMPDIR:-/tmp}/%(title)s-%(id)s.%(ext)s" \
-               --restrict-filenames \
-               --format=bestaudio \
-               --exec=mpv "$*"
+	       --youtube-skip-dash-manifest \
+	       --output="${TMPDIR:-/tmp}/%(title)s-%(id)s.%(ext)s" \
+	       --restrict-filenames \
+	       --format=bestaudio \
+	       --exec=mpv "$*"
 }
 ########
 
