@@ -489,21 +489,21 @@ trap _exit EXIT
 
 
 ## Sourcin'
+## Throw all potential sources into an array, check, then source
 # Some personal/private stuff, used in various places bash and lisp
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
-source "$HOME/.config/bash/priv-env.sh"
+sources=("$HOME/.config/bash/priv-env.sh")
 # Advanced bash completion https://github.com/scop/bash-completion
-# Should probably unify these two...
-# Standard location, sources /usr/share/bash-completion/bash_completion
-std_completion="/etc/bash_completion"
-[ -r "$std_completion" ] && [ -f "$std_completion" ] && source "$std_completion";
-# Macports, sources /opt/local/share/bash-completion/bash_completion
-macports_completion="/opt/local/etc/bash_completion"
-[ -r "$macports_completion" ] && [ -f "$macports_completion" ] && source "$macports_completion";
+# Standard location, in turn sources /usr/share/bash-completion/bash_completion
+sources+=("/etc/bash_completion")
+# Macports, in turn sources /opt/local/share/bash-completion/bash_completion
+sources+=("/opt/local/etc/bash_completion")
 # Supplement the above with some missing items (brew, pip, gem), some mac-specific
 # ones (defaults, eject), and some personal pecadilloes
-for file in ~/.completions.d/*; do
+sources+=(~/.completions.d/*)
+# Source all the (readable) things (files)!
+for file in "${sources[@]}"; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
