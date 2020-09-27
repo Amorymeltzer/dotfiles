@@ -494,17 +494,20 @@ trap _exit EXIT
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
 sources=("$HOME/.config/bash/priv-env.sh")
+# Homebrew completion directory, here before macports since I generally use
+# the latter.  Confident glob probably fine given the -f -r checks below.
+sources+=(/usr/local/etc/bash_completion.d/*)
 # Advanced bash completion https://github.com/scop/bash-completion
 # Standard location, in turn sources /usr/share/bash-completion/bash_completion
 sources+=("/etc/bash_completion")
 # Macports, in turn sources /opt/local/share/bash-completion/bash_completion
 sources+=("/opt/local/etc/bash_completion")
-# Supplement the above with some missing items (brew, pip, gem), some mac-specific
+# Supplement the above with some missing items (pip, gem), some mac-specific
 # ones (defaults, eject), and some personal pecadilloes
 sources+=(~/.completions.d/*)
 # Source all the (readable) things (files)!
 for file in "${sources[@]}"; do
-    [ -r "$file" ] && [ -f "$file" ] && source "$file";
+    [ -f "$file" ] && [ -r "$file" ] && source "$file";
 done;
 unset file;
 
