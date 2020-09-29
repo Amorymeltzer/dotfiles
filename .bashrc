@@ -826,6 +826,18 @@ alias grepic='grepc -i'
 alias grepC='grep -C 10'
 alias grepiC='grepC -i'
 
+# Same for ripgrep
+if [[ -f `command -v rg` ]]; then
+    export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
+    # -i largely meaningless with -S/--smart-case in the ripgreprc
+    alias rgi='rg -i'
+    alias rgc='rg -C 3'
+    alias rgic='rgc -i'
+    alias rgC='rg -C 10'
+    alias rgiC='rgC -i'
+fi
+
 # Applications
 #ls | open -f # pipe ls, open in default application (probably texteditor)
 alias reveal='open -R'
