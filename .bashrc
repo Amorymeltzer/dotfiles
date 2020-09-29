@@ -390,40 +390,23 @@ function _job_color()
 ###### holiday greeting
 # from Jonathan's .bashrc file (by ~71KR117)
 # http://dotshare.it/dots/516/
-function holiday_greeting()
-{
-    # get current day (Month-Day Format)
-    local day=$(date +"%B %d")
-    # get current year (for new years greeting)
-    local year=$(date +"%Y")
-    # make sure the holiday greeting is displayed (if any)
-    local hol=1 holgreet
-    if [ "$day" = "January 01" ]; then
-	holgreet="${Color_Magenta_Intense}Happy ${Color_Red_Intense}New ${Color_Blue_Intense}Year!${Color_zOff} Have a great $year."
-    elif [ "$day" = "February 02" ]; then
-	holgreet="Happy Groundhog Day!"
-    elif [ "$day" = "February 14" ]; then
-	holgreet="Happy ${Color_Magenta}Valentine's Day!${Color_zOff}"
-    elif [ "$day" = "July 04" ]; then
-	holgreet="Happy ${Color_Red_Intense}Fourth ${Color_White_Intense}of ${Color_Blue_Intense}July!${Color_zOff}"
-    elif [ "$day" = "August 12" ]; then
-	holgreet="Happy Birthday!"
-    elif [ "$day" = "October 31" ]; then
-	holgreet="${Color_Red_Bold}Happy Halloween!${Color_zOff}"
-    elif [ "$day" = "December 24" ]; then
-	holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve!${Color_zOff}"
-    elif [ "$day" = "December 25" ];then
-	holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas!${Color_zOff}!"
-    elif [ "$day" = "December 31" ]; then
-	holgreet="Happy New Year's Eve!"
-    else
-	hol=0
-    fi
-
-    if [ "$hol" = "1" ]; then
-	echo
-	echo -e $holgreet
-    fi
+function holiday_greeting() {
+    case $(date +"%B %d") in
+	"January 01")
+	    # get current year (for new years greeting)
+	    local year=$(date +"%Y")
+	    holgreet="${Color_Magenta_Intense}Happy ${Color_Red_Intense}New ${Color_Blue_Intense}Year!${Color_zOff} Have a great $year.";;
+	"February 02") holgreet="Happy Groundhog Day!";;
+	"February 14") holgreet="Happy ${Color_Magenta}Valentine's Day!${Color_zOff}";;
+	"July 04") holgreet="Happy ${Color_Red_Intense}Fourth ${Color_White_Intense}of ${Color_Blue_Intense}July!${Color_zOff}";;
+	"August 12") holgreet="Happy Birthday!";;
+	"October 31") holgreet="${Color_Red_Bold}Happy Halloween!${Color_zOff}";;
+	"December 24") holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve!${Color_zOff}";;
+	"December 25") holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas!${Color_zOff}!";;
+	"December 31") holgreet="Happy New Year's Eve!";;
+	*) exit 0;;
+    esac
+    echo -e "\n$holgreet"
 }
 
 ### Actual prompt
