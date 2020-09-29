@@ -109,7 +109,7 @@ total=""
 ##### .git #####
 # REBASE_HEAD points to current, when would be different than short_sha???
 # Present for edit, not reword, break
-##### SHARED #####
+##### SHARED (.git/rebase-merge/) #####
 # author-script: Name, email, date
 # done: Which steps done/applied, includes current action
 # end: Number of steps
@@ -138,6 +138,10 @@ if [ -d "$gitdir/rebase-merge" ]; then
     __git_eread "$gitdir/rebase-merge/msgnum" step
     __git_eread "$gitdir/rebase-merge/end" total
     r="Rebasing"
+    if __git_eread "$gitdir/rebase-merge/orig-head" orighead; then
+	orighead=$(git rev-parse --short "$orighead")
+	r="$r $(__wrap_color "$orighead")"
+    fi
     if __git_eread "$gitdir/rebase-merge/onto" o; then
 	o=$(git rev-parse --short "$o")
 	o="$(__wrap_color "onto" "Red") $o"
