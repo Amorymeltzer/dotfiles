@@ -355,20 +355,20 @@ esac
 # x=symbol (U) for merge: conflicts/modified
 # y=symbol (D) for merge: deleted
 # n=symbol (A) for merge: added
-# s=symbol ($) to indicate something is stashed
 # e=symbol (FIX) for others
 # c=BARE or empty
 # b=branch name
 # o=rebasing onto commit
 # f=string combining above, so probably something like *+$.
 # z=separator, just a space
+# s=symbol ($) to indicate something is stashed
 # ${f:+$z$f}: if empty, nothing; if present, then separator then f itself
 # r=rebasing/bisecting/cherry/reverting/etc.  ACTION: Should customize more, put first
 # p=differential from upstream, expand
 
-f="$u$w$i$t$m$d$n$x$y$s$e"
+f="$u$w$i$t$m$d$n$x$y$e"
 # ${f:-=}: above dirty state, = if not
-gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
+gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z$s${f:-=}$p"
 # Ensure gitstring is string, etc.
 printf -v gitstring '%s' "$gitstring"
 out="$gitstring"
