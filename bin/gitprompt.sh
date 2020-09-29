@@ -322,8 +322,12 @@ if [[ "$b" != "master" ]]; then
     fi
 fi
 
-# @ separator
-at=$(__wrap_color "@" "Black")
+# @ separator, but resort to stash ($s, in green) if present
+if [[ -n "$s" ]]; then
+    at="$s"
+else
+    at=$(__wrap_color "@" "Black")
+fi
 
 ######## ###########
 count="$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)"
@@ -361,14 +365,13 @@ esac
 # o=rebasing onto commit
 # f=string combining above, so probably something like *+$.
 # z=separator, just a space
-# s=symbol ($) to indicate something is stashed
 # ${f:+$z$f}: if empty, nothing; if present, then separator then f itself
 # r=rebasing/bisecting/cherry/reverting/etc.  ACTION: Should customize more, put first
 # p=differential from upstream, expand
 
 f="$u$w$i$t$m$d$n$x$y$e"
 # ${f:-=}: above dirty state, = if not
-gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z$s${f:-=}$p"
+gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 # Ensure gitstring is string, etc.
 printf -v gitstring '%s' "$gitstring"
 out="$gitstring"
