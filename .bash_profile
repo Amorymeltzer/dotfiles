@@ -28,7 +28,7 @@ if [[ -d "/opt/local/bin" ]]; then
     macports_pathstring="/opt/local/bin"
 fi
 if [[ -d "/opt/local/sbin" ]]; then
-    macports_pathstring="$macports_pathstring:/opt/local/sbin"
+    macports_pathstring="${macports_pathstring:+:${macports_pathstring}}/opt/local/sbin"
 fi
 if [[ -n "$macports_pathstring" ]]; then
     export PATH="$macports_pathstring:$PATH"
@@ -47,7 +47,8 @@ export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing 
 # toolforge tool account isn't SSH_TTY, but does have the same env variable
 if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     # This from cpan
-    PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
+    new_path="${new_path:+:${new_path}}$HOME/perl5/bin" # Okay this one was modified
+
     PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
     PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
     PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
@@ -66,7 +67,7 @@ else
     # portable not to hardcode these
     perl5_vendorbin=$(perl -V::vendorbin:|tr -d ' '|tr -d \')
     perl5_sitebin=$(perl -V::sitebin:|tr -d ' '|tr -d \')
-    new_path="$new_path:$perl5_sitebin:$perl5_vendorbin"
+    new_path="${new_path:+:${new_path}}$perl5_sitebin:$perl5_vendorbin"
 
     # Add unloved perl modules' manpages to the manpath, not as easy as above
     # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
@@ -88,6 +89,7 @@ if [[ `command -v npm` ]]; then
 fi
 
 # Add python execs
+# Doesn't really work on SSH FIXME TODO
 # local; preferable to global
 new_path="$new_path:$(python -m site --user-base)/bin"
 # global; not preferred but just in case
