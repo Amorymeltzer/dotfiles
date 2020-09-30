@@ -660,7 +660,7 @@ alias linecount='count'
 
 # http://linux.die.net/man/1/pygmentize
 # Colorized cat
-alias cot='pygmentize-3.4 -O bg=light -g'
+alias cot='pygmentize -O bg=light -g'
 
 # o with no args opens current directory, otherwise opens the given location
 function o() {
