@@ -1394,18 +1394,6 @@ function twinkleCheck() {
 # Easy
 alias toolforge="ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org"
 
-# Get coordinates
-function findlocation() {
-    local place
-    if [ ! $1 ]; then
-	echo "Usage: findlocation <place>"
-    else
-	place=`echo $* | sed 's/ /%20/g'`
-    fi
-    curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=$place&sensor=false" | grep -A 2 -e "location\"" -e "formatted_address" | grep -e "formatted" -e "lat" -e "lng" | sed -e 's/^ *//' -e 's/"//g' -e 's/formatted_address/Full address/g' -e 's/,$//g' -e 's/^.*{//g';
-}
-alias getcoordinates='findlocation'
-
 # Get the weather
 function weather() {
     local where
@@ -1555,15 +1543,10 @@ function monitor() {
     tail -f $1 | while read line; do printf "$(date '+%F %T')\t$line\n"; done;
 }
 
-# Check available macs on UCD campus
-function available() {
-    curl -s "clm.ucdavis.edu/rooms/available/" | perl -ne 'print "$2\t$3\n" if /(roomcolumn)\">(\d*\s\w*).*?(\d*\sMac)/;'
-}
-
 # /. headlines, turn into shell script to option output?
 # Not perfect but good enough
 function slashdot() {
-    curl -s "http://rss.slashdot.org/Slashdot/slashdot" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;'
+    curl -s "http://rss.slashdot.org/Slashdot/slashdot" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;' | tail -n +3
 }
 # HN mainpage stories
 function hackernews() {
@@ -1777,7 +1760,7 @@ jargon () { curl dict://dict.org/d:${1}:jargon; }
 # free-online dictionary of computing
 foldoc () { curl dict://dict.org/d:${1}:foldoc; }
 # urbandict
-urban() { word=`echo $* | sed 's/ /%20/g'`; curl -s http://www.urbandictionary.com/define.php?term=$word | iconv | grep -A 4 -m 1 "'meaning'>" | tail -n 4 | sed '2,3d'; }
+urban() { word=`echo $* | sed 's/ /%20/g'`; curl -s http://api.urbandictionary.com/v0/define?term=$word | jq -reM .list[0].definition; }
 
 # Add note to Notes.app (OS X 10.8+)
 # Usage: `note 'title' 'body'` or `echo 'body' | note`
