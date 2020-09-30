@@ -427,7 +427,13 @@ function prompt_command {
 	PS1+="[$psuser\[$Color_Cyan\]]-"
     fi
 
-    PS1+="[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.sh)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]$(holiday_greeting)\n\[$Color_Cyan\]└─["
+    PS1+="[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]"
+
+    gitprompt="$(gitprompt.sh)"
+    if [[ -n "$gitprompt" ]]; then
+	PS1+="-[\[$Color_Yellow\]$gitprompt\[$Color_Cyan\]]"
+    fi
+    PS1+="$(holiday_greeting)\n\[$Color_Cyan\]└─["
 
     if ((${ERRORS} > 0)); then
 	PS1+="\[$Color_Red_Intense\]\$"

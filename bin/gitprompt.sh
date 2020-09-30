@@ -4,7 +4,32 @@
 # https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
 ### [ "true" = asd ] convert to [[ ]]
 
-# Helper function to read the first line of a file into a variable.
+# Exit early but get all the info desired if present
+repo_info="$(git rev-parse --git-dir --is-inside-git-dir --is-bare-repository --is-inside-work-tree --short HEAD 2>/dev/null)"
+rev_parse_exit_code="$?"
+
+if [ -z "$repo_info" ]; then
+    exit
+fi
+
+# parse
+if [ "$rev_parse_exit_code" = "0" ]; then
+    short_sha="${repo_info##*$'\n'}"
+    repo_info="${repo_info%$'\n'*}"
+fi
+inside_worktree="${repo_info##*$'\n'}"
+repo_info="${repo_info%$'\n'*}"
+bare_repo="${repo_info##*$'\n'}"
+repo_info="${repo_info%$'\n'*}"
+inside_gitdir="${repo_info##*$'\n'}"
+gitdir="${repo_info%$'\n'*}"
+
+# Separator, possibly unnecessary FIXME TODO
+z=" "
+
+
+### Helper functions ###
+# Read the first line of a file into a variable.
 # __git_eread requires 2 arguments, the file path and the name of the
 # variable, in that order.
 ### CAN USE FOR SINGLE LINE???
@@ -12,7 +37,7 @@ __git_eread () {
     test -r "$1" && IFS=$'\r\n' read "$2" <"$1"
 }
 
-# Helper function to wrap colors around a variabled
+# Wrap colors around a variable
 # There has got to be a smarter way to do this FIXME TODO
 __wrap_color () {
     local color
@@ -31,7 +56,7 @@ __wrap_color () {
     echo -ne $color$1${Color_Yellow}
 }
 
-# see if a cherry-pick or revert is in progress, if the user has committed a
+# See if a cherry-pick or revert is in progress, if the user has committed a
 # conflict resolution with 'git commit' in the middle of a sequence of picks or
 # reverts then CHERRY_PICK_HEAD/REVERT_HEAD will not exist so we have to read
 # the todo file.
@@ -66,44 +91,10 @@ __git_sequencer_status () {
 }
 
 
-
-# Default output if not in git directory
-out='-'
-
-repo_info="$(git rev-parse --git-dir --is-inside-git-dir --is-bare-repository --is-inside-work-tree --short HEAD 2>/dev/null)"
-rev_parse_exit_code="$?"
-
-if [ -z "$repo_info" ]; then
-    echo -n $out
-    exit
-fi
-
-if [ "$rev_parse_exit_code" = "0" ]; then
-    short_sha="${repo_info##*$'\n'}"
-    repo_info="${repo_info%$'\n'*}"
-fi
-inside_worktree="${repo_info##*$'\n'}"
-repo_info="${repo_info%$'\n'*}"
-bare_repo="${repo_info##*$'\n'}"
-repo_info="${repo_info%$'\n'*}"
-inside_gitdir="${repo_info##*$'\n'}"
-gitdir="${repo_info%$'\n'*}"
-
-# Separator, possibly unnecessary FIXME TODO
-z=" "
-
-r=""
-a=""
-o=""
-b=""
-step=""
-total=""
-
 ### REBASE NOTES ###
 # If there's a conflcit, presence of .git/MERGE_MSG should do it?
 # stopped-sha = edit or conflict
 # Investigate amend?  Presence indicates e (versus r)
-
 
 #### REBASE FILES ####
 ##### .git #####
@@ -132,6 +123,13 @@ total=""
 # (none)
 ##### BREAK #####
 # (none)
+
+r=""
+a=""
+o=""
+b=""
+step=""
+total=""
 
 if [ -d "$gitdir/rebase-merge" ]; then
     __git_eread "$gitdir/rebase-merge/head-name" b
