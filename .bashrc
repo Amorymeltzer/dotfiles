@@ -332,26 +332,25 @@ MLOAD=$(( 200*${NCPU} ))	# Medium load
 XLOAD=$(( 400*${NCPU} ))	# Large load
 
 ### Prompt functions
-# Highlight hostname when connected via SSH
-function _cnx_color()
+# Hostname when connected via SSH
+function _cnx()
 {
-    if [[ ! $SSH_TTY && ! $INSTANCEPROJECT ]]; then
-	echo -en ${Color_Red}
-    else
-	echo -en ${Color_White}${Color_Black_zBackground}
+    if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
+	echo -en "${Color_Blue_Intense}@${Color_Red}\h"
     fi
 }
 
-# Test user type FIXME TODO
-# see also `id -un` instead(?) of `logname`
-function _uid_color()
-{
-    if [[ $USER != $(logname) ]]; then
-	echo -en ${Color_Red_zBackground} # User is not login user
-    elif [[ $USER == "root" ]]; then
-	echo -en ${Color_Red}	# User is root
-    else
-	echo -en ${Color_Green}	# User is normal (mostly)
+# Test user
+# id -un, logname, $USER: not necessarily the same!
+function _uid() {
+    if [[ $USER != $USER_NAME ]]; then # Only if not meeeee
+	local color
+	case $USER in
+	    root) color="${Color_Red}";; # User is root
+	    "$(logname)") color="${Color_Green}";; # User is normal (mostly)
+	    *) color="${Color_Red_zBackground}";; # User is not login user
+	esac
+	echo -en "$color\u"
     fi
 }
 
@@ -373,7 +372,7 @@ function _load_color()
     elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
 	echo -en ${Color_Magenta_Intense}
     else
-	echo -en ${Color_zOff}
+	echo -en ${Color_Yellow}
     fi
 }
 
@@ -420,17 +419,23 @@ function prompt_command {
 	ERRORS=0
     fi
 
-    psbegin="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
-    psmiddle="\h\[$Color_Cyan\]]-[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.sh)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]$(holiday_greeting)\n\[$Color_Cyan\]└─"
+    # PS1... ASSEMBLE!
+    PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
 
-    if ((${ERRORS} > 0)); then
-	PS1="$psbegin[\[$Color_Red_Intense\]\u\[$Color_Blue\]@\[$Color_Red_Intense\]$psmiddle[\[$Color_Red_Intense\]\$"
-    else
-	PS1="$psbegin[\[$(_uid_color)\]\u\[$Color_Blue\]@\[$(_cnx_color)\]$psmiddle[\[$Color_Magenta\]\#"
+    psuser="$(_uid)$(_cnx)"
+    if [[ -n "$psuser" ]]; then
+	PS1+="[$psuser\[$Color_Cyan\]]-"
     fi
 
-    psend="\[$Color_Cyan\]]\[$(_job_color)\]->\[$Color_zOff\] "
-    PS1+=$psend
+    PS1+="[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]$(gitprompt.sh)\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]$(holiday_greeting)\n\[$Color_Cyan\]└─["
+
+    if ((${ERRORS} > 0)); then
+	PS1+="\[$Color_Red_Intense\]\$"
+    else
+	PS1+="\[$Color_Magenta\]\#"
+    fi
+
+    PS1+="\[$Color_Cyan\]]\[$(_job_color)\]->\[$Color_zOff\] "
     export PS1
 
     # create a $fill of all screen width minus the time string and a space:
