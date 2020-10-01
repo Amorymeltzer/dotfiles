@@ -4,7 +4,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-h] [new|notes|last|rand|remove|rm|YYY-MM-DD|stats]
+Usage: $(basename $0) [-h] [new|notes|last|rand|log|remove|rm|YYY-MM-DD|stats]
 
   Without any parameters, diary will open today's entry for you; if it hasn't
   been started yet, it will create the file with, and populate it with the
@@ -17,6 +17,7 @@ Usage: $(basename $0) [-h] [new|notes|last|rand|remove|rm|YYY-MM-DD|stats]
   notes		Edit the notes file
   last		Display the last diary entry
   rand		Display a random diary entry
+  log		Commit today's file, only if the directory is managed by git
   remove, rm	Remove today's entry, if present
   YYYY-MM-DD	Display the diary entry from a specific day
   stats		Display some basic statistics (currently just number of entries)
@@ -78,6 +79,33 @@ else
 		cat $(ls -1 | shuf | head -n 1);;
 	    "remove"|"rm")
 		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
+	    "log")
+		# Commit entry, if git
+		[[ ! $(git rev-parse --is-inside-work-tree 2>/dev/null) ]] && exit 1
+		# Reset the index, just in case
+		git reset HEAD --
+
+		# Ensure there's just one file, and that it's today
+		status=$(git status --porcelain)
+		if [[ $(wc -l <<< "$status") -ne 1 ]]; then
+		    echo "Too many files present, exiting"
+		    exit 1
+		elif [[ "$(cut -c 4- <<< "$status")" != "$today" ]]; then
+		    echo "File isn't for today, exiting"
+		    exit 1
+		fi
+
+		git add $today
+		# Commit if untracked, amend if already present
+		if [[ "$(cut -c 1-2 <<< "$status")" == "??" ]]; then
+		    git commit -m $today
+		elif [[ "$(cut -c 1-2 <<< "$status")" == " M" ]]; then
+		    git commit --amend --no-edit
+		else
+		    echo "$status"
+		    echo "Unknown situation, exiting"
+		    exit 1
+		fi;;
 	    "stats")
 		# Basic stats, should expand this (days done (since date?), etc.)
 		# This should be find but whatever
