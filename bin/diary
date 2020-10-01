@@ -4,7 +4,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-h]
+Usage: $(basename $0) [-h] [new|notes|last|rand|remove|rm|YYY-MM-DD|stats]
 
   Without any parameters, diary will open today's entry for you; if it hasn't
   been started yet, it will create the file with, and populate it with the
@@ -17,6 +17,7 @@ Usage: $(basename $0) [-h]
   notes		Edit the notes file
   last		Display the last diary entry
   rand		Display a random diary entry
+  remove, rm	Remove today's entry, if present
   YYYY-MM-DD	Display the diary entry from a specific day
   stats		Display some basic statistics (currently just number of entries)
 END_HELP
@@ -75,6 +76,8 @@ else
 	    "rand")
 		# Display a random entry
 		cat $(ls -1 | shuf | head -n 1);;
+	    "remove"|"rm")
+		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
 	    "stats")
 		# Basic stats, should expand this (days done (since date?), etc.)
 		# This should be find but whatever
