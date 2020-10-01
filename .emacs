@@ -81,6 +81,18 @@
 ;; Packages and paradox customizations in custom.el
 ;; Set by custom rather than by hand to make installation easier
 
+;; This must come before configurations of installed packages
+(package-initialize)
+
+;; use-package https://github.com/jwiegley/use-package
+;; install (if not already present) and require, must be around for everyone else
+(dolist (package '(use-package))
+   (unless (package-installed-p package)
+     (package-install package)
+     (require 'use-package)))
+
+
+;; paradox https://github.com/Malabarba/paradox
 (require 'paradox)
 (setq paradox-github-token
       ;; Stored in a place like ~/.authinfo.gpg, ~/.authinfo, etc.  See
@@ -102,9 +114,6 @@ Record that in `paradox--backups', but do nothing if
     (add-to-list 'paradox--backups sym)))
 
 (paradox-enable)
-
-;; This must come before configurations of installed packages
-(package-initialize)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
