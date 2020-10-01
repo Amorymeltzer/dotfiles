@@ -932,6 +932,8 @@ function newperl() {
 }
 alias newbash="newperl "
 
+alias d="diary "
+
 alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 
 # Start an HTTP server from a directory, optionally specifying the port
@@ -1748,7 +1750,7 @@ function gz() {
 # wordnet
 dictionary () { curl dict://dict.org/d:${1}:wn; }
 alias define='dictionary'
-alias d='dictionary'
+alias dict='dictionary'
 # Moby thesaurus
 thesaurus () { curl dict://dict.org/d:${1}:moby-thes; }
 alias synonym='thesaurus'
