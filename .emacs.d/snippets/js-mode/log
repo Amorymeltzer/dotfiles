@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: console.log-basic
+# key: log
+# group: console
+# --
+console.log($0);
