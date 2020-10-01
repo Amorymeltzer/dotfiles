@@ -219,19 +219,20 @@ if [[ -z $homebrew_all_flag ]]; then
     fi
 fi
 
-# Uses sudo
+# Uses sudo; requires cpan-outdated https://metacpan.org/pod/cpan-outdated
 if [[ -z $cpan_all_flag ]]; then
     checking 'CPAN modules'
-    cpan_todo=$(cpan-outdated --verbose)
+    cpan_todo=$(cpan-outdated --verbose --exclude-core)
     if [[ -n $cpan_todo ]]; then
 	echo "$cpan_todo"
 	if [[ -z $cpan_flag ]]; then
 	    updating 'CPAN modules'
-	    # Should probably just cut -f 1 -d ' '
+	    cpan_todo=$(cat $cpan_todo | cut -f 1 -d ' ')
+
 	    if [[ -f `command -v cpanm` ]]; then
-		cpan-outdated -p | sudo cpanm
+		cat $cpan_todo | sudo cpanm
 	    else
-		cpan-outdated -p | xargs sudo cpan -i
+		cat $cpan_todo | xargs sudo cpan -i
 	    fi
 	    cleaning 'CPAN directories'
 	    sudo cpanclean;
