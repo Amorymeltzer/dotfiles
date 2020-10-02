@@ -4,29 +4,29 @@
 # Fight https://xkcd.com/1579/
 
 ## TODO:
-## More sudo deescalation
+## More sudo deescalation (macports, cpan, gem)
 ## Better color management
 ## Detect errors
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-bmMpPgrRnNekEKcCLhH]
+Usage: $(basename $0) [-bmMekEKcCnNgrRpPLhH]
 
   -b		skip updating macports base, but 'port sync' to update tree
   -m		check for macports updates but don't upgrade
   -M		skip all macports actions
-  -p		check for python updates but don't upgrade
-  -P		skip all python actions
-  -g		skip updating gem itself
-  -r		check for ruby updates but don't upgrade
-  -R		skip all ruby actions
-  -n		check for npm nodejs updates (global) but don't upgrade
-  -N		skip all npm nodejs actions
   -e		pull homebrew and hombrew-cask changes but don't upgrade homebrew
   -k		skip all homebrew-cask updates
   -E -K		skip all homebrew and homebrew-cask updates
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
+  -n		check for npm nodejs updates (global) but don't upgrade
+  -N		skip all npm nodejs actions
+  -g		skip updating gem itself
+  -r		check for ruby updates but don't upgrade
+  -R		skip all ruby actions
+  -p		check for python updates but don't upgrade
+  -P		skip all python actions
   -L		skip all emacs lisp actions
   -h -H		this help
 END_HELP
@@ -38,18 +38,18 @@ while getopts 'bcCeEgkKLmMnNpPrRhH' opt; do
 	b) base_flag='1';;
 	m) macports_flag='1';;
 	M) macports_all_flag='2';;
-	p) python_flag='1';;
-	P) python_all_flag='2';;
-	g) gem_flag='1';;
-	r) ruby_flag='1';;
-	R) ruby_all_flag='2';;
-	n) npm_flag='1';;
-	N) npm_all_flag='2';;
 	e) homebrew_flag='1';;
 	k) brewcask_flag='1';;
 	E|K) homebrew_all_flag='2';;
 	c) cpan_flag='1';;
 	C) cpan_all_flag='2';;
+	n) npm_flag='1';;
+	N) npm_all_flag='2';;
+	g) gem_flag='1';;
+	r) ruby_flag='1';;
+	R) ruby_all_flag='2';;
+	p) python_flag='1';;
+	P) python_all_flag='2';;
 	L) emacs_all_flag='2';;
 	h|H) help $0
 	     exit 0;;
@@ -129,58 +129,6 @@ if [[ -z $macports_all_flag ]]; then
     fi
 fi
 
-if [[ -z $python_all_flag ]]; then
-    checking 'pip python packages'
-    python_todo=$(pip list --outdated --user)
-    if [[ -n $python_todo ]]; then
-	echo "$python_todo"
-	if [[ -z $python_flag ]]; then
-	    updating 'pip python packages'
-	    pipupgrade;
-	fi
-    else
-	echo -e "${Color_Green}pip python packages already up-to-date!${Color_zOff}"
-    fi
-fi
-
-# Uses sudo
-if [[ -z $ruby_all_flag ]]; then
-    if [[ -z $gem_flag ]]; then
-	updating 'gem ruby manager'
-	sudo gem update --system
-    fi
-    checking 'ruby gems'
-    ruby_todo=$(gem outdated)
-    if [[ -n $ruby_todo ]]; then
-	echo "$ruby_todo"
-	if [[ -z $ruby_flag ]]; then
-	    updating 'ruby gems'
-	    sudo gem update
-	    cleaning 'ruby gems'
-	    sudo gem cleanup;
-	fi
-    else
-	echo -e "${Color_Green}ruby gems already up-to-date!${Color_zOff}"
-    fi
-fi
-
-if [[ -z $npm_all_flag ]]; then
-    checking 'npm nodejs packages (global)'
-    # Means I miss out on the cool coloring in the output
-    npm_todo=$(npm outdated --global)
-    if [[ -n $npm_todo ]]; then
-	echo "$npm_todo"
-	if [[ -z $npm_flag ]]; then
-	    updating 'npm nodejs packages (global)'
-	    # skip column headers, pass package names to npm install since
-	    # global implies caret semver https://github.com/npm/cli/issues/746
-	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | xargs npm install --global
-	fi
-    else
-	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
-    fi
-fi
-
 ## Should probably make this verbose or something
 if [[ -z $homebrew_all_flag ]]; then
     updating 'Homebrew repository'
@@ -209,6 +157,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	if [[ -n $cask_todo ]]; then
 	    updating 'casks'
 	    # echo "$cask_todo"
+	    # Some apps require sudo
 	    brew cu -aqy --no-brew-update
 
 	    cleaning 'casks'
@@ -242,7 +191,60 @@ if [[ -z $cpan_all_flag ]]; then
     fi
 fi
 
+if [[ -z $npm_all_flag ]]; then
+    checking 'npm nodejs packages (global)'
+    # Means I miss out on the cool coloring in the output
+    npm_todo=$(npm outdated --global)
+    if [[ -n $npm_todo ]]; then
+	echo "$npm_todo"
+	if [[ -z $npm_flag ]]; then
+	    updating 'npm nodejs packages (global)'
+	    # skip column headers, pass package names to npm install since
+	    # global implies caret semver https://github.com/npm/cli/issues/746
+	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | xargs npm install --global
+	fi
+    else
+	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
+    fi
+fi
+
+# Uses sudo
+if [[ -z $ruby_all_flag ]]; then
+    if [[ -z $gem_flag ]]; then
+	updating 'gem ruby manager'
+	sudo gem update --system
+    fi
+    checking 'ruby gems'
+    ruby_todo=$(gem outdated)
+    if [[ -n $ruby_todo ]]; then
+	echo "$ruby_todo"
+	if [[ -z $ruby_flag ]]; then
+	    updating 'ruby gems'
+	    sudo gem update
+	    cleaning 'ruby gems'
+	    sudo gem cleanup;
+	fi
+    else
+	echo -e "${Color_Green}ruby gems already up-to-date!${Color_zOff}"
+    fi
+fi
+
+if [[ -z $python_all_flag ]]; then
+    checking 'pip python packages'
+    python_todo=$(pip list --outdated --user)
+    if [[ -n $python_todo ]]; then
+	echo "$python_todo"
+	if [[ -z $python_flag ]]; then
+	    updating 'pip python packages'
+	    pipupgrade;
+	fi
+    else
+	echo -e "${Color_Green}pip python packages already up-to-date!${Color_zOff}"
+    fi
+fi
+
 if [[ -z $emacs_all_flag ]]; then
     updating 'emacs lisp packages'
     update_elisp.sh;
 fi
+
