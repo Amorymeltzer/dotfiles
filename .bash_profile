@@ -2,7 +2,7 @@
 # Worth noting that export doesn't take in aliases
 export EDITOR='emacsclient -cqu '
 # Used by emacsclient in case no daemon is running, such as with sudo
-export ALTERNATE_EDITOR="emacs "
+export ALTERNATE_EDITOR='emacs '
 
 # Make CPAN always select the default option
 export PERL_MM_USE_DEFAULT=1
@@ -55,10 +55,6 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
     PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
     PERL_MM_OPT="INSTALL_BASE=/$HOME/perl5"; export PERL_MM_OPT;
-
-    # Don't know if it's old (24.5) emacsen or the ssh environment, but having
-    # trouble using emacsclient here
-    export EDITOR='emacs '
 else
     ## Add perl execs
     # Perhaps the next time I upgrade perl, I'll wait before installing
