@@ -79,8 +79,13 @@ if [[ $EUID == 0 ]]; then
     echo "Please don't use sudo!"
     exit 1
 fi
-# Ask for sudo early, just in case FIXME TODO
-sudo -v
+# Ask for sudo early when possibly needed
+# Could be smarter about various suboptions, esp around ruby
+# Doesn't account for brew cask, not sure that's possible
+if [[ -z $macports_all_flag ]] || [[ -z $cpan_all_flag ]] || [[ -z $ruby_all_flag ]]; then
+    sudo -v
+fi
+
 
 # Capture things it suggests, like port select and so on ;;;;;; ##### FIXME TODO
 # Uses sudo
@@ -130,6 +135,7 @@ if [[ -z $macports_all_flag ]]; then
 fi
 
 ## Should probably make this verbose or something
+## Something wrong with flags here FIXME TODO
 if [[ -z $homebrew_all_flag ]]; then
     updating 'Homebrew repository'
     brew update
