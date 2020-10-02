@@ -227,12 +227,12 @@ if [[ -z $cpan_all_flag ]]; then
 	echo "$cpan_todo"
 	if [[ -z $cpan_flag ]]; then
 	    updating 'CPAN modules'
-	    cpan_todo=$(cat $cpan_todo | cut -f 1 -d ' ')
+	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
 
 	    if [[ -f `command -v cpanm` ]]; then
-		cat $cpan_todo | sudo cpanm
+		echo "$cpan_todo" | sudo cpanm
 	    else
-		cat $cpan_todo | xargs sudo cpan -i
+		echo "$cpan_todo" | xargs sudo cpan -i
 	    fi
 	    cleaning 'CPAN directories'
 	    sudo cpanclean;
