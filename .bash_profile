@@ -1,6 +1,8 @@
 ## Some helpful environment vars and configs
 # Worth noting that export doesn't take in aliases
 export EDITOR='emacsclient -cqu '
+# Used by emacsclient in case no daemon is running, such as with sudo
+export ALTERNATE_EDITOR="emacs "
 
 # Make CPAN always select the default option
 export PERL_MM_USE_DEFAULT=1
