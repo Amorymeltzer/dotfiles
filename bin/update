@@ -159,7 +159,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	# Uses brew cu, mainly for the superior pinning ability
 	# https://github.com/buo/homebrew-cask-upgrade
 	# Want autoupdating casks, but not latest
-	cask_todo=$(brew cask outdated --greedy --verbose|grep -v latest)
+	cask_todo=$(brew outdated --cask --greedy --verbose|grep -v latest)
 	if [[ -n $cask_todo ]]; then
 	    updating 'casks'
 	    # echo "$cask_todo"
