@@ -4,7 +4,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-h] [new|notes|last|rand|log|remove|rm|delete|YYY-MM-DD|stats]
+Usage: $(basename $0) [-h] [new|notes|last|show|rand|log|remove|rm|delete|YYY-MM-DD|stats]
 
   Without any parameters, diary will open today's entry for you; if it hasn't
   been started yet, it will create the file with, and populate it with the
@@ -16,6 +16,7 @@ Usage: $(basename $0) [-h] [new|notes|last|rand|log|remove|rm|delete|YYY-MM-DD|s
   new			Create a new file, without opening
   notes			Edit the notes file
   last			Display the last diary entry
+  show [YYYY-MM-DD]	Show a given entry, or the last entry if no date provided
   rand			Display a random diary entry
   log			Commit today's file, only if the directory is managed by git
   remove, rm, delete	Remove today's entry, if present
@@ -59,21 +60,35 @@ if [[ ! $1 ]]; then
     newDay
     $VISUAL "$today"
 else
-    # Show a specific date
-    if [[ $1 =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-	if [[ ! -f "$1.md" ]]; then
+    function validDate {
+	[[ $1 =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]
+    }
+    function showDate {
+	if validDate "$1" && [[ -f "$1.md" ]]; then
+	    cat "$1.md"
+	else
 	    echo "No entry for $1"
 	    exit 1
-	else
-	    cat "$1.md"
 	fi
+    }
+
+    # Show a specific date
+    if validDate "$1"; then
+	showDate "$1"
     else
+	function showLast {
+	    cat $(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1)
+	}
+
 	case "$1" in
 	    "new") newDay;;
 	    "notes") $VISUAL notes;;
 	    "last")
 		# Display latest entry, not including today's
-		cat $(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1);;
+		showLast;;
+	    "show")
+		# Show the specific entry
+		[[ $2 ]] && showDate "$2" || showLast;; # Second param by this point
 	    "rand")
 		# Display a random entry
 		cat $(ls -1 | shuf | head -n 1);;
