@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+interface=$(ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active' | egrep -o -m 1 '^[^\t:]+')
+
+if [[ $interface == "en0" ]]; then
+    echo -n "high"
+elif [[ $interface == "en1" ]]; then
+    echo -n "medium"
+else
+    echo -n "medium"
+fi

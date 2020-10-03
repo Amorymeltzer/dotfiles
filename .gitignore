@@ -1,0 +1,11 @@
+# Only include elisp files, others change too much/are too personal
+/.emacs.d/*
+!/.emacs.d/custom.el
+!/.emacs.d/site-lisp/
+!/.emacs.d/themes/
+!/.emacs.d/snippets/
+
+# Ignore changes
+# git update-index --assume-unchanged FILE
+# Allow changes
+# git update-index --no-assume-unchanged FILE

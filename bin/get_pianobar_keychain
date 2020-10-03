@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+security find-generic-password -a "pianobar" -g 2>&1 | grep password | sed -e "s/password: \"//" -e "s/\"//"
