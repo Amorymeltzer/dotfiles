@@ -179,7 +179,9 @@ top-contributors-merges = "!t() { c=${1:-10}; git --no-pager shortlog --summary 
 whois = "!git log -i -1 --pretty='format:%an <%ae>'"
 
 difflog = log -u
-rl = reflog --decorate
+
+# Include date
+rl = reflog --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
 
 cl = clone
 
