@@ -21,7 +21,7 @@ Usage: $(basename $0) [-h] [new|notes|last|show|rand|log|remove|rm|delete|YYY-MM
   log			Commit today's file, only if the directory is managed by git
   remove, rm, delete	Remove today's entry, if present
   YYYY-MM-DD		Display the diary entry from a specific day
-  stats			Display some basic statistics (currently just number of entries)
+  stats			Display some basic statistics
 END_HELP
 }
 
@@ -125,8 +125,25 @@ else
 	    "stats")
 		# Basic stats, should expand this (days done (since date?), etc.)
 		# This should be find but whatever
-		count=$(ls -1 | grep -E "\d{4}-\d{2}-\d{2}\.md" | wc -l | tr -d ' ')
-		echo "There are $count entries!";;
+		files=$(ls -1 | grep -E "\d{4}-\d{2}-\d{2}\.md")
+		total=$(wc -l <<<"$files" | tr -d ' ')
+		if [[ $total -gt 0 ]]; then
+		    IFS=$'\n' results=($(cut -f 1 -d - <<<"$files" | sort | uniq -c))
+		    for result in "${results[@]}"; do
+			result=$(cut -c 3- <<<"${result}")
+			year="${result#*' '}"
+			count="${result%' '*}"
+			echo -n "$year: $count "
+			if [[ $count -ge 2 ]]; then
+			    echo "entries"
+			else
+			    echo "entry"
+			fi
+		    done
+		    echo "$total total"
+		else
+		    echo "No entries found"
+		fi;;
 	    *) echo "Unknown option"
 	       exit 1;;
 	esac
