@@ -321,20 +321,36 @@ bind "set completion-map-case on"
 # Seems unnecessary right now
 #    trap 'echo -ne "\033[00m"' DEBUG
 
-### Number of CPUs; used for load_color below, but theoretically useful
-if [[ $OSTYPE == darwin* ]]; then
-    NCPU=$(sysctl -n hw.ncpu)
-else
-    NCPU=$(nproc)
-fi
-SLOAD=$(( 100*${NCPU} ))	# Small load
-MLOAD=$(( 200*${NCPU} ))	# Medium load
-XLOAD=$(( 400*${NCPU} ))	# Large load
 
 ### Prompt functions
+# Return a color indicating system load
+# Basically, if load average is greater than the number of CPUs, then
+# executions will be delayed/queued.  This just assigns colors to that.
+function _load_color() {
+    if [[ $OSTYPE == darwin* ]]; then
+	local NCPU=$(sysctl -n hw.ncpu)
+	local SYSLOAD=$(sysctl -n vm.loadavg | cut -f 2 -d ' ')
+    else
+	local NCPU=$(nproc)
+	local SYSLOAD=$(uptime | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " ")
+    fi
+    # Remove decimal, essentially treating it as a percentage (40 instead of
+    # 0.40) since bash can't do math with floating points
+    SYSLOAD=$(tr -d '.' <<< "$SYSLOAD")
+
+    if [ ${SYSLOAD} -lt $((100*${NCPU})) ]; then
+	echo -en ${Color_Yellow} # Normal load
+    elif [ ${SYSLOAD} -lt $((200*${NCPU})) ]; then
+	echo -en ${Color_Magenta_Intense} # Small load
+    elif [ ${SYSLOAD} -lt $((400*${NCPU})) ]; then
+	echo -en ${Color_Red_Bold_Intense} # Medium load
+    else
+	echo -en ${Color_Red_zBackground}${Color_Red_Bold_Intense} # Large load
+    fi
+}
+
 # Hostname when connected via SSH
-function _cnx()
-{
+function _cnx() {
     if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
 	echo -en "${Color_Blue_Intense}@${Color_Red}\h"
     fi
@@ -354,31 +370,8 @@ function _uid() {
     fi
 }
 
-# System load of the current host, as percentage (40 instead of 0.40)
-function load()
-{
-    local SYSLOAD=$(uptime | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " " | tr -d '.')
-    echo $((10#$SYSLOAD))
-}
-
-# Return a color indicating system load.
-function _load_color()
-{
-    local SYSLOAD=$(load)
-    if [ ${SYSLOAD} -gt ${XLOAD} ]; then
-	echo -en ${Color_Red_zBackground}${Color_Red_Bold_Intense}
-    elif [ ${SYSLOAD} -gt ${MLOAD} ]; then
-	echo -en ${Color_Red_Bold_Intense}
-    elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
-	echo -en ${Color_Magenta_Intense}
-    else
-	echo -en ${Color_Yellow}
-    fi
-}
-
 # Return a color according to running/suspended jobs.
-function _job_color()
-{
+function _job_color() {
     if [ $(jobs -s | wc -l) -gt "0" ]; then
 	echo -en ${Color_Red_Bold_Intense}
     elif [ $(jobs -r | wc -l) -gt "0" ]; then
