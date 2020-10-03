@@ -516,6 +516,10 @@ error = red bold # Takes the help color unless otherwise specificed, default is 
 
 [gc]
 auto = 256
+reflogExpire = 365		# Default 90 days
+reflogExpireUnreachable = 60 	# Default 30 days
+rerereResolved = 30		# Default is 15
+rerereUnresolved = 30		# Default is 15
 
 [tag]
 # Implies annotated, which is good behavior anyway
