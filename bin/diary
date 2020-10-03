@@ -60,14 +60,15 @@ if [[ ! $1 ]]; then
     newDay
     $VISUAL "$today"
 else
+    # Optional .md to allow for bash completion, removed in showDate
     function validDate {
-	[[ $1 =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]
+	[[ $1 =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}(\.md)?$ ]]
     }
     function showDate {
-	if validDate "$1" && [[ -f "$1.md" ]]; then
-	    cat "$1.md"
+	if date=$1 && date=$(sed 's/\.md$//' <<< "$date") && validDate "$date" && [[ -f "$date.md" ]]; then
+	    cat "$date.md"
 	else
-	    echo "No entry for $1"
+	    echo "No entry for $date"
 	    exit 1
 	fi
     }
