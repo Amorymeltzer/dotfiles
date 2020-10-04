@@ -43,7 +43,8 @@ open my $skip, '>>', 'skipme.list' or die $!;
 foreach my $cask (sort keys %caskList) {
   delete $caskList{$cask};
   system "clear";
-  system "brew cask chome $cask";
+  system "brew cask cat $cask";
+  system "open \$(brew cask _stanza appcast $cask)";
 
   print "\n[K]eep, [S]kip, or [Q]uit?";
   my $action = <STDIN>;
