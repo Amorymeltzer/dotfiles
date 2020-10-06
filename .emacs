@@ -673,23 +673,27 @@ current buffer" t)
 (eval-after-load 'autoinsert
   '(progn
      ;; Perl
-     (define-auto-insert '("\\.pl\\'" . "Perl skeleton") '(nil "#!/usr/bin/env perl" \n
-							       "# FOO by " user-full-name \n
-							       "# " _ \n
-							       \n "use strict;" \n
-							       "use warnings;" \n
-							       "use diagnostics;" \n))
+     (define-auto-insert '("\\.pl\\'" . "Perl skeleton")
+       '(nil "#!/usr/bin/env perl" \n
+	     "# " (file-name-base) " by " user-full-name \n
+	     "# " _ \n
+	     \n "use strict;" \n
+	     "use warnings;" \n
+	     "use diagnostics;" \n))
 
      ;; shell script
-     (define-auto-insert '("\\.\\(ba\\)?sh\\'" . "Bash skeleton") '(nil "#!/usr/bin/env bash" \n
-									"# FOO by " user-full-name \n
-									"# " _ ))
+     (define-auto-insert '("\\.\\(ba\\)?sh\\'" . "Bash skeleton")
+       '(nil "#!/usr/bin/env bash" \n
+	     "# " (file-name-base) " by " user-full-name \n
+	     "# " _ ))
 
      ;; Python
-     (define-auto-insert '("\\.py\\'" . "Python skeleton") '(nil "#!/usr/bin/env python" \n _ ))
+     (define-auto-insert '("\\.py\\'" . "Python skeleton")
+       '(nil "#!/usr/bin/env python" \n _ ))
 
      ;; Ruby
-     (define-auto-insert '("\\.rb\\'" . "Ruby skeleton") '(nil "#!/usr/bin/env ruby" \n _ ))))
+     (define-auto-insert '("\\.rb\\'" . "Ruby skeleton")
+       '(nil "#!/usr/bin/env ruby" \n _ ))))
 ;;; Can also define file, ie
 ;; (setq auto-insert-directory "~/.mytemplates/") ;; Note: trailing slash important
 ;; (define-auto-insert "\.py" "my-python-template.py")
