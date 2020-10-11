@@ -336,6 +336,12 @@ Record that in `paradox--backups', but do nothing if
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
 
 
+;; yaml-mode
+(autoload 'yaml-mode "yaml-mode" "Simple mode to edit YAML." t)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Flymake stuff
