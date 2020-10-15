@@ -129,6 +129,8 @@ else
 		total=$(wc -l <<<"$files" | tr -d ' ')
 		if [[ $total -gt 0 ]]; then
 		    IFS=$'\n' results=($(cut -f 1 -d - <<<"$files" | sort | uniq -c))
+		    # Used below, 1-indexing
+		    mons=(null Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
 		    for result in "${results[@]}"; do
 			result=$(cut -c 3- <<<"${result}")
 			year="${result#*' '}"
@@ -139,6 +141,23 @@ else
 			else
 			    echo "entry"
 			fi
+
+			# Monthly stats
+			yfiles=$(grep "$year" <<<"$files")
+			# Note the leading ! in the array, means iterate over the index
+			for i in "${!mons[@]}"; do
+			    # 1-indexing
+			    if [ $i -eq 0 ]; then
+				continue
+			    fi
+			    # Zero-pad month number
+			    find=$(printf "%02d" $i)
+			    mcount=$(echo "$yfiles" | grep -E "\d{4}-$find-\d{2}\.md" | wc -l | tr -d ' ')
+			    if [ $mcount -gt 0 ]; then
+				mon=${mons[$i]}
+				echo -e "\t$mon: $mcount"
+			    fi
+			done
 		    done
 		    echo "$total total"
 		else
