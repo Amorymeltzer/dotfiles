@@ -67,6 +67,7 @@ aa = add -A
 all = add -A
 # Don't do anything unless there are any staged changes
 # More specific (staged) than diff-index
+as = "!git add -A; git diff --staged --name-only --quiet || git status --short --branch"
 aas = "!git add -A; git diff --staged --name-only --quiet || git status --short --branch"
 acm = "!git add -A; git diff --staged --name-only --quiet || git commit -m"
 aca = "!git add -A; git diff --staged --name-only --quiet || git commit --amend"
