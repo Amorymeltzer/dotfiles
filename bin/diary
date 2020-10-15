@@ -135,15 +135,12 @@ else
 			result=$(cut -c 3- <<<"${result}")
 			year="${result#*' '}"
 			count="${result%' '*}"
-			echo -n "$year: $count "
-			if [[ $count -ge 2 ]]; then
-			    echo "entries"
-			else
-			    echo "entry"
-			fi
+			echo "$year:"
 
-			# Monthly stats
+			# Display monthly stats first
 			yfiles=$(grep "$year" <<<"$files")
+			# Hold onto counts
+			spark=()
 			# Note the leading ! in the array, means iterate over the index
 			for i in "${!mons[@]}"; do
 			    # 1-indexing
@@ -156,8 +153,23 @@ else
 			    if [ $mcount -gt 0 ]; then
 				mon=${mons[$i]}
 				echo -e "\t$mon: $mcount"
+				# Add to spark array
+				spark+=($mcount)
 			    fi
 			done
+
+			# Display annual total
+			echo -n "$count "
+			if [[ $count -ge 2 ]]; then
+			    echo -n "entries"
+			else
+			    echo -n "entry"
+			fi
+
+			if [ `command -v spark` ]; then
+			    echo -n " "
+			    spark "${spark[@]}"
+			fi
 		    done
 		    echo "$total total"
 		else
