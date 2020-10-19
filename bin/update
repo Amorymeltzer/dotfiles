@@ -140,7 +140,7 @@ if [[ -z $homebrew_all_flag ]]; then
     updating 'Homebrew repository'
     brew update
     if [[ -z $homebrew_flag ]]; then
-	brew_todo=$(brew outdated)
+	brew_todo=$(brew outdated --formula)
 	if [[ -n $brew_todo ]]; then
 	    updating 'brews'
 	    echo "$brew_todo"
