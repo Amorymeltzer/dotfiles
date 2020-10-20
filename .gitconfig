@@ -7,7 +7,9 @@ helper = osxkeychain
 [core]
 # Use custom `.gitignore`
 excludesfile = ~/.global-gitignore
-# editor and pager set in include
+# Global gitattributes
+attributesfile = ~/.global-gitattributes
+# editor and pager set in include file
 
 # Treat spaces before tabs, lines that are indented with 8 or more spaces,
 # and all kinds of trailing whitespace as an error
