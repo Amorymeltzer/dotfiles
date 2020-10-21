@@ -56,6 +56,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package
 (require 'package)
+;; Fix for annoying ELPA failure, supposedly fixed upstream but still an issue
+;; for me; see https://github.com/syl20bnr/spacemacs/issues/12535 and
+;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 ;; In theory it'd be nice to set package-archive-priorities, but in practice
 ;; there's no overlap between MELPA and GNU ELPA.  Added in 25.1
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
