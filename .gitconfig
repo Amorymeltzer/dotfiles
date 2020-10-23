@@ -118,12 +118,21 @@ la = log --graph --decorate --oneline --all
 las = log --graph --decorate --oneline --all --simplify-by-decoration
 
 ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
-ld5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short -5
+ld5 = ld -5
+ldm = ld master..HEAD
+lmd = ldm
+ldm5 = ld5 master..HEAD
+ld5m = ldm5
 
 # Potentially overridden in local-config to use date=human after 2.21, see also recent-branches-by-commit and [log]
 lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
-lr5 = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%3Cblue\\ [%an]" --decorate --date=relative -5
 lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %Cgreen(A: %cr, C: %ar)%C(blue) [%an]%Creset' --abbrev-commit --date=relative
+
+lr5 = lr -5
+lrm = lr master..HEAD
+lmr = lrm
+lrm5 = lr5 master..HEAD
+lr5m = lrm5
 
 graph = lg
 
