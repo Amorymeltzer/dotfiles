@@ -2188,7 +2188,14 @@ This checks in turn:
 (require 'amory-emacs-haiku)
 ;; Initialize *scratch* buffer with a random Emacs haiku
 (setq initial-scratch-message (amory-random-emacs-haiku))
-
+;; Clear out the scratch buffer... like new!
+(defun new-scratch-buffer nil
+       "Clear out the scratch buffer"
+       (interactive)
+       (switch-to-buffer (get-buffer-create "*scratch*"))
+       (delete-region (point-min) (point-max))
+       (insert (amory-random-emacs-haiku))
+       (lisp-interaction-mode))
 
 ;; All the cperl options, bad?  Need to fix ;;;;; #### FIXME TODO
 ;; Affects:
