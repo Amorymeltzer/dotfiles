@@ -572,6 +572,14 @@ fi
 # Emacs stuff.  Makes which/type confused, but order is important
 # emacs daemon/emacsclient
 alias emd='\emacs --daemon '
+# Get server status
+function eserver() {
+    if [[ `ps -Af | grep "emacs --daemon"` ]]; then
+	echo "Emacs server running"
+    else
+	echo "Emacs server not running"
+    fi
+}
 alias killemacs-server="\emacsclient -e '(kill-emacs)'"
 alias kemacs-server='killemacs-server'
 alias ke='kemacs-server'
