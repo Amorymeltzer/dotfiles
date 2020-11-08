@@ -296,6 +296,7 @@ dm = diff master
 dmc = diff --cached master
 dmn = diff --name-only master
 dnm = diff --name-only master
+dnp = "!f() { c=${1:-HEAD}; git diff --name-only $c~ $c; }; f"
 du  = diff @{upstream}
 dun = diff --name-only @{upstream}
 duc = diff --cached @{upstream}
