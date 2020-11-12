@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Continue git stuff, inspired by https://github.com/da-x/misc-gitology
+
+set -e		# Exit right away if any command exits with non-zero exit code
+gitdir="$(git rev-parse --git-dir)"
+
+if [[ -e "$gitdir/rebase-merge" ]]; then
+    exec git rebase --continue "$@"
+elif [[ -e "$gitdir/rebase-apply" ]]; then
+    # This one always throws me for a loop
+    if [[ -e "$gitdir/rebase-apply/applying" ]]; then
+	exec git am --continue "$@"
+    else
+	exec git rebase --continue "$@"
+    fi
+elif [[ -e "$gitdir/MERGE_MODE" ]]; then
+    exec git merge --continue "$@"
+elif [[ -e "$gitdir/CHERRY_PICK_HEAD" ]]; then
+    exec git cherry-pick --continue "$@"
+elif [[ -e "$gitdir/REVERT_HEAD" ]]; then
+    exec git revert --continue "$@"
+else
+    echo "Nothing to continue!"
+fi
