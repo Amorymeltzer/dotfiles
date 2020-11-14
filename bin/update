@@ -134,6 +134,29 @@ if [[ -z $macports_all_flag ]]; then
     fi
 fi
 
+# Uses sudo; requires cpan-outdated https://metacpan.org/pod/cpan-outdated
+if [[ -z $cpan_all_flag ]]; then
+    checking 'CPAN modules'
+    cpan_todo=$(cpan-outdated --verbose --exclude-core)
+    if [[ -n $cpan_todo ]]; then
+	echo "$cpan_todo"
+	if [[ -z $cpan_flag ]]; then
+	    updating 'CPAN modules'
+	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
+
+	    if [[ -f `command -v cpanm` ]]; then
+		echo "$cpan_todo" | sudo cpanm
+	    else
+		echo "$cpan_todo" | xargs sudo cpan -i
+	    fi
+	    cleaning 'CPAN directories'
+	    sudo cpanclean;
+	fi
+    else
+	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
+    fi
+fi
+
 ## Should probably make this verbose or something
 ## Something wrong with flags here FIXME TODO
 if [[ -z $homebrew_all_flag ]]; then
@@ -173,46 +196,6 @@ if [[ -z $homebrew_all_flag ]]; then
     fi
 fi
 
-# Uses sudo; requires cpan-outdated https://metacpan.org/pod/cpan-outdated
-if [[ -z $cpan_all_flag ]]; then
-    checking 'CPAN modules'
-    cpan_todo=$(cpan-outdated --verbose --exclude-core)
-    if [[ -n $cpan_todo ]]; then
-	echo "$cpan_todo"
-	if [[ -z $cpan_flag ]]; then
-	    updating 'CPAN modules'
-	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
-
-	    if [[ -f `command -v cpanm` ]]; then
-		echo "$cpan_todo" | sudo cpanm
-	    else
-		echo "$cpan_todo" | xargs sudo cpan -i
-	    fi
-	    cleaning 'CPAN directories'
-	    sudo cpanclean;
-	fi
-    else
-	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
-    fi
-fi
-
-if [[ -z $npm_all_flag ]]; then
-    checking 'npm nodejs packages (global)'
-    # Means I miss out on the cool coloring in the output
-    npm_todo=$(npm outdated --global)
-    if [[ -n $npm_todo ]]; then
-	echo "$npm_todo"
-	if [[ -z $npm_flag ]]; then
-	    updating 'npm nodejs packages (global)'
-	    # skip column headers, pass package names to npm install since
-	    # global implies caret semver https://github.com/npm/cli/issues/746
-	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | xargs npm install --global
-	fi
-    else
-	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
-    fi
-fi
-
 # Uses sudo
 if [[ -z $ruby_all_flag ]]; then
     if [[ -z $gem_flag ]]; then
@@ -231,6 +214,23 @@ if [[ -z $ruby_all_flag ]]; then
 	fi
     else
 	echo -e "${Color_Green}ruby gems already up-to-date!${Color_zOff}"
+    fi
+fi
+
+if [[ -z $npm_all_flag ]]; then
+    checking 'npm nodejs packages (global)'
+    # Means I miss out on the cool coloring in the output
+    npm_todo=$(npm outdated --global)
+    if [[ -n $npm_todo ]]; then
+	echo "$npm_todo"
+	if [[ -z $npm_flag ]]; then
+	    updating 'npm nodejs packages (global)'
+	    # skip column headers, pass package names to npm install since
+	    # global implies caret semver https://github.com/npm/cli/issues/746
+	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | xargs npm install --global
+	fi
+    else
+	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
     fi
 fi
 
