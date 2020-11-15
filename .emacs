@@ -2614,8 +2614,8 @@ This checks in turn:
 ;; (key-chord-define-global "9i" "(")
 ;; (key-chord-define-global "-p" "_") ;; Gets annoying since works both ways
 
-(key-chord-define-global "<<" 'smart-shift-left)
-(key-chord-define-global ">>" 'smart-shift-right)
+;; (key-chord-define-global "<<" 'smart-shift-left)
+;; (key-chord-define-global ">>" 'smart-shift-right)
 
 ;; ;;;;;;;;;;;;;; ############ FIXME TODO ;;;;;;;;;;;;;; ############
 ;; ;;; http://blogs.fluidinfo.com/terry/2011/11/10/emacs-buffer-mode-histogram/
