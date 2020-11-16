@@ -14,7 +14,7 @@ export LC_ALL=C
 # export LC_ALL=en_US.UTF-8
 
 # Colors ----------------------------------------------------------
-export TERM=xterm-color
+export TERM=xterm-256color
 # Change for different colors, to magenta
 #  export GREP_OPTIONS='--color=auto' GREP_COLOR='0;35'
 alias grep='grep --color=auto '
