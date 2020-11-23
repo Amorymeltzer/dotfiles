@@ -149,8 +149,9 @@ if [[ -z $cpan_all_flag ]]; then
 	    else
 		echo "$cpan_todo" | xargs sudo cpan -i
 	    fi
-	    cleaning 'CPAN directories'
-	    sudo cpanclean;
+	    # Unnecessary with cpanm
+	    # cleaning 'CPAN directories'
+	    # sudo cpanclean;
 	fi
     else
 	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
