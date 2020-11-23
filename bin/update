@@ -134,6 +134,27 @@ if [[ -z $macports_all_flag ]]; then
     fi
 fi
 
+# Uses sudo
+if [[ -z $ruby_all_flag ]]; then
+    if [[ -z $gem_flag ]]; then
+	updating 'gem ruby manager'
+	sudo gem update --system
+    fi
+    checking 'ruby gems'
+    ruby_todo=$(gem outdated)
+    if [[ -n $ruby_todo ]]; then
+	echo "$ruby_todo"
+	if [[ -z $ruby_flag ]]; then
+	    updating 'ruby gems'
+	    sudo gem update
+	    cleaning 'ruby gems'
+	    sudo gem cleanup;
+	fi
+    else
+	echo -e "${Color_Green}ruby gems already up-to-date!${Color_zOff}"
+    fi
+fi
+
 # Uses sudo; requires cpan-outdated https://metacpan.org/pod/cpan-outdated
 if [[ -z $cpan_all_flag ]]; then
     checking 'CPAN modules'
@@ -194,27 +215,6 @@ if [[ -z $homebrew_all_flag ]]; then
 	else
 	    echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
 	fi
-    fi
-fi
-
-# Uses sudo
-if [[ -z $ruby_all_flag ]]; then
-    if [[ -z $gem_flag ]]; then
-	updating 'gem ruby manager'
-	sudo gem update --system
-    fi
-    checking 'ruby gems'
-    ruby_todo=$(gem outdated)
-    if [[ -n $ruby_todo ]]; then
-	echo "$ruby_todo"
-	if [[ -z $ruby_flag ]]; then
-	    updating 'ruby gems'
-	    sudo gem update
-	    cleaning 'ruby gems'
-	    sudo gem cleanup;
-	fi
-    else
-	echo -e "${Color_Green}ruby gems already up-to-date!${Color_zOff}"
     fi
 fi
 
