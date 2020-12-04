@@ -105,7 +105,7 @@ if [[ -z $macports_all_flag ]]; then
 	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [[ -z $macports_flag ]]; then
 	    updating 'Macports'
-	    sudo port upgrade outdated
+	    sudo port -p upgrade outdated
 	    cleaning 'Macports'
 	    sudo port uninstall inactive;
 	    if [[ -n $(port echo leaves) ]]; then
