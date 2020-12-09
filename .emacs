@@ -308,6 +308,9 @@ Record that in `paradox--backups', but do nothing if
 (require 'js2-imenu-extras)
 (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
 (js2-imenu-extras-setup)
+;; I *like having it, but it's annoying that it's sorted first
+(setq js2-imenu-show-other-functions nil)
+
 
 
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
@@ -2332,8 +2335,16 @@ This checks in turn:
 ;; Jump to a definition in the current file (holy shit this is awesome)
 ;; Does this automatically use ido?  Others think it doesn't but I do...
 (global-set-key (kbd "C-c i") 'imenu)
-;; Always rescan buffers
-(set-default 'imenu-auto-rescan t)
+(setq-default
+ imenu-auto-rescan t ; Always rescan buffers
+ imenu-auto-rescan-maxout 90000 ; Only if they're under 90k
+ imenu-sort-function 'imenu--sort-by-name
+ imenu-after-jump-hook 'recenter)
+;; There's no interactive to force rescanning?  Fine but seems weird
+(defun imenu-rescan ()
+   (interactive)
+   (imenu--menubar-select imenu--rescan-item))
+(global-set-key "\C-cI" 'imenu-rescan)
 
 ;; Face stuff
 
