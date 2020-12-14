@@ -10,9 +10,12 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-bmMekEKcCnNgrRpPLhH]
+Usage: $(basename $0) [-bBmMekEKcCnNgrRpPLhH] [-d]
+
+  -d		Debug mode: outputs timestamps for actions (WIP)
 
   -b		skip updating macports base, but 'port sync' to update tree
+  -B		skip updating macports base AND 'port sync' to update tree
   -m		check for macports updates but don't upgrade
   -M		skip all macports actions
   -e		pull homebrew and hombrew-cask changes but don't upgrade homebrew
@@ -33,9 +36,11 @@ END_HELP
 }
 
 # Parse commandline options
-while getopts 'bcCeEgkKLmMnNpPrRhH' opt; do
+while getopts 'dbBcCeEgkKLmMnNpPrRhH' opt; do
     case $opt in
-	b) base_flag='1';;
+	d) debug='1';;
+	b) port_base_flag='1';;
+	B) port_tree_flag='2';;
 	m) macports_flag='1';;
 	M) macports_all_flag='2';;
 	e) homebrew_flag='1';;
@@ -60,16 +65,26 @@ while getopts 'bcCeEgkKLmMnNpPrRhH' opt; do
     esac
 done
 
+
+# Modify output for debugging
+runFunc () {
+    if [[ -n "$debug" ]]; then
+	echo -ne "$(date -u +'%H:%M') "
+    fi
+    $1
+}
+
+
 # Efficiently colorize
 updating () {
-    echo -e "$(date -u +'%H:%M') ${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
+    runFunc "echo -e ${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 cleaning () {
-    echo -e "$(date -u +'%H:%M') ${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
+    runFunc "echo -e ${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
-# FIXME TODO
+# FIXME TODO What's the issue?
 checking () {
-    echo -e "$(date -u +'%H:%M') ${Color_Green}Checking ${Color_Magenta_Intense}$1${Color_zOff}..."
+    runFunc "echo -e ${Color_Green}Checking ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 
 
@@ -90,22 +105,26 @@ fi
 # Capture things it suggests, like port select and so on ;;;;;; ##### FIXME TODO
 # Uses sudo
 if [[ -z $macports_all_flag ]]; then
-    if [[ -z $base_flag ]]; then
-	updating 'Macports base'
-	sudo port selfupdate
-    else
-	updating 'Macports tree'
-	sudo port sync
+    if [[ -z $port_tree_flag ]]; then
+	if [[ -z $port_base_flag ]]; then
+	    updating 'Macports base'
+	    sudo port selfupdate
+	else
+	    updating 'Macports tree'
+	    sudo port sync
+	fi
     fi
     checking 'Macports'
     port_todo=$(port outdated | tail +2)
     if [[ -n $port_todo ]]; then
 	echo "$port_todo"
+	# Remove now-unnecessary version info
+	port_todo=$(cut -f 1 -d ' ' <<< "$port_todo")
 	echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
-	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
+	echo "$port_todo" | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [[ -z $macports_flag ]]; then
 	    updating 'Macports'
-	    sudo port -p upgrade outdated
+	    echo "$port_todo" | runFunc "xargs -n 1 sudo port -p upgrade"
 	    cleaning 'Macports'
 	    sudo port uninstall inactive;
 	    if [[ -n $(port echo leaves) ]]; then
@@ -146,7 +165,7 @@ if [[ -z $ruby_all_flag ]]; then
 	echo "$ruby_todo"
 	if [[ -z $ruby_flag ]]; then
 	    updating 'ruby gems'
-	    sudo gem update
+	    echo "$ruby_todo" | cut -f 1 -d ' ' | runFunc "xargs -n 1 sudo gem update"
 	    cleaning 'ruby gems'
 	    sudo gem cleanup;
 	fi
@@ -166,9 +185,9 @@ if [[ -z $cpan_all_flag ]]; then
 	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
 
 	    if [[ -f `command -v cpanm` ]]; then
-		echo "$cpan_todo" | sudo cpanm
+		echo "$cpan_todo" | runFunc "sudo cpanm"
 	    else
-		echo "$cpan_todo" | xargs sudo cpan -i
+		echo "$cpan_todo" | runFunc "xargs sudo cpan -i"
 	    fi
 	    # Unnecessary with cpanm
 	    # cleaning 'CPAN directories'
@@ -190,7 +209,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	    updating 'brews'
 	    echo "$brew_todo"
 	    # brew upgrade now handles casks, but I still prefer cu
-	    echo $brew_todo|xargs brew upgrade --formula
+	    echo $brew_todo|runFunc "xargs brew upgrade --formula"
 
 	    cleaning 'brews'
 	    brew cleanup -s
@@ -228,7 +247,7 @@ if [[ -z $npm_all_flag ]]; then
 	    updating 'npm nodejs packages (global)'
 	    # skip column headers, pass package names to npm install since
 	    # global implies caret semver https://github.com/npm/cli/issues/746
-	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | xargs npm install --global
+	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | runFunc "xargs npm install --global"
 	fi
     else
 	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
@@ -242,7 +261,7 @@ if [[ -z $python_all_flag ]]; then
 	echo "$python_todo"
 	if [[ -z $python_flag ]]; then
 	    updating 'pip python packages'
-	    pipupgrade;
+	    grep -v '^\-e' <<< "$python_todo" | cut -d ' ' -f 1 | tail +3 | runFunc "xargs pip install --upgrade --user"
 	fi
     else
 	echo -e "${Color_Green}pip python packages already up-to-date!${Color_zOff}"
@@ -253,4 +272,3 @@ if [[ -z $emacs_all_flag ]]; then
     updating 'emacs lisp packages'
     update_elisp.sh;
 fi
-
