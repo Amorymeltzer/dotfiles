@@ -9,7 +9,7 @@ Usage: $(basename $0) [-h] [new|notes|last|show|rand|log|remove|rm|delete|YYY-MM
   Without any parameters, diary will open today's entry for you; if it hasn't
   been started yet, it will create the file with, and populate it with the
   content of a "notes" file.  If you're not in the directory defined by the
-  $DIARY_DIR environment variable, it will exit.
+  "\$DIARY_DIR" environment variable, it will exit.
 
   Other options:
 
@@ -162,15 +162,16 @@ else
 			echo -n "$count "
 			if [[ $count -ge 2 ]]; then
 			    echo -n "entries"
+
+			    if [ `command -v spark` ]; then
+				echo -n " "
+				spark "${spark[@]}"
+			    fi
 			else
 			    echo -n "entry"
 			fi
-
-			if [ `command -v spark` ]; then
-			    echo -n " "
-			    spark "${spark[@]}"
-			fi
 		    done
+		    echo
 		    echo "$total total"
 		else
 		    echo "No entries found"
