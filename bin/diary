@@ -49,7 +49,7 @@ function newDay {
 	printf "## $title\n\n" > $today
 	notes=$(cat notes)
 	if [[ -n $notes ]]; then
-	    printf "### Thoughts ###\n" >> $today
+	    printf "### Thoughts\n" >> $today
 	    echo "$notes" >> $today
 	fi
 	printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
@@ -132,7 +132,7 @@ else
 		    # Used below, 1-indexing
 		    mons=(null Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
 		    for result in "${results[@]}"; do
-			result=$(cut -c 3- <<<"${result}")
+			result=$(sed -e 's/^[[:space:]]*//' <<<"${result}")
 			year="${result#*' '}"
 			count="${result%' '*}"
 			echo "$year:"
