@@ -898,7 +898,7 @@ if [[ -f `command -v brew` ]]; then
     # Homebrew-cask
     # Symlink in /Applications
     export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook"
-    alias cask='brew cask'
+    alias cask='brew --cask '
     alias call='cask outdated; cask upgrade'
     alias cinfo='brew cask info'
     alias clist='brew cask list'
