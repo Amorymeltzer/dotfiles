@@ -150,13 +150,20 @@ if [ -d "$gitdir/rebase-merge" ]; then
 	a="$done"
 	if [[ "$a" != "break" && `echo "$done" | cut -f 1 -d ' '` != "exec" ]]; then
 	    a=$(echo -n "$done" | grep "$short_sha" | cut -f 1 -d ' ')
+	    # There's a way to get better message here?  reword sha steps
+	    # instead of just reword steps, like with stopped? FIXME TODO
+	    # With break, maybe grab the last?  or next?  Or both?
+
 	    # Weirdness with merges and shit, hopefully don't get here
 	    # Could be smarter and check for stopped and amend
 	    # then output extra info if present and different
 	    if [[ -z "$a" ]]; then
+		a="stopped"
 		__git_eread "$gitdir/rebase-merge/stopped-sha" stopped
-		stopped=$(git rev-parse --short "$stopped") # Just in case
-		a="stopped at $stopped"
+		if [[ -n "$stopped" ]]; then
+		    stopped=$(git rev-parse --short "$stopped") # Just in case
+		    a="stopped at $stopped"
+		fi
 	    fi
 	fi
     fi
