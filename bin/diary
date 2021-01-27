@@ -127,6 +127,9 @@ else
 		# This should be find but whatever
 		files=$(ls -1 | grep -E "\d{4}-\d{2}-\d{2}\.md")
 		total=$(wc -l <<<"$files" | tr -d ' ')
+		# Here so the command command isn't called multiple times
+		hasSpark=`command -v spark`
+
 		if [[ $total -gt 0 ]]; then
 		    IFS=$'\n' results=($(cut -f 1 -d - <<<"$files" | sort | uniq -c))
 		    # Used below, 1-indexing
@@ -163,9 +166,11 @@ else
 			if [[ $count -ge 2 ]]; then
 			    echo -n "entries"
 
-			    if [ `command -v spark` ]; then
+			    if [[ -n "${hasSpark}" ]] && [ ${#spark[@]} -gt 1 ]; then
 				echo -n " "
 				spark "${spark[@]}"
+			    else
+				echo
 			    fi
 			else
 			    echo -n "entry"
