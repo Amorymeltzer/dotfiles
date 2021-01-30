@@ -319,7 +319,7 @@ b=${b##refs/heads/}
 # __git_ps1_branch_name=$b
 # b="\${__git_ps1_branch_name}"
 
-if [[ "$b" != "master" ]]; then
+if [[ "$b" != "master" ]] && [[ "$b" != "main" ]]; then
     if [[ "$detached" = 'yes' ]]; then
 	b=$(__wrap_color "$b" "Red")
     else
