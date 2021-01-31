@@ -67,24 +67,22 @@ done
 
 
 # Modify output for debugging
-runFunc () {
+bug () {
     if [[ -n "$debug" ]]; then
 	echo -ne "$(date -u +'%H:%M') "
     fi
-    $1
 }
-
 
 # Efficiently colorize
 updating () {
-    runFunc "echo -e ${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
+    bug && echo -e "${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 cleaning () {
-    runFunc "echo -e ${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
+    bug && echo -e "${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 # FIXME TODO What's the issue?
 checking () {
-    runFunc "echo -e ${Color_Green}Checking ${Color_Magenta_Intense}$1${Color_zOff}..."
+    bug && echo -e "${Color_Green}Checking ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 
 
@@ -124,7 +122,7 @@ if [[ -z $macports_all_flag ]]; then
 	echo "$port_todo" | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [[ -z $macports_flag ]]; then
 	    updating 'Macports'
-	    echo "$port_todo" | runFunc "xargs -n 1 sudo port -p upgrade"
+	    bug && echo "${port_todo[@]}" | xargs bash -c 'for arg; do sudo port -p upgrade "$arg"; done' _
 	    cleaning 'Macports'
 	    sudo port uninstall inactive;
 	    if [[ -n $(port echo leaves) ]]; then
@@ -165,7 +163,7 @@ if [[ -z $ruby_all_flag ]]; then
 	echo "$ruby_todo"
 	if [[ -z $ruby_flag ]]; then
 	    updating 'ruby gems'
-	    echo "$ruby_todo" | cut -f 1 -d ' ' | runFunc "xargs -n 1 sudo gem update"
+	    bug && echo "${ruby_todo[@]}" | cut -f 1 -d ' ' | xargs bash -c 'for arg; do sudo gem update "$arg"; done' _
 	    cleaning 'ruby gems'
 	    sudo gem cleanup;
 	fi
@@ -185,9 +183,9 @@ if [[ -z $cpan_all_flag ]]; then
 	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
 
 	    if [[ -f `command -v cpanm` ]]; then
-		echo "$cpan_todo" | runFunc "sudo cpanm"
+		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; done' _
 	    else
-		echo "$cpan_todo" | runFunc "xargs sudo cpan -i"
+		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpan -i "$arg"; done' _
 	    fi
 	    # Unnecessary with cpanm
 	    # cleaning 'CPAN directories'
@@ -209,7 +207,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	    updating 'brews'
 	    echo "$brew_todo"
 	    # brew upgrade now handles casks, but I still prefer cu
-	    echo $brew_todo|runFunc "xargs brew upgrade --formula"
+	    bug && echo "${brew_todo[@]}" | xargs bash -c 'for arg; do brew upgrade --formula "$arg"; done' _
 
 	    cleaning 'brews'
 	    brew cleanup -s
@@ -247,7 +245,7 @@ if [[ -z $npm_all_flag ]]; then
 	    updating 'npm nodejs packages (global)'
 	    # skip column headers, pass package names to npm install since
 	    # global implies caret semver https://github.com/npm/cli/issues/746
-	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | runFunc "xargs npm install --global"
+	    bug && echo "${npm_todo[@]}" | tail -n +2 | cut -f 1 -d ' ' | xargs bash -c 'for arg; do npm install --global "$arg"; done' _
 	fi
     else
 	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
@@ -261,7 +259,7 @@ if [[ -z $python_all_flag ]]; then
 	echo "$python_todo"
 	if [[ -z $python_flag ]]; then
 	    updating 'pip python packages'
-	    grep -v '^\-e' <<< "$python_todo" | cut -d ' ' -f 1 | tail +3 | runFunc "xargs pip install --upgrade --user"
+	    bug && grep -v '^\-e' <<< "$python_todo" | cut -d ' ' -f 1 | tail +3 | xargs bash -c 'for arg; do pip install --upgrade --user "$arg"; done' _
 	fi
     else
 	echo -e "${Color_Green}pip python packages already up-to-date!${Color_zOff}"
