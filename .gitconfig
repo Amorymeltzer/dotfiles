@@ -86,7 +86,6 @@ gog = checkout gh-pages
 god = checkout dev
 wc = whatchanged
 
-stat = status
 s = status --short --branch
 sn = status --untracked=no
 
@@ -305,6 +304,7 @@ ds = "!git diff $(git split-from)"
 dsc = "!git diff --cached $(git split-from)"
 dns = "!git diff --name-only $(git split-from)"
 dsn = dns
+stat = diff --stat
 
 # Easier difftool, but default to gui (at least until smerge/emerge makes sense...)
 # git diff-tool --tool-help for options
