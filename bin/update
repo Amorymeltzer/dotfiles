@@ -259,7 +259,7 @@ if [[ -z $python_all_flag ]]; then
 	echo "$python_todo"
 	if [[ -z $python_flag ]]; then
 	    updating 'pip python packages'
-	    bug && grep -v '^\-e' <<< "$python_todo" | cut -d ' ' -f 1 | tail +3 | xargs bash -c 'for arg; do pip install --upgrade --user "$arg"; done' _
+	    bug && grep -v '^\-e' <<< "$python_todo" | grep -v opencv-python | cut -d ' ' -f 1 | tail +3 | xargs bash -c 'for arg; do pip install --upgrade --user "$arg"; done' _
 	fi
     else
 	echo -e "${Color_Green}pip python packages already up-to-date!${Color_zOff}"
