@@ -858,6 +858,7 @@ if [[ -f `command -v port` ]]; then
     alias puo='pug'
     alias pleaves='port echo leaves'
     alias pclean='sudo port clean -v --all installed'
+    alias pcleanleaves='port echo leaves >> ~/port_leaves_log.txt && sudo port uninstall leaves'
     alias pactive='port echo active'
     alias pinactive='port echo inactive'
     alias pinfo='port info'
