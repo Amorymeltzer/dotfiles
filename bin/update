@@ -126,10 +126,11 @@ if [[ -z $macports_all_flag ]]; then
 	    cleaning 'Macports'
 	    sudo port uninstall inactive;
 	    if [[ -n $(port echo leaves) ]]; then
-		echo -e "${Color_Green}Logging leaves${Color_zOff}..."
-		port echo leaves >> ~/port_leaves_log.txt;
-		cleaning 'leaves'
-		sudo port uninstall leaves;
+		while [[ -n $(port echo leaves) ]]; do
+		    echo -e "${Color_Green}Logging and cleaning leaves${Color_zOff}..."
+		    port echo leaves >> ~/port_leaves_log.txt;
+		    sudo port uninstall leaves;
+		done
 	    else
 		echo -e "${Color_Green}No leaves to clean!${Color_zOff}"
 	    fi
