@@ -329,6 +329,8 @@ reh = reset --hard
 res = reset --soft
 rehu = reset --hard @{upstream}
 resu = reset --soft @{upstream}
+# Weird, opposite to add -p?  Can choose to stage or unstage items to undo?  Useful but confusing
+rep = reset --patch
 
 # m just too simple/easy for merge
 mg = merge
