@@ -564,3 +564,6 @@ smudge = git-lfs smudge -- %f
 path = ~/.local-gitconfig
 # user.name, user.email, github.user
 path = ~/.config/git/priv-gitconfig
+[hooks "confirm"]
+	match = TODO
+	match = FIXME
