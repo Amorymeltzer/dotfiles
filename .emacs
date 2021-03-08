@@ -1977,7 +1977,7 @@ in the buffer." t)
 (autoload 'eprime-mode "eprime-mode" "Check text conforms to E', disallowing forms of \"to be\".")
 
 ;; JUST USE WEBJUMP!!!!
-(global-set-key (kbd "C-x g") 'webjump)
+(global-set-key (kbd "C-x j") 'webjump)
 ;; Add some missing items to the webjump catalog ;;;;; #### FIXME TODO
 (eval-after-load "webjump" '(progn
 			      (add-to-list 'webjump-sites
