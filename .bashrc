@@ -894,7 +894,7 @@ if [[ -f `command -v brew` ]]; then
     alias bdoctor='brew doctor'
 
     function homebrew-deps() {
-	brew list | while read cask; do echo -en "${Color_Blue_Bold}$cask ->${Color_zOff}"; brew deps $cask | awk '{printf(" %s ", $0)}'; echo ""; done
+	brew list --formula | while read cask; do echo -en "${Color_Blue_Bold}$cask ->${Color_zOff}"; brew deps $cask | awk '{printf(" %s ", $0)}'; echo ""; done
     }
 
     # Homebrew-cask
