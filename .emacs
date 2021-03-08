@@ -2380,65 +2380,15 @@ This checks in turn:
 (setq find-file-wildcards t)
 
 
-;;;;;;;;;;;;;;;;;;;; FLYSPELL ;;;;;;;;;;;;;;;;;;;;
-;; ;;; Settings for Flyspell  (Spell checker.)
+;; Spell checking
+(require 'flyspell)
+(setq flyspell-highlight-properties t
+      flyspell-issue-welcome-flag nil)
 
-
-;; (require 'flyspell)
-
-;; (defun turn-on-flyspell-mode () (flyspell-mode 1))
-;; (defun turn-off-flyspell-mode () (flyspell-mode 0))
-;; (setq flyspell-highlight-properties t
-;;       flyspell-multi-language-p nil
-;;       flyspell-issue-welcome-flag nil)
-
-;; (defun turn-on-flyspell-prog-mode () (interactive)
-;;   (if (fboundp 'flyspell-prog-mode)
-;;       (flyspell-prog-mode)
-;;     (setq p-flyspell-restricted-checking t)
-;;     (flyspell-mode 1)))
-
-;; (when (and (>= emacs-major-version 20) window-system)
-;;   (add-hook 'mail-send-hook 'turn-off-flyspell-mode)
-;;   (add-hook 'text-mode-hook 'turn-on-flyspell-mode)
-;;   (add-hook 'tex-mode-hook 'turn-on-flyspell-mode t)
-;;   (add-hook 'mail-setup-hook 'turn-on-flyspell-mode)
-;;   (add-hook 'fundamenal-mode-hook 'turn-on-flyspell-mode t)
-;;   (add-hook 'log-mode-hook 'turn-on-flyspell-mode t)
-;;   (add-hook 'math-edit-mode-hook 'turn-on-flyspell-prog-mode t)
-;;   (add-hook 'verilog-mode-hook 'turn-on-flyspell-prog-mode t)
-;;   (add-hook 'perl-mode-hook 'turn-on-flyspell-prog-mode t)
-;;   (add-hook 'tcl-mode-hook 'turn-on-flyspell-prog-mode t)
-;;   (add-hook 'c-mode-hook 'turn-on-flyspell-prog-mode t)
-;;   (add-hook 'postscript-mode-hook 'turn-on-flyspell-prog-mode t)
-;;   (add-hook 'c++-mode-hook 'turn-on-flyspell-prog-mode t)
-;;   (add-hook 'sh-mode-hook 'turn-on-flyspell-prog-mode t)
-;;   (add-hook 'emacs-lisp-mode-hook 'turn-on-flyspell-prog-mode t))
-
-
-;; (defvar p-flyspell-restricted-checking nil
-;;   "If not nil, flyspell only checks spelling in comments and strings.")
-;; (make-variable-buffer-local 'p-flyspell-restricted-checking)
-
-;; (defadvice flyspell-get-word
-;;   (after checkable first activate)
-;;   "Return nil instead of word if checking restricted and not in comment or string.
-
-;; Spell check is restricted if p-flyspell-restricted-checking non-nil.
-;; Word considered to be in comment or string if face property is set
-;; to font-lock-comment-face or font-lock-string-face."
-;;   (setq ad-return-value
-;;         (if (and p-flyspell-restricted-checking
-;;                  ad-return-value
-;;                  (not (member (get-text-property (car (cdr ad-return-value))
-;;                                                  `face)
-;;                               (list 'font-lock-comment-face
-;;                                     'font-lock-string-face))))
-;;             nil
-;;           ad-return-value)))
-
-;; (if (fboundp 'flyspell-prog-mode)
-;;   (ad-deactivate 'flyspell-get-word))
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'markdown-mode-hook 'flyspell-mode)
+(add-hook 'fundamental-mode-hook 'flyspell-mode)
 
 
 ;; FUCKS SHIT UP ;;;;;;; #########
@@ -2775,6 +2725,7 @@ This checks in turn:
 (require 'diminish)
 (diminish 'auto-complete-mode "ac")
 (diminish 'flymake-mode "Fly")
+(diminish 'flyspell-mode "sp")
 (eval-after-load "emmet-mode" '(diminish 'emmet-mode "Emm"))
 (diminish 'isearch-mode)
 (diminish 'abbrev-mode "Abv")
@@ -3048,7 +2999,6 @@ instead."
 ;; window-number or numbering????
 ;; applescript-mode or apples?
 ;; Use plur???
-;; flyspell stuff?  Turn on?  Add?  Imrpve
 ;; Try out flx-ido, see if better
 ;; Try replacements for hl-line+ https://www.emacswiki.org/emacs/HighlightCurrentLine
 ;; shut-up, maybe for scripts?? https://github.com/cask/shut-up
