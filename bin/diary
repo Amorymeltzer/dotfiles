@@ -46,13 +46,13 @@ today=$(date +"%Y-%m-%d").md
 function newDay {
     if [[ ! -f $today ]]; then
 	title=$(date +"%A, %B %d, %Y")
-	printf "## $title\n\n" > $today
+	printf "# $title\n\n" > $today
 	notes=$(cat notes)
 	if [[ -n $notes ]]; then
-	    printf "### Thoughts\n" >> $today
-	    echo "$notes" >> $today
+	    printf "## Thoughts\n" >> $today
+	    printf "$notes\n" >> $today
 	fi
-	printf "### Morning\n\n\n### Afternoon\n\n\n### Evening\n" >> $today
+	printf "## Morning\n\n\n## Afternoon\n\n\n## Evening\n" >> $today
     fi
 }
 
