@@ -19,37 +19,14 @@
   (forward-line -1)
   (indent-according-to-mode))
 
-(global-set-key (kbd "M-p") 'move-line-up)
-(global-set-key (kbd "M-n") 'move-line-down)
-
-;; FIXME TODO Use my C-q key map
-;; (define-key my-map (kbd "<up>") 'my-move-line-up)
-;; (define-key my-map (kbd "<down>") 'my-move-line-down)
-
-;; ;;;;;;; ######### FIXME TODO
-;; (global-set-key (kbd "M-<up>") 'move-line-up)
-;; (global-set-key (kbd "M-<down>") 'move-line-down)
-;; (global-set-key (kbd "C-c M-O B") 'move-line-down)
-
-;; (global-set-key [(meta shift up)]  'move-line-up)
-;; (global-set-key [(ESC-<down>)]  'move-line-down)
-;; (global-set-key [(control c) (down)]  'move-line-down)
-;; (global-set-key (kbd "C-c M-O B") 'move-line-down)
-
 ;; Swap/flip/flop/transpose buffers easily
 (require 'transpose-frame)
-(require 'buffer-move)
-(global-set-key [(control c) (up)] 'buf-move-up)
-(global-set-key [(control c) (down)] 'buf-move-down)
-(global-set-key [(control c) (left)] 'buf-move-left)
-(global-set-key [(control c) (right)] 'buf-move-right)
-
 ;; Transpose stuff with M-t
 (global-unset-key (kbd "M-t")) ;; which used to be transpose-words
 (global-set-key (kbd "M-t l") 'transpose-lines)
 (global-set-key (kbd "M-t w") 'transpose-words)
 (global-set-key (kbd "M-t s") 'transpose-sexps)
-;; (global-set-key (kbd "M-t p") 'transpose-params)
+(global-set-key (kbd "M-t p") 'transpose-paragraphs)
 
 ;; Copy to kill ring, exists mainly for the below
 ;; Can use whole-line-or-region-kill-ring-save for interactive
@@ -198,6 +175,8 @@ linum-relative and linum" t)
 ;; (global-set-key (kbd "C-x w") 'what-line)
 (global-set-key (kbd "M-g c") 'move-to-column)
 
+;; Move buffers around https://github.com/lukhas/buffer-move
+(require 'buffer-move)
 ;; Other M-g mapping stuff
 (global-set-key (kbd "M-g j") 'buf-move-left)
 (global-set-key (kbd "M-g k") 'buf-move-down)

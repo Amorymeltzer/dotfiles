@@ -1515,6 +1515,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq minibuffer-depth-indicate-mode t)
 
 ;; Remap C-t to C-x prefix
+;; Maybe make a C-t map, put in transpose-frame stuff from manipulate M-t? FIXME TODO
 ;; (bind "C-t" (lookup-key global-map (kbd "C-x")))
 
 ;; Ctrl-q map.  I'll never use quoted-insert, so I might as well make this
@@ -1532,6 +1533,9 @@ when in source code modes such as python-mode or perl-mode" t)
 (define-key my/ctrl-q-map (kbd ".") 'highlight-symbol-at-point)
 (define-key my/ctrl-q-map (kbd "?") 'highlight-symbol-remove-all)
 (define-key my/ctrl-q-map (kbd "/") 'highlight-symbol-remove-all)
+;; Currently defined in amory-manipulate.el
+(define-key my/ctrl-q-map (kbd "<up>") 'move-line-up)
+(define-key my/ctrl-q-map (kbd "<down>") 'move-line-down)
 
 
 ;; https://github.com/nflath/hungry-delete
