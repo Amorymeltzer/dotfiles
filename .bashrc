@@ -574,7 +574,7 @@ fi
 # emacs daemon/emacsclient
 alias emd='\emacs --daemon '
 # Get server status
-function eserver() {
+function eserver-status() {
     if [[ `ps -Af | grep "emacs --daemon"` ]]; then
 	echo "Emacs server running"
     else
