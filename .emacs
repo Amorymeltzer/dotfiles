@@ -295,8 +295,10 @@ Record that in `paradox--backups', but do nothing if
 (add-to-list 'interpreter-mode-alist
 	     '(("node" . js2-mode)
 	       ("nodejs" . js2-mode)))
-;; js2-jump-to-definition takes this over, annoying
+;; js2-jump-to-definition takes this over, annoying given everyone else respects it
 (define-key js2-mode-map (kbd "M-.") 'end-of-buffer)
+;; Okay weird but maybe?  Lots of clobbering elsewhere...
+(define-key js2-mode-map (kbd "C-c 2") 'js2-jump-to-definition)
 
 ;; Add globals for Twinkle development, temporary until I get flycheck up and running
 (add-hook 'js2-mode-hook
@@ -311,12 +313,10 @@ Record that in `paradox--backups', but do nothing if
 ;; I *like having it, but it's annoying that it's sorted first
 (setq js2-imenu-show-other-functions nil)
 
-
-
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
 ;; Requires yasnippet and multiple-cursors
 ;; https://github.com/magnars/multiple-cursors.el
-;; Should probably learn to use, seems useful
+;; Should probably learn more of these https://github.com/magnars/js2-refactor.el#refactorings
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 (setq js2r-prefered-quote-type 2)	; single, not double
@@ -333,6 +333,7 @@ Record that in `paradox--backups', but do nothing if
 (add-hook 'js2-mode-hook  'emmet-mode)
 (add-hook 'html-mode-hook  'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode)
+
 
 ;; mhtml-mode probably better (default since 26), but some bug (maybe with
 ;; fic-mode?) makes it wig out. Regex taken from auto-mode-alist itself
