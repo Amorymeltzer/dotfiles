@@ -310,7 +310,7 @@ Record that in `paradox--backups', but do nothing if
 (require 'js2-imenu-extras)
 (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
 (js2-imenu-extras-setup)
-;; I *like having it, but it's annoying that it's sorted first
+;; I *like* having them, but it's annoying that they're sorted first
 (setq js2-imenu-show-other-functions nil)
 
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
@@ -320,17 +320,15 @@ Record that in `paradox--backups', but do nothing if
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 (setq js2r-prefered-quote-type 2)	; single, not double
-;; (js2r-add-keybindings-with-prefix "C-c C-m")
 (js2r-add-keybindings-with-prefix "C-c m")
 ;; js2-refactor does not work in a buffer that has Javascript parse
-;; errors. This tells js2-mode to treat hashbangs as comments, preventing them
-;; from causing parse errors
+;; errors. This tells js2-mode to treat octothorpes and hashbangs as comments,
+;; preventing them from causing parse errors
 ;; (setq js2-skip-preprocessor-directives t)
 
 ;; emmet-mode expansions, super cool if I ever remember (use C-j)
 ;; https://github.com/smihica/emmet-mode
 (autoload 'emmet-mode "emmet-mode")
-(add-hook 'js2-mode-hook  'emmet-mode)
 (add-hook 'html-mode-hook  'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode)
 
