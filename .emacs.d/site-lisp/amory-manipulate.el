@@ -271,32 +271,16 @@ When there's no active region, act on the buffer."
 (window-numbering-mode t)
 
 ;; Easily switch to specific window using numbers (if >2)
-;; https://github.com/dimitri/switch-window
-;; (require 'switch-window)
-;; (global-set-key (kbd "C-x C-o") 'switch-window)
-;; Use ace-window instead
 ;; https://github.com/abo-abo/ace-window
 ;; (require 'ace-window)
 (autoload 'ace-window "ace-window" "Quickly switch windows" t)
-(global-set-key (kbd "C-x C-o") 'ace-window)
+(global-set-key (kbd "C-x o") 'ace-window)
 (eval-after-load 'ace-window
   '(progn
      (set-face-attribute 'aw-leading-char-face nil
 		    :foreground "deep sky blue"
 		    :weight 'bold
 		    :height 3.0)))
-
-;; FIXME TODO;;;;;;;;;; ##########
-;; What's broken???
-;; Function for moving through the windows backwards
-(defun other-window-backward ()
-  "Like other window, but go backwards."
-  (interactive)
-  (other-window -1))
-(global-set-key (kbd "C-c o") 'other-window-backward)
-
-;; (global-set-key (kbd "M-<up>") 'other-window-backward)
-;; (global-set-key (kbd "M-<down>") 'other-window)
 
 ;; Control other windows easier
 (global-set-key (kbd "C-M-t") 'scroll-other-window-down)
