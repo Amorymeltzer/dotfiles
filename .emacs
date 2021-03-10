@@ -50,9 +50,10 @@
 ;; Prefer newer files even if not .elc
 (setq load-prefer-newer t)
 
-;; Customizations from emacs gui
+;; Customizations from within emacs interface
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package
