@@ -495,7 +495,7 @@ Record that in `paradox--backups', but do nothing if
 
 
 ;; Make life easier, in all lisps
-(define-key lisp-mode-shared-map (kbd "C-x e") 'eval-buffer)
+(define-key lisp-mode-shared-map (kbd "C-x e") 'eval-region)
 (define-key lisp-mode-shared-map (kbd "C-x C-e") 'eval-buffer)
 
 
