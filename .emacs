@@ -1337,7 +1337,7 @@ current buffer" t)
 ;; (global-set-key (kbd "C-x #") 'comment-or-uncomment-region)
 
 ;; Autowrap comments but only comments (longlines-mode for all)
-(setq-default fill-column 78 ; Default is 70
+(setq-default fill-column 80 ; Default is 70
 	      comment-auto-fill-only-comments t)
 (add-hook 'prog-mode-hook 'auto-fill-mode)
 ;; https://github.com/alpaker/Fill-Column-Indicator
