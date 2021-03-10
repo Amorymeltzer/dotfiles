@@ -513,13 +513,14 @@ Record that in `paradox--backups', but do nothing if
 (setq backup-directory-alist
       `(("." . ,(expand-file-name "backups" user-emacs-directory))))
 ;; Save every on inputs and idle
-(setq auto-save-interval 300) ; default 100
-(setq auto-save-timeout 90) ; default 30
-;; Versions
-(setq delete-old-versions t
+(setq auto-save-interval 300 ; default 100
+      auto-save-timeout 90   ; default 30
+      auto-save-default t
+      ;; Versions
+      delete-old-versions t
       backup-by-copying t
       kept-new-versions 20 ; 6
-      kept-old-versions 3
+      kept-old-versions 4  ;2
       version-control t)
 
 ;; Allow diff/ediff with specific backup files
