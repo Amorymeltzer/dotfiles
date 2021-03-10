@@ -1568,8 +1568,8 @@ when in source code modes such as python-mode or perl-mode" t)
 (require 'undo-tree)
 (global-undo-tree-mode)
 ;; Larger size limits for undo
-(setq undo-outer-limit 18000000 ;; 12000000
-      undo-limit 100000)	;; 80000
+(setq undo-limit 32000000	 ;; 160000
+      undo-outer-limit 24000000) ;; 24000000
 
 ;; Way more likely to remember
 (defalias 'uppercase-region 'upcase-region)
