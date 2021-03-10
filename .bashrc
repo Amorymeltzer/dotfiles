@@ -893,8 +893,13 @@ if [[ -f `command -v brew` ]]; then
     alias blist='brew list'
     alias bdoctor='brew doctor'
 
+    # This could just be `brew deps --installed --formula` and would be *much* faster,
+    # but the blue coloring is nice?  Maybe stupid
     function homebrew-deps() {
-	brew list --formula | while read cask; do echo -en "${Color_Blue_Bold}$cask ->${Color_zOff}"; brew deps $cask | awk '{printf(" %s ", $0)}'; echo ""; done
+	brew list --formula | while read formula; do echo -en "${Color_Blue_Bold}$formula ->${Color_zOff}"; brew deps --formula --installed $formula | awk '{printf(" %s ", $0)}'; echo ""; done
+    }
+    function homebrew-dependents() {
+	brew list --formula | while read formula; do echo -en "${Color_Blue_Bold}$formula ->${Color_zOff}"; brew uses --formula --installed $formula | awk '{printf(" %s ", $0)}'; echo ""; done
     }
 
     # Homebrew-cask
