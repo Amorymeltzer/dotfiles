@@ -499,14 +499,27 @@ Record that in `paradox--backups', but do nothing if
 (define-key lisp-mode-shared-map (kbd "C-x C-e") 'eval-buffer)
 
 
-;; Use buffer name as frame title, only works in window-system
+;; Use buffer name as window title for window-system
 ;; (setq frame-title-format "%b - emacs")
 ;; (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 ;; (let ((name (assq 'name default-frame-alist)))
 ;;   (when (consp name)
 ;;     (setcdr name ())))
-
 ;; (modify-frame-parameters (selected-frame) '((name)))
+
+;; Send buffer name to xterm directly to rename tabs, from:
+;; https://www.emacswiki.org/emacs/FrameTitle#h5o-6
+;; Behaves somewhat badly when multiple emacsclient instances are in use
+(defun xterm-title-update ()
+  (interactive)
+  ;; xterm escape sequences: https://tldp.org/HOWTO/Xterm-Title-3.html
+  ;; 0: icon name and window title, 1 icon name, 2 window title
+  (send-string-to-terminal (concat "\033]1; " (buffer-name) "\007"))
+  (if buffer-file-name
+      (send-string-to-terminal (concat "\033]2; " (buffer-file-name) "\007"))
+    (send-string-to-terminal (concat "\033]2; " (buffer-name) "\007"))))
+(add-hook 'post-command-hook 'xterm-title-update)
+
 
 ;; create a backup file directory
 ;; ` rather than ' needed to selectively evaluate item marked by ,
