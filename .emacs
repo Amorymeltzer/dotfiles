@@ -621,7 +621,7 @@ backups." t)
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
 ;; Edit git commit messages in markdown, since mostly for github
-;; Probably want to remove/change this once installing magit
+;; Off since magit
 ;; (add-to-list 'auto-mode-alist
 ;;	     '("/\\.git/COMMIT_EDITMSG\\'" . markdown-mode))
 ;; (add-to-list 'auto-mode-alist
@@ -1476,7 +1476,11 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq vc-handled-backends nil) ;; delete all backends
 
 ;; Magit stuff
-(add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
+;; Make magit use delta, if present https://github.com/dandavison/magit-delta
+;; https://github.com/dandavison/delta
+;; Seemingly unnecessary if delta is your default pager
+(if (executable-find "delta")
+    (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
 
 ;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
