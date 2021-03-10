@@ -479,8 +479,10 @@ trap _exit EXIT
 ## Sourcin'
 ## Throw all potential sources into an array, check, then source
 # Some personal/private stuff, used in various places bash and lisp
+# Consider loading in .bash_profile, with GIT_PERS_DIR and PERL_PERS_DIR??
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
+# DIARY_DIR, TWITTER_USERNAME, GITHUB_USERNAME
 sources=("$HOME/.config/bash/priv-env.sh")
 # Homebrew completion directory, here before macports since I generally use
 # the latter.  Confident glob probably fine given the -f -r checks below.
@@ -593,7 +595,7 @@ function recompile_emacs() {
 }
 alias ii=recompile_emacs
 
-alias e="$VISUAL "
+alias m='emacs --eval "(progn (magit-status) (delete-other-windows))"'
 # Make customization easier
 alias bashrc='$VISUAL ~/.bashrc'
 alias rc='$VISUAL ~/.bashrc'
@@ -628,7 +630,6 @@ alias .....='cd ../../../..'
 alias ~="cd ~"
 alias -- --='cd -'		# go back a directory, -- means end of options
 alias -- -='cd -'
-alias b='cd -'
 
 # Shortcuts
 alias bin="cd ~/bin"
@@ -650,10 +651,7 @@ alias dws="cd $PERL_PERS_DIR/wiki/sysopIndex"
 alias dwu="cd $PERL_PERS_DIR/wiki/userScripts"
 alias drk="cd ~/Documents/R/kinship/"
 alias eds="cd ~/.emacs.d/site-lisp/"
-alias m='more'
-#alias c='cat'
-alias j="jobs"
-alias h='history 15'
+alias e="$VISUAL "
 alias hig='history | grep -i'
 alias cl='clear'
 alias cls='clear'
