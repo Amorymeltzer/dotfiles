@@ -1,3 +1,4 @@
+;;; .emacs -*- lexical-binding: t; -*-
 ;;;;;;;;; BEGIN
 ;; (setq emacs-load-start-time (current-time))
 
