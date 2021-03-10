@@ -150,6 +150,11 @@ Record that in `paradox--backups', but do nothing if
 ;; Indent if possible but complete otherwise
 (setq-default tab-always-indent 'complete)
 
+;; Resize windows when splitting; annoying if want certain size, but let's be
+;; honest, I usually want some balance.  Besides, on a small screen, it's not
+;; a big difference, and on a big screen, it doesn't matter!
+(setq-default window-combination-resize t)
+
 ;; Auto complete
 ;; http://cx4a.org/software/auto-complete/manual.html#Configuration
 (require 'auto-complete-config)
@@ -1662,6 +1667,7 @@ when in source code modes such as python-mode or perl-mode" t)
 				window nil)) (window-list)))))
     (select-window (car window-of-buffer))))
 
+;; Clobbered in js2, but not using anyway FIXME TODO
 (global-set-key (kbd "C-c C-o") 'jump-to-window)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
