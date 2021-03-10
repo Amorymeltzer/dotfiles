@@ -879,8 +879,10 @@ current buffer" t)
 (display-time-mode t)
 
 ;; Battery percentage
-(display-battery-mode t)
-(setq battery-update-interval 180) ;; Default 60s
+(when (not (equal "Battery status not available"
+		  (battery)))
+  (display-battery-mode t)
+  (setq battery-update-interval 180)) ;; Default 60s
 
 ;; Show column-number, size in the mode line
 (column-number-mode 1) ; performance hit?
