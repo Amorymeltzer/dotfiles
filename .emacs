@@ -1992,17 +1992,14 @@ idle for SECS seconds." t)
     (format-time-string format time)))
 
 
-(defvar open-dictionary-hist)
-(defun open-dictionary (the-word)
-  "Open Dictionary.app for the-word"
-  (interactive (list
-		(let* ((wap (word-at-point))
-		       (w (read-from-minibuffer
-			   (format "Dictionary Lookup (%s): " wap)
-			   nil nil nil 'open-dictionary-hist)))
-		  (if (zerop (length w)) wap w))))
-  (start-process "dict" nil "open" (concat "dict:///" the-word)))
-
+;; define-word https://github.com/abo-abo/define-word
+;; uses https://wordnik.com/ by default, but can customize
+;; define-word-default-service to openthesaurus, webster, or offline-wiktionary
+;; (if I download something); define-it uses https://www.collinsdictionary.com/
+;; lexic also neat, although sdcv... https://github.com/tecosaur/lexic
+;; Prefer define-wap over define-word
+(defalias 'lookup-word 'define-word-at-point)
+(global-set-key (kbd "C-c d") 'define-word-at-point)
 
 ;; writegood-mode https://github.com/bnbeckwith/writegood-mode
 (autoload 'writegood-mode "writegood-mode" "Colorize issues with the writing
@@ -2010,9 +2007,25 @@ in the buffer." t)
 ;; eprime-mode https://github.com/AndrewHynes/eprime-mode
 (autoload 'eprime-mode "eprime-mode" "Check text conforms to E', disallowing forms of \"to be\".")
 
+;; Google translate interface
+;; https://github.com/atykhonov/google-translate
+(autoload 'google-translate-query-translate "google-translate" "Query a text
+(a word or a phrase), and pop up a buffer named *Google Translate* displaying
+available translations of the text." t)
+(autoload 'google-translate-at-point "google-translate" "Translate the word at
+point or the words in the active region." t)
+;; Always detect, override default through C-u prefix
+(setq google-translate-default-source-language "auto"
+      google-translate-default-target-language "en"
+      google-translate-enable-ido-completion 1
+      google-translate-show-phonetic 1)
+(global-set-key "\C-ct" 'google-translate-query-translate)
+
+
 ;; JUST USE WEBJUMP!!!!
 (global-set-key (kbd "C-x j") 'webjump)
 ;; Add some missing items to the webjump catalog ;;;;; #### FIXME TODO
+;; Can this take at-point/region by default??
 (eval-after-load "webjump" '(progn
 			      (add-to-list 'webjump-sites
 					   '("Urban Dict" .  [simple-query
@@ -2044,6 +2057,9 @@ in the buffer." t)
 							"www.imdb.com/find?q="
 							"&s=all"]))))
 
+;; Should take some of these and add to webjump (devdocs, etc.)
+;; Should also rethink these prefixes: too good to use C-C? FIXME TODO
+;; Define a prefix map?
 (defun google ()
   "Google the selected region if any, display a query prompt otherwise."
   (interactive)
@@ -2127,7 +2143,7 @@ in the buffer." t)
     (url-hexify-string (if mark-active
 			   (buffer-substring (region-beginning) (region-end))
 			 (read-string "Search devdocs.io: "))))))
-(global-set-key (kbd "C-c d") 'devdocs)
+;; (global-set-key (kbd "C-c d") 'devdocs)
 
 ;; browse-url-of-buffer will render the url assigned to a buffer.  This tells
 ;; Emacs how to map a given filename to a url. Check out skewer
@@ -2149,21 +2165,6 @@ in the buffer." t)
     (rename-buffer url t)
     (cond ((search-forward "<?xml" nil t) (xml-mode))
 	  ((search-forward "<html" nil t) (html-mode)))))
-
-;; Google translate interface
-;; https://github.com/atykhonov/google-translate
-(autoload 'google-translate-query-translate "google-translate" "Query a text
-(a word or a phrase), and pop up a buffer named *Google Translate* displaying
-available translations of the text." t)
-(autoload 'google-translate-at-point "google-translate" "Translate the word at
-point or the words in the active region." t)
-;; Always detect, override default through C-u prefix
-(setq google-translate-default-source-language "auto"
-      google-translate-default-target-language "en"
-      google-translate-enable-ido-completion 1
-      google-translate-show-phonetic 1)
-(global-set-key "\C-ct" 'google-translate-query-translate)
-
 
 ;; DNA mode, mucks with keybindings
 (autoload 'dna-mode "dna-mode" "Major mode for dna" t)
