@@ -401,11 +401,13 @@ Record that in `paradox--backups', but do nothing if
 ;;Turn on automatically
 (add-hook 'find-file-hook 'flymake-find-file-hook)
 
-;; flymake-perlcritic stuff.  Requires flymake_perlcritic file, should be
-;; present in your $PATH; if not, set the flymake-perlcritic-command
+;; flymake-perlcritic stuff.  Requires flymake_perlcritic, which should be
+;; present from the MELPA installation; if not, set flymake-perlcritic-command.
+;; That in turn makes use of your installed perlcritic executable.
 ;; https://github.com/illusori/emacs-flymake-perlcritic
-(require 'flymake-perlcritic)
-(setq flymake-perlcritic-severity 2)
+(when (executable-find "perlcritic")
+      (require 'flymake-perlcritic)
+      (setq flymake-perlcritic-severity 2))
 
 ;; https://github.com/purcell/flymake-easy
 (require 'flymake-easy)
@@ -1479,7 +1481,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Make magit use delta, if present https://github.com/dandavison/magit-delta
 ;; https://github.com/dandavison/delta
 ;; Seemingly unnecessary if delta is your default pager
-(if (executable-find "delta")
+(when (executable-find "delta")
     (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
 
 ;; Useful for git related work, although maybe try find-file-in-repo
