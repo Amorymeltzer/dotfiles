@@ -192,8 +192,9 @@ Record that in `paradox--backups', but do nothing if
 ;; https://github.com/joaotavora/yasnippet and
 ;; https://github.com/AndreaCrotti/yasnippet-snippets
 (require 'yasnippet)
-(setq yas-wrap-around-region t)		; Set region to $0
-(setq yas-verbosity 2)			; Fewer messages on startup
+(setq yas-wrap-around-region t		; Set region to $0
+      yas-verbosity 2			; Fewer messages on startup
+      yas-triggers-in-field t)		; Allow nested expansions
 (define-key yas-minor-mode-map (kbd "C-c C-i") 'yas-insert-snippet) ; C-c tab
 (yas-reload-all)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
