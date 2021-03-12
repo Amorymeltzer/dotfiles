@@ -2422,7 +2422,10 @@ This checks in turn:
       ;; See also:
       ;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
       ;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
-      ispell-personal-dictionary ".aspell.en.pws")
+      ispell-personal-dictionary ".aspell.en.pws"
+      ;; --camel-case is neat, but since I'm using flyspell-prog-mode - only
+      ;; strings and comments - it's unlikely to be necessary
+      ispell-extra-args '("--sug-mode=ultra"))
 
 ;; Flyspell spell checking
 ;; Lots of ispell process instances being started then killed, especially
