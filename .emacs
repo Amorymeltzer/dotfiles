@@ -2415,7 +2415,18 @@ This checks in turn:
 (setq find-file-wildcards t)
 
 
-;; Spell checking
+;; Custom SCOWL dictionary: size 70, variants 2, diacritics both
+;; http://app.aspell.net/create
+(setq ispell-dictionary "en-custom"
+      ;; This should be the default for aspell, but just in case...
+      ;; See also:
+      ;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
+      ;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
+      ispell-personal-dictionary ".aspell.en.pws")
+
+;; Flyspell spell checking
+;; Lots of ispell process instances being started then killed, especially
+;; around git/magit?? FIXME TODO
 (require 'flyspell)
 (setq flyspell-highlight-properties t
       flyspell-issue-welcome-flag nil)
