@@ -2345,7 +2345,8 @@ This checks in turn:
      (setq which-key-popup-type 'side-window
 	   which-key-side-window-location 'bottom
 	   which-key-show-prefix 'top	; default echo
-	   which-key-sort-order 'which-key-key-order-alpha
+	   ;; There are a lot of these, all have merits
+	   which-key-sort-order 'which-key-local-then-key-order
 	   which-key-side-window-max-height 0.5 ; default 0.25
 	   which-key-idle-delay 0.25		 ; default 1.0
 	   which-key-prefix-prefix "=> "	 ; default +
