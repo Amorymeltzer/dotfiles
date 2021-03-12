@@ -2326,16 +2326,7 @@ This checks in turn:
 ;; Don't have ruby-mode auto-insert coding utf-8 info on files
 (setq ruby-insert-encoding-magic-comment nil)
 
-;; Pop-up with completions for prefixes, uses 'popwin
-;; https://github.com/kbkbkbkb1/guide-key
-;; (require 'guide-key)
-;; (setq guide-key/guide-key-sequence t
-;;       guide-key/idle-delay 0.5 ; quicker
-;;       guide-key/recursive-key-sequence-flag t
-;;       guide-key/popup-window-position 'bottom)
-;; (guide-key-mode 1)
-
-;; which-key also nice.  Sorting is better
+;; which-key has better sorting than guide-key
 ;; https://github.com/justbur/emacs-which-key
 (require 'which-key)
 (eval-after-load "which-key"
@@ -2344,21 +2335,23 @@ This checks in turn:
      (set-face-attribute 'which-key-separator-face nil :foreground "green")
      (set-face-attribute 'which-key-note-face nil :foreground "black")
      ;; (set-face-attribute 'which-key-special-key-face nil :foreground "red")
-     ;; color of prefx command
+     ;; color of prefix command
      (set-face-attribute 'which-key-group-description-face nil :foreground "blue" :bold nil)
-     ;; Basic keys
      (set-face-attribute 'which-key-command-description-face nil :inherit nil)
-     (setq which-key-sort-order 'which-key-key-order-alpha)
-     (setq which-key-side-window-max-height 0.5) ; default 0.25
-     ;; (setq which-key-idle-delay 0.5)		 ; default 1.0
-     (setq which-key-idle-delay 0.25)		 ; default 1.0
-     (setq which-key-prefix-prefix nil)
-     ))
+
+     ;; These first few are from the which-key-setup-side-window-bottom
+     ;; function, but here so as not to separate out/overwrite preferences
+     (which-key--setup-echo-keystrokes)
+     (setq which-key-popup-type 'side-window
+	   which-key-side-window-location 'bottom
+	   which-key-show-prefix 'top	; default echo
+	   which-key-sort-order 'which-key-key-order-alpha
+	   which-key-side-window-max-height 0.5 ; default 0.25
+	   which-key-idle-delay 0.25		 ; default 1.0
+	   which-key-prefix-prefix "=> "	 ; default +
+	   which-key-show-remaining-keys t)))
 (which-key-mode)
 (which-key-setup-side-window-bottom)
-(progn
-  (setq which-key-show-prefix 'top)
-  (setq which-key-show-remaining-keys nil))
 
 ;; Display what function block if I'm in in certain modes
 ;; (set-face-attribute 'which-func nil
