@@ -1041,19 +1041,32 @@ current buffer" t)
       history-delete-duplicates t)
 
 
+;; Allows hiding of comments
+(autoload 'hide/show-comments-toggle "hide-comnt"
+  "Toggle hiding/showing of comments in the active region or whole buffer." t)
+(defalias 'toggle-comments 'hide/show-comments-toggle)
+(global-set-key (kbd "C-x M-;") 'toggle-comments)
+
 ;; Make M-w a bit like C-w, etc.
 (require 'whole-line-or-region)
 (whole-line-or-region-global-mode 1)
 (global-set-key (kbd "M-w") 'whole-line-or-region-kill-ring-save)
-;; whole-line-or-region-comment-dwim-2 fully takes over comment-dwim, but I
-;; like the "new comment" behavior from comment-dwim, so this undoes that a
-;; bit. In practive, I think I'd prefer M-; to be wlr and C-x ; to c-d, but
-;; whatever.  comment-dwim is moderately better than comment-line, which was
-;; new in emacs 25.
+;; whole-line-or-region-comment-dwim-2 fully takes over comment-dwim, but I like
+;; the "new comment" behavior from comment-dwim, so this undoes that a bit. In
+;; practice, I think I'd prefer M-; to be wlr and C-x ; to c-d, but whatever.
+;; comment-dwim is moderately better than comment-line, which was new in Emacs
+;; 25.  I miss moving to the next line, though?? FIXME TODO
 (substitute-key-definition 'whole-line-or-region-comment-dwim-2 'comment-dwim whole-line-or-region-local-mode-map)
 (global-set-key (kbd "C-x ;") 'whole-line-or-region-comment-dwim-2)
 
+;; Related, neat
 (global-set-key (kbd "M-k") 'comment-kill)
+;; Will add a comment if no comment, could just take over M-; FIXME TODO
+(global-set-key (kbd "M-i") 'comment-indent)
+;; Previously M-i was tab-to-tab-stop, which I never used but is neat, whereas
+;; C-x i was ido-insert-file, which I *don't* need a command for
+(global-set-key (kbd "C-x i") 'tab-to-tab-stop)
+
 
 
 ;;;;;;;;;;;;;;;;;;;
@@ -1352,14 +1365,6 @@ current buffer" t)
 ;; Cleaner, more meaningful narrow-to-region
 ;; https://github.com/Bruce-Connor/fancy-narrow
 ;; (require 'fancy-narrow)
-
-;; Allows hiding of comments
-(autoload 'hide/show-comments-toggle "hide-comnt"
-  "Toggle hiding/showing of comments in the active region or whole buffer." t)
-(defalias 'toggle-comments 'hide/show-comments-toggle)
-(global-set-key (kbd "C-x M-;") 'toggle-comments)
-;; (global-set-key (kbd "C-x ;") 'comment-or-uncomment-region)
-;; (global-set-key (kbd "C-x #") 'comment-or-uncomment-region)
 
 ;; Autowrap comments but only comments (longlines-mode for all)
 (setq-default fill-column 80 ; Default is 70
