@@ -2437,6 +2437,7 @@ This checks in turn:
 ;; around git/magit?? FIXME TODO
 (require 'flyspell)
 (setq flyspell-highlight-properties t
+      flyspell-issue-message-flag nil
       flyspell-issue-welcome-flag nil)
 
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
