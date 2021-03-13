@@ -634,6 +634,11 @@ backups." t)
 ;; Also need to make interactives for bold, italics, headers, etc
 (eval-after-load "markdown-mode"
   '(progn
+     ;; Colorize code blocks
+     (setq markdown-fontify-code-blocks-natively t)
+     ;; Add js, etc.
+     (add-to-list 'markdown-code-lang-modes '("js\\|javascript" . js2-mode))
+
      ;; key bindings
      (define-key markdown-mode-map (kbd "C-M-f") 'forward-symbol)
      (define-key markdown-mode-map (kbd "C-M-b") 'editutil-backward-symbol)
