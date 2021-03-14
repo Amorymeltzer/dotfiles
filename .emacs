@@ -2340,8 +2340,8 @@ This checks in turn:
 ;; which-key has better sorting than guide-key
 ;; https://github.com/justbur/emacs-which-key
 (require 'which-key)
-(eval-after-load "which-key"
-  '(progn
+(with-eval-after-load "which-key"
+  ;; https://github.com/justbur/emacs-which-key#face-customization-options
      ;; (set-face-attribute 'which-key-key-face nil :foreground "magenta")
      (set-face-attribute 'which-key-separator-face nil :foreground "green")
      (set-face-attribute 'which-key-note-face nil :foreground "black")
@@ -2353,6 +2353,7 @@ This checks in turn:
      ;; These first few are from the which-key-setup-side-window-bottom
      ;; function, but here so as not to separate out/overwrite preferences
      (which-key--setup-echo-keystrokes)
+     ;; https://github.com/justbur/emacs-which-key#other-options
      (setq which-key-popup-type 'side-window
 	   which-key-side-window-location 'bottom
 	   which-key-show-prefix 'top	; default echo
@@ -2361,9 +2362,10 @@ This checks in turn:
 	   which-key-side-window-max-height 0.5 ; default 0.25
 	   which-key-idle-delay 0.25		 ; default 1.0
 	   which-key-prefix-prefix "=> "	 ; default +
-	   which-key-show-remaining-keys t)))
+	   which-key-show-remaining-keys t
+	   which-key-lighter nil	; Diminish not working properly...
+	   ))
 (which-key-mode)
-(which-key-setup-side-window-bottom)
 
 ;; Display what function block if I'm in in certain modes
 ;; (set-face-attribute 'which-func nil
@@ -2799,7 +2801,8 @@ This checks in turn:
 (diminish 'wrap-region-mode)
 (diminish 'anzu-mode)
 (diminish 'ace-jump-mode "Ace")
-(diminish 'which-key-mode)
+;; Only works transiently, but which-key-lighter customized above
+;; (diminish 'which-key-mode)
 ;; (diminish 'guide-key-mode)
 ;; (diminish 'fancy-narrow-mode)
 (diminish 'subword-mode)
@@ -2872,7 +2875,10 @@ instead."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Modeline shit
+;; Maybe check out moody or doom...
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; use setq-default to set it for /all/ modes
 ;; (setq mode-line-format
 ;;	      (list
