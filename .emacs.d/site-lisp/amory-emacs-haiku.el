@@ -64,7 +64,7 @@
     "Oh, why don't you are
      a lake, a stream, a meadow
      this morning, Emacs?
-         -- Oliver Scholz" ;%
+         -- Oliver Scholz"
     "The friends chat gaily,
      I stand up to join their talk.
      My `save-excursion'.
@@ -73,7 +73,7 @@
 
 ;; Function for choosing a random haiku from the above list
 (defun amory-random-emacs-haiku (&optional prefix)
-  "Select and format a random haiku from `amory-emacs-haiku'."
+  "Select and format a random haiku from `amory-emacs-haiku'.  Optional PREFIX to determine what, if any, characters to lead each line with; defaults to lisp `;; `."
   (random t)
   (let* ((prefix (or prefix ";; "))
 	 (n (random (length amory-emacs-haiku)))

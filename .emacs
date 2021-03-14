@@ -2231,22 +2231,34 @@ This checks in turn:
 	  ((setq sym (function-at-point)) (describe-function sym)))))
 (global-set-key (kbd "C-h h") 'describe-foo-at-point)
 
-
 ;; Make the scratch buffer blank
 ;; (setq initial-scratch-message "")
 ;; Use haikus instead
 (require 'amory-emacs-haiku)
 ;; Initialize *scratch* buffer with a random Emacs haiku
 (setq initial-scratch-message (amory-random-emacs-haiku))
-;; Clear out the scratch buffer... like new!
+;; Clear out the scratch buffer, initialized with whatever major mode we were
+;; just in and with any selected region
 (defun new-scratch-buffer nil
-       "Clear out the scratch buffer"
-       (interactive)
-       (switch-to-buffer (get-buffer-create "*scratch*"))
-       (delete-region (point-min) (point-max))
-       (insert (amory-random-emacs-haiku))
-       (lisp-interaction-mode))
+  "Initialize the scratch buffer with the highlighted region, setting whatever major mode was active."
+  (interactive)
+  (let* ((mode major-mode)
+	 (region (with-current-buffer (current-buffer)
+                   (if (region-active-p)
+                       (buffer-substring-no-properties
+			(region-beginning)
+			(region-end))))))
 
+    (switch-to-buffer (get-buffer-create "*scratch*"))
+    (delete-region (point-min) (point-max))
+    (funcall mode)
+    ;; Rather than muck about with buffer-local variables - not to mention
+    ;; elisp's `;` or `;;` identity crises - just comment it after the fact
+    (insert (amory-random-emacs-haiku ""))
+    (comment-region (point-min) (point-max))
+    ;; Insert region, or just advance
+    (if region (insert region))
+    (goto-char (point-max))))
 ;; All the cperl options, bad?  Need to fix ;;;;; #### FIXME TODO
 ;; Affects:
 ;; cperl-font-lock, cperl-electric-lbrace-space, cperl-electric-parens
