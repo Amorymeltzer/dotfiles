@@ -311,9 +311,10 @@ Record that in `paradox--backups', but do nothing if
 ;; Add globals for Twinkle development, temporary until I get flycheck up and running
 (add-hook 'js2-mode-hook
 	  (lambda ()
-	    (when (string-match "twinkle@azatoth" (buffer-file-name))
-	      (setq js2-additional-externs
-		    '("$" "mw" "Morebits" "Twinkle")))))
+	    (when (buffer-file-name)
+	      (when (string-match "twinkle@azatoth" (buffer-file-name))
+		(setq js2-additional-externs
+		      '("$" "mw" "Morebits" "Twinkle"))))))
 ;; Part of js2-mode package
 (require 'js2-imenu-extras)
 (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
