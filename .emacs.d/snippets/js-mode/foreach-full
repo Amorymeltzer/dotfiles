@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: foreach-full
+# key: foreach
+# --
+
+${1:array}.forEach(function(${2:currentItem}) {
+  $0
+})
