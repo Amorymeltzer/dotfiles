@@ -2421,8 +2421,7 @@ This checks in turn:
 (defalias 'elisp-mode 'emacs-lisp-mode)
 ;; Give info at point in elisp mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-;; 0.5 is too quick, 1 is too slow
-(setq eldoc-idle-delay 0.5)
+(setq eldoc-idle-delay 0.25)		;Default is 0.5
 
 
 ;; Interesting! But no
