@@ -1498,7 +1498,8 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; git-commit-style-convention-checks take overlong-summary-line if want to
 ;; ensure git commit is within guidance (git-commit-summary-max-length)
 ;; git-commit-turn-on-flyspell ???
-(setq git-commit-major-mode 'markdown-mode)
+(setq git-commit-major-mode 'markdown-mode
+      git-rebase-confirm-cancel nil)
 (setq magit-log-section-commit-count 25 ; default 10
       ;; Turn this off if/when ivy
       magit-completing-read-function 'magit-ido-completing-read
