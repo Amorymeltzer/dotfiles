@@ -1490,6 +1490,12 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq vc-handled-backends nil) ;; delete all backends
 
 ;; Magit stuff
+;; Set directories using bash environment (currently from .bash_profile)
+;; ` quotes but means , evaluates; using ' to quote puts in directly
+(setq magit-repository-directories
+      `(("~/dotfiles" . 0)
+	(,(getenv "GIT_PERS_DIR") . 1)
+	(,(getenv "PERL_PERS_DIR") . 1)))
 ;; Make magit use delta, if present https://github.com/dandavison/magit-delta
 ;; https://github.com/dandavison/delta
 ;; Seemingly unnecessary if delta is your default pager
