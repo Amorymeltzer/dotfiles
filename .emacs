@@ -1490,11 +1490,26 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Prior to magit, I turned off built-in vc handling, preferring manual git:
 ;; (delete 'Git vc-handled-backends) ;; delete git from list of backends
 ;; (setq vc-handled-backends nil) ;; delete all backends
-;; Probably don't need to turn it off if using magit, but apparently doing so
+;; Probably don't need to turn it off if using magit, and apparently doing so
 ;; can muck up magit so it won't follow symlinks?  It seems like just setting
 ;; vc-follow-symlinks does the trick?
 ;; https://github.com/magit/magit/issues/2250#issuecomment-138906601
 (setq vc-follow-symlinks t)
+;; git-commit-style-convention-checks take overlong-summary-line if want to
+;; ensure git commit is within guidance (git-commit-summary-max-length)
+;; git-commit-turn-on-flyspell ???
+(setq git-commit-major-mode 'markdown-mode)
+(setq magit-log-section-commit-count 25 ; default 10
+      ;; Turn this off if/when ivy
+      magit-completing-read-function 'magit-ido-completing-read
+      ;; Not entirely sure what this does, but seems worthwhile
+      magit-diff-refine-hunk t)
+
+;; Log stylin', just minor tweak to author length; L l/d to toggle
+;; (setq
+;;  magit-status-margin '(nil age magit-log-margin-width nil 12)  ; magit-status
+;;  magit-log-margin '(t age magit-log-margin-width t 12)	       ; magit-log
+;;  magit-log-select-margin '(t age magit-log-margin-width t 12))
 ;; Set directories using bash environment (currently from .bash_profile)
 ;; ` quotes but means , evaluates; using ' to quote puts in directly
 (setq magit-repository-directories
@@ -1525,10 +1540,6 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Seemingly unnecessary if delta is your default pager
 (when (executable-find "delta")
   (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
-;; git-commit-style-convention-checks take overlong-summary-line if want to
-;; ensure git commit is within guidance (git-commit-summary-max-length)
-;; Not entirely sure what this does, but seems worthwhile
-(setq magit-diff-refine-hunk t)
 
 ;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
