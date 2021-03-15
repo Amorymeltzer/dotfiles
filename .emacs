@@ -779,13 +779,12 @@ current buffer" t)
 
 ;; Save a list of open files in ~/.emacs.d/.emacs.desktop(.lock)
 ;; Not great with emacsclient server?
-(desktop-save-mode t)
+(desktop-save-mode 1)
 ;; Automatically unless nonexistant
 (setq desktop-save 'ask-if-new
-      desktop-restore-eager t ; Load this many buffers, rest when lazy
-      ;; desktop-restore-eager t ; Load this many buffers, rest when lazy
-      desktop-load-locked-desktop 'ask ; Just as a reminder
-      desktop-base-file-name "emacs.desktop"
+      desktop-restore-eager 0		; Load this many buffers, rest when lazy
+      desktop-load-locked-desktop 'ask	; Just as a reminder
+      desktop-base-file-name "emacs.desktop" ; Not .emacs.desktop
       ;; Don't try to save if file is locked, I'll always be quick
       desktop-not-loaded-hook (quote (desktop-save-mode-off))
       desktop-path (quote (user-emacs-directory "~"))) ; Just in case
