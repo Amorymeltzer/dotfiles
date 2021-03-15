@@ -717,9 +717,10 @@ current buffer" t)
 ;; auto-insert mode skeletons
 (eval-after-load 'autoinsert
   '(progn
+     (defvar hashbang-env "#!/usr/bin/env")
      ;; Perl
      (define-auto-insert '("\\.pl\\'" . "Perl skeleton")
-       '(nil "#!/usr/bin/env perl" \n
+       '(nil (concat hashbang-env " perl") \n
 	     "# " (file-name-base) " by " user-full-name \n
 	     "# " _ \n
 	     \n "use strict;" \n
@@ -728,17 +729,17 @@ current buffer" t)
 
      ;; shell script
      (define-auto-insert '("\\.\\(ba\\)?sh\\'" . "Bash skeleton")
-       '(nil "#!/usr/bin/env bash" \n
+       '(nil (concat hashbang-env " bash") \n
 	     "# " (file-name-base) " by " user-full-name \n
 	     "# " _ ))
 
      ;; Python
      (define-auto-insert '("\\.py\\'" . "Python skeleton")
-       '(nil "#!/usr/bin/env python" \n _ ))
+       '(nil (concat hashbang-env " python") \n _ ))
 
      ;; Ruby
      (define-auto-insert '("\\.rb\\'" . "Ruby skeleton")
-       '(nil "#!/usr/bin/env ruby" \n _ ))))
+       '(nil (concat hashbang-env " ruby") \n _ ))))
 ;;; Can also define file, ie
 ;; (setq auto-insert-directory "~/.mytemplates/") ;; Note: trailing slash important
 ;; (define-auto-insert "\.py" "my-python-template.py")
@@ -1816,11 +1817,8 @@ when in source code modes such as python-mode or perl-mode" t)
 (defadvice ansi-term (before force-bash)
   (interactive (list my-term-shell)))
 (ad-activate 'ansi-term)
-
 ;; Make links in man pages, etc., work, in ansi-mode
-(defun my-term-hook()
-  (goto-address-mode))
-(add-hook 'term-mode-hook 'my-term-hook)
+(add-hook 'term-mode-hook 'goto-address-mode)
 
 ;; Convert DOS `^M' end of lines to Unix end of lines.  See also
 ;; set-buffer-file-coding-system (C-x RET f) with unix.  Do for mac?
