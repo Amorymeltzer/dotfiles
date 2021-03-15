@@ -1485,11 +1485,16 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; I hate this
 ;; (highlight-changes-mode 1)
 
-;; Turn off (git from) built-in vc handling, prefer manual git or magit
-;; (delete 'Git vc-handled-backends) ;; delete git from list of backends
-(setq vc-handled-backends nil) ;; delete all backends
 
 ;; Magit stuff
+;; Prior to magit, I turned off built-in vc handling, preferring manual git:
+;; (delete 'Git vc-handled-backends) ;; delete git from list of backends
+;; (setq vc-handled-backends nil) ;; delete all backends
+;; Probably don't need to turn it off if using magit, but apparently doing so
+;; can muck up magit so it won't follow symlinks?  It seems like just setting
+;; vc-follow-symlinks does the trick?
+;; https://github.com/magit/magit/issues/2250#issuecomment-138906601
+(setq vc-follow-symlinks t)
 ;; Set directories using bash environment (currently from .bash_profile)
 ;; ` quotes but means , evaluates; using ' to quote puts in directly
 (setq magit-repository-directories
