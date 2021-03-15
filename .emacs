@@ -1495,7 +1495,21 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq magit-repository-directories
       `(("~/dotfiles" . 0)
 	(,(getenv "GIT_PERS_DIR") . 1)
-	(,(getenv "PERL_PERS_DIR") . 1)))
+	(,(getenv "PERL_PERS_DIR") . 1))
+      magit-repolist-columns
+      '(("Name" 20 magit-repolist-column-ident nil)
+	("B<U" 3 magit-repolist-column-unpulled-from-upstream
+	 ((:right-align t)
+	  (:help-echo "Upstream changes not in branch")))
+	("B>U" 3 magit-repolist-column-unpushed-to-upstream
+	 ((:right-align t)
+	  (:help-echo "Local changes not in upstream")))
+	("+/-" 3 magit-repolist-column-flag nil)
+	("St#" 3 magit-repolist-column-stashes nil)
+	("Branch" 15 magit-repolist-column-branch nil)
+	;; ("Version" 10 magit-repolist-column-version nil)
+	("Path" 99 magit-repolist-column-path nil))
+      )
 ;; Make magit use delta, if present https://github.com/dandavison/magit-delta
 ;; https://github.com/dandavison/delta
 ;; Seemingly unnecessary if delta is your default pager
