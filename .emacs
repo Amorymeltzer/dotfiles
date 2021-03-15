@@ -1552,6 +1552,7 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Highlight ( and ) Highlight phrase if no matching paren.
 (show-paren-mode t)
+;; Could used 'mixed here, but highlight-parentheses better?
 (setq show-paren-style 'expression
       show-paren-delay 0.5)
 ;; Highlight parens currently between
@@ -1559,14 +1560,18 @@ when in source code modes such as python-mode or perl-mode" t)
 (require 'highlight-parentheses)
 (highlight-parentheses-mode t)
 ;; Bold 'em, Color mismatched differently
-;; These guys share faces
+;; These two share faces
 (progn
   (set-face-attribute 'highlight-parentheses-highlight nil :weight 'bold)
   (set-face-attribute 'show-paren-match nil :background "black"
 		      :foreground nil)
   (set-face-attribute 'show-paren-mismatch nil :background "red")
   (setq highlight-parentheses-colors (quote ("red" "white" "green" "cyan"
-				"red" "white" "green" "cyan"))))
+					     "red" "white" "green" "cyan"))))
+
+;; Electric-pair parentheses
+(add-hook 'prog-mode-hook #'electric-pair-mode)
+
 
 ;; Allow highlighting of phrases.
 ;; Maybe hook for prog modes (perl, etc.)  ;;;;;;;; ####### FIXME TODO
@@ -2304,6 +2309,7 @@ This checks in turn:
     ;; Insert region, or just advance
     (if region (insert region))
     (goto-char (point-max))))
+
 ;; All the cperl options, bad?  Need to fix ;;;;; #### FIXME TODO
 ;; Affects:
 ;; cperl-font-lock, cperl-electric-lbrace-space, cperl-electric-parens
