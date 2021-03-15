@@ -1494,7 +1494,11 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; https://github.com/dandavison/delta
 ;; Seemingly unnecessary if delta is your default pager
 (when (executable-find "delta")
-    (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
+  (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
+;; git-commit-style-convention-checks take overlong-summary-line if want to
+;; ensure git commit is within guidance (git-commit-summary-max-length)
+;; Not entirely sure what this does, but seems worthwhile
+(setq magit-diff-refine-hunk t)
 
 ;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
