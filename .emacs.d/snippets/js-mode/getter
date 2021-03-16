@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: getter
+# key: getter
+# --
+
+this.get${1:UpperName}() {
+    return this.${2:propertyName};
+}

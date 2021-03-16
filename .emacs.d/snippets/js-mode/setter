@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: setter
+# key: setter
+# --
+
+this.set${1:UpperName}(${2:param}) {
+    this.${3:propertyName} = $2;
+}
