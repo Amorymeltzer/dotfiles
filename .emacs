@@ -456,15 +456,14 @@ Record that in `paradox--backups', but do nothing if
 
 ;; Whitespace
 (require 'whitespace)
-;; Turn on globally, probably if better just for programming modes
+;; Turn on globally, probably if better just for programming and text modes
 ;; (global-whitespace-mode t)
 (add-hook 'prog-mode-hook 'whitespace-mode)
-;; Highlight tabs, spaces, lines, parts oflines >80 chars
-;; http://www.emacswiki.org/cgi-bin/wiki/EightyColumnRule
-;; (setq whitespace-style '(face empty lines-tail trailing space-before-tab))
-;; No trailing lines: gets annoying, redundant to fci-mode
-;; (setq whitespace-style '(face empty trailing space-before-tab))
-(setq whitespace-style '(face empty trailing space-before-tab))
+(add-hook 'text-mode-hook 'whitespace-mode)
+;; Highlight empty lines, trailing whitespace, inappropriate indentation
+;; trailing lines (lines or lines-tail) gets annoying, redundant to fci-mode
+;; big-indent nice idea, but too quick to become an issue
+(setq whitespace-style '(face empty trailing indentation space-before-tab space-after-tab))
 
 ;; Not needed in emacsen >= 23 because of lines-tail above
 ;; Auto-color lines over 80 in length .\{81\}
