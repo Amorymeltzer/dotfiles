@@ -892,10 +892,16 @@ current buffer" t)
 ;; scrolling
 (setq
  scroll-margin 0                        ;; do smooth scrolling
- scroll-conservatively 100000		;; ... the defaults ...
+ scroll-conservatively 9001		;; ... the defaults ...
  scroll-up-aggressively 0.0             ;; ... are very ...
  scroll-down-aggressively 0.0           ;; ... annoying
  scroll-preserve-screen-position t)     ;; preserve screen pos with C-v/M-v
+
+;; Set recentering positions, will be used for below as well
+;; I'd like to set scroll-margin to 2, but it's also active here, which is annoying
+(setq recenter-positions '(middle 5 top bottom))
+;; Move pointer to center/top/bottom of buffer, compare to C-l
+(global-set-key (kbd "C-c l") 'move-to-window-line-top-bottom)
 
 ;; Keep cursor away from edges when scrolling up/down
 ;; https://github.com/aspiers/smooth-scrolling/

@@ -183,9 +183,6 @@ linum-relative and linum" t)
 (global-set-key (kbd "M-g i") 'buf-move-up)
 (global-set-key (kbd "M-g l") 'buf-move-right)
 
-;; Move pointer to center/top/bottom of buffer, compare to C-l
-(global-set-key (kbd "C-c l") 'move-to-window-line-top-bottom)
-(global-set-key (kbd "C-c C-l") 'move-to-window-line-top-bottom)
 
 ;; Jump to a specific percentage of a buffer
 ;; https://unix.stackexchange.com/a/29398/43935
