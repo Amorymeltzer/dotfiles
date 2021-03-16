@@ -2492,8 +2492,8 @@ This checks in turn:
       ;; This should be the default for aspell, but just in case...
       ;; See also:
       ;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
-      ;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
-      ispell-personal-dictionary ".aspell.en.pws"
+      ;; http://aspell.net/man-html/Format-of-the-Personal-and-Replacement-Dictionaries.html
+      ispell-personal-dictionary "~/.aspell.en.pws"
       ;; --camel-case is neat, but since I'm using flyspell-prog-mode - only
       ;; strings and comments - it's unlikely to be necessary
       ispell-extra-args '("--sug-mode=ultra"))
