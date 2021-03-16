@@ -1515,11 +1515,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; ensure git commit is within guidance (git-commit-summary-max-length)
 ;; git-commit-turn-on-flyspell ???
 (setq git-commit-major-mode 'markdown-mode
-      git-rebase-confirm-cancel nil
-      ;; This is the default less git-commit-turn-on-auto-fill, since I don't
-      ;; want to wrap lines in commit messages by default (GitHub don't care)
-      git-commit-setup-hook
-      '(git-commit-save-message git-commit-setup-changelog-support git-commit-propertize-diff bug-reference-mode with-editor-usage-message))
+      git-rebase-confirm-cancel nil)
 (setq magit-log-section-commit-count 25 ; default 10
       ;; Display buffers in same buffer, except for diffs. Better?
       magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
@@ -1527,10 +1523,15 @@ when in source code modes such as python-mode or perl-mode" t)
       magit-completing-read-function 'magit-ido-completing-read
       ;; Not entirely sure what this does, but seems worthwhile
       magit-diff-refine-hunk t)
-;; Add ongoing merge-log to status sections; check out other magit-insert functions
+
+;; Various items not available right away since not magit require-d...
 (with-eval-after-load "magit"
-  ;; magit-add-section-hook not available right away since not magit require-d...
-  (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-merge-log))
+  ;; Add any ongoing merge-log to status sections; check out other magit-insert functions
+  (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-merge-log)
+  ;; This is the default less git-commit-turn-on-auto-fill, since I don't want
+  ;; to wrap lines in commit messages by default (GitHub don't care)
+  (setq git-commit-setup-hook
+	'(git-commit-save-message git-commit-setup-changelog-support git-commit-propertize-diff bug-reference-mode with-editor-usage-message)))
 ;; magit-section-initial-visibility-alist to customize initial visibility
 
 ;; Log stylin', just minor tweak to author length; L l/d to toggle
