@@ -787,25 +787,23 @@ current buffer" t)
 (autoload 'reveal-in-osx-finder "reveal-in-osx-finder" "Reveal file/folder in finder" t)
 (global-set-key (kbd "C-c z") 'reveal-in-osx-finder)
 
-;; Save a list of open files in ~/.emacs.d/.emacs.desktop(.lock)
+;; Save a list of open files in ~/.emacs.d/emacs.desktop(.lock)
+;; Rename to just desktop(.lock)???
 ;; Not great with emacsclient server?
-(desktop-save-mode 1)
-;; Automatically unless nonexistant
+;; Load the desktop *after* all init stuff is done.
+(eval-after-load "init"
+  '(progn
+     (desktop-read)
+     (desktop-save-mode 1)))
+;; Automatically unless nonexistent
 (setq desktop-save 'ask-if-new
-      desktop-restore-eager 0		; Load this many buffers, rest when lazy
+      desktop-restore-eager 2		; Load this many buffers, rest when lazy
       desktop-load-locked-desktop 'ask	; Just as a reminder
-      desktop-base-file-name "emacs.desktop" ; Not .emacs.desktop
+      desktop-base-file-name "emacs.desktop"	  ; Not .emacs.desktop
+      desktop-base-lock-name "emacs.desktop.lock" ; Not .emacs.desktop.lock
       ;; Don't try to save if file is locked, I'll always be quick
       desktop-not-loaded-hook (quote (desktop-save-mode-off))
       desktop-path (quote (user-emacs-directory "~"))) ; Just in case
-
-
-;; Load the desktop *after* all init stuff is done.  Does what???
-;; ;;;;;; ####### FIXME TODO
-;; (eval-after-load "init"
-;;   '(progn
-;;      ;; (desktop-read)
-;;      (desktop-save-mode 1)))
 
 ;; Save a bunch of variables to the desktop file.  For lists specify the len
 ;; of the maximal saved data also
