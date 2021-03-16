@@ -1527,6 +1527,11 @@ when in source code modes such as python-mode or perl-mode" t)
       magit-completing-read-function 'magit-ido-completing-read
       ;; Not entirely sure what this does, but seems worthwhile
       magit-diff-refine-hunk t)
+;; Add ongoing merge-log to status sections; check out other magit-insert functions
+(with-eval-after-load "magit"
+  ;; magit-add-section-hook not available right away since not magit require-d...
+  (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-merge-log))
+;; magit-section-initial-visibility-alist to customize initial visibility
 
 ;; Log stylin', just minor tweak to author length; L l/d to toggle
 ;; (setq
