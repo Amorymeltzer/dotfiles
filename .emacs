@@ -341,6 +341,12 @@ Record that in `paradox--backups', but do nothing if
 (add-hook 'html-mode-hook  'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode)
 
+;; json-mode https://github.com/joshwnj/json-mode
+;; C-c C- map has fun things like reformatting, toggling booleans
+;; Consider json-navigator https://github.com/DamienCassou/json-navigator
+(autoload 'json-mode "json-mode" "Major mode for editing JSON files." t)
+(add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
+
 
 ;; mhtml-mode probably better (default since 26), but some bug (maybe with
 ;; fic-mode?) makes it wig out. Regex taken from auto-mode-alist itself
