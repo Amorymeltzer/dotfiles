@@ -1521,6 +1521,8 @@ when in source code modes such as python-mode or perl-mode" t)
       git-commit-setup-hook
       '(git-commit-save-message git-commit-setup-changelog-support git-commit-propertize-diff bug-reference-mode with-editor-usage-message))
 (setq magit-log-section-commit-count 25 ; default 10
+      ;; Display buffers in same buffer, except for diffs. Better?
+      magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
       ;; Turn this off if/when ivy
       magit-completing-read-function 'magit-ido-completing-read
       ;; Not entirely sure what this does, but seems worthwhile
