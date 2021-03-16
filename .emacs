@@ -140,7 +140,8 @@ Record that in `paradox--backups', but do nothing if
       inhibit-startup-message t)
 
 ;; UTF-8 always, always, always
-(setq locale-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(setq-default locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
