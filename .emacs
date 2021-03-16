@@ -2854,7 +2854,7 @@ This checks in turn:
 (diminish 'whitespace-mode)
 (diminish 'global-whitespace-mode)
 (diminish 'auto-fill-function)
-;; (diminish 'font-lock-mode "Fn")
+;; (diminish 'font-lock-mode "Fn") ;; Unused
 (diminish 'visual-line-mode "vl")
 (diminish 'fic-mode)
 (diminish 'whole-line-or-region-local-mode)
@@ -2865,11 +2865,11 @@ This checks in turn:
 (diminish 'wrap-region-mode)
 (diminish 'anzu-mode)
 (diminish 'ace-jump-mode "Ace")
-;; Only works transiently, but which-key-lighter customized above
-;; (diminish 'which-key-mode)
-;; (diminish 'guide-key-mode)
-;; (diminish 'fancy-narrow-mode)
+;; (diminish 'which-key-mode) ;; Only works transiently, but which-key-lighter customized above
+;; (diminish 'guide-key-mode) ;; Unused
+;; (diminish 'fancy-narrow-mode) ;; Unused
 (diminish 'subword-mode)
+(diminish 'with-editor-mode)
 ;; Diminish doesn't work here??  Dumb
 (setq eldoc-minor-mode-string nil)
 
