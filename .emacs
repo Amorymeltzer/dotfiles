@@ -1562,6 +1562,13 @@ when in source code modes such as python-mode or perl-mode" t)
 (when (executable-find "delta")
   (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
 
+;; git modes for gitignore, gitconfig, and gitattributes
+;; https://github.com/magit/git-modes
+(autoload 'gitconfig-mode "gitconfig-mode" "A major mode for editing .gitconfig files." t)
+(autoload 'gitignore-mode "gitignore-mode" "A major mode for editing .gitignore files." t)
+(autoload 'gitattributes-mode "gitattributes-mode" "A major mode for editing .gitattributes files." t)
+
+
 ;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
 ;; (global-set-key (kbd "C-x f") 'find-file-in-project)
