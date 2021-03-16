@@ -625,11 +625,11 @@ backups." t)
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
 ;; Edit git commit messages in markdown, since mostly for github
-;; Off since magit
-;; (add-to-list 'auto-mode-alist
-;;	     '("/\\.git/COMMIT_EDITMSG\\'" . markdown-mode))
-;; (add-to-list 'auto-mode-alist
-;;	     '("/\\.git/PULLREQ_EDITMSG\\'" . markdown-mode))
+;; Less useful when using magit, but useful nonetheless
+(add-to-list 'auto-mode-alist
+	     '("/\\.git/COMMIT_EDITMSG\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist
+	     '("/\\.git/PULLREQ_EDITMSG\\'" . markdown-mode))
 
 ;; Should add some more here
 ;; Also need to make interactives for bold, italics, headers, etc
