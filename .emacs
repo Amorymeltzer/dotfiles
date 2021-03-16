@@ -134,7 +134,7 @@ Record that in `paradox--backups', but do nothing if
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
   (when (fboundp mode) (funcall mode -1)))
 ;; Prevent the startup message and splash screen
-(setq inhibit-startup-echo-area-message "t"
+(setq inhibit-startup-echo-area-message user-login-name
       inhibit-startup-message t)
 
 ;; UTF-8 always, always, always
