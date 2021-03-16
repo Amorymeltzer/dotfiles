@@ -200,6 +200,7 @@ Record that in `paradox--backups', but do nothing if
 (define-key yas-minor-mode-map (kbd "C-c C-i") 'yas-insert-snippet) ; C-c tab
 (yas-reload-all)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
+(add-hook 'text-mode-hook #'yas-minor-mode)
 
 ;; Default M-/ is dabbrev-expand, but this is broken? ;;;;; ###### FIXME TODO
 ;; (global-set-key "\M-/" 'auto-complete)
