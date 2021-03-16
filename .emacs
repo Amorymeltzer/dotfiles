@@ -1516,7 +1516,11 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; ensure git commit is within guidance (git-commit-summary-max-length)
 ;; git-commit-turn-on-flyspell ???
 (setq git-commit-major-mode 'markdown-mode
-      git-rebase-confirm-cancel nil)
+      git-rebase-confirm-cancel nil
+      ;; This is the default less git-commit-turn-on-auto-fill, since I don't
+      ;; want to wrap lines in commit messages by default (GitHub don't care)
+      git-commit-setup-hook
+      '(git-commit-save-message git-commit-setup-changelog-support git-commit-propertize-diff bug-reference-mode with-editor-usage-message))
 (setq magit-log-section-commit-count 25 ; default 10
       ;; Turn this off if/when ivy
       magit-completing-read-function 'magit-ido-completing-read
