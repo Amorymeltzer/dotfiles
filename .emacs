@@ -2664,7 +2664,8 @@ This checks in turn:
 ;; (setq large-file-warning-threshold 50000000)
 
 ;; Don't be so stingy on the memory, we have lots now. It's the distant future.
-(setq gc-cons-threshold (* 8 1024 1024))
+(setq gc-cons-threshold (* 8 1024 1024)
+      gc-cons-percentage 0.2)
 
 ;; Just in case
 (setq warning-suppress-types nil)
