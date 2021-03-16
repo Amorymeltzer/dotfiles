@@ -2483,6 +2483,8 @@ This checks in turn:
 ;; Give info at point in elisp mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (setq eldoc-idle-delay 0.25)		;Default is 0.5
+;; Not really useful, but at least I'll remember this
+(defalias 'elisp-repl 'ielm)
 
 
 ;; Interesting! But no
