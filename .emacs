@@ -1093,6 +1093,23 @@ current buffer" t)
 (global-set-key (kbd "C-x i") 'tab-to-tab-stop)
 
 
+;; Dired, file browser and then some
+;; Should really look at dired-mode-map for the full suite of commands
+(require 'dired)
+(global-set-key (kbd "C-x C-d") 'dired-jump) ; C-x d already dired...
+(setq dired-auto-revert-buffer t
+      dired-dwim-target t		; seems useful?
+      dired-hide-details-hide-symlink-targets nil
+      dired-listing-switches "-Flagoh")
+
+(when (eq system-type 'darwin)
+  (setq-default dired-ls-F-marks-symlinks t ; OSX uses @ after symlinks
+		dired-use-ls-dired nil))    ; OSX ls doesn't support --dired
+;; wdired lets you rename files
+(setq wdired-allow-to-change-permissions 'advanced)
+;; Available as C-x C-q, but nice to be able to toggle more easily
+(define-key dired-mode-map (kbd "C-w") 'wdired-change-to-wdired-mode)
+
 
 ;;;;;;;;;;;;;;;;;;;
 ;; IDO, Interactively Do Things
@@ -1267,7 +1284,7 @@ current buffer" t)
 ;; (set-face-attribute 'ido-virtual nil
 
 
-;; ;;;;;;;;; ##### FIXME TODO
+;; Really need to figure these out FIXME TODO
 ;; Better/easier buffer menu???
 ;; (global-set-key (kbd "C-c C-b") 'bs-show)
 ;; What about ibuffer?!  Also iswitchb-mode for switching...
