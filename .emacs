@@ -1478,7 +1478,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (setq send-mail-function (quote mailclient-send-it))
 
 ;; enlarge or shrink windows
-(global-set-key (kbd "C-x }") 'Enlarge-window-horizontally)
+(global-set-key (kbd "C-x }") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-x <up>") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-x {") 'shrink-window-horizontally)
 (global-set-key (kbd "C-x <down>") 'shrink-window-horizontally)
@@ -1668,7 +1668,11 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; https://github.com/hbin/smart-shift
 (require 'smart-shift)
 (global-smart-shift-mode 1)
-
+;; Take these off so they can be used for windmove below
+(define-key smart-shift-mode-map (kbd "C-c <up>") nil)
+(define-key smart-shift-mode-map (kbd "C-c <down>") nil)
+(define-key smart-shift-mode-map (kbd "C-c <left>") nil)
+(define-key smart-shift-mode-map (kbd "C-c <right>") nil)
 
 ;; Remap C-t to C-x prefix
 ;; Maybe make a C-t map, put in transpose-frame stuff from manipulate M-t? FIXME TODO
@@ -1697,6 +1701,30 @@ when in source code modes such as python-mode or perl-mode" t)
     map)
   "My personal keymap, bound to C-q.")
 
+
+;; M-# to move to windows
+;; https://github.com/nschum/window-numbering.el
+(require 'window-numbering)
+(window-numbering-mode t)
+
+;; Easily switch to specific window using numbers (if >2)
+;; https://github.com/abo-abo/ace-window
+;; (require 'ace-window)
+(autoload 'ace-window "ace-window" "Quickly switch windows" t)
+(global-set-key (kbd "C-x o") 'ace-window)
+(eval-after-load 'ace-window
+  '(progn
+     (set-face-attribute 'aw-leading-char-face nil
+			 ;; Make purple FIXME TODO
+			 :foreground "deep sky blue"
+			 :weight 'bold
+			 :height 3.0)))
+
+;; windmove stuff, in case the above simply isn't enough
+(global-set-key (kbd "C-c <up>") 'windmove-up)
+(global-set-key (kbd "C-c <down>") 'windmove-down)
+(global-set-key (kbd "C-c <left>") 'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
 
 ;; https://github.com/nflath/hungry-delete
 ;; Delete all white space chars at once

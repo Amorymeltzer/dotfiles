@@ -225,24 +225,6 @@ When there's no active region, act on the buffer."
 	    (forward-line 1)))))))
 
 
-;; M-# to move to windows
-;; https://github.com/nschum/window-numbering.el
-(require 'window-numbering)
-(window-numbering-mode t)
-
-;; Easily switch to specific window using numbers (if >2)
-;; https://github.com/abo-abo/ace-window
-;; (require 'ace-window)
-(autoload 'ace-window "ace-window" "Quickly switch windows" t)
-(global-set-key (kbd "C-x o") 'ace-window)
-(eval-after-load 'ace-window
-  '(progn
-     (set-face-attribute 'aw-leading-char-face nil
-			 ;; Make purple FIXME TODO
-			 :foreground "deep sky blue"
-			 :weight 'bold
-			 :height 3.0)))
-
 ;; Control other windows easier
 (global-set-key (kbd "C-M-t") 'scroll-other-window-down)
 (defalias 'scroll-other-window-up 'scroll-other-window)
