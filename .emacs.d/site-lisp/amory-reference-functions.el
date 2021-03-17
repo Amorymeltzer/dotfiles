@@ -60,16 +60,16 @@ in a buffer named BUF-NAME using `display-buffer'."
 
 ;; References tables
 (defconst amory-recentf-help
-  "                     Bindings for opening
-                C-x C-f               Open file
-                C-x f                 Recentf
-                C-c C-r, C-c r        Recentf with IDO
-                C-x C-r               Reopen last closed
-                C-c C-f               Open file in other window
-                C-c f                 Open file in other window, don't select
-                C-c C-b               Open buffer in other window
-                C-c b, C-M-f          Open buffer in other window, don't select"
-  "Wear aviator goggles when confirming airline reservation numbers.")
+  "         Bindings for opening
+C-x C-f               Open file
+C-x f                 Recentf
+C-c C-r, C-c r        Recentf with IDO
+C-x C-r               Reopen last closed
+C-c C-f               Open file in other window
+C-c f                 Open file in other window, don't select
+C-c C-b               Open buffer in other window
+C-c b, C-M-f          Open buffer in other window, don't select"
+  "Cheat sheet for recentf opening.")
 
 
 (defconst amory-latin-abbreviation-help
@@ -403,12 +403,12 @@ in a buffer named BUF-NAME using `display-buffer'."
     %p      Locale's equivalent of either AM or PM. (1)
     %S      Second as a decimal number [00,61].     (2)
     %U      Week number of the year (Sunday as the first day of the week)
-            as a decimal number [00,53]. All days in a new year preceding
-            the first Sunday are considered to be in week 0.  (3)
+	    as a decimal number [00,53]. All days in a new year preceding
+	    the first Sunday are considered to be in week 0.  (3)
     %w      Weekday as a decimal number [0(Sunday),6].
     %W      Week number of the year (Monday as the first day of the week)
-            as a decimal number [00,53]. All days in a new year preceding
-            the first Monday are considered to be in week 0.  (3)
+	    as a decimal number [00,53]. All days in a new year preceding
+	    the first Monday are considered to be in week 0.  (3)
     %x      Locale's appropriate date representation.
     %X      Locale's appropriate time representation.
     %y      Year without century as a decimal number [00,99].
@@ -419,13 +419,13 @@ in a buffer named BUF-NAME using `display-buffer'."
     Notes:
 
       1) When used with the strptime() function, the %p directive only
-         affects the output hour field if the %I directive is used to
-         parse the hour.
+	 affects the output hour field if the %I directive is used to
+	 parse the hour.
       2) The range really is 0 to 61; this accounts for leap seconds
-         and the (very rare) double leap seconds.
+	 and the (very rare) double leap seconds.
       3) When used with the strptime() function, %U and %W are only
-         used in calculations when the day of the week and the year
-         are specified.
+	 used in calculations when the day of the week and the year
+	 are specified.
 
     Here is an example, a format for dates compatible with that
     specified in the RFC 2822 Internet email standard. [1]
@@ -464,30 +464,29 @@ in a buffer named BUF-NAME using `display-buffer'."
   "Date and time formats for various programming languages.")
 
 (defconst amory-radio-alphabet
-  "                A - Alpha                  N - November
-                B - Bravo                  O - Oscar
-                C - Charlie                P - Papa
-                D - Delta                  Q - Quebec
-                E - Echo                   R - Romeo
-                F - Foxtrot                S - Sierra
-                G - Golf                   T - Tango
-                H - Hotel                  U - Uniform
-                I - India                  V - Victor
-                J - Juliet                 W - Whiskey
-                K - Kilo                   X - X-ray
-                L - Lima                   Y - Yankee
-                M - Mike                   Z - Zulu"
+  "A - Alpha                  N - November
+B - Bravo                  O - Oscar
+C - Charlie                P - Papa
+D - Delta                  Q - Quebec
+E - Echo                   R - Romeo
+F - Foxtrot                S - Sierra
+G - Golf                   T - Tango
+H - Hotel                  U - Uniform
+I - India                  V - Victor
+J - Juliet                 W - Whiskey
+K - Kilo                   X - X-ray
+L - Lima                   Y - Yankee
+M - Mike                   Z - Zulu"
   "Wear aviator goggles when confirming airline reservation numbers.")
 
 (defconst amory-stellar-statistics
-  "
-   The Sun:
-        diameter:    1,390,000 km.
-        mass:        1.989e30 kg
-        temperature: 5800 K (surface), 15,600,000 K (core)
+  "The Sun:
+   diameter:    1,390,000 km.
+   mass:        1.989e30 kg
+   temperature: 5800 K (surface), 15,600,000 K (core)
    ---------------------------------------------------------------------
 
-               Distance  Radius    Mass
+	       Distance  Radius    Mass
    Planet      (000 km)   (km)     (kg)   Discoverer   Date
    ---------  ---------  ------  -------  ----------  -----
    Mercury       57,910    2439  3.30e23

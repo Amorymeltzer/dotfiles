@@ -21,54 +21,54 @@
     "Great clouds overhead
      Tiny black birds rise and fall
      Snow covers Emacs
-         -- Alex Schroeder"
+	 -- Alex Schroeder"
     "hacking on Smyrno
      `error in process filter'
      something is b0rken
-         -- EdwardOConnor"
+	 -- EdwardOConnor"
     "Swiftly typing. Oh!
      Where would we be without you,
      `self-insert-command'?"
     "treeless quiet field
      sudden bud: EmacsWiki
      now he{ar,re} the birds sing
-         -- ttn"
+	 -- ttn"
     "an emacs user's
      fingers dance on the keyboard;
      a nerd pianist
-         -- Erik Bourget"
+	 -- Erik Bourget"
     "The file was open.
      flying in a sparrow stole
      a parenthesis
-         -- Oliver Scholz"
+	 -- Oliver Scholz"
     "The day went away.
      The file still puts its weight on
      the tired mode-line.
-         -- Oliver Scholz"
+	 -- Oliver Scholz"
     "On a cloudy day
      you hear the cons cells whisper:
      'We are lost and gone.'
-         -- Oliver Scholz"
+	 -- Oliver Scholz"
     "A message, a string
      remind me of my sweet love.
      Good bye, my buffers.
-         -- Oliver Scholz"
+	 -- Oliver Scholz"
     "Hot night in summer:
      Hush, you quibbling characters!
      Do not wake her up!
-         -- Oliver Scholz"
+	 -- Oliver Scholz"
     "A bright, busy day.
      The windows watch a thousand
      wild cursors dancing.
-         -- Oliver Scholz"
+	 -- Oliver Scholz"
     "Oh, why don't you are
      a lake, a stream, a meadow
      this morning, Emacs?
-         -- Oliver Scholz"
+	 -- Oliver Scholz"
     "The friends chat gaily,
      I stand up to join their talk.
      My `save-excursion'.
-         -- Oliver Scholz")
+	 -- Oliver Scholz")
   "Haiku taken from the Emacs Wiki's EmacsHaiku page.")
 
 ;; Function for choosing a random haiku from the above list

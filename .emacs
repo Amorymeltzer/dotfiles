@@ -67,7 +67,7 @@
 ;; Something to do with a specific GNUTLS version (currently 30615), this exact check is from
 ;; https://github.com/syl20bnr/spacemacs/blob/d46eacd83842815b24afcb2e1fee5c80c38187c5/core/core-emacs-backports.el
 (unless (<= libgnutls-version 30603)
-    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 ;; In theory it'd be nice to set package-archive-priorities, but in practice
 ;; there's no overlap between MELPA and GNU ELPA.  Added in 25.1
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -100,10 +100,10 @@
 ;; install (if not already present) and require, must be around for everyone else
 ;; Should actually use this...
 (dolist (package '(use-package))
-   (unless (package-installed-p package)
-     (package-install package)
-     (require 'use-package)
-     (setq use-package-always-ensure t)))
+  (unless (package-installed-p package)
+    (package-install package)
+    (require 'use-package)
+    (setq use-package-always-ensure t)))
 
 
 ;; paradox https://github.com/Malabarba/paradox
@@ -187,8 +187,8 @@ Record that in `paradox--backups', but do nothing if
   (ac-html-enable-data-provider 'ac-html-default-data-provider)
   (ac-html-setup)
   (setq ac-sources '(ac-source-html-tag
-                     ac-source-html-attr
-                     ac-source-html-attrv))
+		     ac-source-html-attr
+		     ac-source-html-attrv))
   (auto-complete-mode))
 (add-hook 'html-mode-hook 'setup-ac-for-html)
 (add-hook 'mhtml-mode-hook 'setup-ac-for-html)
@@ -422,8 +422,8 @@ Record that in `paradox--backups', but do nothing if
 ;; That in turn makes use of your installed perlcritic executable.
 ;; https://github.com/illusori/emacs-flymake-perlcritic
 (when (executable-find "perlcritic")
-      (require 'flymake-perlcritic)
-      (setq flymake-perlcritic-severity 2))
+  (require 'flymake-perlcritic)
+  (setq flymake-perlcritic-severity 2))
 
 ;; https://github.com/purcell/flymake-easy
 (require 'flymake-easy)
@@ -2462,29 +2462,29 @@ This checks in turn:
 (require 'which-key)
 (with-eval-after-load "which-key"
   ;; https://github.com/justbur/emacs-which-key#face-customization-options
-     ;; (set-face-attribute 'which-key-key-face nil :foreground "magenta")
-     (set-face-attribute 'which-key-separator-face nil :foreground "magenta")
-     (set-face-attribute 'which-key-note-face nil :foreground "black")
-     ;; (set-face-attribute 'which-key-special-key-face nil :foreground "red")
-     ;; color of prefix command
-     (set-face-attribute 'which-key-group-description-face nil :foreground "blue" :bold nil)
-     (set-face-attribute 'which-key-command-description-face nil :inherit nil)
+  ;; (set-face-attribute 'which-key-key-face nil :foreground "magenta")
+  (set-face-attribute 'which-key-separator-face nil :foreground "magenta")
+  (set-face-attribute 'which-key-note-face nil :foreground "black")
+  ;; (set-face-attribute 'which-key-special-key-face nil :foreground "red")
+  ;; color of prefix command
+  (set-face-attribute 'which-key-group-description-face nil :foreground "blue" :bold nil)
+  (set-face-attribute 'which-key-command-description-face nil :inherit nil)
 
-     ;; These first few are from the which-key-setup-side-window-bottom
-     ;; function, but here so as not to separate out/overwrite preferences
-     (which-key--setup-echo-keystrokes)
-     ;; https://github.com/justbur/emacs-which-key#other-options
-     (setq which-key-popup-type 'side-window
-	   which-key-side-window-location 'bottom
-	   which-key-show-prefix 'top	; default echo
-	   ;; There are a lot of these, all have merits
-	   which-key-sort-order 'which-key-local-then-key-order
-	   which-key-side-window-max-height 0.5 ; default 0.25
-	   which-key-idle-delay 0.25		 ; default 1.0
-	   which-key-prefix-prefix "=> "	 ; default +
-	   which-key-show-remaining-keys t
-	   which-key-lighter nil	; Diminish not working properly...
-	   ))
+  ;; These first few are from the which-key-setup-side-window-bottom
+  ;; function, but here so as not to separate out/overwrite preferences
+  (which-key--setup-echo-keystrokes)
+  ;; https://github.com/justbur/emacs-which-key#other-options
+  (setq which-key-popup-type 'side-window
+	which-key-side-window-location 'bottom
+	which-key-show-prefix 'top	; default echo
+	;; There are a lot of these, all have merits
+	which-key-sort-order 'which-key-local-then-key-order
+	which-key-side-window-max-height 0.5 ; default 0.25
+	which-key-idle-delay 0.25		 ; default 1.0
+	which-key-prefix-prefix "=> "	 ; default +
+	which-key-show-remaining-keys t
+	which-key-lighter nil	; Diminish not working properly...
+	))
 (which-key-mode)
 
 ;; Display what function block if I'm in in certain modes
@@ -2504,8 +2504,8 @@ This checks in turn:
  imenu-after-jump-hook 'recenter)
 ;; There's no interactive to force rescanning?  Fine but seems weird
 (defun imenu-rescan ()
-   (interactive)
-   (imenu--menubar-select imenu--rescan-item))
+  (interactive)
+  (imenu--menubar-select imenu--rescan-item))
 (global-set-key "\C-cI" 'imenu-rescan)
 
 ;; Face stuff

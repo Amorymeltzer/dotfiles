@@ -78,7 +78,7 @@ function g {
     local ref=$(git rev-parse --is-inside-work-tree 2> /dev/null)
     if [[ $ref ]]; then
 	if [[ $# > 0 ]]; then
-            git "$@"
+	    git "$@"
 	else
 	    git lr5
 	    git status --short --branch
@@ -455,8 +455,8 @@ function prompt_command {
 	fill=""
 	while [ "$fillsize" -gt "0" ]
 	do
-            fill="-${fill}"
-            let fillsize=${fillsize}-1
+	    fill="-${fill}"
+	    let fillsize=${fillsize}-1
 	done
 	fill="${fill}${battery}"
     fi
