@@ -63,6 +63,9 @@ alias tree='tree -Csuh'
 # Preserve environment
 alias sudo='sudo -E '
 
+# Too much node repl
+alias .exit='exit'
+
 ### Git stuff
 # Should fix git signing when ssh'd, no issues locally?
 export GPG_TTY=$(tty)
