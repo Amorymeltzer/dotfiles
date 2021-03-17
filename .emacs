@@ -2445,7 +2445,7 @@ This checks in turn:
 (with-eval-after-load "which-key"
   ;; https://github.com/justbur/emacs-which-key#face-customization-options
      ;; (set-face-attribute 'which-key-key-face nil :foreground "magenta")
-     (set-face-attribute 'which-key-separator-face nil :foreground "green")
+     (set-face-attribute 'which-key-separator-face nil :foreground "magenta")
      (set-face-attribute 'which-key-note-face nil :foreground "black")
      ;; (set-face-attribute 'which-key-special-key-face nil :foreground "red")
      ;; color of prefix command
