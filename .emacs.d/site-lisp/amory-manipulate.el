@@ -178,10 +178,10 @@ linum-relative and linum" t)
 ;; Move buffers around https://github.com/lukhas/buffer-move
 (require 'buffer-move)
 ;; Other M-g mapping stuff
-(global-set-key (kbd "M-g j") 'buf-move-left)
-(global-set-key (kbd "M-g k") 'buf-move-down)
-(global-set-key (kbd "M-g i") 'buf-move-up)
-(global-set-key (kbd "M-g l") 'buf-move-right)
+(global-set-key (kbd "M-g <left>") 'buf-move-left)
+(global-set-key (kbd "M-g <down>") 'buf-move-down)
+(global-set-key (kbd "M-g <up>") 'buf-move-up)
+(global-set-key (kbd "M-g <right>") 'buf-move-right)
 
 
 ;; Jump to a specific percentage of a buffer
@@ -254,9 +254,10 @@ When there's no active region, act on the buffer."
 (eval-after-load 'ace-window
   '(progn
      (set-face-attribute 'aw-leading-char-face nil
-		    :foreground "deep sky blue"
-		    :weight 'bold
-		    :height 3.0)))
+			 ;; Make purple FIXME TODO
+			 :foreground "deep sky blue"
+			 :weight 'bold
+			 :height 3.0)))
 
 ;; Control other windows easier
 (global-set-key (kbd "C-M-t") 'scroll-other-window-down)

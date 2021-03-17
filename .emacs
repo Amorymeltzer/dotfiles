@@ -1655,10 +1655,12 @@ when in source code modes such as python-mode or perl-mode" t)
 (define-key my/ctrl-q-map (kbd "C-a") 'align-regexp)
 (define-key my/ctrl-q-map (kbd "q") 'qrr)
 (define-key my/ctrl-q-map (kbd "r") 'rr)
-(define-key my/ctrl-q-map (kbd "a") 'align)
+(define-key my/ctrl-q-map (kbd "a") 'align) ;This is shit, change it FIXME TODO
 (define-key my/ctrl-q-map (kbd ".") 'highlight-symbol-at-point)
 (define-key my/ctrl-q-map (kbd "?") 'highlight-symbol-remove-all)
 (define-key my/ctrl-q-map (kbd "/") 'highlight-symbol-remove-all)
+(define-key my/ctrl-q-map (kbd "p") 'backward-paragraph)
+(define-key my/ctrl-q-map (kbd "n") 'forward-paragraph)
 ;; Currently defined in amory-manipulate.el
 (define-key my/ctrl-q-map (kbd "<up>") 'move-line-up)
 (define-key my/ctrl-q-map (kbd "<down>") 'move-line-down)
