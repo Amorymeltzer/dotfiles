@@ -1416,7 +1416,7 @@ when in source code modes such as python-mode or perl-mode" t)
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
 
-(global-set-key (kbd "M-Q") 'unfill-paragraph)
+(global-set-key (kbd "M-Q") 'unfill-region)
 
 ;; Comment colors
 (set-face-attribute 'font-lock-comment-face nil :foreground "black")
