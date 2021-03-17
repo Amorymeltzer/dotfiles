@@ -802,6 +802,7 @@ current buffer" t)
 (setq desktop-save 'ask-if-new
       desktop-restore-eager 2		; Load this many buffers, rest when lazy
       desktop-load-locked-desktop 'ask	; Just as a reminder
+      desktop-restore-forces-onscreen nil ; Don't restore frames onto the screen
       desktop-base-file-name "emacs.desktop"	  ; Not .emacs.desktop
       desktop-base-lock-name "emacs.desktop.lock" ; Not .emacs.desktop.lock
       ;; Don't try to save if file is locked, I'll always be quick
