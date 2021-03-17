@@ -1663,30 +1663,39 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Display depth indicator, kind of weird but may be useful
 (setq minibuffer-depth-indicate-mode t)
 
+
+;; Easily indent line/region according to mode, or move line/region up or down
+;; https://github.com/hbin/smart-shift
+(require 'smart-shift)
+(global-smart-shift-mode 1)
+
+
 ;; Remap C-t to C-x prefix
 ;; Maybe make a C-t map, put in transpose-frame stuff from manipulate M-t? FIXME TODO
 ;; (bind "C-t" (lookup-key global-map (kbd "C-x")))
 
 ;; Ctrl-q map.  I'll never use quoted-insert, so I might as well make this
 ;; thing more useful.  Should add to this. ;;;;; #### FIXME TODO
-(defvar my/ctrl-q-map (make-sparse-keymap)
-  "My original keymap bound to C-q.")
-(defalias 'my/ctrl-q-prefix my/ctrl-q-map) ; Why?
-(define-key global-map (kbd "C-q") 'my/ctrl-q-prefix)
-(define-key my/ctrl-q-map (kbd "C-q") 'quoted-insert)
-(define-key my/ctrl-q-map (kbd "C-c") 'column-highlight-mode)
-(define-key my/ctrl-q-map (kbd "C-a") 'align-regexp)
-(define-key my/ctrl-q-map (kbd "q") 'qrr)
-(define-key my/ctrl-q-map (kbd "r") 'rr)
-(define-key my/ctrl-q-map (kbd "a") 'align) ;This is shit, change it FIXME TODO
-(define-key my/ctrl-q-map (kbd ".") 'highlight-symbol-at-point)
-(define-key my/ctrl-q-map (kbd "?") 'highlight-symbol-remove-all)
-(define-key my/ctrl-q-map (kbd "/") 'highlight-symbol-remove-all)
-(define-key my/ctrl-q-map (kbd "p") 'backward-paragraph)
-(define-key my/ctrl-q-map (kbd "n") 'forward-paragraph)
-;; Currently defined in amory-manipulate.el
-(define-key my/ctrl-q-map (kbd "<up>") 'move-line-up)
-(define-key my/ctrl-q-map (kbd "<down>") 'move-line-down)
+(defvar my/ctrl-q-map
+  (let* ((map (make-sparse-keymap)))
+    (define-key global-map (kbd "C-q") map)
+    (define-key map (kbd "C-q") 'quoted-insert)
+    (define-key map (kbd "C-c") 'column-highlight-mode)
+    (define-key map (kbd "C-a") 'align-regexp)
+    (define-key map (kbd "q") 'qrr)
+    (define-key map (kbd "r") 'rr)
+    (define-key map (kbd "a") 'align) ;This is shit, change it FIXME TODO
+    (define-key map (kbd ".") 'highlight-symbol-at-point)
+    (define-key map (kbd "?") 'highlight-symbol-remove-all)
+    (define-key map (kbd "/") 'highlight-symbol-remove-all)
+    (define-key map (kbd "p") 'backward-paragraph)
+    (define-key map (kbd "n") 'forward-paragraph)
+    (define-key map (kbd "<up>") 'smart-shift-up)
+    (define-key map (kbd "<down>") 'smart-shift-down)
+    (define-key map (kbd "<left>") 'smart-shift-left)
+    (define-key map (kbd "<right>") 'smart-shift-right)
+    map)
+  "My personal keymap, bound to C-q.")
 
 
 ;; https://github.com/nflath/hungry-delete
@@ -1725,11 +1734,6 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; https://github.com/k-talo/volatile-highlights.el
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
-
-;; Easily indent given line according to mode
-;; https://github.com/hbin/smart-shift
-(require 'smart-shift)
-(global-smart-shift-mode 1)
 
 
 ;; http://github.com/rejeep/emacs/blob/master/rejeep-defuns.el
@@ -2756,9 +2760,6 @@ This checks in turn:
 ;; (key-chord-define-global "8u" "*")
 ;; (key-chord-define-global "9i" "(")
 ;; (key-chord-define-global "-p" "_") ;; Gets annoying since works both ways
-
-;; (key-chord-define-global "<<" 'smart-shift-left)
-;; (key-chord-define-global ">>" 'smart-shift-right)
 
 ;; ;;;;;;;;;;;;;; ############ FIXME TODO ;;;;;;;;;;;;;; ############
 ;; ;;; http://blogs.fluidinfo.com/terry/2011/11/10/emacs-buffer-mode-histogram/

@@ -3,22 +3,6 @@
 ;; Split nicer
 (setq split-window-keep-point nil)
 
-;; ;;;;;; ##### FIXME TODO
-(defun move-line-up ()
-  "Move up the current line."
-  (interactive)
-  (transpose-lines 1)
-  (forward-line -2)
-  (indent-according-to-mode))
-
-(defun move-line-down ()
-  "Move down the current line."
-  (interactive)
-  (forward-line 1)
-  (transpose-lines 1)
-  (forward-line -1)
-  (indent-according-to-mode))
-
 ;; Swap/flip/flop/transpose buffers easily
 (require 'transpose-frame)
 ;; Transpose stuff with M-t
