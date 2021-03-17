@@ -922,7 +922,8 @@ current buffer" t)
 ;; Modeline customizations
 ;; Time
 (setq display-time-day-and-date t
-      display-time-24hr-format t)
+      display-time-24hr-format t
+      display-time-default-load-average nil)
 (display-time-mode t)
 
 ;; Battery percentage
