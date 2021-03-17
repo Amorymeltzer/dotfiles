@@ -943,11 +943,33 @@ current buffer" t)
 (defalias 'replace-query-regexp 'query-replace-regexp)
 (defalias 'replace-query-regexp-eval 'query-replace-regexp-eval)
 
+;; Allow scrolling (not off-screen) during search
+;; Kind of weird if going up?
+(setq isearch-allow-scroll t
+      ;; Add search commands to history, allow resuming
+      isearch-resume-in-command-history t)
+
+;; Scroll history in isearch, same as minibuffer
+(define-key isearch-mode-map (kbd "M-p") 'isearch-ring-retreat)
+(define-key isearch-mode-map (kbd "M-n") 'isearch-ring-advance)
+
+;; Grab the full word for searching
+(defun isearch-yank-symbol ()
+  (interactive)
+  (isearch-yank-internal (lambda () (forward-symbol 1) (point))))
+(define-key isearch-mode-map (kbd "C-M-w") 'isearch-yank-symbol)
+
+;; Activate occur easily inside isearch
+(define-key isearch-mode-map (kbd "C-o")
+  (lambda () (interactive)
+    (let ((case-fold-search isearch-case-fold-search))
+      (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
+
 ;; Visual feedback for regex replace
 ;; Should I alias the above to this?  Maybe. ;;;;;; ####### FIXME TODO
 ;; Also setup isearch, isearch regexp for this style?  Probably
 ;; Replace is fast, query asks
-;; Only works DOWN a bufer
+;; Only works DOWN a buffer
 ;; Sourced by below -steroids
 ;; https://github.com/benma/visual-regexp.el
 ;; (require 'visual-regexp)
@@ -972,8 +994,8 @@ current buffer" t)
 ;; (global-set-key (kbd "C-c r") 'vr/replace)
 ;; (global-set-key (kbd "C-c q") 'vr/query-replace)
 
-;; Display number of matches in modeline for isearch.  Need to use anzu instead
-;; of visual regexp since it does much the same thing ;;;;;;; ##### FIXME TODO
+;; Display number of matches in modeline for isearch.  Use anzu instead of
+;; visual regexp since it does much the same thing??? ;;;;;;; ##### FIXME TODO
 ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
 ;; (global-set-key (kbd "C-x M-%") 'anzu-query-replace-at-cursor)
 ;; (global-set-key (kbd "C-x %") 'anzu-replace-at-cursor-thing)
@@ -1010,24 +1032,6 @@ current buffer" t)
 
 (add-to-list 'debug-ignored-errors "\\[AceJump\\].*")
 
-;; Allow scrolling (not off-screen) during search
-;; Kind of weird if going up?
-(setq isearch-allow-scroll t
-      ;; Add search commands to history, allow resuming
-      isearch-resume-in-command-history t)
-
-;; Grab the full word for searching
-(defun isearch-yank-symbol ()
-  (interactive)
-  (isearch-yank-internal (lambda () (forward-symbol 1) (point))))
-
-(define-key isearch-mode-map (kbd "C-M-w") 'isearch-yank-symbol)
-
-;; Activate occur easily inside isearch
-(define-key isearch-mode-map (kbd "C-o")
-  (lambda () (interactive)
-    (let ((case-fold-search isearch-case-fold-search))
-      (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
 
 
 ;; Utilize system's trash can
@@ -2324,8 +2328,8 @@ This checks in turn:
   (interactive)
   (let* ((mode major-mode)
 	 (region (with-current-buffer (current-buffer)
-                   (if (region-active-p)
-                       (buffer-substring-no-properties
+		   (if (region-active-p)
+		       (buffer-substring-no-properties
 			(region-beginning)
 			(region-end))))))
 
@@ -2398,12 +2402,16 @@ This checks in turn:
 (defalias 'perl-mode 'cperl-mode)
 
 
+;; Don't have ruby-mode auto-insert coding utf-8 info on files
+(setq ruby-insert-encoding-magic-comment nil)
+
+
 ;;; Should probably figure out a way to diminish these fuckers
 ;; Colors numbers
 ;; https://github.com/Fanael/highlight-numbers
 ;; Should... do elsewhere?  Remove?  prog-mode-map? Customize color??? FIXME TODO
 (autoload 'highlight-numbers-mode "highlight-numbers" "Highlight numeric literals in source code" t)
-;; Color identifiers based on their name
+;; Color identifiers based on their name, less useful with fully-powered theme coloring
 ;; https://github.com/Fanael/rainbow-identifiers
 (autoload 'rainbow-identifiers-mode "rainbow-identifiers" "Color identifiers based on their name" t)
 ;; Color identifies uniquely
@@ -2427,9 +2435,6 @@ This checks in turn:
 (global-set-key (kbd "C-h F") #'helpful-function)
 (global-set-key (kbd "C-h C") #'helpful-command)
 
-
-;; Don't have ruby-mode auto-insert coding utf-8 info on files
-(setq ruby-insert-encoding-magic-comment nil)
 
 ;; which-key has better sorting than guide-key
 ;; https://github.com/justbur/emacs-which-key
