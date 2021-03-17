@@ -1103,7 +1103,6 @@ current buffer" t)
 ;; Dired, file browser and then some
 ;; Should really look at dired-mode-map for the full suite of commands
 (require 'dired)
-(global-set-key (kbd "C-x C-d") 'dired-jump) ; C-x d already dired...
 (setq dired-auto-revert-buffer t
       dired-dwim-target t		; seems useful?
       dired-hide-details-hide-symlink-targets nil
@@ -1117,6 +1116,14 @@ current buffer" t)
 ;; Available as C-x C-q, but nice to be able to toggle more easily
 (define-key dired-mode-map (kbd "C-w") 'wdired-change-to-wdired-mode)
 
+;; dired-x: ignore uninteresting files
+(require 'dired-x)
+(add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
+;; Feels weird that dired-jump is part of dired-x...
+(global-set-key (kbd "C-x C-d") 'dired-jump) ; C-x d already dired...
+;; By default excludes ., ., autosave files, and lockfiles(?); add stupid OSX
+;; .DS_Store files
+(setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|\\`.DS_Store\\'")
 
 ;;;;;;;;;;;;;;;;;;;
 ;; IDO, Interactively Do Things
