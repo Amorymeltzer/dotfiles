@@ -55,8 +55,12 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-;; Custom theme directory
-(setq custom-theme-directory (expand-file-name "themes" user-emacs-directory))
+;; Themes
+(setq
+ ;; Custom theme directory
+ custom-theme-directory (expand-file-name "themes" user-emacs-directory)
+ ;; Treat all themes as safe
+ custom-safe-themes t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package
