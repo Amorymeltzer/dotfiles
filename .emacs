@@ -100,6 +100,9 @@
 ;; This must come before configurations of installed packages
 (package-initialize)
 
+;; Should probably install auto-package-update
+;; https://github.com/rranelli/auto-package-update.el
+
 ;; use-package https://github.com/jwiegley/use-package
 ;; install (if not already present) and require, must be around for everyone else
 ;; Should actually use this...
@@ -144,7 +147,7 @@ Record that in `paradox--backups', but do nothing if
   (when (fboundp mode) (funcall mode -1)))
 ;; Prevent the startup message and splash screen
 (setq inhibit-startup-echo-area-message user-login-name
-      inhibit-startup-message t)
+      inhibit-startup-screen t)
 
 ;; UTF-8 always, always, always
 (set-default-coding-systems 'utf-8)
@@ -207,8 +210,7 @@ Record that in `paradox--backups', but do nothing if
       yas-triggers-in-field t)		; Allow nested expansions
 (define-key yas-minor-mode-map (kbd "C-c C-i") 'yas-insert-snippet) ; C-c tab
 (yas-reload-all)
-(add-hook 'prog-mode-hook #'yas-minor-mode)
-(add-hook 'text-mode-hook #'yas-minor-mode)
+(yas-global-mode)
 
 ;; Default M-/ is dabbrev-expand, but this is broken? ;;;;; ###### FIXME TODO
 ;; (global-set-key "\M-/" 'auto-complete)
@@ -871,10 +873,9 @@ current buffer" t)
 ;; This can be an arg of some functions (apropos \"timer\").")
 
 ;; Open at last place visited in a file
-;; Any overlap with desktop or persistency?
-;; Note great with emacsclient
+;; Any overlap with desktop or persistency? Not great with emacsclient
 (require 'saveplace)
-(setq-default save-place t)
+(save-place-mode)
 (setq save-place-file (expand-file-name "saved-places" user-emacs-directory))
 
 
@@ -1290,12 +1291,20 @@ current buffer" t)
 
 
 ;; Really need to figure these out FIXME TODO
+;; C-x C-b is crap
 ;; Better/easier buffer menu???
 ;; (global-set-key (kbd "C-c C-b") 'bs-show)
 ;; What about ibuffer?!  Also iswitchb-mode for switching...
 ;; (global-set-key (kbd "C-c C-b") 'ibuffer
 ;; Consider this from http://emacs.stackexchange.com/q/2177/2051
 ;; (add-hook 'ibuffer-mode-hook (lambda () (ibuffer-auto-mode 1)))
+;; ibuffer-vc would be dope too https://github.com/purcell/ibuffer-vc
+;; Try this:
+;; (add-hook 'ibuffer-hook
+;;		  (lambda ()
+;;		    (ibuffer-vc-set-filter-groups-by-vc-root)
+;;		    (unless (eq ibuffer-sorting-mode 'alphabetic)
+;;		      (ibuffer-do-sort-by-alphabetic))))
 
 ;; Also electric, but... eh
 ;; (electric-buffer-list)
@@ -2527,6 +2536,7 @@ This checks in turn:
 (which-key-mode)
 
 ;; Display what function block if I'm in in certain modes
+;; reenable?  prog-mode-hook?
 ;; (set-face-attribute 'which-func nil
 ;;                     :foreground "LightPink3" :weight 'bold)
 ;; (add-hook 'sh-mode-hook 'which-function-mode)
@@ -2604,7 +2614,6 @@ This checks in turn:
 
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'markdown-mode-hook 'flyspell-mode)
 (add-hook 'fundamental-mode-hook 'flyspell-mode)
 
 
@@ -2742,6 +2751,8 @@ This checks in turn:
      (define-key browse-kill-ring-mode-map (kbd "C-g") 'browse-kill-ring-quit)
      (define-key browse-kill-ring-mode-map (kbd "M-n") 'browse-kill-ring-forward)
      (define-key browse-kill-ring-mode-map (kbd "M-p") 'browse-kill-ring-previous)))
+;; Prefer M-y to kill-ring-ido rather than browse-kill-ring (via
+;; browse-kill-ring-default-keybindings function)
 (autoload 'kill-ring-ido "kill-ring-ido" "Kill-ring browsing with ido" t)
 (global-set-key (kbd "M-y") 'kill-ring-ido)
 
