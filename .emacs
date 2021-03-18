@@ -1117,6 +1117,10 @@ current buffer" t)
 (setq wdired-allow-to-change-permissions 'advanced)
 ;; Available as C-x C-q, but nice to be able to toggle more easily
 (define-key dired-mode-map (kbd "C-w") 'wdired-change-to-wdired-mode)
+;; The mode-map isn't around until loaded
+(with-eval-after-load "wdired"
+  (define-key wdired-mode-map (kbd "C-w") 'wdired-abort-changes)
+  (define-key wdired-mode-map (kbd "C-c k") 'wdired-abort-changes))
 
 ;; dired-x: ignore uninteresting files
 (require 'dired-x)
