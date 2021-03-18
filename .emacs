@@ -1101,8 +1101,11 @@ current buffer" t)
 (global-set-key (kbd "C-x i") 'tab-to-tab-stop)
 
 
+;;;;;;;;;;;;;;;;;;;
 ;; Dired, file browser and then some
 ;; Should really look at dired-mode-map for the full suite of commands
+;; Like, v and o are dope!
+;; Check out dired-hacks for filter, sort, narrow, colors, etc https://github.com/Fuco1/dired-hacks
 (require 'dired)
 (setq dired-auto-revert-buffer t
       dired-dwim-target t		; seems useful?
@@ -1112,6 +1115,27 @@ current buffer" t)
   (setq-default dired-ls-F-marks-symlinks t ; OSX uses @ after symlinks
 		dired-use-ls-dired nil))    ; OSX ls doesn't support --dired
 (add-hook 'dired-mode-hook 'hl-line-mode)
+;; Use a rather than return so as not to open up so many damn windows
+;; Don't warn/disable/whatever
+(put 'dired-find-alternate-file 'disabled nil)
+;; Remap ^ to use find-alternate-file to move up, thus not opening another dired
+;; buffer.  In theory that might be nice, but in practice I'm just passing through.
+;; Could probably just use dired-single https://github.com/crocket/dired-single
+(defun my/dired-move-up-directory ()
+  "Move up one directory without opening yet another Dired buffer.  Mimics
+`dired-find-alternate-file', but uses `find-alternate-file' it its place so as
+to explicitly provide `..' as an argument.  Will be remapped to `^'."
+  (interactive)
+  (set-buffer-modified-p nil)
+  (find-alternate-file ".."))
+(define-key dired-mode-map (kbd "^") 'my/dired-move-up-directory)
+
+;; Rename dired buffers to absolute directory name, courtesy of
+;; https://emacs.stackexchange.com/a/2154/2051
+(add-hook 'dired-after-readin-hook
+	  (lambda ()
+	    ;; Uniquify-esque or Magit-esque?
+	    (rename-buffer (generate-new-buffer-name (concat "dired: " dired-directory)))))
 
 ;; wdired lets you rename files
 (setq wdired-allow-to-change-permissions 'advanced)
@@ -1130,6 +1154,7 @@ current buffer" t)
 ;; By default excludes ., ., autosave files, and lockfiles(?); add stupid OSX
 ;; .DS_Store files
 (setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|\\`.DS_Store\\'")
+
 
 ;;;;;;;;;;;;;;;;;;;
 ;; IDO, Interactively Do Things
