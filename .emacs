@@ -824,11 +824,11 @@ current buffer" t)
 ;; Save a bunch of variables to the desktop file.  For lists specify the len
 ;; of the maximal saved data also
 (setq desktop-globals-to-save
-      (append '((extended-command-history . 50)
+      (append '((extended-command-history . 100)
 		(file-name-history        . 100)
 		(grep-history             . 30)
 		(compile-history          . 30)
-		(minibuffer-history       . 60)
+		(minibuffer-history       . 100)
 		(query-replace-history    . 50)
 		(read-expression-history  . 30)
 		(regexp-history           . 60)
