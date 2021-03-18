@@ -1107,11 +1107,12 @@ current buffer" t)
 (setq dired-auto-revert-buffer t
       dired-dwim-target t		; seems useful?
       dired-hide-details-hide-symlink-targets nil
-      dired-listing-switches "-Flagoh")
-
+      dired-listing-switches "-Flagoth")
 (when (eq system-type 'darwin)
   (setq-default dired-ls-F-marks-symlinks t ; OSX uses @ after symlinks
 		dired-use-ls-dired nil))    ; OSX ls doesn't support --dired
+(add-hook 'dired-mode-hook 'hl-line-mode)
+
 ;; wdired lets you rename files
 (setq wdired-allow-to-change-permissions 'advanced)
 ;; Available as C-x C-q, but nice to be able to toggle more easily
