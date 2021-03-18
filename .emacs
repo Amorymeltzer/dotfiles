@@ -85,8 +85,6 @@
 ;; 'kill-ring-ido
 ;; 'perltidy
 ;; 'pick-backup
-;; 'thing-opt
-;; 'thingatpt+
 ;; 'tidy
 ;; 'u-mandelbrot
 
@@ -490,6 +488,7 @@ Record that in `paradox--backups', but do nothing if
 
 
 ;;; God there are a lot of ways to do this, need to pick the best one
+;;; hl-todo better? https://github.com/tarsius/hl-todo
 ;; ;;;;;; ###### FIXME TODO
 ;; Highlight TODOs, FIXMEs, etc.
 ;; https://github.com/lewang/fic-mode
@@ -729,6 +728,7 @@ buffer or region to mardown and display it in a separate window."
 
 ;; Tidy mode to judge your html
 ;; http://www.emacswiki.org/emacs/tidy.el
+;; Should get update elisp and tidy binary
 (autoload 'tidy-buffer "tidy" "Run Tidy HTML parser on current buffer" t)
 (autoload 'tidy_parse-config-file "tidy" "Parse the `tidy-config-file'" t)
 (autoload 'tidy-save-settings "tidy" "Save settings to `tidy-config-file'" t)
@@ -2387,12 +2387,6 @@ point or the words in the active region." t)
 (add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (autoload 'csv-mode "csv-mode"
   "Major mode for editing comma-separated value files." t)
-
-;; will I even use these?
-;; (require 'thingatpt+)
-;; Expanded things, namely kill thing, mark thing, and upward mark thing
-;; (require 'thing-opt)
-;; (define-thing-commands)
 
 
 ;; Describe whatever I'm on/in
