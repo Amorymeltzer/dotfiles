@@ -583,6 +583,20 @@ backups." t)
 (setq ediff-split-window-function 'split-window-horizontally)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
+;; Better ediff coloring?  Slightly more subtle?  Do for smerge...
+(eval-after-load 'ediff
+  '(progn
+     (set-face-foreground 'ediff-odd-diff-B "#ffffff")
+     (set-face-background 'ediff-odd-diff-B "#292521")
+     (set-face-foreground 'ediff-even-diff-B "#ffffff")
+     (set-face-background 'ediff-even-diff-B "#292527")
+
+     (set-face-foreground 'ediff-odd-diff-A "#ffffff")
+     (set-face-background 'ediff-odd-diff-A "#292521")
+     (set-face-foreground 'ediff-even-diff-A "#ffffff")
+     (set-face-background 'ediff-even-diff-A "#292527")))
+
+
 ;; Options to pass to ls, default just -l
 (setq list-directory-verbose-switches "-lh")
 
@@ -1559,6 +1573,10 @@ when in source code modes such as python-mode or perl-mode" t)
 
 
 ;; Magit stuff
+;; Idea: Create a modemap (C-x m or C-c m or something) for nice items:
+;; blame, status, log, etc.
+;; Open log, etc. in separate window?  Like vc-print-log
+;; Look into tweaking faces?
 ;; Prior to magit, I turned off built-in vc handling, preferring manual git:
 ;; (delete 'Git vc-handled-backends) ;; delete git from list of backends
 ;; (setq vc-handled-backends nil) ;; delete all backends
