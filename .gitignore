@@ -2,6 +2,7 @@
 /.emacs.d/*
 !/.emacs.d/custom.el
 !/.emacs.d/site-lisp/
+/.emacs.d/site-lisp/*/
 !/.emacs.d/themes/
 !/.emacs.d/snippets/
 
