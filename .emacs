@@ -1747,6 +1747,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key (kbd "C-c <down>") 'windmove-down)
 (global-set-key (kbd "C-c <left>") 'windmove-left)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
+(setq windmove-wrap-around t)
 
 ;; https://github.com/nflath/hungry-delete
 ;; Delete all white space chars at once
