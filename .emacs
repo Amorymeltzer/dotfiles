@@ -170,6 +170,14 @@ Record that in `paradox--backups', but do nothing if
 ;; a big difference, and on a big screen, it doesn't matter!
 (setq-default window-combination-resize t)
 
+;; ignore case when completing, including buffers and filenames
+(setq completion-ignore-case t
+      read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t)
+
+;; Completion in mini-buffer
+(icomplete-mode t)
+
 ;; Auto complete
 ;; http://cx4a.org/software/auto-complete/manual.html#Configuration
 (require 'auto-complete-config)
@@ -1049,14 +1057,6 @@ current buffer" t)
 ;; Utilize system's trash can
 (setq-default delete-by-moving-to-trash t
 	      trash-directory "~/.trash/emacs")
-
-;; ignore case when completing, including buffers and filenames
-(setq completion-ignore-case t
-      read-file-name-completion-ignore-case t
-      read-buffer-completion-ignore-case t)
-
-;; Completion in mini-buffer
-(icomplete-mode t)
 
 ;; minibuffer window expands vertically as necessary to hold the text that you
 ;; put in the minibuffer
@@ -2637,6 +2637,7 @@ This checks in turn:
 ;; (require 'pretty-mode)
 
 
+;; Some potentially useful stuff from Magnars https://github.com/magnars/.emacs.d
 ;; Rename file and buffer
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
@@ -2645,10 +2646,7 @@ This checks in turn:
 	(filename (buffer-file-name)))
     (if (not (and filename (file-exists-p filename)))
 	(error "Buffer '%s' is not visiting a file!" name)
-      (let ((new-name (read-file-name "New name: "
-				      (file-name-directory filename)
-				      nil nil
-				      (file-name-nondirectory filename))))
+      (let ((new-name (read-file-name "New name: " filename)))
 	(if (get-buffer new-name)
 	    (error "A buffer named '%s' already exists!" new-name)
 	  (rename-file filename new-name 1)
@@ -2657,7 +2655,6 @@ This checks in turn:
 	  (set-buffer-modified-p nil)
 	  (message "File '%s' successfully renamed to '%s'"
 		   name (file-name-nondirectory new-name)))))))
-
 ;; Don't use ido for this, would defeat the purpose
 (put 'rename-current-buffer-file 'ido 'ignore)
 
@@ -2673,6 +2670,8 @@ This checks in turn:
 	(delete-file filename)
 	(kill-buffer buffer)
 	(message "File '%s' successfully removed" filename)))))
+;; likewise
+(put 'delete-current-buffer-file 'ido 'ignore)
 
 (defun insert-file-name ()
   (interactive)
