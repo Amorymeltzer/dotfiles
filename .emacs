@@ -79,10 +79,6 @@
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
 ;; Manual package installs, ideally some can be removed
-;; 'hl-line+
-;; 'hl-spotlight
-;; 'col-highlight
-;; 'vline
 ;; 'hide-comnt
 ;; 'keep-buffers
 ;; 'keywiz
@@ -1549,25 +1545,12 @@ when in source code modes such as python-mode or perl-mode" t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Hi-lite current line
-;; As an alternative to the builtin, use Drew Adams' hl-line+
-;; requires hl-spotlight
-;; col-highlight requires vline.el as well
-;; Try out others?? https://www.emacswiki.org/emacs/HighlightCurrentLine FIXME TODO
-(require 'hl-line+)
-(require 'col-highlight)
-;; (global-hl-line-mode 1)
-;; (column-highlight-mode 1)
-;; Show when idle
-;; (toggle-hl-line-when-idle 1)
-;; (toggle-highlight-column-when-idle 1)
 ;; Customize hl-line, etc. colors
-(set-face-attribute 'hl-line nil :background "black" :foreground "white")
-;; (set-face-attribute 'col-highlight
-;;		    nil :background "black" :foreground "white")
-;; Doesn't perfectly hidge the fringe lines, but sobeit
-(set-face-attribute 'vertical-border
-		    nil :background "black" :foreground "black")
+(with-eval-after-load "hl-line"
+  (set-face-attribute 'hl-line nil :background "black" :foreground "white")
+  ;; Doesn't perfectly hidge the fringe lines, but sobeit
+  (set-face-attribute 'vertical-border
+		      nil :background "black" :foreground "black"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Point out changes
