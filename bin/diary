@@ -125,7 +125,7 @@ else
 	    "stats")
 		# Basic stats, should expand this (days done (since date?), etc.)
 		# This should be find but whatever
-		files=$(ls -1 | grep -E "\d{4}-\d{2}-\d{2}\.md")
+		files=$(ls -1 | grep -E "^\d{4}-\d{2}-\d{2}\.md$")
 		total=$(wc -l <<<"$files" | tr -d ' ')
 		# Here so the command command isn't called multiple times
 		hasSpark=`command -v spark`
@@ -152,7 +152,7 @@ else
 			    fi
 			    # Zero-pad month number
 			    find=$(printf "%02d" $i)
-			    mcount=$(echo "$yfiles" | grep -E "\d{4}-$find-\d{2}\.md" | wc -l | tr -d ' ')
+			    mcount=$(echo "$yfiles" | grep -E "^\d{4}-$find-\d{2}\.md$" | wc -l | tr -d ' ')
 			    if [ $mcount -gt 0 ]; then
 				mon=${mons[$i]}
 				echo -e "\t$mon: $mcount"
