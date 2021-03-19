@@ -40,6 +40,7 @@
 ;; http://www.emacswiki.org/emacs/EmacsNewbieKeyReference
 ;; http://www.rgrjr.com/emacs/emacs_cheat.html
 ;; http://www.emacswiki.org/emacs/Reference_Sheet_by_Aaron_Hawley
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Regexp-Backslash.html
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enter debugger on error
@@ -499,13 +500,36 @@ Record that in `paradox--backups', but do nothing if
 ;; (add-hook 'perl-mode-hook '(lambda () (highlight-lines-matching-regexp ".\\{81\\}" 'hi-red-b)))
 
 
-;;; God there are a lot of ways to do this, need to pick the best one
-;;; hl-todo better? https://github.com/tarsius/hl-todo
-;; ;;;;;; ###### FIXME TODO
-;; Highlight TODOs, FIXMEs, etc.
-;; https://github.com/lewang/fic-mode
-(require 'fic-mode)
-(add-hook 'prog-mode-hook 'fic-mode)
+;;; Highlight TODOs, FIXMEs, etc.
+;; There are a lot of ways to do this.  Previously I used fic-mode
+;; (<https://github.com/lewang/fic-mode>) which is fairly bare-bones.  It looks
+;; like hl-todo (<hl-todo better? https://github.com/tarsius/hl-todo>) is better
+;; (more customization options, ability to jump to each in turn), but, honestly,
+;; I kind of just like the simple method here.  In the end, that means something
+;; roughly at the level of fic-mode, but probably less-well integrated.  If I
+;; really need something more full-fledged, I'll just use hl-todo, with
+;; something like the below:
+;; (setq hl-todo '(t (:foreground "#e55c7a" :weight normal)))
+;; (setq hl-todo-keyword-faces
+;;       '(("TODO"  . "pink")
+;;	("FIXME" . "#cc9393")
+;;	("XXX"   . "#1E90FF")))
+(defun my/add-watchwords ()
+  (font-lock-add-keywords
+   ;; \\<, \\> are empty string at beginning, end of word
+   nil '(("\\<\\(FIXME\\|TODO\\|XXX\\)\\>"
+	  1 '((:foreground "pink") (:weight bold)) t))))
+(add-hook 'prog-mode-hook 'my/add-watchwords)
+(add-hook 'text-mode-hook 'my/add-watchwords)
+
+(font-lock-add-keywords 'emacs-lisp-mode
+			'(("autoload" . font-lock-keyword-face)))
+
+
+;; https://github.com/dgutov/highlight-escape-sequences
+;; (require 'highlight-escape-sequences)
+;; (setq hes-simple-modes '(emacs-lisp-mode))
+;; (hes-mode)
 
 ;; Really should figure out and group font-lock stuff ;;;;; #### FIXME TODO
 ;; Regexp color for backslash, and... escapes?
@@ -513,21 +537,6 @@ Record that in `paradox--backups', but do nothing if
 		    :foreground "#ff1493")
 (set-face-attribute 'font-lock-regexp-grouping-construct nil
 		    :foreground "#ff8c00")
-
-;; highlight specified words
-;; (defun my/add-watchwords ()
-;;   (font-lock-add-keywords
-;;    nil '(("\\_<\\(FIXME\\|TODO\\|XXX\\|@@@\\)\\_>"
-;;           1 '((:foreground "pink") (:weight bold)) t))))
-;; (add-hook 'prog-mode-hook 'my/add-watchwords)
-
-(font-lock-add-keywords 'emacs-lisp-mode
-			'(("autoload" . font-lock-keyword-face)))
-
-;; https://github.com/dgutov/highlight-escape-sequences
-;; (require 'highlight-escape-sequences)
-;; (setq hes-simple-modes '(emacs-lisp-mode))
-;; (hes-mode)
 
 
 ;; (require 'applescript-mode)
