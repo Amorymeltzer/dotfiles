@@ -308,6 +308,8 @@ Record that in `paradox--backups', but do nothing if
 (global-subword-mode 1)
 
 
+;;;;;;;;;;;;;;;;;;;
+;; JavaScript stuff
 ;; Use js2-mode instead of js-mode https://github.com/mooz/js2-mode
 (require 'js2-mode)
 (setq
@@ -351,6 +353,16 @@ Record that in `paradox--backups', but do nothing if
 ;; errors. This tells js2-mode to treat octothorpes and hashbangs as comments,
 ;; preventing them from causing parse errors
 ;; (setq js2-skip-preprocessor-directives t)
+
+;; jsdoc https://github.com/mooz/js-doc
+;; old and creaky, but okay enough for now.  Honestly, maybe yas would just be better?
+(require 'js-doc)
+(add-hook 'js2-mode-hook
+	  #'(lambda ()
+	      ;; clobbers js-set-js-context, whatever that did
+	      (define-key js2-mode-map "\C-c\C-j" 'js-doc-insert-function-doc)
+	      (define-key js2-mode-map "@" 'js-doc-insert-tag)))
+;;;;;;;;;;;;;;;;;;;
 
 ;; emmet-mode expansions, super cool if I ever remember (use C-j)
 ;; https://github.com/smihica/emmet-mode
@@ -652,9 +664,6 @@ backups." t)
 ;; (add-to-list 'recentf-arrange-rules (quote (("Perl files (%d)" ".\\.pl\\'"))))
 ;; (add-to-list 'recentf-arrange-rules (quote (("CGI files (%d)" ".\\.cgi\\'"))))
 
-;; Ensure cgi ends up in perl mode
-(add-to-list 'auto-mode-alist '("\\.[cG][gG][iI]$" . perl-mode))
-
 
 ;; Markdown mode
 (autoload 'markdown-mode "markdown-mode"
@@ -675,7 +684,8 @@ backups." t)
   '(progn
      ;; Colorize code blocks
      (setq markdown-fontify-code-blocks-natively t)
-     ;; Add js, etc.
+     ;; JavaScript missing from block highlighting
+     ;; Add perl?  css?  json?  FIXME TODO
      (add-to-list 'markdown-code-lang-modes '("js\\|javascript" . js2-mode))
 
      ;; key bindings
@@ -2448,6 +2458,8 @@ This checks in turn:
     (if region (insert region))
     (goto-char (point-max))))
 
+;;;;;;;;;;;;;;;;;;;
+;; cperl mode: Better than perl-mode
 ;; All the cperl options, bad?  Need to fix ;;;;; #### FIXME TODO
 ;; Affects:
 ;; cperl-font-lock, cperl-electric-lbrace-space, cperl-electric-parens
@@ -2504,6 +2516,10 @@ This checks in turn:
 (defalias 'perldoc 'cperl-perldoc)
 ;; Perl mode alias to make cperl default for .pl
 (defalias 'perl-mode 'cperl-mode)
+
+;; Ensure cgi ends up in perl mode
+(add-to-list 'auto-mode-alist '("\\.[cG][gG][iI]$" . perl-mode))
+;;;;;;;;;;
 
 
 ;; Don't have ruby-mode auto-insert coding utf-8 info on files
