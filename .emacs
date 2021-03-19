@@ -1603,8 +1603,10 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Edit git messages in markdown as these are mostly targeted for GitHub
 (add-hook 'git-commit-mode-hook 'markdown-mode)
 (setq magit-log-section-commit-count 25 ; default 10
-      ;; Display buffers in same buffer, except for diffs. Better?
-      magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
+      ;; Display buffers in same buffer, except for diffs
+      ;; Eh, they multiply too much, things get
+      ;; lost. 'magit-display-buffer-traditional is better
+      ;; magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
       ;; Turn this off if/when ivy
       magit-completing-read-function 'magit-ido-completing-read
       ;; Not entirely sure what this does, but seems worthwhile
