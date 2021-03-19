@@ -470,8 +470,8 @@ Record that in `paradox--backups', but do nothing if
 ;; Show all errors, pointless with one-line mode-line
 ;; (setq flymake-number-of-errors-to-display nil)
 
-;; Perltidy, also exists as stand-alone command line program
-;; Uses ~/.perltidyrc
+;; Perltidy: https://github.com/emacsmirror/emacswiki.org/blob/master/perltidy.el
+;; requires stand-alone command line program; uses ~/.perltidyrc
 (require 'perltidy)
 
 
