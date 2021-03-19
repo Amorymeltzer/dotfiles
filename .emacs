@@ -1654,9 +1654,15 @@ when in source code modes such as python-mode or perl-mode" t)
       )
 ;; Make magit use delta, if present https://github.com/dandavison/magit-delta
 ;; https://github.com/dandavison/delta
-;; Seemingly unnecessary if delta is your default pager
 (when (executable-find "delta")
   (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
+;; abridge-diff https://github.com/jdtsmith/abridge-diff
+;; Show refined, abridged diff hunks in magit
+;; Really neat but doesn't work with magit-delta
+;; Honestly this might be better for magit than delta, should investigate
+;; (with-eval-after-load "magit"
+;;   (require 'abridge-diff)
+;;   (abridge-diff-mode 1))
 
 ;; git modes for gitignore, gitconfig, and gitattributes
 ;; https://github.com/magit/git-modes
