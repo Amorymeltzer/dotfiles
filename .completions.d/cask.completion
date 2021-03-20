@@ -1,3 +1,0 @@
-# Make my life easier with my cask=brew cask alias
-
-complete -o bashdefault -o default -F _brew_cask cask
