@@ -311,11 +311,6 @@ stat = diff --stat
 dt = difftool -g
 mt = mergetool -g
 
-# Goodness (summary of diff lines added/removed/total)
-# FIXME TODO: Colorize
-gn = goodness
-gnc = goodness --cached
-
 # Copy sha hashes.  Trim new lines since sh's echo doesn't accept -n
 hash = "!r() { h=${1:-HEAD}; rev=$(git rev-parse $h); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
 sha = "!r() { h=${1:-HEAD}; rev=$(git rev-parse --short $h); echo $rev; echo $rev | tr -d '\n' | pbcopy; }; r"
