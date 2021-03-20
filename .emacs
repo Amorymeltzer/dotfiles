@@ -1673,6 +1673,30 @@ when in source code modes such as python-mode or perl-mode" t)
 ;;   (require 'abridge-diff)
 ;;   (abridge-diff-mode 1))
 
+;; magit-todos https://github.com/alphapapa/magit-todos
+;; (require 'magit-todos)
+;; ;; Could adjust section so not last via `magit-status-sections-hook'
+;; ;; See also https://github.com/alphapapa/magit-todos/issues/8
+;; (let ((inhibit-message t))
+;;   (setq
+;;    ;; Include hidden files like .emacs
+;;    magit-todos-rg-extra-args '("--hidden")
+;;    ;; Only go one level below the repo directory
+;;    magit-todos-depth 1
+;;    ;; .git should be handled by the depth, but still.  See also:
+;;    ;; https://github.com/alphapapa/magit-todos/pull/115
+;;    magit-todos-exclude-globs '(".git/" ".emacs.d/")
+;;    ;; hl-todo defines XXX+, a regex, which doesn't work
+;;    ;; https://github.com/alphapapa/magit-todos/issues/101
+;;    ;; But this doesn't either for some reason? FIXME TODO
+;;    magit-todos-keywords (append '("XXX") (map-keys hl-todo-keyword-faces)))
+;;   ;; Quiet message about *not* binding jT
+;;   (magit-todos-mode 1)
+;;   ;; Rebind jT to jump to TODOs list
+;;   ;; Problematic since transient https://github.com/alphapapa/magit-todos/issues/95
+;;   (transient-append-suffix 'magit-status-jump '(0 0 -1)
+;;     '("T " "Todos" magit-todos-jump-to-todos)))
+
 ;; git modes for gitignore, gitconfig, and gitattributes
 ;; https://github.com/magit/git-modes
 (autoload 'gitconfig-mode "gitconfig-mode" "A major mode for editing .gitconfig files." t)
