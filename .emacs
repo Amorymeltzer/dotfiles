@@ -58,7 +58,7 @@
 
 ;; Themes
 (setq
- ;; Custom theme directory
+ ;; Custom theme directory, in case
  custom-theme-directory (expand-file-name "themes" user-emacs-directory)
  ;; Treat all themes as safe
  custom-safe-themes t)
