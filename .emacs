@@ -401,6 +401,7 @@ Record that in `paradox--backups', but do nothing if
 ;;; Flymake stuff
 ;; Really should use flycheck if emacs >= 24 and revert back to flymake
 ;; otherwise Require flymake. ;;;;;; ##### FIXME TODO
+;; flymake is newer on MELPA, as is eldoc
 (require 'flymake)
 
 ;; Deal with stupid jshint/javascript/csslint stuff
@@ -429,23 +430,14 @@ Record that in `paradox--backups', but do nothing if
 ;; I want to see all errors for the line.
 (setq flymake-number-of-errors-to-display nil)
 
-;; Flymake cursor to show in buffer If you're a TTY emacs user, flymake-cursor
-;; is a must-have.
-;; (require 'flymake-cursor)
-;; https://github.com/illusori/emacs-flymake-cursor
-(eval-after-load 'flymake '(require 'flymake-cursor))
-(setq flymake-cursor-error-display-delay 0)
-
 ;;Turn on automatically
 (add-hook 'find-file-hook 'flymake-find-file-hook)
 
-;; flymake-perlcritic stuff.  Requires flymake_perlcritic, which should be
-;; present from the MELPA installation; if not, set flymake-perlcritic-command.
-;; That in turn makes use of your installed perlcritic executable.
+;; perlcritic stuff, stored from when flymake-perlcritic was a thing
 ;; https://github.com/illusori/emacs-flymake-perlcritic
-(when (executable-find "perlcritic")
-  (require 'flymake-perlcritic)
-  (setq flymake-perlcritic-severity 2))
+;; (when (executable-find "perlcritic")
+;;   (require 'flymake-perlcritic)
+;;   (setq flymake-perlcritic-severity 2))
 
 ;; https://github.com/purcell/flymake-easy
 (require 'flymake-easy)
@@ -464,8 +456,9 @@ Record that in `paradox--backups', but do nothing if
 ;; Redundant to cperl-mode??? ;;;;;; ##### FIXME TODO
 (set-face-attribute 'flymake-errline nil
 		    :foreground "black")
-(set-face-attribute 'flymake-infoline nil
-		    :foreground "black")
+;; This was used in the old version of flymake...
+;; (set-face-attribute 'flymake-infoline nil
+;; 		    :foreground "black")
 (set-face-attribute 'flymake-warnline nil
 		    :foreground "black")
 ;; Show all errors, pointless with one-line mode-line
