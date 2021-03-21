@@ -2277,19 +2277,18 @@ in the buffer." t)
      (add-to-list 'webjump-sites
 		  '("Urban Dict" .  [simple-query
 				     "www.urbandictionary.com"
-				     "http://www.urbandictionary.com/define.php?term="
+				     "https://www.urbandictionary.com/define.php?term="
 				     ""]))
+     (add-to-list 'webjump-sites
+		  '("IMDB" .  [simple-query
+			       "www.imdb.com"
+			       "https://www.imdb.com/find?q="
+			       "&s=all"]))
      (add-to-list 'webjump-sites
 		  '("Google translate" .  [simple-query
 					   "translate.google.com"
 					   "https://translate.google.com/?sl=auto&tl=en&text="
 					   ""]))
-     ;; Fix emacswiki search in webjump
-     (add-to-list 'webjump-sites
-		  '("Emacs Wiki" .  [simple-query
-				     "www.emacswiki.org"
-				     "https://duckduckgo.com/?q="
-				     "+site%3Aemacswiki.org"]))
      (add-to-list 'webjump-sites
 		  '("DOI" .  [simple-query
 			      "www.dx.doi.org/"
@@ -2298,101 +2297,36 @@ in the buffer." t)
      (add-to-list 'webjump-sites
 		  '("Youtube" .  [simple-query
 				  "www.youtube.com"
-				  "http://www.youtube.com/results?search_query="
+				  "https://www.youtube.com/results?search_query="
 				  ""]))
      (add-to-list 'webjump-sites
-		  '("IMDB" .  [simple-query
-			       "www.imdb.com"
-			       "www.imdb.com/find?q="
-			       "&s=all"]))))
+		  '("MediaWiki API" .  [simple-query
+					"www.mediawiki.org"
+					"https://www.mediawiki.org/wiki/API:"
+					""]))
+     (add-to-list 'webjump-sites
+		  '("MDN" .  [simple-query
+			      "developer.mozilla.org"
+			      "https://developer.mozilla.org/en-US/search?q="
+			      ""]))
+     (add-to-list 'webjump-sites
+		  '("devdocs" .  [simple-query
+				  "devdocs.io"
+				  "https://devdocs.io/#q="
+				  ""]))
 
-;; Should take some of these and add to webjump (devdocs, etc.)
-;; Should also rethink these prefixes: too good to use C-C? FIXME TODO
-;; Define a prefix map?
-(defun google ()
-  "Google the selected region if any, display a query prompt otherwise."
-  (interactive)
-  (browse-url
-   (concat
-    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
-    (url-hexify-string (if mark-active
-			   (buffer-substring (region-beginning) (region-end))
-			 (read-string "Google: "))))))
-(global-set-key (kbd "C-c g") 'google)
+     ;; Some wiki defaults aren't great
+     (add-to-list 'webjump-sites
+		  '("Emacs Wiki" .  [simple-query
+				     "www.emacswiki.org"
+				     "https://duckduckgo.com/?q="
+				     "+site%3Aemacswiki.org"]))
+     (add-to-list 'webjump-sites
+		  '("Wikipedia" .  [simple-query
+				    "en.wikipedia.org"
+				    "https://en.wikipedia.org/wiki/Special:Search/"
+				    ""]))))
 
-(defun youtube ()
-  "Search YouTube with a query or region if any."
-  (interactive)
-  (browse-url
-   (concat
-    "http://www.youtube.com/results?search_query="
-    (url-hexify-string (if mark-active
-			   (buffer-substring (region-beginning) (region-end))
-			 (read-string "Search YouTube: "))))))
-
-(defun wikipedia ()
-  "Search enWiki with a query or region if any."
-  (interactive)
-  (browse-url
-   (concat
-    "https://en.wikipedia.org/wiki/Special:Search/"
-    (url-hexify-string (if mark-active
-			   (buffer-substring (region-beginning) (region-end))
-			 (read-string "Search enWikipedia: "))))))
-(global-set-key (kbd "C-c w") 'wikipedia)
-
-(defun mediawiki ()
-  "Check mediawiki.org API pages with a query or region if any."
-  (interactive)
-  (browse-url
-   (concat
-    "https://www.mediawiki.org/wiki/API:"
-    (url-hexify-string (if mark-active
-			   (buffer-substring (region-beginning) (region-end))
-			 (read-string "mediawiki API: "))))))
-
-(defun doi ()
-  "Resolve a DOI link."
-  (interactive)
-  (browse-url
-   (concat
-    "http://www.dx.doi.org/"
-    (url-hexify-string (if mark-active
-			   (buffer-substring (region-beginning) (region-end))
-			 (read-string "DOI link: "))))))
-
-(defun emacswiki ()
-  "Search the EmacsWiki for a region or specific query."
-  (interactive)
-  (browse-url
-   (concat
-    "https://duckduckgo.com/?q="
-    (url-hexify-string (if mark-active
-			   (buffer-substring (region-beginning) (region-end))
-			 (read-string "Emacs: ")))
-    "+site%3Aemacswiki.org")))
-
-(defun mdn ()
-  "Search Mozilla's MDN with a query or region if any."
-  (interactive)
-  (browse-url
-   (concat
-    "https://developer.mozilla.org/en-US/search?q="
-    (url-hexify-string (if mark-active
-			   (buffer-substring (region-beginning) (region-end))
-			 (read-string "Search MDN docs: "))))))
-(global-set-key (kbd "C-c j") 'mdn)
-
-(defun devdocs ()
-  "Search devdocs.io with a query or region if any."
-  (interactive)
-  (browse-url
-   (concat
-    "https://devdocs.io/#q="
-    (url-hexify-string (if mark-active
-			   (buffer-substring (region-beginning) (region-end))
-			 (read-string "Search devdocs.io: "))))))
-;; (global-set-key (kbd "C-c d") 'devdocs)
 
 ;; browse-url-of-buffer will render the url assigned to a buffer.  This tells
 ;; Emacs how to map a given filename to a url. Check out skewer
