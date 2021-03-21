@@ -1585,8 +1585,9 @@ when in source code modes such as python-mode or perl-mode" t)
 
 
 ;; Magit stuff
-;; Idea: Create a modemap (C-x m or C-c m or something) for nice items:
-;; blame, status, log, etc.
+;; C-x g for status, but C-x M-g for magit-dispatch: trigger command directly
+;; C-c M-g: magit-file-dispatch; super convenient, so let's make it more so
+(global-set-key (kbd "C-c g") 'magit-file-dispatch)
 ;; Open log, etc. in separate window?  Like vc-print-log
 ;; Look into tweaking faces?
 ;; Prior to magit, I turned off built-in vc handling, preferring manual git:
