@@ -2410,68 +2410,57 @@ This checks in turn:
     (if region (insert region))
     (goto-char (point-max))))
 
-;;;;;;;;;;;;;;;;;;;
-;; cperl mode: Better than perl-mode
-;; All the cperl options, bad?  Need to fix ;;;;; #### FIXME TODO
+;;;;;;;;;;;;;;;;;;;;
+;; cperl-mode: Better than perl-mode
+;; All the cperl options, bad?  Read docs for more info
 ;; Affects:
 ;; cperl-font-lock, cperl-electric-lbrace-space, cperl-electric-parens
 ;; cperl-electric-linefeed, cperl-electric-keywords, cperl-lazy-help-time
 ;; cperl-info-on-command-no-prompt, cperl-clobber-lisp-bindings
 (setq cperl-hairy t)
-;; Help in cperl, default is 5s
-;; Works in perl-mode?! too?
-;; (setq cperl-lazy-help-time 1)
+;; Help in cperl, default is 5s.  Works in perl-mode?! too?
 (setq cperl-lazy-help-time 0.25)
 ;; Don't mess with C-h; would be useful but for the above
+;; Not working???
 (setq cperl-clobber-lisp-bindings 1)
 ;; flymake in cperl
 (add-hook 'cperl-mode-hook 'flymake-mode)
-;; Treat _ as word character, probably counter-intuitive
+;; Treat _ as word character, probably counter-intuitive.  cperl-under-as-char
+;; is deprecated, so use superword-mode (well, don't, but you know)
 ;; (setq cperl-under-as-char t)
-;; Good?
-(setq cperl-font-lock t
-      cperl-highlight-variables-indiscriminately t)
 
-;; Do some color fixin' in cperl-mode
+;; Good?
+(setq cperl-highlight-variables-indiscriminately t)
+
 (eval-after-load "cperl-mode"
   '(progn
-     (setq fill-column 78)		; Need a better place for this...
-					; ;;;;;; ##### FIXME TODO
+     ;; Do some color fixin' in cperl-mode, check out cperl-tips-faces
+     ;; Really need to play around with these when themin' FIXME TODO
      (set-face-attribute 'cperl-array-face nil :background "nil" :foreground
-			 "blue" :underline t) ; arrays
+			 "blue") ; arrays
      (set-face-attribute 'cperl-hash-face nil :background "nil" :foreground
-			 "red" :underline t) ; hashes
-     (set-face-attribute 'cperl-nonoverridable-face nil :background "nil"
-			 :foreground "nil") ; `print`, anything else?
+			 "red") ; hashes
+     ;; (set-face-attribute 'cperl-nonoverridable-face nil :background "nil"
+     ;;				 :foreground "nil") ; `print`, etc.
+
+     ;; Was cperl-next-interpolated-REx-1
      (define-key cperl-mode-map (kbd "C-c C-y") nil)
+     ;; Was auto-fill-mode
      (define-key cperl-mode-map (kbd "C-c C-f") nil)
+     ;; Was cperl-find-bad-style
      (define-key cperl-mode-map (kbd "C-c C-b") nil)))
 
-;; Sets face just for cperl-mode, to return magenta to use strict/warnings
-;; From https://stackoverflow.com/a/17630877/2521092
-;; First create new face which is a copy of hl-line-face
-(copy-face 'font-lock-function-name-face 'cperl-strictwarnings-face)
-
-;; Change what you want in this new face
-(set-face-attribute 'cperl-strictwarnings-face nil
-		    :foreground "magenta" :bold nil)
-
-;; The function to use the new face
-(defun my-cperl-strictwarnings ()
-  (set (make-local-variable 'font-lock-function-name-face)
-       'cperl-strictwarnings-face))
-
-;; Finally, the hook
-(add-hook 'cperl-mode-hook 'my-cperl-strictwarnings)
+;; cperl always better than perl
+(defalias 'perl-mode 'cperl-mode)
+(add-to-list 'interpreter-mode-alist '("\\(mini\\)?perl5?" . cperl-mode))
+;; Not complete but pod can be let through
+(add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
+;; Ensure cgi ends up there too
+(add-to-list 'auto-mode-alist '("\\.[cC][gG][iI]$" . cperl-mode))
 
 ;; Perldoc in emacs
 (defalias 'perldoc 'cperl-perldoc)
-;; Perl mode alias to make cperl default for .pl
-(defalias 'perl-mode 'cperl-mode)
-
-;; Ensure cgi ends up in perl mode
-(add-to-list 'auto-mode-alist '("\\.[cG][gG][iI]$" . perl-mode))
-;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
 
 
 ;; Don't have ruby-mode auto-insert coding utf-8 info on files
