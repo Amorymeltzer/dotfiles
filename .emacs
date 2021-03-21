@@ -1843,6 +1843,8 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Was exchange-point-and-mark
 (global-set-key (kbd "C-x C-x") 'delete-other-windows)
+;; C-x C-SPC
+(global-set-key (kbd "C-x C-@") 'exchange-point-and-mark)
 
 ;; C-x u for tree, C-_ to undo, M-_ to redo, etc.
 ;; Define a hook to automatically show diff/timestamps?
