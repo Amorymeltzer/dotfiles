@@ -2259,44 +2259,52 @@ in the buffer." t)
 ;; eprime-mode https://github.com/AndrewHynes/eprime-mode
 (autoload 'eprime-mode "eprime-mode" "Check text conforms to E', disallowing forms of \"to be\".")
 
-;; Just use webjump!  Also, damn, I wish it could take at-point/region by default
+;; webjump for searching easily
 (global-set-key (kbd "C-x j") 'webjump)
-;; Add some missing items to the webjump catalog
-(eval-after-load "webjump" '(progn
-			      (add-to-list 'webjump-sites
-					   '("Urban Dict" .  [simple-query
-							      "www.urbandictionary.com"
-							      "http://www.urbandictionary.com/define.php?term="
-							      ""]))
-			      (add-to-list 'webjump-sites
-					   '("Google translate" .  [simple-query
-							      "translate.google.com"
-							      "https://translate.google.com/?sl=auto&tl=en&text="
-							      ""]))
-			      ;; Fix emacswiki search in webjump
-			      (add-to-list 'webjump-sites
-					   '("Emacs Wiki" .  [simple-query
-							      "www.emacswiki.org"
-							      "https://duckduckgo.com/?q="
-							      "+site%3Aemacswiki.org"]))
-			      ;; DOI
-			      (add-to-list 'webjump-sites
-					   '("DOI" .  [simple-query
-						       "www.dx.doi.org/"
-						       "www.dx.doi.org/"
-						       ""]))
-			      ;; Youtube
-			      (add-to-list 'webjump-sites
-					   '("Youtube" .  [simple-query
-							   "www.youtube.com"
-							   "http://www.youtube.com/results?search_query="
-							   ""]))
-			      ;; IMDB
-			      (add-to-list 'webjump-sites
-					   '("IMDB" .  [simple-query
-							"www.imdb.com"
-							"www.imdb.com/find?q="
-							"&s=all"]))))
+(eval-after-load "webjump"
+  '(progn
+     ;; webjump doesn't take at-point/region by default, so overwrite the
+     ;; relevant function with a tiny bit of code to help it do so
+     (defun webjump-read-string (prompt)
+       (let ((input
+	      (read-string (concat prompt ": ")
+			   (if mark-active
+			       (buffer-substring (region-beginning) (region-end))
+			     (thing-at-point 'symbol t)))))
+	 (if (webjump-null-or-blank-string-p input) nil input)))
+
+     ;; Add some missing items to the webjump catalog
+     (add-to-list 'webjump-sites
+		  '("Urban Dict" .  [simple-query
+				     "www.urbandictionary.com"
+				     "http://www.urbandictionary.com/define.php?term="
+				     ""]))
+     (add-to-list 'webjump-sites
+		  '("Google translate" .  [simple-query
+					   "translate.google.com"
+					   "https://translate.google.com/?sl=auto&tl=en&text="
+					   ""]))
+     ;; Fix emacswiki search in webjump
+     (add-to-list 'webjump-sites
+		  '("Emacs Wiki" .  [simple-query
+				     "www.emacswiki.org"
+				     "https://duckduckgo.com/?q="
+				     "+site%3Aemacswiki.org"]))
+     (add-to-list 'webjump-sites
+		  '("DOI" .  [simple-query
+			      "www.dx.doi.org/"
+			      "www.dx.doi.org/"
+			      ""]))
+     (add-to-list 'webjump-sites
+		  '("Youtube" .  [simple-query
+				  "www.youtube.com"
+				  "http://www.youtube.com/results?search_query="
+				  ""]))
+     (add-to-list 'webjump-sites
+		  '("IMDB" .  [simple-query
+			       "www.imdb.com"
+			       "www.imdb.com/find?q="
+			       "&s=all"]))))
 
 ;; Should take some of these and add to webjump (devdocs, etc.)
 ;; Should also rethink these prefixes: too good to use C-C? FIXME TODO
