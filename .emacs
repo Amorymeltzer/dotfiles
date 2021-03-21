@@ -2418,8 +2418,10 @@ This checks in turn:
 ;; cperl-electric-linefeed, cperl-electric-keywords, cperl-lazy-help-time
 ;; cperl-info-on-command-no-prompt, cperl-clobber-lisp-bindings
 (setq cperl-hairy t)
-;; Help in cperl, default is 5s.  Works in perl-mode?! too?
-(setq cperl-lazy-help-time 0.25)
+;; Help in cperl, default is 5s, must be integer.  Can do C-h v (when not
+;; clobbering lisp) for immediate help.  See also `cperl-mode-map' for more
+;; along that line
+(setq cperl-lazy-help-time 1)
 ;; Don't mess with C-h; would be useful but for the above
 ;; Not working???
 (setq cperl-clobber-lisp-bindings 1)
