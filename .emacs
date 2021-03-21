@@ -403,35 +403,28 @@ Record that in `paradox--backups', but do nothing if
 ;; otherwise Require flymake. ;;;;;; ##### FIXME TODO
 ;; flymake is newer on MELPA, as is eldoc
 (require 'flymake)
+;; Good?  Maybe just for cperl (done there) and elisp, given js2 is fine for js
+;; (add-hook 'prog-mode-hook 'flymake-mode)
 
 ;; Deal with stupid jshint/javascript/csslint stuff
 ;; I really need to migrate to flycheck
 (delete '("\\.js\\'" flymake-javascript-init) flymake-allowed-file-name-masks)
 (delete '("\\.css\\'" flymake-css-init) flymake-allowed-file-name-masks)
 
-;; Static analysis can be slow, so only run flymake if I've not been typing for 5 seconds.
-;; It will still run on save or hitting return.
+;; Static analysis can be slow, so only run flymake if I've not been typing for
+;; 5 seconds.  It will still run on save or hitting return.
 (setq flymake-no-changes-timeout 3)
 
-;; Disable in-place checking, and tell it to use ~/.emacs.d/tmp/ for the temp files.
-(setq temporary-file-directory (expand-file-name "tmp/" user-emacs-directory))
-(setq flymake-run-in-place nil)
-
-;; Only need these two if you plan to debug Flymake.
-(setq flymake-log-file-name (concat temporary-file-directory "flymake.log"))
-(setq flymake-log-level -1)
-
-;; Tune how many checks can run in parallel, default of 4 should be fine.
-;;(setq flymake-max-parallel-syntax-checks 1)
-
-;; I want to see at most the first 4 errors for a line.
-;;(setq flymake-number-of-errors-to-display 4)
-
-;; I want to see all errors for the line.
-(setq flymake-number-of-errors-to-display nil)
+;; Make flymake faces pop
+(set-face-attribute 'flymake-note nil
+		    :background "DarkGreen" :foreground "white")
+(set-face-attribute 'flymake-warning nil
+		    :background "DarkBlue" :foreground "white")
+(set-face-attribute 'flymake-error nil
+		    :background "Firebrick4" :foreground "white")
 
 ;;Turn on automatically
-(add-hook 'find-file-hook 'flymake-find-file-hook)
+;; (add-hook 'find-file-hook 'flymake-find-file-hook)
 
 ;; perlcritic stuff, stored from when flymake-perlcritic was a thing
 ;; https://github.com/illusori/emacs-flymake-perlcritic
@@ -451,18 +444,6 @@ Record that in `paradox--backups', but do nothing if
 (global-set-key (kbd "C-c '") 'flymake-goto-next-error)
 ;; C-c C-C to go to prev error
 (global-set-key (kbd "C-c ;") 'flymake-goto-prev-error)
-
-;; Flymake faces, do the same for cperl's checking faces?
-;; Redundant to cperl-mode??? ;;;;;; ##### FIXME TODO
-(set-face-attribute 'flymake-errline nil
-		    :foreground "black")
-;; This was used in the old version of flymake...
-;; (set-face-attribute 'flymake-infoline nil
-;; 		    :foreground "black")
-(set-face-attribute 'flymake-warnline nil
-		    :foreground "black")
-;; Show all errors, pointless with one-line mode-line
-;; (setq flymake-number-of-errors-to-display nil)
 
 ;; Perltidy: https://github.com/emacsmirror/emacswiki.org/blob/master/perltidy.el
 ;; requires stand-alone command line program; uses ~/.perltidyrc
@@ -511,6 +492,9 @@ Record that in `paradox--backups', but do nothing if
   (font-lock-add-keywords
    ;; \\<, \\> are empty string at beginning, end of word
    nil '(("\\<\\(FIXME\\|TODO\\|XXX\\)\\>"
+	  ;; Consider: rebeccapurple, purple, magenta, violet, pink, etc.
+	  ;; These are good candidates for font-lock-function-name-face whenever
+	  ;; I customize my theme...
 	  1 '((:foreground "pink") (:weight bold)) t))))
 (add-hook 'prog-mode-hook 'my/add-watchwords)
 (add-hook 'text-mode-hook 'my/add-watchwords)
@@ -2590,6 +2574,8 @@ This checks in turn:
 
 
 (defalias 'elisp-mode 'emacs-lisp-mode)
+(add-hook 'emacs-lisp-mode-hook 'flymake-mode)
+
 ;; Give info at point in elisp mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (setq eldoc-idle-delay 0.25)		;Default is 0.5
