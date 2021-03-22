@@ -670,9 +670,11 @@ backups." t)
   '(progn
      ;; Colorize code blocks
      (setq markdown-fontify-code-blocks-natively t)
-     ;; JavaScript missing from block highlighting
-     ;; Add perl?  css?  json?  FIXME TODO
+     ;; Add a few missing from block highlighting
      (add-to-list 'markdown-code-lang-modes '("js\\|javascript" . js2-mode))
+     (add-to-list 'markdown-code-lang-modes '("css" . css-mode))
+     (add-to-list 'markdown-code-lang-modes '("json" . json-mode))
+     (add-to-list 'markdown-code-lang-modes '("perl" . cperl-mode))
 
      ;; key bindings
      (define-key markdown-mode-map (kbd "C-M-f") 'forward-symbol)
