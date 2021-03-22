@@ -363,6 +363,13 @@ Record that in `paradox--backups', but do nothing if
 	      ;; clobbers js-set-js-context, whatever that did
 	      (define-key js2-mode-map "\C-c\C-j" 'js-doc-insert-function-doc)
 	      (define-key js2-mode-map "@" 'js-doc-insert-tag)))
+
+;; flymake-eslint
+;; Nice to have but slow when enabled, maybe turn on manually?
+(autoload 'flymake-eslint-enable "flymake-eslint" "Enable Flymake and add flymake-eslint as a buffer-local Flymake backend." t)
+;; (add-hook 'js2-mode-hook
+;;   (lambda ()
+;;     (flymake-eslint-enable)))
 ;;;;;;;;;;;;;;;;;;;
 
 ;; emmet-mode expansions, super cool if I ever remember (use C-j)
