@@ -825,6 +825,7 @@ current buffer" t)
       desktop-restore-eager 2		; Load this many buffers, rest when lazy
       desktop-load-locked-desktop 'ask	; Just as a reminder
       desktop-restore-forces-onscreen nil ; Don't restore frames onto the screen
+      desktop-dirname user-emacs-directory
       desktop-base-file-name "emacs.desktop"	  ; Not .emacs.desktop
       desktop-base-lock-name "emacs.desktop.lock" ; Not .emacs.desktop.lock
       ;; Don't try to save if file is locked, I'll always be quick
@@ -848,44 +849,18 @@ current buffer" t)
 		tags-file-name
 		register-alist)))
 
-;; I'd like the desktop to be automatically saved whenever Emacs has been idle
-;; for some time:
-(if completion-ignore-case
-    (defvar desktop-save-time
-      (run-with-idle-timer 60 t (lambda ()
-				  (garbage-collect)
-				  (wm-save-desktop-with-message)))
-      "idle-timer (see \\[run-with-idle-timer]) to save desktop \\[cancel-timer] to cancel it."))
-(setq desktop-dirname user-emacs-directory)
-(defun wm-save-desktop-with-message ()
+;; Save the desktop automatically whenever Emacs has been idle for some time
+(defvar desktop-save-time
+  (run-with-idle-timer 60 t (lambda ()
+			      (garbage-collect)
+			      (my/save-desktop-with-message)))
+  "idle-timer (see \\[run-with-idle-timer]) to save desktop \\[cancel-timer] to cancel it.")
+(defun my/save-desktop-with-message ()
   (interactive)
   (desktop-save desktop-dirname)
   (message "Desktop saved at %s, memory-limit %x."
-	   (wm-format-time-string "%T %a %d %b %y")
+	   (format-time-string "%T %a %d %b %y")
 	   (memory-limit)))
-
-
-(defun wm-format-time-string (format &optional time)
-  "Like format-time-string except that %a gives a 2-char abbreviation."
-  ;; Under GNU 19.34 (format-time-string "%2a") returns "2a".
-  (callf or time (current-time))
-  (if (string-match "\\(\\`\\|[^%]\\|\\(%%\\)+\\)%a" format)
-      (let ((i (match-end 0)))
-	(concat (format-time-string (substring format 0 (- i 2)) time)
-		(substring (format-time-string "%a" time) 0 2)
-		(wm-format-time-string (substring format i) time)))
-    (format-time-string format time)))
-
-;; (defvar wm-desktop-save-timer
-;;   (run-with-idle-timer
-;;    60 ;take the action after idle for this many seconds
-;;    t  ;repeat (i.e. don't just do it the first time Emacs has been idle)
-;;    (lambda ()
-;;      (garbage-collect)
-;;        ;bundle with desktop timer for performance reasons
-;;      (wm-save-desktop-with-message)))
-;;   "Timer object causing desktop saving after idle time.
-;; This can be an arg of some functions (apropos \"timer\").")
 
 ;; Open at last place visited in a file
 ;; Any overlap with desktop or persistency? Not great with emacsclient
@@ -2216,19 +2191,6 @@ idle for SECS seconds." t)
 	   (vconcat zone-programs [zone-pgm-md5]))))
 
 
-
-(defun wm-format-time-string (format &optional time)
-  "Like format-time-string except that %a gives a 2-char abbreviation."
-  ;; Under GNU 19.34 (format-time-string "%2a") returns "2a".
-  (callf or time (current-time))
-  (if (string-match "\\(\\`\\|[^%]\\|\\(%%\\)+\\)%a" format)
-      (let ((i (match-end 0)))
-	(concat (format-time-string (substring format 0 (- i 2)) time)
-		(substring (format-time-string "%a" time) 0 2)
-		(wm-format-time-string (substring format i) time)))
-    (format-time-string format time)))
-
-
 ;; define-word https://github.com/abo-abo/define-word
 ;; uses https://wordnik.com/ by default, but can customize
 ;; define-word-default-service to openthesaurus, webster, or offline-wiktionary
@@ -2714,8 +2676,8 @@ This checks in turn:
 ;; TEST FOR EMACS VERSION USE FOR IDO AND SMEX
 ;; ;;;;;;;;;;;;;; ############ FIXME TODO
 ;; (if (and (>= emacs-major-version 25) (>= emacs-minor-version 2))
-;;     (message "Emacs loaded at %s." (wm-format-time-string "%T %a %d %b %y"))
-;;   (message "Emacs dumb at %s." (wm-format-time-string "%T %a %d %b %y")))
+;;     (message "Emacs loaded at %s." (format-time-string "%T %a %d %b %y"))
+;;   (message "Emacs dumb at %s." (format-time-string "%T %a %d %b %y")))
 
 ;; (when (> emacs-major-version 23)
 ;;   (message "Emacs is >23"))
@@ -3022,18 +2984,6 @@ instead."
 	      (kill-buffer buffer)))
 	  (buffer-list))))
 
-
-(defun ted-find-mode (extension &optional interactive)
-  "Returns the mode in which a file with EXTENSION would be opened."
-  (interactive "sExtension: \np")
-  (let ((mode (assoc-default (concat "." extension) auto-mode-alist
-			     'string-match default-major-mode)))
-    (when interactive
-      (message "A file with extension .%s would be opened with mode %s"
-	       extension mode))
-    mode))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (smex-initialize)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -3203,7 +3153,7 @@ instead."
 ;;;;;;; END
 ;; (when (require 'time-date nil t)
 ;;   (message "Emacs startup time: %d seconds." (time-to-seconds (time-since emacs-load-start-time))))
-(message "Emacs loaded at %s." (wm-format-time-string "%T %a %d %b %y"))
+(message "Emacs loaded at %s." (format-time-string "%T %a %d %b %y"))
 
 
 ;;;;Package todos
