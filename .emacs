@@ -1809,12 +1809,18 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key (kbd "C-x C-@") 'exchange-point-and-mark)
 
 ;; C-x u for tree, C-_ to undo, M-_ to redo, etc.
-;; Define a hook to automatically show diff/timestamps?
-;; FIXME TODO
 (require 'undo-tree)
 (global-undo-tree-mode)
-;; Larger size limits for undo
-(setq undo-limit 32000000	 ;; 160000
+(setq undo-tree-visualizer-timestamps t		 ;; default is off
+      undo-tree-visualizer-relative-timestamps t ;; default is on
+      ;; Save history
+      undo-tree-auto-save-history t
+      undo-tree-history-directory-alist `(("." . ,(expand-file-name "undo-tree" user-emacs-directory)))
+      ;; Neat mini diff
+      undo-tree-visualizer-diff t
+      ;; Larger size limits for undo, this might get unwieldy now that I'm
+      ;; saving the history across sessions
+      undo-limit 32000000	 ;; 160000
       undo-outer-limit 24000000) ;; 24000000
 
 ;; Way more likely to remember
