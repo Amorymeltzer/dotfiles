@@ -403,6 +403,9 @@ Record that in `paradox--backups', but do nothing if
 ;; otherwise Require flymake. ;;;;;; ##### FIXME TODO
 ;; flymake is newer on MELPA, as is eldoc
 (require 'flymake)
+;; Remove annoying logging.  Doesn't quite get all of 'em?  Last one is for
+;; `elisp-flymake-checkdoc' on startup, wrong-type-argument integer-or-marker-p nil
+(remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
 ;; Good?  Maybe just for cperl (done there) and elisp, given js2 is fine for js
 ;; (add-hook 'prog-mode-hook 'flymake-mode)
 
