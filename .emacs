@@ -620,7 +620,7 @@ backups." t)
 ;; other process has finished writing!!!  Set manually!
 ;; (auto-revert-tail-mode 1)
 
-;; Recent files (~/.emacs.d/.recentf)
+;; Recent files (~/.emacs.d/recentf)
 ;; Pointless if saving buffers as below?
 (require 'recentf)
 (recentf-mode 1)
@@ -638,9 +638,9 @@ backups." t)
 (add-to-list 'recentf-exclude "\\.el.gz\\'")
 (add-to-list 'recentf-exclude "\\.elc\\'")
 (add-to-list 'recentf-exclude "\\/opt\\/local\\/share\\/emacs.*\\'")
-(add-to-list 'recentf-exclude "\\.ido.last\\'")
-(add-to-list 'recentf-exclude "\\.smex-items\\'")
-(add-to-list 'recentf-exclude "\\.recentf\\'")
+(add-to-list 'recentf-exclude "ido.last\\'")
+(add-to-list 'recentf-exclude "smex-items\\'")
+(add-to-list 'recentf-exclude "recentf\\'")
 (add-to-list 'recentf-exclude "\\node_modules\\'")
 
 ;; Cleanup timer
