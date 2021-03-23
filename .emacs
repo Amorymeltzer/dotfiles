@@ -414,6 +414,8 @@ Record that in `paradox--backups', but do nothing if
 ;; `elisp-flymake-checkdoc' on startup, wrong-type-argument integer-or-marker-p nil
 (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
 ;; Good?  Maybe just for cperl (done there) and elisp, given js2 is fine for js
+;; Then again, if this is present, given the presence of flymake-proselint in
+;; text-mode-hook, flymake would be on basically everywhere...
 ;; (add-hook 'prog-mode-hook 'flymake-mode)
 
 ;; Deal with stupid jshint/javascript/csslint stuff
@@ -436,7 +438,8 @@ Record that in `paradox--backups', but do nothing if
 ;;Turn on automatically
 ;; (add-hook 'find-file-hook 'flymake-find-file-hook)
 
-;; perlcritic stuff, stored from when flymake-perlcritic was a thing
+;; perlcritic stuff, stored from when flymake-perlcritic was a thing.  Could
+;; maybe write a quick miniversion based on flymake-easy or flymake-quickdef?
 ;; https://github.com/illusori/emacs-flymake-perlcritic
 ;; (when (executable-find "perlcritic")
 ;;   (require 'flymake-perlcritic)
@@ -676,6 +679,7 @@ backups." t)
 
 ;; Should add some more here
 ;; Also need to make interactives for bold, italics, headers, etc
+;; Stop clobbering flymake-goto error commands FIXME TODO
 (eval-after-load "markdown-mode"
   '(progn
      ;; Colorize code blocks
@@ -2591,6 +2595,17 @@ This checks in turn:
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'fundamental-mode-hook 'flyspell-mode)
+
+
+;; flymake-proselint https://github.com/manuel-uberti/flymake-proselint
+;; Clearly depends on the proselint executable (pip, macports, brew, etc)
+;; https://github.com/amperser/proselint/
+(add-hook 'text-mode-hook
+	  (lambda ()
+	    ;; With this, flymake is on for (c)perl and text modes, pretty close
+	    ;; to everything I care about...
+	    (flymake-mode +1)
+	    (flymake-proselint-setup)))
 
 
 ;; FUCKS SHIT UP ;;;;;;; #########
