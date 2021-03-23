@@ -155,9 +155,27 @@ Record that in `paradox--backups', but do nothing if
 ;; Prevent the startup message and splash screen
 (setq inhibit-startup-echo-area-message user-login-name
       inhibit-startup-screen t)
+
 ;; But use a neat dashboard
 (require 'dashboard)
-(dashboard-setup-startup-hook)
+
+;; Tip of the day taken from
+;; https://github.com/emacs-dashboard/emacs-dashboard/issues/26 and
+;; https://gist.github.com/saintaardvark/375aa054c15f02c42f45
+;; Not perfect, should ideally limit self to a modemap or something
+(defun totd()
+  (interactive)
+      (let* ((commands (cl-loop for s being the symbols
+				when (commandp s) collect s))
+	     (command (nth (random (length commands)) commands)))
+	(insert
+     (format "** Tip of the day: **\nCommand: %s\n\n%s\n\nInvoke with: "
+	     command (documentation command)))
+	(where-is command t)))
+(defun dashboard-insert-totd (list-size)
+  (totd))
+(add-to-list 'dashboard-item-generators '(totd . dashboard-insert-totd))
+
 ;; Required for emacsclient
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 ;; Expand recents; not using bookmarks or agenda, but keep here as reminder to
@@ -167,9 +185,10 @@ Record that in `paradox--backups', but do nothing if
 			;; (projects . 5)	; Depends on projectile
 			(agenda . 5)
 			;; (registers . 5)
-			))
-(setq dashboard-set-navigator t)
-(setq dashboard-set-init-info t)
+			(totd . 1)))
+(setq dashboard-set-navigator t
+      dashboard-set-init-info t)
+(dashboard-setup-startup-hook)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indent if possible but complete otherwise
 (setq-default tab-always-indent 'complete)
