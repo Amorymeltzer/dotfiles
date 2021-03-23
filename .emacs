@@ -620,11 +620,17 @@ backups." t)
 ;; other process has finished writing!!!  Set manually!
 ;; (auto-revert-tail-mode 1)
 
+;; Some file names used here and in their respective modes, defined here to
+;; avoid duplication of strings and mistakes like d1134df2
+(defvar my/recentf-file "recentf")
+(defvar my/ido-file "ido.last")
+(defvar my/smex-file "smex-items")
+
 ;; Recent files (~/.emacs.d/recentf)
 ;; Pointless if saving buffers as below?
 (require 'recentf)
 (recentf-mode 1)
-(setq recentf-save-file (expand-file-name "recentf" user-emacs-directory))
+(setq recentf-save-file (expand-file-name my/recentf-file user-emacs-directory))
 ;; Uses ~ instead of full path
 (setq recentf-filename-handlers (quote abbreviate-file-name))
 ;; Same as above?
@@ -638,9 +644,9 @@ backups." t)
 (add-to-list 'recentf-exclude "\\.el.gz\\'")
 (add-to-list 'recentf-exclude "\\.elc\\'")
 (add-to-list 'recentf-exclude "\\/opt\\/local\\/share\\/emacs.*\\'")
-(add-to-list 'recentf-exclude "ido.last\\'")
-(add-to-list 'recentf-exclude "smex-items\\'")
-(add-to-list 'recentf-exclude "recentf\\'")
+(add-to-list 'recentf-exclude (concat my/ido-file "\\'"))
+(add-to-list 'recentf-exclude (concat my/smex-file "\\'"))
+(add-to-list 'recentf-exclude (concat my/recentf-file "\\'"))
 (add-to-list 'recentf-exclude "\\node_modules\\'")
 
 ;; Cleanup timer
@@ -1210,7 +1216,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (ido-at-point-mode)
 
 ;; Specify save file in ~/.emacs.d/ folder
-(setq ido-save-directory-list-file (expand-file-name "ido.last" user-emacs-directory)
+(setq ido-save-directory-list-file (expand-file-name my/ido-file user-emacs-directory)
       ;; Kind of keeps buffer names around via recentf in case things get closed
       ido-use-virtual-buffers t
       ;; Probably good/useful
@@ -1446,7 +1452,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; https://github.com/nonsequitur/smex/
 (require 'smex)
 ;; Specify save file in ~/.emacs.d/ folder, MUST be before initializing
-(setq smex-save-file (expand-file-name "smex-items" user-emacs-directory))
+(setq smex-save-file (expand-file-name my/smex-file user-emacs-directory))
 (smex-initialize)
 
 ;; Only a slight speed enhancement, but let's be honest: I'm not loading tons
@@ -1825,7 +1831,7 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Was exchange-point-and-mark
 (global-set-key (kbd "C-x C-x") 'delete-other-windows)
-;; C-x C-SPC
+;; aka C-x C-SPC
 (global-set-key (kbd "C-x C-@") 'exchange-point-and-mark)
 
 ;; C-x u for tree, C-_ to undo, M-_ to redo, etc.
