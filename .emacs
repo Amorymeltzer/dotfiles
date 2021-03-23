@@ -2555,6 +2555,9 @@ This checks in turn:
 
 
 (defalias 'elisp-mode 'emacs-lisp-mode)
+;; Doesn't handle (M)ELPA well since this just defaults to "./" Should probably
+;; be setq-local, but whatever
+(setq elisp-flymake-byte-compile-load-path load-path)
 (add-hook 'emacs-lisp-mode-hook 'flymake-mode)
 
 ;; Give info at point in elisp mode
