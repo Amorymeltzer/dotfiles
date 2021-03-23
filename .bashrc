@@ -1215,7 +1215,7 @@ alias pbp='pbpaste'
 alias clipboard="tr -d '\n' | pbcopy"
 
 function uniqsort() {
-    sort $1 | uniq | sort
+    sort $1 | uniq -c | sort -nr
 }
 # quicksort in three lines from http://git.io/UzwyWQ
 qsort()
