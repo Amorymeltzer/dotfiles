@@ -481,11 +481,11 @@ trap _exit EXIT
 
 ## Sourcin'
 ## Throw all potential sources into an array, check, then source
-# Some personal/private stuff, used in various places bash and lisp
+# Some personal/private stuff, used in various places, both bash and lisp
 # Consider loading in .bash_profile, with GIT_PERS_DIR and PERL_PERS_DIR??
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
-# DIARY_DIR, TWITTER_USERNAME, GITHUB_USERNAME
+# DIARY_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
 sources=("$HOME/.config/bash/priv-env.sh")
 # Homebrew completion directory, here before macports since I generally use
 # the latter.  Confident glob probably fine given the -f -r checks below.
@@ -1172,8 +1172,8 @@ alias ipaddr="ifconfig -a | grep 'inet' | grep 'broadcast' | awk '{ print $2 }'"
 alias ipinfo='http -b ipinfo.io/json'
 
 # $OSTYPE == darwin* FIXME TODO
-function ssid()
-{
+# Should include fallback for no network, etc.
+function ssid() {
     local ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | grep " SSID" | sed "s/.*: //")
 
     if [ "$1" ]; then
@@ -1184,7 +1184,9 @@ function ssid()
 	echo $ssid
     fi
 }
-
+# Should probably export more/all of these... FIXME TODO
+# Also: -f `command -v func` is a weird pattern
+export -f ssid
 
 # View HTTP traffic
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"

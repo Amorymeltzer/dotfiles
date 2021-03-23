@@ -46,7 +46,13 @@ today=$(date +"%Y-%m-%d").md
 function newDay {
     if [[ ! -f $today ]]; then
 	title=$(date +"%A, %B %d, %Y")
-	printf "# $title\n\n" > $today
+
+	# Try to check ssid, insert a reminder to note location if not at home
+	if [[ -n `command -v ssid` ]] && [[ -n $HOME_SSID ]] && [[ $HOME_SSID != "$(ssid)" ]]; then
+	    away=" (INSERTLOCATION)"
+	fi
+
+	printf "# ${title}${away}\n\n" > $today
 	notes=$(cat notes)
 	if [[ -n $notes ]]; then
 	    printf "## Thoughts\n" >> $today
