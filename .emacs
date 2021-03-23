@@ -46,6 +46,16 @@
 ;; Enter debugger on error
 (setq debug-on-error t)
 
+;; UTF-8 always, always, always
+(set-default-coding-systems 'utf-8)
+(setq-default locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(set-language-environment "UTF-8")
+;; (setq-default buffer-file-coding-system 'utf-8-unix)
+
 ;; Local lisp, will take precedence over elpa directory
 (add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
 ;; Prefer newer files even if not .elc
@@ -141,21 +151,25 @@ Record that in `paradox--backups', but do nothing if
 ;; No menu bar
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
   (when (fboundp mode) (funcall mode -1)))
+
 ;; Prevent the startup message and splash screen
 (setq inhibit-startup-echo-area-message user-login-name
       inhibit-startup-screen t)
-
-;; UTF-8 always, always, always
-(set-default-coding-systems 'utf-8)
-(setq-default locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(set-language-environment "UTF-8")
-;; (setq-default buffer-file-coding-system 'utf-8-unix)
-
-
+;; But use a neat dashboard
+(require 'dashboard)
+(dashboard-setup-startup-hook)
+;; Required for emacsclient
+(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+;; Expand recents; not using bookmarks or agenda, but keep here as reminder to
+;; do so.  Should use projectile at some point
+(setq dashboard-items '((recents  . 15)
+			(bookmarks . 5)
+			;; (projects . 5)	; Depends on projectile
+			(agenda . 5)
+			;; (registers . 5)
+			))
+(setq dashboard-set-navigator t)
+(setq dashboard-set-init-info t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indent if possible but complete otherwise
 (setq-default tab-always-indent 'complete)
@@ -903,13 +917,13 @@ current buffer" t)
 ;; Bookmarks are persistent and they have names; not markers. Bookmarked
 ;; positions can also be relocated (found) if they move slightly because of
 ;; text changes.
-
 ;; To navigate to a bookmark (linking to a file or directory), just press
 ;; `C-x r b'. You'll be prompted for the bookmark name, and it will open that
 ;; file or directory.
 ;; C-x r l for list
 ;; C-x r m to make a new one
 ;; C-x r d to delete
+;; Fuck I should use these more
 (global-set-key "\C-xrd" 'bookmark-delete)
 ;; where to save the bookmarks
 (setq bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
