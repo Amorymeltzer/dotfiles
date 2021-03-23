@@ -370,6 +370,12 @@ Record that in `paradox--backups', but do nothing if
 ;; (add-hook 'js2-mode-hook
 ;;   (lambda ()
 ;;     (flymake-eslint-enable)))
+;; Would be nice to have a toggle
+(defun flymake-eslint-disable ()
+  "Reverse `flymake-eslint-enable': Remove the availability of `eslint' as a Flymake backend and turn off Flymake."
+  (interactive "P")
+  (remove-hook 'flymake-diagnostic-functions 'flymake-eslint--checker t)
+  (flymake-mode -1))
 ;;;;;;;;;;;;;;;;;;;
 
 ;; emmet-mode expansions, super cool if I ever remember (use C-j)
