@@ -156,8 +156,32 @@ Record that in `paradox--backups', but do nothing if
 (setq inhibit-startup-echo-area-message user-login-name
       inhibit-startup-screen t)
 
-;; But use a neat dashboard
+;; But use a neat dashboard https://github.com/emacs-dashboard/emacs-dashboard
 (require 'dashboard)
+(setq dashboard-set-navigator t
+      dashboard-set-init-info t)
+;; Required for emacsclient
+(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+
+;; List files in current directory https://github.com/emacs-dashboard/dashboard-ls
+;; (require 'dashboard-ls)
+;; Doesn't work well for emacsclient since 'default-directory is set when emacs
+;; is started.  Ideally, with something like the below (inspired by startup.el),
+;; dashboard-ls could take a function to determine the working directory when
+;; called, then do something like the above lambda here as well, but in practice
+;; emacsclient doesn't have good, fresh access to the PWD on loading.  Maybe if
+;; aliased to a function that takes the PWD when opening?  Awkward.
+
+;; (let* ((path
+;;	(cond ((stringp dashboard-ls-path)
+;;	       (symbol-value 'dashboard-ls-path))
+;;	      ((functionp dashboard-ls-path)
+;;	       (funcall dashboard-ls-path))
+;;	      ((booleanp dashboard-ls-path)
+;;	       (symbol-value 'default-directory)))
+;;	))
+;;    ;; (message "%s" path)
+;;    (setq dashboard-ls--record-path path))
 
 ;; Tip of the day taken from
 ;; https://github.com/emacs-dashboard/emacs-dashboard/issues/26 and
@@ -176,18 +200,17 @@ Record that in `paradox--backups', but do nothing if
   (totd))
 (add-to-list 'dashboard-item-generators '(totd . dashboard-insert-totd))
 
-;; Required for emacsclient
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 ;; Expand recents; not using bookmarks or agenda, but keep here as reminder to
 ;; do so.  Should use projectile at some point
 (setq dashboard-items '((recents  . 15)
+			;; (ls-files . 5)
+			;; (ls-directories . 3)
 			(bookmarks . 5)
 			;; (projects . 5)	; Depends on projectile
 			(agenda . 5)
 			;; (registers . 5)
 			(totd . 1)))
-(setq dashboard-set-navigator t
-      dashboard-set-init-info t)
+
 (dashboard-setup-startup-hook)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indent if possible but complete otherwise
