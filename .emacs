@@ -712,9 +712,6 @@ backups." t)
 (add-to-list 'recentf-exclude (concat my/recentf-file "\\'"))
 (add-to-list 'recentf-exclude "\\node_modules\\'")
 
-;; Cleanup timer
-;; (setq recentf-auto-cleanup 300)
-(setq recentf-auto-cleanup 'never)
 
 ;; From http://www.emacswiki.org/emacs/recentf-ext.el:
 ;;; [2009/03/01] (@* "`recentf' as most recently USED files")
