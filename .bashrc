@@ -742,6 +742,25 @@ function mkmv() {
 }
 
 
+# Rarely do I need the calendar for years in Roman times, and it's really
+# annoying to have to enter this year when I just want last or next month or
+# something, so let's make this more useful for day-to-day usage.
+function cal {
+    # Smartypants
+    if [[ "$1" == '-m' ]]; then
+	command cal $@
+    else
+	month=$1
+	year=$2
+	if [[ -z $year ]] && [[ $month -lt 13 ]]; then
+	    command cal -m "$month"
+	else
+	    command cal "$month"
+	fi
+    fi
+}
+
+
 # Human-readable values, and a total for du
 alias df='df -h'
 # Also ignore stupid things that require permissions
