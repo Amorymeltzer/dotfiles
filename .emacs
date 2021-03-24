@@ -683,6 +683,10 @@ backups." t)
 ;; other process has finished writing!!!  Set manually!
 ;; (auto-revert-tail-mode 1)
 
+;; Follow real links to files.  Roughly mirrors vc-follow-symlinks, but for
+;; non-vc managed files
+(setq find-file-visit-truename t)
+
 ;; Some file names used here and in their respective modes, defined here to
 ;; avoid duplication of strings and mistakes like d1134df2
 (defvar my/recentf-file "recentf")
@@ -711,6 +715,9 @@ backups." t)
 (add-to-list 'recentf-exclude (concat my/smex-file "\\'"))
 (add-to-list 'recentf-exclude (concat my/recentf-file "\\'"))
 (add-to-list 'recentf-exclude "\\node_modules\\'")
+;; Exclude symlinks
+(add-to-list 'recentf-exclude
+	     (lambda (f) (not (string= (file-truename f) f))))
 
 
 ;; From http://www.emacswiki.org/emacs/recentf-ext.el:
