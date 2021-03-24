@@ -391,6 +391,13 @@ Record that in `paradox--backups', but do nothing if
 	      (when (string-match "twinkle@azatoth" (buffer-file-name))
 		(setq js2-additional-externs
 		      '("$" "mw" "Morebits" "Twinkle"))))))
+;; Make faces pop
+(set-face-attribute 'js2-warning nil
+		    :background "DarkBlue" :foreground "white")
+(set-face-attribute 'js2-error nil
+		    :background "Firebrick4" :foreground "white")
+
+
 ;; Part of js2-mode package
 (require 'js2-imenu-extras)
 (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
