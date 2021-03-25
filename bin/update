@@ -125,7 +125,7 @@ if [[ -z $nosudo && -z $macports_all_flag ]]; then
 	echo "$port_todo" | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [[ -z $macports_flag ]]; then
 	    updating 'Macports'
-	    bug && echo "${port_todo[@]}" | xargs bash -c 'for arg; do sudo port -p upgrade "$arg"; done' _
+	    bug && echo "${port_todo[@]}" | xargs bash -c 'for arg; do sudo port -p upgrade "$arg"; done'
 	    cleaning 'Macports'
 	    sudo port uninstall inactive;
 	    if [[ -n $(port echo leaves) ]]; then
@@ -167,7 +167,7 @@ if [[ -z $nosudo && -z $ruby_all_flag ]]; then
 	echo "$ruby_todo"
 	if [[ -z $ruby_flag ]]; then
 	    updating 'ruby gems'
-	    bug && echo "${ruby_todo[@]}" | cut -f 1 -d ' ' | xargs bash -c 'for arg; do sudo gem update "$arg"; done' _
+	    bug && echo "${ruby_todo[@]}" | cut -f 1 -d ' ' | xargs bash -c 'for arg; do sudo gem update "$arg"; done'
 	    cleaning 'ruby gems'
 	    sudo gem cleanup;
 	fi
@@ -187,9 +187,9 @@ if [[ -z $nosudo && -z $cpan_all_flag ]]; then
 	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
 
 	    if [[ -f `command -v cpanm` ]]; then
-		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; done' _
+		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; done'
 	    else
-		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpan -i "$arg"; done' _
+		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpan -i "$arg"; done'
 	    fi
 	    # Unnecessary with cpanm
 	    # cleaning 'CPAN directories'
@@ -211,7 +211,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	    updating 'brews'
 	    echo "$brew_todo"
 	    # brew upgrade now handles casks, but I still prefer cu
-	    bug && echo "${brew_todo[@]}" | xargs bash -c 'for arg; do brew upgrade --formula "$arg"; done' _
+	    bug && echo "${brew_todo[@]}" | xargs bash -c 'for arg; do brew upgrade --formula "$arg"; done'
 
 	    cleaning 'brews'
 	    brew cleanup -s
@@ -250,7 +250,7 @@ if [[ -z $npm_all_flag ]]; then
 	    updating 'npm nodejs packages (global)'
 	    # skip column headers, pass package names to npm install since
 	    # global implies caret semver https://github.com/npm/cli/issues/746
-	    bug && echo "${npm_todo[@]}" | tail -n +2 | cut -f 1 -d ' ' | xargs bash -c 'for arg; do npm install --global "$arg"; done' _
+	    bug && echo "${npm_todo[@]}" | tail -n +2 | cut -f 1 -d ' ' | xargs bash -c 'for arg; do npm install --global "$arg"; done'
 	fi
     else
 	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
@@ -264,7 +264,7 @@ if [[ -z $python_all_flag ]]; then
 	echo "$python_todo"
 	if [[ -z $python_flag ]]; then
 	    updating 'pip python packages'
-	    bug && grep -v '^\-e' <<< "$python_todo" | grep -v opencv-python | cut -d ' ' -f 1 | tail +3 | xargs bash -c 'for arg; do pip install --upgrade --user "$arg"; done' _
+	    bug && grep -v '^\-e' <<< "$python_todo" | cut -d ' ' -f 1 | tail +3 | xargs bash -c 'for arg; do pip install --upgrade --user "$arg"; done'
 	fi
     else
 	echo -e "${Color_Green}pip python packages already up-to-date!${Color_zOff}"

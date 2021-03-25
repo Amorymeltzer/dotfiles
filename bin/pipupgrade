@@ -3,4 +3,4 @@
 # Upgrade all pip modules
 # http://stackoverflow.com/a/3452888/2521092
 
-pip list --outdated --user | grep -v '^\-e' | grep -v opencv-python | cut -d ' ' -f 1 | tail +3 | xargs pip install --upgrade --user
+pip list --outdated --user | grep -v '^\-e' | cut -d ' ' -f 1 | tail +3 | xargs pip install --upgrade --user
