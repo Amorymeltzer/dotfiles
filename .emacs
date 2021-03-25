@@ -695,6 +695,8 @@ backups." t)
 (defvar my/recentf-file "recentf")
 (defvar my/ido-file "ido.last")
 (defvar my/smex-file "smex-items")
+(defvar my/desktop-file "emacs.desktop") ;; Rename to just desktop(.lock)???
+(defvar my/saveplace-file "saved-places")
 
 ;; Recent files (~/.emacs.d/recentf)
 ;; Pointless if saving buffers as below?
@@ -910,8 +912,7 @@ current buffer" t)
 (autoload 'reveal-in-osx-finder "reveal-in-osx-finder" "Reveal file/folder in finder" t)
 (global-set-key (kbd "C-c z") 'reveal-in-osx-finder)
 
-;; Save a list of open files in ~/.emacs.d/emacs.desktop(.lock)
-;; Rename to just desktop(.lock)???
+;; Save a list of open files
 ;; Not great with emacsclient server?  Not great with dashboard, that's for sure...
 ;; Load the desktop *after* all init stuff is done.
 (eval-after-load "init"
@@ -924,8 +925,8 @@ current buffer" t)
       desktop-load-locked-desktop 'ask	; Just as a reminder
       desktop-restore-forces-onscreen nil ; Don't restore frames onto the screen
       desktop-dirname user-emacs-directory
-      desktop-base-file-name "emacs.desktop"	  ; Not .emacs.desktop
-      desktop-base-lock-name "emacs.desktop.lock" ; Not .emacs.desktop.lock
+      desktop-base-file-name my/desktop-file	  ; Not .emacs.desktop
+      desktop-base-lock-name (concat my/desktop-file ".lock") ; Not .emacs.desktop.lock
       ;; Don't try to save if file is locked, I'll always be quick
       desktop-not-loaded-hook (quote (desktop-save-mode-off))
       desktop-path (quote (user-emacs-directory "~"))) ; Just in case
@@ -949,10 +950,11 @@ current buffer" t)
 
 
 ;; Open at last place visited in a file
-;; Any overlap with desktop or persistency? Not great with emacsclient
+;; Any overlap with desktop or persistency? Not great with emacsclient?
+;; Do something like 'recenter in save-place-find-file-hook??
 (require 'saveplace)
 (save-place-mode)
-(setq save-place-file (expand-file-name "saved-places" user-emacs-directory))
+(setq save-place-file (expand-file-name my/saveplace-file user-emacs-directory))
 
 
 ;; Save clipboard strings into kill ring before replacing them.
