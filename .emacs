@@ -1831,8 +1831,9 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Maybe make a C-t map, put in transpose-frame stuff from manipulate M-t? FIXME TODO
 ;; (bind "C-t" (lookup-key global-map (kbd "C-x")))
 
-;; Ctrl-q map.  I'll never use quoted-insert, so I might as well make this
-;; thing more useful.  Should add to this. ;;;;; #### FIXME TODO
+;; I rarely use quoted-insert (only to avoid annoying electric pairing), so I
+;; might as well make something more useful.  Should add to this. ;;;;; ####
+;; FIXME TODO
 (defvar my/ctrl-q-map
   (let* ((map (make-sparse-keymap)))
     (define-key global-map (kbd "C-q") map)
@@ -2561,6 +2562,7 @@ This checks in turn:
 (global-set-key (kbd "C-c C-d") #'helpful-at-point)
 (global-set-key (kbd "C-h F") #'helpful-function)
 (global-set-key (kbd "C-h C") #'helpful-command)
+;; Maybe add helpful regex to clean-buffer-list-kill-regexps ??
 
 
 ;; which-key has better sorting than guide-key

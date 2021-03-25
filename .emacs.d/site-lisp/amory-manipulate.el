@@ -262,13 +262,6 @@ line instead. With argument LINEOFFSET not nil or 1, behave like
 (global-set-key (kbd "C-a") 'smart-beginning-of-line)
 
 
-;; Goto last change in buffer
-;; https://github.com/camdez/goto-last-change.el
-;; FIXME TODO
-(autoload 'goto-last-change "goto-last-change" "Set point to the position of
-the last change." t)
-(global-set-key "\C-x\C-\\" 'goto-last-change)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Some commands from http://www.emacswiki.org/emacs/basic-edit-toolkit.el
 ;; Not things I'll use that often but hey why not
