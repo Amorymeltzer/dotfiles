@@ -42,6 +42,9 @@
 ;; http://www.emacswiki.org/emacs/Reference_Sheet_by_Aaron_Hawley
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Regexp-Backslash.html
 
+;; Should really look into and make use of f, s, dash
+;; Am I just going to keep improving this until it matches spacemacs?
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enter debugger on error
 (setq debug-on-error t)
@@ -909,7 +912,7 @@ current buffer" t)
 
 ;; Save a list of open files in ~/.emacs.d/emacs.desktop(.lock)
 ;; Rename to just desktop(.lock)???
-;; Not great with emacsclient server?
+;; Not great with emacsclient server?  Not great with dashboard, that's for sure...
 ;; Load the desktop *after* all init stuff is done.
 (eval-after-load "init"
   '(progn
@@ -944,18 +947,6 @@ current buffer" t)
 		tags-file-name
 		register-alist)))
 
-;; Save the desktop automatically whenever Emacs has been idle for some time
-(defvar desktop-save-time
-  (run-with-idle-timer 60 t (lambda ()
-			      (garbage-collect)
-			      (my/save-desktop-with-message)))
-  "idle-timer (see \\[run-with-idle-timer]) to save desktop \\[cancel-timer] to cancel it.")
-(defun my/save-desktop-with-message ()
-  (interactive)
-  (desktop-save desktop-dirname)
-  (message "Desktop saved at %s, memory-limit %x."
-	   (format-time-string "%T %a %d %b %y")
-	   (memory-limit)))
 
 ;; Open at last place visited in a file
 ;; Any overlap with desktop or persistency? Not great with emacsclient
@@ -1110,6 +1101,7 @@ current buffer" t)
 
 ;; Jump to word (char, line, with C-u, C-u C-u)
 ;; https://github.com/winterTTr/ace-jump-mode
+;; Old and unmaintained; should use avy instead FIXME TODO
 (require 'ace-jump-mode)
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 (setq ace-jump-mode-scope 'frame)	; Only look in current frame, not all windows
