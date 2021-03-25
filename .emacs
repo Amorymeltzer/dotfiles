@@ -723,7 +723,10 @@ backups." t)
 ;; Exclude symlinks
 (add-to-list 'recentf-exclude
 	     (lambda (f) (not (string= (file-truename f) f))))
-
+;; Automatically save the list regularly, rather than wait for idle via
+;; run-with-idle-timer.  Wait for init to be loaded though?
+(add-hook 'after-init-hook
+	  (lambda () (run-at-time nil (* 5 60) 'recentf-save-list)))
 
 ;; From http://www.emacswiki.org/emacs/recentf-ext.el:
 ;;; [2009/03/01] (@* "`recentf' as most recently USED files")
