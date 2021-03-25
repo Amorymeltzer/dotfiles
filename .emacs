@@ -219,6 +219,9 @@ Record that in `paradox--backups', but do nothing if
 ;; Indent if possible but complete otherwise
 (setq-default tab-always-indent 'complete)
 
+;; Split nicer (still want???)
+(setq split-window-keep-point nil)
+
 ;; Resize windows when splitting; annoying if want certain size, but let's be
 ;; honest, I usually want some balance.  Besides, on a small screen, it's not
 ;; a big difference, and on a big screen, it doesn't matter!
@@ -1827,9 +1830,35 @@ when in source code modes such as python-mode or perl-mode" t)
 (define-key smart-shift-mode-map (kbd "C-c <left>") nil)
 (define-key smart-shift-mode-map (kbd "C-c <right>") nil)
 
+
 ;; Remap C-t to C-x prefix
-;; Maybe make a C-t map, put in transpose-frame stuff from manipulate M-t? FIXME TODO
 ;; (bind "C-t" (lookup-key global-map (kbd "C-x")))
+;; Maybe make a C-t map, put in transpose-frame stuff M-t? FIXME TODO
+
+;; Swap/flip/flop/transpose buffers easily
+(require 'transpose-frame)
+;; Transpose stuff with M-t
+(global-unset-key (kbd "M-t")) ;; which used to be transpose-words
+(global-set-key (kbd "M-t l") 'transpose-lines)
+(global-set-key (kbd "M-t w") 'transpose-words)
+(global-set-key (kbd "M-t s") 'transpose-sexps)
+(global-set-key (kbd "M-t p") 'transpose-paragraphs)
+
+
+;; M-g prefix more useful?
+;; (global-set-key "\M-g" 'goto-line)
+;; Which line, probably not hugely useful, C-x l more useful
+;; (global-set-key (kbd "C-x w") 'what-line)
+(global-set-key (kbd "M-g c") 'move-to-column)
+
+;; Move buffers around https://github.com/lukhas/buffer-move
+(require 'buffer-move)
+;; Other M-g mapping stuff
+(global-set-key (kbd "M-g <left>") 'buf-move-left)
+(global-set-key (kbd "M-g <down>") 'buf-move-down)
+(global-set-key (kbd "M-g <up>") 'buf-move-up)
+(global-set-key (kbd "M-g <right>") 'buf-move-right)
+
 
 ;; I rarely use quoted-insert (only to avoid annoying electric pairing), so I
 ;; might as well make something more useful.  Should add to this. ;;;;; ####

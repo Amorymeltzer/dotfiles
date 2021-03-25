@@ -1,17 +1,5 @@
 ;;; amory-manipulate.el --- Manipulate lines and comments, move around
 
-;; Split nicer
-(setq split-window-keep-point nil)
-
-;; Swap/flip/flop/transpose buffers easily
-(require 'transpose-frame)
-;; Transpose stuff with M-t
-(global-unset-key (kbd "M-t")) ;; which used to be transpose-words
-(global-set-key (kbd "M-t l") 'transpose-lines)
-(global-set-key (kbd "M-t w") 'transpose-words)
-(global-set-key (kbd "M-t s") 'transpose-sexps)
-(global-set-key (kbd "M-t p") 'transpose-paragraphs)
-
 ;; Copy to kill ring, exists mainly for the below
 ;; Can use whole-line-or-region-kill-ring-save for interactive
 (defun mark-line-and-copy ()
@@ -152,21 +140,6 @@ two windows."
 ;; https://github.com/coldnew/linum-relative
 (autoload 'linum-relative-toggle "linum-relative" "Toggle between
 linum-relative and linum" t)
-
-;; M-g prefix more useful?
-;; (global-set-key "\M-g" 'goto-line)
-;; Which line, probably not hugely useful, C-x l more useful
-;; (global-set-key (kbd "C-x w") 'what-line)
-(global-set-key (kbd "M-g c") 'move-to-column)
-
-;; Move buffers around https://github.com/lukhas/buffer-move
-(require 'buffer-move)
-;; Other M-g mapping stuff
-(global-set-key (kbd "M-g <left>") 'buf-move-left)
-(global-set-key (kbd "M-g <down>") 'buf-move-down)
-(global-set-key (kbd "M-g <up>") 'buf-move-up)
-(global-set-key (kbd "M-g <right>") 'buf-move-right)
-
 
 ;; Jump to a specific percentage of a buffer
 ;; https://unix.stackexchange.com/a/29398/43935
