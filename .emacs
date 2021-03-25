@@ -1121,6 +1121,10 @@ current buffer" t)
 (add-to-list 'debug-ignored-errors "\\[AceJump\\].*")
 
 
+;; recenter after occur
+(add-hook 'occur-mode-find-occurrence-hook 'recenter)
+;; occur-mode-display-occurrence is nice, but C-o is annoying
+(define-key occur-mode-map (kbd "d") 'occur-mode-display-occurrence)
 
 ;; Utilize system's trash can
 (setq-default delete-by-moving-to-trash t
