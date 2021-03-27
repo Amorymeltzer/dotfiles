@@ -1,6 +1,4 @@
 ;;; .emacs -*- lexical-binding: t; -*-
-;;;;;;;;; BEGIN
-;; (setq emacs-load-start-time (current-time))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Citations                                                                  ;;
@@ -44,8 +42,9 @@
 
 ;; Should really look into and make use of f, s, dash
 ;; Am I just going to keep improving this until it matches spacemacs?
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;; BEGIN
 ;; Enter debugger on error
 (setq debug-on-error t)
 
@@ -191,15 +190,17 @@ Record that in `paradox--backups', but do nothing if
 ;; https://gist.github.com/saintaardvark/375aa054c15f02c42f45
 ;; Not perfect, should ideally limit self to a modemap or something
 (defun totd()
+  "Display a 'Tip of the Day' message with a random command.  Used for insertion into the dashboard."
   (interactive)
-      (let* ((commands (cl-loop for s being the symbols
-				when (commandp s) collect s))
-	     (command (nth (random (length commands)) commands)))
-	(insert
+  (let* ((commands (cl-loop for s being the symbols
+			    when (commandp s) collect s))
+	 (command (nth (random (length commands)) commands)))
+    (insert
      (format "** Tip of the day: **\nCommand: %s\n\n%s\n\nInvoke with: "
 	     command (documentation command)))
-	(where-is command t)))
+    (where-is command t)))
 (defun dashboard-insert-totd (list-size)
+  "Shim to insert the Tip of the Day into the dashboard."
   (totd))
 (add-to-list 'dashboard-item-generators '(totd . dashboard-insert-totd))
 
@@ -214,6 +215,8 @@ Record that in `paradox--backups', but do nothing if
 			;; (registers . 5)
 			(totd . 1)))
 
+;; Weird that this gets the startup time wrong with emacsclient, not sure of why
+;; since it appears to be using the right hooks
 (dashboard-setup-startup-hook)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indent if possible but complete otherwise
@@ -253,7 +256,9 @@ Record that in `paradox--backups', but do nothing if
 ;;
 ;;
 ;; ac-html mode, from https://github.com/cheunghy/ac-html
+;; Deprecated maybe replace?
 (defun setup-ac-for-html ()
+  "Basic structure and setup for HTML auto-completion (ac-html)."
   (require 'ac-html)
   ;; I guess?
   (require 'ac-html-default-data-provider)
@@ -286,6 +291,7 @@ Record that in `paradox--backups', but do nothing if
 ;; Unexpand.  This only works if you use hippie, I want a
 ;; dabbrev-unexpand, sort of like unexpand-abbrev
 (defun hippie-unexpand ()
+  "Unexpand a `hippie-expand' expansion."
   (interactive)
   (hippie-expand 0))
 (global-set-key "\M-\"" 'hippie-unexpand)
@@ -495,8 +501,8 @@ Record that in `paradox--backups', but do nothing if
 
 ;; Deal with stupid jshint/javascript/csslint stuff
 ;; I really need to migrate to flycheck
-(delete '("\\.js\\'" flymake-javascript-init) flymake-allowed-file-name-masks)
-(delete '("\\.css\\'" flymake-css-init) flymake-allowed-file-name-masks)
+(delete '("\\.js\\'" flymake-javascript-init) flymake-proc-allowed-file-name-masks)
+(delete '("\\.css\\'" flymake-css-init) flymake-proc-allowed-file-name-masks)
 
 ;; Static analysis can be slow, so only run flymake if I've not been typing for
 ;; 5 seconds.  It will still run on save or hitting return.
@@ -577,6 +583,8 @@ Record that in `paradox--backups', but do nothing if
 ;;	("FIXME" . "#cc9393")
 ;;	("XXX"   . "#1E90FF")))
 (defun my/add-watchwords ()
+  "Function to highlight specific watchwords, rather than use `fic-mode' or
+`hl-todo' or something."
   (font-lock-add-keywords
    ;; \\<, \\> are empty string at beginning, end of word
    nil '(("\\<\\(FIXME\\|TODO\\|XXX\\)\\>"
@@ -624,6 +632,7 @@ Record that in `paradox--backups', but do nothing if
 ;; https://www.emacswiki.org/emacs/FrameTitle#h5o-6
 ;; Behaves somewhat badly when multiple emacsclient instances are in use
 (defun xterm-title-update ()
+  "Rename terminal tabs by sending the buffer name to xterm directly."
   (interactive)
   ;; xterm escape sequences: https://tldp.org/HOWTO/Xterm-Title-3.html
   ;; 0: icon name and window title, 1 icon name, 2 window title
@@ -823,6 +832,7 @@ buffer or region to mardown and display it in a separate window."
 (autoload 'htmlize-many-files "htmllize" "Convert files to HTML and save the corresponding HTML versions.")
 
 (defun linkify-region-html (start end)
+  "Wrap the region in `a href' for an HTML link."
   (interactive "r")
   (let ((str (buffer-substring-no-properties start end)))
     (delete-region start end)
@@ -837,7 +847,7 @@ buffer or region to mardown and display it in a separate window."
 (autoload 'tidy-build-menu  "tidy" "Install an options menu for HTML Tidy." t)
 
 (defun tidy-then-indent ()
-  "Tidy leaves a buffer looking flat, so indent after use"
+  "`tidy' a buffer's HTML, then indent it, since `tidy' leaves a buffer looking flat."
   (interactive)
   (tidy-buffer)
   (indent-buffer))
@@ -1050,6 +1060,7 @@ current buffer" t)
 
 ;; Grab the full word for searching
 (defun isearch-yank-symbol ()
+  "Grab the word at point to expand an ongoing search."
   (interactive)
   (isearch-yank-internal (lambda () (forward-symbol 1) (point))))
 (define-key isearch-mode-map (kbd "C-M-w") 'isearch-yank-symbol)
@@ -1268,8 +1279,8 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (ido-ubiquitous-mode t)
 ;; Fix for weird issue https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28774
 (defun ido-name (item)
-  ;; Return file name for current item, whether in a normal list
-  ;; or a merged work directory list.
+  "Return file name for the current item, whether in a normal list or a merged work
+  directory list."
   (concat (if (consp item) (car item) item)))
 
 ;; Use ido for yes-or-no
@@ -1303,8 +1314,8 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (add-to-list 'ido-ignore-files "\\.elc\\'")
 (add-to-list 'ido-ignore-directories "node_modules")
 
-;; Sort ido filelist by modified time instead of alphabetically, buries .
 (defun ido-sort-mtime ()
+  "Sort an ido filelist by modified time instead of alphabetically, and bury `.'."
   (setq ido-temp-list
 	(sort ido-temp-list
 	      (lambda (a b)
@@ -1560,11 +1571,13 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 when in source code modes such as python-mode or perl-mode" t)
 
 (defun unfill-paragraph ()
+  "Unfill a paragraph."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
 
 (defun unfill-region ()
+  "Unfill the selection region."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
@@ -1842,8 +1855,8 @@ when in source code modes such as python-mode or perl-mode" t)
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Reclaim C-t as a general transposition map
-;; Maybe better as C-c t?
-;; Why on earth does this not show up in which-key but C-q does???
+;; Maybe better as C-c t?  M-t?
+;; Why on earth does this not show up in which-key but C-q does??? FIXME TODO
 ;; Maybe add transpose-frame stuff? FIXME TODO
 ;; Unset a few scattered here n' there; maybe a 'bind or something would be better?
 (global-unset-key (kbd "C-t"))	   ;; was transpose-chars
@@ -1976,7 +1989,7 @@ when in source code modes such as python-mode or perl-mode" t)
   (mapcar (lambda (x) (kill-buffer x)) (buffer-list)) (delete-other-windows))
 
 (defun indent-buffer ()
-  "Indents the entire buffer."
+  "Indent the entire buffer."
   (interactive)
   (indent-region (point-min) (point-max)))
 
@@ -1992,6 +2005,7 @@ when in source code modes such as python-mode or perl-mode" t)
 
 
 (defun replace-next-underscore-with-camel (arg)
+  "Convert a snakecase variable to camelCase."
   (interactive "p")
   (if (> arg 0)
       (setq arg (1+ arg))) ; 1-based index to get eternal loop with 0
@@ -2004,6 +2018,8 @@ when in source code modes such as python-mode or perl-mode" t)
       (setq arg (1- arg)))))
 
 (defun camelize-buffer ()
+  "Convert all snakecase variables in a buffer to camelCase,
+using `replace-next-underscore-with-camel'."
   (interactive)
   (goto-char 0)
   (ignore-errors
@@ -2014,7 +2030,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use ido to select which window based off window name
 (defun rotate-list (list count)
-  "Rotate the LIST by COUNT elements"
+  "Rotate the LIST by COUNT elements."
   (cond
    ((= count 0) list)
    ((not list) list)
@@ -2034,8 +2050,8 @@ when in source code modes such as python-mode or perl-mode" t)
     (mapcar 'cdr sorted-list)))
 
 (defun jump-to-window ()
-  "Interactively jump to another visible window based on it's
-`buffer-name' using `ido-completing-read'"
+  "Interactively jump to another visible window based on it's `buffer-name'
+using `ido-completing-read'."
   (interactive)
   (let* ((visible-buffers (mapcar #'(lambda (window) (window-buffer window)) (window-list)))
 	 (sorted-visible-buffers (dka-sort-by-other-list visible-buffers (buffer-list)))
@@ -2092,7 +2108,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key [(control c) (a)] 'ansi-term)
 ;; Copy current buffer file contents to clipboard
 (defun pbcopy-buffer ()
-  "Copy the contents of the current buffer to the GUI clipboard"
+  "Copy the contents of the current buffer to the GUI clipboard."
   (interactive)
   (shell-command-on-region (point-min) (point-max) "pbcopy")
   (message "Copied contents of %s" buffer-file-name))
@@ -2162,8 +2178,8 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Prefix means C-u (4) or C-u C-u (16)
 (defun insert-date (prefix)
-  "Insert the current date in ISO format. With prefix-argument, add day of
-week. With two prefix arguments, add day of week and time."
+  "Insert the current date in ISO format.  With prefix argument, add include the
+day of the week.  With two prefix arguments, add day of week and time."
   (interactive "P")
   (let ((format (cond ((not prefix) "%Y-%m-%d")
 		      ((equal prefix '(4)) "%Y-%m-%d %a")
@@ -2199,11 +2215,11 @@ the latest BTC price." t)
 (setq btc-ticker-api-poll-interval 60)
 
 (defun loan-payment-calculator (amount rate years)
-  "Calculate what the payments for a loan of AMOUNT dollars when annual
-percentage rate is RATE and the term of the loan is YEARS years.  The RATE
-should expressed in terms of the percentage \(i.e. \'8.9\' instead of
-\'.089\'\) and must contain a decimal point.  The total amount of interest
-charged over the life of the loan is also given."
+  "Calculate the payment for a loan of AMOUNT dollars when annual percentage
+rate is RATE and the term of the loan is YEARS years.  The RATE should expressed
+in terms of the percentage \(i.e. \'8.9\' instead of \'.089\'\) and must contain
+a decimal point.  The total amount of interest charged over the life of the loan
+is also given."
   (interactive "nLoan Amount: \nnAPR (per): \nnTerm (years): ")
   (let ((payment (/ (* amount (/ rate 1200)) (- 1 (expt (+ 1 (/ rate 1200)) (* years -12.0))))))
     (message "%s payments of $%.2f. Total interest $%.2f"
@@ -2655,6 +2671,7 @@ This checks in turn:
  imenu-after-jump-hook 'recenter)
 ;; There's no interactive to force rescanning?  Fine but seems weird
 (defun imenu-rescan ()
+  "Manually rescan and build the buffer's `imenu' definitions."
   (interactive)
   (imenu--menubar-select imenu--rescan-item))
 (global-set-key "\C-cI" 'imenu-rescan)
@@ -2667,10 +2684,11 @@ This checks in turn:
 ;; Face stuff
 
 ;; Print face at point
-;; M-x what-cursor-position, full with prefix
-;; C-u C-x =
-;; M-x describe-face to get list, describe certain others
+;; M-x describe-face to get list of properties
+;; M-x what-cursor-position with a prefix (aka C-u C-x =) also gives face (along
+;; with other info)
 (defun what-face (pos)
+  "Print the name of the face at the given point."
   (interactive "d")
   (let ((face (or (get-char-property (point) 'read-face-name)
 		  (get-char-property (point) 'face))))
@@ -2767,11 +2785,10 @@ This checks in turn:
 (put 'rename-current-buffer-file 'ido 'ignore)
 
 (defun delete-current-buffer-file ()
-  "Removes file connected to current buffer and kills buffer."
+  "Remove file connected to current buffer and kill buffer."
   (interactive)
   (let ((filename (buffer-file-name))
-	(buffer (current-buffer))
-	(name (buffer-name)))
+	(buffer (current-buffer)))
     (if (not (and filename (file-exists-p filename)))
 	(ido-kill-buffer)
       (when (yes-or-no-p "Are you sure you want to remove this file? ")
@@ -2782,6 +2799,7 @@ This checks in turn:
 (put 'delete-current-buffer-file 'ido 'ignore)
 
 (defun insert-file-name ()
+  "Does what it says on the tin."
   (interactive)
   (insert (file-name-nondirectory
 	   (buffer-file-name
@@ -2885,7 +2903,7 @@ This checks in turn:
 ;; In shell: emacs -batch -f batch-byte-compile ~/.emacs.d/**/*.el
 ;; Aliased(ish) to recompile_emacs
 (defun byte-compile-init-dir ()
-  "Byte-compile all your dotfiles."
+  "Byte-compile everything in your `user-emacs-directory'."
   (interactive)
   (byte-recompile-directory user-emacs-directory 0))
 ;; An .elc file is probably out of date after a save, so remove it
@@ -2955,8 +2973,9 @@ This checks in turn:
 			 (make-string (/ (* count (min 36
 						       maxcount)) maxcount) ?+))))))))
 
+;; Accurate?  Lots of fundamental mode buffers...
 (defun buffer-mode-histogram ()
-  "Display a histogram of emacs buffer modes."
+  "Display a histogram of buffer modes."
   (interactive)
   (let* ((ht (make-hash-table :test 'equal))
 	 (number-of-buffers (loop for buffer being the buffers
@@ -3008,6 +3027,7 @@ This checks in turn:
       (mapcar 'insert lines))))
 
 (defun kf-randomize-region (b e)
+  "Randomize the order of words in the region."
   (interactive "*r")
   (save-excursion
     (apply
@@ -3102,6 +3122,7 @@ This checks in turn:
 
 ;; Function to shorten major modes in modeline
 (defmacro rename-modeline (package-name mode new-name)
+  "Rename the modeline lighter of PACKAGE-NAME to NEW-NAME"
   `(eval-after-load ,package-name
      '(defadvice ,mode (after rename-modeline activate)
 	(setq mode-name ,new-name))))
@@ -3115,39 +3136,6 @@ This checks in turn:
 ;; https://stackoverflow.com/q/11326350/2521092
 (add-to-list 'minor-mode-alist '(follow-mode " follow"))
 
-
-(defun ted-read-major-mode ()
-  "Read a major mode from the user, and return it.
-Based on Kevin Rogers' `edit-region' interactive spec."
-  (intern (completing-read
-	   (format "Major mode (default `%s'): " major-mode)
-	   obarray 'kr-major-mode-p t nil nil
-	   (symbol-name major-mode))))
-
-(defun kr-major-mode-p (symbol)
-  "Return non-nil if SYMBOL is a major mode.
-Used in `interactive' forms to read major mode names from the user."
-  (and (fboundp symbol)
-       (let ((function-name (symbol-name symbol)))
-	 (and (string-match "-mode\\'" function-name)
-	      (not (string-match "\\`turn-\\(on\\|off\\)-"
-				 function-name))))
-       (not (assq symbol minor-mode-alist))))
-
-
-(defun ted-kill-mode-buffers (&optional mode)
-  "Kill all buffers of this major mode.
-With optional argument MODE, all buffers in major mode MODE are killed
-instead."
-  (interactive (list (when current-prefix-arg (ted-read-major-mode))))
-  (setq mode (or mode major-mode))
-  (when (or current-prefix-arg
-	    (y-or-n-p (format "Really kill all %s buffers? " mode)))
-    (mapc (lambda (buffer)
-	    (when (with-current-buffer buffer
-		    (eq major-mode mode))
-	      (kill-buffer buffer)))
-	  (buffer-list))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (smex-initialize)
@@ -3316,8 +3304,8 @@ instead."
 ;;     "]")))
 
 ;;;;;;; END
-;; (when (require 'time-date nil t)
-;;   (message "Emacs startup time: %d seconds." (time-to-seconds (time-since emacs-load-start-time))))
+;; This should probably be in after-init-hook or emacs-startup-hook??
+;; https://www.emacswiki.org/emacs/BenchmarkInit
 (message "Emacs loaded at %s." (format-time-string "%T %a %d %b %y"))
 
 
