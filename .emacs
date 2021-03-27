@@ -413,7 +413,7 @@ Record that in `paradox--backups', but do nothing if
 
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
 ;; Requires yasnippet and multiple-cursors
-;; https://github.com/magnars/multiple-cursors.el
+;; https://github.com/magnars/multiple-cursors.el (maybe do C-c m or something?)
 ;; Should probably learn more of these https://github.com/magnars/js2-refactor.el#refactorings
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
@@ -1830,39 +1830,51 @@ when in source code modes such as python-mode or perl-mode" t)
 (define-key smart-shift-mode-map (kbd "C-c <left>") nil)
 (define-key smart-shift-mode-map (kbd "C-c <right>") nil)
 
-
-;; Remap C-t to C-x prefix
-;; (bind "C-t" (lookup-key global-map (kbd "C-x")))
-;; Maybe make a C-t map, put in transpose-frame stuff M-t? FIXME TODO
-
-;; Swap/flip/flop/transpose buffers easily
+;; Swap/flip/flop/transpose buffers easily. Will be added to M-t prefix
 (require 'transpose-frame)
-;; Transpose stuff with M-t
-(global-unset-key (kbd "M-t")) ;; which used to be transpose-words
-(global-set-key (kbd "M-t l") 'transpose-lines)
-(global-set-key (kbd "M-t w") 'transpose-words)
-(global-set-key (kbd "M-t s") 'transpose-sexps)
-(global-set-key (kbd "M-t p") 'transpose-paragraphs)
-
-
-;; M-g prefix more useful?
-;; (global-set-key "\M-g" 'goto-line)
-;; Which line, probably not hugely useful, C-x l more useful
-;; (global-set-key (kbd "C-x w") 'what-line)
-(global-set-key (kbd "M-g c") 'move-to-column)
 
 ;; Move buffers around https://github.com/lukhas/buffer-move
+;; Will be added to my/meta-g-map
 (require 'buffer-move)
-;; Other M-g mapping stuff
-(global-set-key (kbd "M-g <left>") 'buf-move-left)
-(global-set-key (kbd "M-g <down>") 'buf-move-down)
-(global-set-key (kbd "M-g <up>") 'buf-move-up)
-(global-set-key (kbd "M-g <right>") 'buf-move-right)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Personal keymaps
+;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Reclaim C-t as a general transposition map
+;; Maybe better as C-c t?
+;; Why on earth does this not show up in which-key but C-q does???
+;; Maybe add transpose-frame stuff? FIXME TODO
+;; Unset a few scattered here n' there; maybe a 'bind or something would be better?
+(global-unset-key (kbd "C-t"))	   ;; was transpose-chars
+(global-unset-key (kbd "C-x C-t")) ;; was transpose-lines
+(global-unset-key (kbd "M-t"))	   ;; was transpose-words
+(defvar my/ctrl-t-transpose-map
+  (let* ((map (make-sparse-keymap)))
+    (define-key global-map (kbd "C-t") map)
+    (define-key map (kbd "c") 'transpose-chars)
+    (define-key map (kbd "w") 'transpose-words)
+    (define-key map (kbd "l") 'transpose-lines)
+    (define-key map (kbd "s") 'transpose-sexps)
+    (define-key map (kbd "p") 'transpose-paragraphs)
+    map)
+  "Personal keymap for transpositions.")
+
+
+;; Add to/take over the goto-map
+;; goto-line-with-feedback (better goto-line, the original M-g, etc.) takes
+;; goto-line bindings in amory-manipulate.el
+;; (define-key goto-map (kbd "g") 'goto-line)
+(define-key goto-map (kbd "c") 'move-to-column)
+(define-key goto-map (kbd "<up>") 'buf-move-up)
+(define-key goto-map (kbd "<down>") 'buf-move-down)
+(define-key goto-map (kbd "<left>") 'buf-move-left)
+(define-key goto-map (kbd "<right>") 'buf-move-right)
 
 
 ;; I rarely use quoted-insert (only to avoid annoying electric pairing), so I
-;; might as well make something more useful.  Should add to this. ;;;;; ####
-;; FIXME TODO
+;; might as well make something more useful.
+;; A lot of this might be happy in the original M-s search-map???? FIXME TODO
 (defvar my/ctrl-q-map
   (let* ((map (make-sparse-keymap)))
     (define-key global-map (kbd "C-q") map)
@@ -1877,6 +1889,7 @@ when in source code modes such as python-mode or perl-mode" t)
     (define-key map (kbd "/") 'highlight-symbol-remove-all)
     (define-key map (kbd "p") 'backward-paragraph)
     (define-key map (kbd "n") 'forward-paragraph)
+    ;; Maybe move these to C-t???
     (define-key map (kbd "<up>") 'smart-shift-up)
     (define-key map (kbd "<down>") 'smart-shift-down)
     (define-key map (kbd "<left>") 'smart-shift-left)
@@ -2645,6 +2658,11 @@ This checks in turn:
   (interactive)
   (imenu--menubar-select imenu--rescan-item))
 (global-set-key "\C-cI" 'imenu-rescan)
+
+
+;; Which line, probably not hugely useful, C-x l more useful
+;; (global-set-key (kbd "C-x w") 'what-line)
+
 
 ;; Face stuff
 
