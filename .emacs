@@ -2974,6 +2974,13 @@ This checks in turn:
 	    nil t))
 (add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
 
+
+;; discover-my-major https://framagit.org/steckerhalter/discover-my-major
+;; Old and imperfect, but kinda neat
+(global-set-key (kbd "C-h C-m") 'discover-my-major)
+(global-set-key (kbd "C-h M-m") 'discover-my-mode)
+
+
 (require 'key-chord)
 (key-chord-mode 1)
 (key-chord-define-global "jj" 'whitespace-cleanup)
