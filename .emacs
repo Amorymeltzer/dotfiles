@@ -2722,6 +2722,9 @@ This checks in turn:
 (setq find-file-wildcards t)
 
 
+;;;;;;;;;;;;;;;;;;;;
+;; Spelling stuff
+;;;;;;;;;;;;;;;;;;;;
 ;; Custom SCOWL dictionary: size 70, variants 2, diacritics both
 ;; http://app.aspell.net/create
 (setq ispell-dictionary "en-custom"
@@ -2735,17 +2738,71 @@ This checks in turn:
       ispell-extra-args '("--sug-mode=ultra"))
 
 ;; Flyspell spell checking
+;; Turns out that `flyspell-auto-correct-previous-word' is often/always better
+;; than `flyspell-auto-correct-word'
+;; Can't set C-M-I for `flyspell-auto-correct-word' since somehow that registers
+;; as C-M-i as well?  Awful.
+(setq flyspell-auto-correct-binding (kbd "C-M-i"))
 ;; Lots of ispell process instances being started then killed, especially
 ;; around git/magit?? FIXME TODO
 (require 'flyspell)
-(setq flyspell-highlight-properties t
-      flyspell-issue-message-flag nil
-      flyspell-issue-welcome-flag nil)
+(with-eval-after-load "flyspell"
+  (setq flyspell-highlight-properties t
+	flyspell-issue-message-flag nil
+	flyspell-issue-welcome-flag nil)
 
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-(add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'fundamental-mode-hook 'flyspell-mode)
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  (add-hook 'text-mode-hook 'flyspell-mode)
 
+  ;; Ew
+  (with-eval-after-load 'auto-complete
+    (ac-flyspell-workaround))
+
+  ;; There's no flyspell-goto-prev-error?  Dumb.
+  (defun flyspell-goto-prev-error ()
+    "Go to closest prior detected error.  Derived from FLYSPELL-GOTO-PREV-ERROR."
+    (interactive)
+    (let* ((arg 1))
+      (while (not (= 0 arg))
+	(let ((pos (point))
+	      (min (point-min)))
+	  (if (and (eq (current-buffer) flyspell-old-buffer-error)
+		   (eq pos flyspell-old-pos-error))
+	      (progn
+		(if (= flyspell-old-pos-error min)
+		    ;; goto end of buffer
+		    (progn
+		      (message "Restarting from end of buffer")
+		      (goto-char (point-max)))
+		  (backward-word 1))
+		(setq pos (point))))
+	  ;; seek the previous error
+	  (while (and (> pos min)
+		      (let ((ovs (overlays-at pos))
+			    (r '()))
+			(while (and (not r) (consp ovs))
+			  (if (flyspell-overlay-p (car ovs))
+			      (setq r t)
+			    (setq ovs (cdr ovs))))
+			(not r)))
+	    (backward-word 1)
+	    (setq pos (point)))
+	  ;; save the current location for next invocation
+	  (setq arg (1- arg))
+	  (setq flyspell-old-pos-error pos)
+	  (setq flyspell-old-buffer-error (current-buffer))
+	  (goto-char pos)
+	  (if (= pos min)
+	      (progn
+		(message "No more miss-spelled words!")
+		(setq arg 0)))))))
+
+  ;; Add working flyspell bindings, since C-, and C-; don't
+  ;; Could even have a fly prefix, taking over C-c f or C-c C-f that I don't use much?
+  ;; Good place for a hydra, actually, since often want flys to continue to next...
+  ;; Is there a way to hook flyspell and flymake into same key?  Next of either?
+  (define-key flyspell-mode-map (kbd "C-c \"") 'flyspell-goto-next-error)
+  (define-key flyspell-mode-map (kbd "C-c :") 'flyspell-goto-prev-error))
 
 ;; flymake-proselint https://github.com/manuel-uberti/flymake-proselint
 ;; Clearly depends on the proselint executable (pip, macports, brew, etc)
@@ -2756,6 +2813,7 @@ This checks in turn:
 	    ;; to everything I care about...
 	    (flymake-mode +1)
 	    (flymake-proselint-setup)))
+;;;;;;;;;;;;;;;;;;;;
 
 
 ;; FUCKS SHIT UP ;;;;;;; #########
