@@ -909,6 +909,7 @@ current buffer" t)
    ("*" "*" nil markdown-mode)
    ("`" "`" nil (markdown-mode ruby-mode))
    ("/" "/" nil ruby-mode)))
+(add-to-list 'wrap-region-except-modes 'ibuffer-mode)
 
 
 (defun visit-most-recent-file ()
@@ -1420,14 +1421,13 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; (set-face-attribute 'ido-virtual nil
 
 
-;; Really need to figure these out FIXME TODO
-;; C-x C-b is crap
-;; Better/easier buffer menu???
-;; (global-set-key (kbd "C-c C-b") 'bs-show)
-;; What about ibuffer?!  Also iswitchb-mode for switching...
-;; (global-set-key (kbd "C-c C-b") 'ibuffer
-;; Consider this from http://emacs.stackexchange.com/q/2177/2051
-;; (add-hook 'ibuffer-mode-hook (lambda () (ibuffer-auto-mode 1)))
+;; buffer-menu is crap, use ibuffer instead
+;; bs-show (with prefix) and electric-buffer-list (sorta) also options
+(require 'ibuffer)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+;; Want to bury ibuffer after leaving https://emacs.stackexchange.com/a/53862/2051
+;; but can probably use a hook?
+;; Also should entirely ignore the IBuffer itself when using ibuffer
 ;; ibuffer-vc would be dope too https://github.com/purcell/ibuffer-vc
 ;; Try this:
 ;; (add-hook 'ibuffer-hook
@@ -1436,14 +1436,14 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;;		    (unless (eq ibuffer-sorting-mode 'alphabetic)
 ;;		      (ibuffer-do-sort-by-alphabetic))))
 
-;; Also electric, but... eh
-;; (electric-buffer-list)
-
-;; ibuffer options
-;; (setq ibuffer-always-show-last-buffer :nomini)
-;; (setq ibuffer-default-shrink-to-minimum-size t)
-;; (setq ibuffer-jump-offer-only-visible-buffers nil)
-;; (setq ibuffer-show-empty-filter-groups nil)
+(setq ibuffer-always-show-last-buffer :nomini
+      ibuffer-default-shrink-to-minimum-size t
+      ibuffer-jump-offer-only-visible-buffers nil
+      ibuffer-show-empty-filter-groups nil
+      ibuffer-use-other-window t
+      ;; Keep updated; toggle with C-c C-a in ibuffer
+      ibuffer-mode-hook '(ibuffer-auto-mode))
+(add-to-list 'ibuffer-help-buffer-modes 'helpful-mode)
 
 ;; Set specific filter groups via mode
 ;; (setq ibuffer-saved-filter-groups
