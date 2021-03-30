@@ -1423,11 +1423,13 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 
 ;; buffer-menu is crap, use ibuffer instead
 ;; bs-show (with prefix) and electric-buffer-list (sorta) also options
-(require 'ibuffer)
+;; Can do a lot with it!  occur, regex search, etc.
+;; Okay, it's ibuffer, but these recursively call each other and this is useful
+;; for extra things like ibuffer-never-show-predicates
+(require 'ibuf-ext)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 ;; Want to bury ibuffer after leaving https://emacs.stackexchange.com/a/53862/2051
 ;; but can probably use a hook?
-;; Also should entirely ignore the IBuffer itself when using ibuffer
 ;; ibuffer-vc would be dope too https://github.com/purcell/ibuffer-vc
 ;; Try this:
 ;; (add-hook 'ibuffer-hook
@@ -1444,6 +1446,41 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
       ;; Keep updated; toggle with C-c C-a in ibuffer
       ibuffer-mode-hook '(ibuffer-auto-mode))
 (add-to-list 'ibuffer-help-buffer-modes 'helpful-mode)
+;; Never show Ibuffer itself; why doesn't this work? FIXME TODO
+(add-to-list 'ibuffer-never-show-predicates "\\*Ibuffer\\*")
+
+;; Add column for last-viewed time
+;; https://emacs.stackexchange.com/a/64210/2051
+(define-ibuffer-column last-viewed
+  (:name "Last-viewed" :inline t)
+  (with-current-buffer buffer
+    (format-time-string "%Y-%m-%d %R" buffer-display-time)))
+;; Insert after mode
+(setq ibuffer-formats
+      '((mark modified read-only locked " "
+	      (name 18 18 :left :elide)
+	      " "
+	      (size 9 -1 :right)
+	      " "
+	      (mode 16 16 :left :elide)
+	      " "
+	      (last-viewed 18 -1 :left)
+	      " " filename-and-process)
+	(mark " "
+	      (name 16 -1)
+	      " " filename)))
+;; `ibuffer-do-sort-by-recency' doesn't work super well?  Maybe because it
+;; derives from `buffer-list' so then interacts poorly with `ibuffer-auto-mode'?
+;; Regardless, it doesn't seem to reliably sort by buffer-display-time, so use a
+;; custom sorter function to override that.
+(define-ibuffer-sorter last-viewed
+  "Sort the buffers by last viewed time."
+  (:description "last viewed")
+  (string-lessp (with-current-buffer (car a)
+       (format-time-string "%Y-%m-%d %R" buffer-display-time))
+     (with-current-buffer (car b)
+       (format-time-string "%Y-%m-%d %R" buffer-display-time))))
+(define-key ibuffer-mode-map (kbd "s v") 'ibuffer-do-sort-by-last-viewed)
 
 ;; Set specific filter groups via mode
 ;; (setq ibuffer-saved-filter-groups
