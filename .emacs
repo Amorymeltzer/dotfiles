@@ -1439,7 +1439,10 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;;		      (ibuffer-do-sort-by-alphabetic))))
 
 (setq ibuffer-always-show-last-buffer :nomini
-      ibuffer-default-shrink-to-minimum-size t
+      ;; Sounds nice, but runs `fit-window-to-buffer' as long as the Ibuffer
+      ;; buffer is visible, so this is trash without a hook to kill that buffer
+      ;; upon leaving the menu or selecting a buffer
+      ibuffer-default-shrink-to-minimum-size nil
       ibuffer-jump-offer-only-visible-buffers nil
       ibuffer-show-empty-filter-groups nil
       ibuffer-use-other-window t
