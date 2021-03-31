@@ -2530,6 +2530,10 @@ in the buffer." t)
 ;; https://github.com/rmuslimov/browse-at-remote
 (global-set-key (kbd "C-c C-g") 'browse-at-remote)
 
+;; github-explorer https://github.com/TxGVNN/github-explorer
+;; Browse files from a repo locally
+(defalias 'browse-github-repo 'github-explorer)
+
 (defun view-url ()
   "Open a new buffer containing the contents of URL."
   (interactive)
