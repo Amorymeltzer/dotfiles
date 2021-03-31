@@ -2516,6 +2516,10 @@ in the buffer." t)
 (global-set-key (kbd "C-c C-v") 'browse-url-of-buffer)
 (global-set-key (kbd "C-c v") 'browse-url)
 
+;; browse-at-remote opens buffer file at the specified remote (e.g. GitHub)
+;; https://github.com/rmuslimov/browse-at-remote
+(global-set-key (kbd "C-c C-g") 'browse-at-remote)
+
 (defun view-url ()
   "Open a new buffer containing the contents of URL."
   (interactive)
