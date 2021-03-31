@@ -1247,6 +1247,24 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; .DS_Store files
 (setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|\\`.DS_Store\\'")
 
+;; dired-sidebar https://github.com/jojojames/dired-sidebar
+;; Works nicely with ibuffer-sidebar via sidebar-toggle (defined elsewhere)
+(require 'dired-sidebar)
+(setq dired-sidebar-one-instance-p t
+      dired-sidebar-should-follow-file t
+      dired-sidebar-theme 'none
+      dired-sidebar-use-magit-integration t)
+;; Disallow commands in the sidebar
+(push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+(push 'toggle-windows-split dired-sidebar-toggle-hidden-commands)
+;; Revert to the buffer's directory on a delay
+;; (dired-sidebar-stale-buffer-time-idle-delay).  If a buffer doesn't have a
+;; file associated with it (customize group, help, etc.) uses the file from the
+;; buffer it was called from.  Can be weird.
+(add-hook 'dired-sidebar-mode-hook
+	  (lambda ()
+	    (unless (file-remote-p default-directory)
+	      (auto-revert-mode))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; IDO, Interactively Do Things
@@ -1485,6 +1503,17 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
        (format-time-string "%Y-%m-%d %R" buffer-display-time))))
 (define-key ibuffer-mode-map (kbd "s v") 'ibuffer-do-sort-by-last-viewed)
 
+;; ibuffer-sidebar https://github.com/jojojames/ibuffer-sidebar
+;; Kind of neat, I guess?  Annoying with ibuffer-auto-mode
+(require 'ibuffer-sidebar)
+(setq ibuffer-sidebar-width 30)		; Little smaller from default of 35
+;; Does work well with dired-sidebar though
+(defun sidebar-toggle ()
+  "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+  (interactive)
+  (dired-sidebar-toggle-sidebar)
+  (ibuffer-sidebar-toggle-sidebar))
+
 ;; Set specific filter groups via mode
 ;; (setq ibuffer-saved-filter-groups
 ;;       '(("default"
@@ -1547,6 +1576,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;;    (30 (eq major-mode 'erc-mode) erc-notice-face)
 ;;    ;; dired buffers
 ;;    (35 (eq major-mode 'dired-mode) eshell-ls-directory-face)))
+
 
 ;; Kill current buffer
 (defalias 'kill-current-buffer 'kill-buffer-and-window)
