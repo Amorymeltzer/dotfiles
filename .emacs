@@ -2360,7 +2360,6 @@ round to ones, tens, etc."
 (autoload 'fireplace "fireplace" "Light a cozy fire.")
 
 ;; Stop unicode trolls https://github.com/camsaul/emacs-unicode-troll-stopper
-;; MELPA help FIXME TODO
 (autoload 'unicode-troll-stopper-mode "unicode-troll-stopper" "Stop unicode
 trolls" t)
 
