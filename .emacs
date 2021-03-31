@@ -1839,6 +1839,16 @@ when in source code modes such as python-mode or perl-mode" t)
 (autoload 'gitattributes-mode "gitattributes-mode" "A major mode for editing .gitattributes files." t)
 
 
+;; git-timemachine https://gitlab.com/pidu/git-timemachine
+;; Pretty cool!  t to search by commit, b to blame, c to view commit in magit
+(setq git-timemachine-abbreviation-length 8)
+;; Use some magit faces for parallelism
+(with-eval-after-load "git-timemachine"
+  ;; (set-face-attribute 'git-timemachine-commit nil :inherit 'magit-hash)
+  ;; Setting a face to nothing but the inherited is annoying
+  (set-face-attribute 'git-timemachine-minibuffer-author-face nil :foreground nil :inherit 'magit-log-author)
+  (set-face-attribute 'git-timemachine-minibuffer-detail-face nil :foreground nil :inherit 'magit-blame-summary))
+
 ;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
 ;; (global-set-key (kbd "C-x f") 'find-file-in-project)
