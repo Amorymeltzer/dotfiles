@@ -494,6 +494,7 @@ Record that in `paradox--backups', but do nothing if
 ;; php-mode https://github.com/emacs-php/php-mode
 ;; Relies on flymake-php: https://github.com/purcell/flymake-php
 ;; which in turn relies on flymake-easy: https://github.com/purcell/flymake-easy
+;; Which is unnecessary with flycheck
 (autoload 'php-mode "php-mode" "Major mode for editing PHP code." t)
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
@@ -508,8 +509,7 @@ Record that in `paradox--backups', but do nothing if
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Flymake stuff
-;; Really should use flycheck if emacs >= 24 and revert back to flymake
-;; otherwise Require flymake. ;;;;;; ##### FIXME TODO
+;; Really should use flycheck,maybe reverting back to flymake if not available
 ;; flymake is newer on MELPA, as is eldoc
 (require 'flymake)
 ;; Remove annoying logging.  Doesn't quite get all of 'em?  Last one is for
@@ -549,7 +549,6 @@ Record that in `paradox--backups', but do nothing if
 
 ;; https://github.com/purcell/flymake-easy
 (require 'flymake-easy)
-
 ;; https://github.com/purcell/flymake-php
 (require 'flymake-php)
 (add-hook 'php-mode-hook 'flymake-php-load)
@@ -2068,6 +2067,8 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq undo-tree-visualizer-timestamps t		 ;; default is off
       undo-tree-visualizer-relative-timestamps t ;; default is on
       ;; Save history
+      ;; Holy fuck the messages for saving history are annoying FIXME TODO
+      ;; Maybe better if ELPA ever updates and presents latest versions?
       undo-tree-auto-save-history t
       undo-tree-history-directory-alist `(("." . ,(expand-file-name "undo-tree" user-emacs-directory)))
       ;; Neat mini diff
@@ -2927,6 +2928,8 @@ This checks in turn:
 ;; flymake-proselint https://github.com/manuel-uberti/flymake-proselint
 ;; Clearly depends on the proselint executable (pip, macports, brew, etc)
 ;; https://github.com/amperser/proselint/
+;; Consider textlint as well?  Fewer stars, but updated more recently
+;; https://github.com/textlint/textlint
 (add-hook 'text-mode-hook
 	  (lambda ()
 	    ;; With this, flymake is on for (c)perl and text modes, pretty close
