@@ -1729,6 +1729,8 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; C-x g for status, but C-x M-g for magit-dispatch: trigger command directly
 ;; C-c M-g: magit-file-dispatch; super convenient, so let's make it more so
 (global-set-key (kbd "C-c g") 'magit-file-dispatch)
+;; Actually, maybe that'd be better as a prefix, then have C-c g f or something
+;; for this and C-c g l for git-link, etc.  Maybe?
 ;; Open log, etc. in separate window?  Like vc-print-log
 ;; Look into tweaking faces?
 ;; Prior to magit, I turned off built-in vc handling, preferring manual git:
@@ -2526,9 +2528,15 @@ in the buffer." t)
 (global-set-key (kbd "C-c C-v") 'browse-url-of-buffer)
 (global-set-key (kbd "C-c v") 'browse-url)
 
-;; browse-at-remote opens buffer file at the specified remote (e.g. GitHub)
-;; https://github.com/rmuslimov/browse-at-remote
-(global-set-key (kbd "C-c C-g") 'browse-at-remote)
+;; There are lots of ways to view a file/commit/whatever at some web address,
+;; each with different features, but ideally I'd have one for url browsing and
+;; one for kill-ring copying.  There are some issues with browse-at-remote
+;; (https://github.com/rmuslimov/browse-at-remote) around some remote styles,
+;; and I'd prefer not to muck about with gitconfig just for that.  git-link
+;; (http://github.com/sshaw/git-link) does so successfully, as well as the
+;; kill-ring bit, so let's keep them separated, at least until it gets annoying.
+(setq git-link-default-remote 'origin)
+(global-set-key (kbd "C-c C-g") 'git-link)
 
 ;; github-explorer https://github.com/TxGVNN/github-explorer
 ;; Browse files from a repo locally
