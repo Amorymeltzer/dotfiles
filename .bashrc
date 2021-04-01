@@ -68,16 +68,18 @@ alias .exit='exit'
 
 ### Git stuff
 # Should fix git signing when ssh'd, no issues locally?
-export GPG_TTY=$(tty)
+GPG_TTY=$(tty)
+export GPG_TTY
 # Alias hub as git for github https://github.com/github/hub
-if [[ -f `command -v hub` ]] ; then
+if [[ -f $(command -v hub) ]] ; then
     alias git='hub'
 fi
 # Quick
 function g {
-    local ref=$(git rev-parse --is-inside-work-tree 2> /dev/null)
+    local ref
+    ref=$(git rev-parse --is-inside-work-tree 2> /dev/null)
     if [[ $ref ]]; then
-	if [[ $# > 0 ]]; then
+	if [[ $# -gt 0 ]]; then
 	    git "$@"
 	else
 	    git lr5
@@ -277,7 +279,8 @@ function lastman {
     while [ $# -gt 0 -a '(' "sudo" = "$1" -o "-" = "${1:0:1}" ')' ]; do
 	shift;
     done;
-    local cmd="$(basename "$1")";
+    local cmd
+    cmd="$(basename "$1")";
     man "$cmd" || help "$cmd";
 }
 alias lman='lastman'
@@ -331,25 +334,27 @@ bind "set completion-map-case on"
 # Basically, if load average is greater than the number of CPUs, then
 # executions will be delayed/queued.  This just assigns colors to that.
 function _load_color() {
+    local NCPU
+    local SYSLOAD
     if [[ $OSTYPE == darwin* ]]; then
-	local NCPU=$(sysctl -n hw.ncpu)
-	local SYSLOAD=$(sysctl -n vm.loadavg | cut -f 2 -d ' ')
+	NCPU=$(sysctl -n hw.ncpu)
+	SYSLOAD=$(sysctl -n vm.loadavg | cut -f 2 -d ' ')
     else
-	local NCPU=$(nproc)
-	local SYSLOAD=$(uptime | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " ")
+	NCPU=$(nproc)
+	SYSLOAD=$(uptime | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " ")
     fi
     # Remove decimal, essentially treating it as a percentage (40 instead of
     # 0.40) since bash can't do math with floating points
     SYSLOAD=$(tr -d '.' <<< "$SYSLOAD")
 
-    if [ ${SYSLOAD} -lt $((100*${NCPU})) ]; then
-	echo -en ${Color_Yellow} # Normal load
-    elif [ ${SYSLOAD} -lt $((200*${NCPU})) ]; then
-	echo -en ${Color_Magenta_Intense} # Small load
-    elif [ ${SYSLOAD} -lt $((400*${NCPU})) ]; then
-	echo -en ${Color_Red_Bold_Intense} # Medium load
+    if [ "${SYSLOAD}" -lt $((100*NCPU)) ]; then
+	echo -en "${Color_Yellow}" # Normal load
+    elif [ "${SYSLOAD}" -lt $((200*NCPU)) ]; then
+	echo -en "${Color_Magenta_Intense}" # Small load
+    elif [ "${SYSLOAD}" -lt $((400*NCPU)) ]; then
+	echo -en "${Color_Red_Bold_Intense}" # Medium load
     else
-	echo -en ${Color_Red_zBackground}${Color_Red_Bold_Intense} # Large load
+	echo -en "${Color_Red_zBackground}${Color_Red_Bold_Intense}" # Large load
     fi
 }
 
@@ -363,7 +368,7 @@ function _cnx() {
 # Test user
 # id -un, logname, $USER: not necessarily the same!
 function _uid() {
-    if [[ $USER != $USER_NAME ]]; then # Only if not meeeee
+    if [[ $USER != "$USER_NAME" ]]; then # Only if not meeeee
 	local color
 	case $USER in
 	    root) color="${Color_Red}";; # User is root
@@ -376,10 +381,10 @@ function _uid() {
 
 # Return a color according to running/suspended jobs.
 function _job_color() {
-    if [ $(jobs -s | wc -l) -gt "0" ]; then
-	echo -en ${Color_Red_Bold_Intense}
-    elif [ $(jobs -r | wc -l) -gt "0" ]; then
-	echo -en ${Color_Yellow_Intense}
+    if [ "$(jobs -s | wc -l)" -gt "0" ]; then
+	echo -en "${Color_Red_Bold_Intense}"
+    elif [ "$(jobs -r | wc -l)" -gt "0" ]; then
+	echo -en "${Color_Yellow_Intense}"
     fi
 }
 
@@ -409,7 +414,7 @@ function prompt_command {
 	PS1+="-[\[$Color_Yellow\]$gitprompt\[$Color_Cyan\]]"
     fi
 
-    if $(command -v holiday_greeting.sh > /dev/null); then
+    if command -v holiday_greeting.sh > /dev/null; then
 	holiday_greeting="$(holiday_greeting.sh)"
 	if [[ -n "$holiday_greeting" ]]; then
 	    holiday_greeting="\n$holiday_greeting"
@@ -506,7 +511,7 @@ if [[ $OSTYPE == darwin* ]]; then
     complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
 fi
 
-if [[ -f `command -v pip` ]]; then
+if [[ -f $(command -v pip) ]]; then
     # https://snarky.ca/why-you-should-use-python-m-pip/
     alias pip='python -m pip '
 
@@ -527,15 +532,17 @@ fi
 export PERL5DB='use Devel::NYTProf'
 
 # Access Perl::Critic documentation
-if [[ -f `command -v perlcritic` ]]; then
+if [[ -f $(command -v perlcritic) ]]; then
     function explain_perlcritic() {
 	perldoc Perl::Critic::Policy::"$1"
     }
     _explain_perlcritic()		# ;;;;;; ##### FIXME TODO
     {
 	local cur="${COMP_WORDS[COMP_CWORD]}"
-	local list="$(\ls /opt/local/share/perl$PERL5/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
-	local clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')"
+	local list
+	list="$(\ls /opt/local/share/perl$PERL5/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
+	local clean
+	clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')"
 
 	COMPREPLY=($(compgen -W "$clean" -- "$cur"))
     }
@@ -556,7 +563,7 @@ alias perlsecret='man perlsecret'
 alias perlcheat='man perlcheat'
 
 # Tell tidy to use a config file if it's there
-if [[ -f `command -v tidy` ]]; then
+if [[ -f $(command -v tidy) ]]; then
     export HTML_TIDY=~/.tidyrc
 fi
 
@@ -565,7 +572,7 @@ fi
 alias emd='\emacs --daemon '
 # Get server status
 function eserver-status() {
-    if [[ `ps -Af | grep "emacs --daemon"` ]]; then
+    if [[ $(ps -Af | grep "emacs --daemon") ]]; then
 	echo "Emacs server running"
     else
 	echo "Emacs server not running"
@@ -585,6 +592,7 @@ alias ii=recompile_emacs
 
 alias m='emacs --eval "(progn (magit-status) (delete-other-windows))"'
 # Make customization easier
+# Should these use $HOME? FIXME TODO
 alias bashrc='$VISUAL ~/.bashrc'
 alias rc='$VISUAL ~/.bashrc'
 alias eb='$VISUAL ~/.bashrc'
@@ -597,11 +605,11 @@ alias gitconfig='$VISUAL ~/.gitconfig'
 function gitignore() {
     local ignore=".gitignore"
     if [[ ! -f $ignore ]]; then
-	ignore="~/.global-gitignore"
+	ignore="$HOME/.global-gitignore"
     elif [[ -n $1 && $1 = "g" ]]; then
-	ignore="~/.global-gitignore"
+	ignore="$HOME/.global-gitignore"
     fi
-    $VISUAL $ignore
+    $VISUAL "$ignore"
 }
 
 # Javascript alias, can also just use node
@@ -685,9 +693,9 @@ alias cp='cp -Rvi' # recursive if folder, the ending / makes a difference
 alias rm='rm -v'
 # Move the given file(s) to the Trash. Favor osxutils https://github.com/vasi/osxutils
 # Alias rm to this instead???
-if [[ ! -f `command -v trash` ]]; then
+if [[ ! -f $(command -v trash) ]]; then
     function trash() {
-	mv $1 ~/.Trash
+	mv "$1" ~/.Trash
     }
 fi
 function emptyalltrashes() {
@@ -703,13 +711,13 @@ alias rd='rmdir'
 
 # mkdir then cd
 function mkcd() {
-    if [ ! -n "$1" ]; then
+    if [ -z  "$1" ]; then
 	echo "Enter a directory name"
-    elif [ -d $1 ]; then
+    elif [ -d "$1" ]; then
 	echo "$1 already exists"
-	cd $1
+	cd "$1"
     else
-	mkdir $1 && cd $1
+	mkdir "$1" && cd "$1"
     fi
 }
 alias mkd='mkcd'
@@ -718,7 +726,7 @@ alias mkd='mkcd'
 function mkmv() {
     if [[ $# -ne 2 ]]; then
 	echo "Usage: mkmv <file> <directory>"
-    elif [ -d $2 ]; then
+    elif [ -d "$2" ]; then
 	echo "$1 already exists"
     else
 	mkdir "$2"
@@ -733,7 +741,7 @@ function mkmv() {
 function cal {
     # Smartypants
     if [[ "$1" == '-m' ]]; then
-	command cal $@
+	command cal "$@"
     else
 	month=$1
 	year=$2
@@ -758,7 +766,7 @@ alias utime="uptime | egrep -o -e 'up [0-9]*.*[0-9]* user[s]?' | tr 'u' 'U'"
 
 # Base 10 instead of base 2, up here to "beat" the alias below
 function diskusage() {
-    df -H "`pwd`" | awk 'NR==2 { print "Used " $3 " of " $2 ", " $4 " (" $5 ") remaining" }'
+    df -H "$(pwd)" | awk 'NR==2 { print "Used " $3 " of " $2 ", " $4 " (" $5 ") remaining" }'
 }
 # Displays user owned processes status.
 function psu {
@@ -795,12 +803,12 @@ alias beep='tput bel'
 # alias whois='whois -h whois-servers.net'
 
 # Use colordiff if it exists
-if [[ -f `command -v colordiff` ]]; then
+if [[ -f $(command -v colordiff) ]]; then
     alias diff='colordiff';
 fi
-if [[ -f `command -v cwdiff` ]]; then
+if [[ -f $(command -v cwdiff) ]]; then
     alias wcolordiff='cwdiff'
-elif [[ -f `command -v wdiff` ]]; then
+elif [[ -f $(command -v wdiff) ]]; then
     # What is this?  Need to explain FIXME TODO
     alias wcolordiff="wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m'"
 fi
@@ -828,7 +836,7 @@ alias grepC='grep -C 10'
 alias grepiC='grepC -i'
 
 # Same for ripgrep
-if [[ -f `command -v rg` ]]; then
+if [[ -f $(command -v rg) ]]; then
     export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
     # -i largely meaningless with -S/--smart-case in the ripgreprc
@@ -853,7 +861,7 @@ alias vlc='open -a vlc'
 alias excel='open -a microsoft\ excel'
 
 # Macports
-if [[ -f `command -v port` ]]; then
+if [[ -f $(command -v port) ]]; then
     alias pecho='port echo'
     alias psync='sudo port sync'
     alias pself='sudo port selfupdate'
@@ -872,7 +880,7 @@ if [[ -f `command -v port` ]]; then
     alias pun='sudo port uninstall'
 
     function pmoreinfo() {
-	psearch $1 | grep @ | cut -f 1 -d ' ' | while read prt; do pinfo $prt; done;
+	psearch "$1" | grep @ | cut -f 1 -d ' ' | while read -r prt; do pinfo "$prt"; done;
     }
 
     # Macports changelog
@@ -881,7 +889,7 @@ if [[ -f `command -v port` ]]; then
 fi
 
 # Homebrew/Cask
-if [[ -f `command -v brew` ]]; then
+if [[ -f $(command -v brew) ]]; then
     brew_repo=$(brew --repo)
     alias dgh="cd $brew_repo"
     alias dgc="cd $brew_repo/Library/Taps/homebrew/homebrew-cask"
@@ -901,10 +909,10 @@ if [[ -f `command -v brew` ]]; then
     # This could just be `brew deps --installed --formula` and would be *much* faster,
     # but the blue coloring is nice?  Maybe stupid
     function homebrew-deps() {
-	brew list --formula | while read formula; do echo -en "${Color_Blue_Bold}$formula ->${Color_zOff}"; brew deps --formula --installed $formula | awk '{printf(" %s ", $0)}'; echo ""; done
+	brew list --formula | while read -r formula; do echo -en "${Color_Blue_Bold}$formula ->${Color_zOff}"; brew deps --formula --installed "$formula" | awk '{printf(" %s ", $0)}'; echo ""; done
     }
     function homebrew-dependents() {
-	brew list --formula | while read formula; do echo -en "${Color_Blue_Bold}$formula ->${Color_zOff}"; brew uses --formula --installed $formula | awk '{printf(" %s ", $0)}'; echo ""; done
+	brew list --formula | while read -r formula; do echo -en "${Color_Blue_Bold}$formula ->${Color_zOff}"; brew uses --formula --installed "$formula" | awk '{printf(" %s ", $0)}'; echo ""; done
     }
 
     # Homebrew-cask
@@ -923,20 +931,20 @@ function newscript() {
     if [ $# -eq 0 ]; then
 	echo "No arguments provided";
     else
-	if [ -a $1 ]; then
+	if [ -a "$1" ]; then
 	    echo "$1 already exists, opening";
 	else
-	    touch $1
-	    chmod 755 $1
+	    touch "$1"
+	    chmod 755 "$1"
 	fi
-	$VISUAL $1
+	$VISUAL "$1"
     fi
 }
 # Deprecated
 function newperl() {
     echo "Use newscript instead!"
     sleep 1
-    newscript $1
+    newscript "$1"
 }
 alias newbash="newperl "
 
@@ -952,10 +960,11 @@ function server() {
 }
 
 # Functions to start/stop mysql server (installed via dmg, not macports/homebrew)
+# Should it be via macports/homebrew? FIXME TODO
 # Names are awful for completion
 function mysqlstart() {
     unset TMPDIR	 # Not sure why but this is apparently quite necessary
-    if [[ -n `ls /usr/local/mysql/data/*.pid 2>/dev/null` ]]; then
+    if [[ -n $(ls /usr/local/mysql/data/*.pid 2>/dev/null) ]]; then
 	echo "mysql server is already running"
 	if [ -e "/usr/local/mysql/data/mysqld.local.pid" ]; then
 	    echo "Use system preferences to turn it off"
@@ -967,7 +976,7 @@ function mysqlstart() {
     sudo /usr/local/mysql/support-files/mysql.server start
 }
 function mysqlstop() {
-    if [[ ! -n `ls /usr/local/mysql/data/*.pid 2>/dev/null` ]]; then
+    if [[ -z $(ls /usr/local/mysql/data/*.pid 2>/dev/null) ]]; then
 	echo "mysql server isn't running"
 	echo "Use mysqlstart to turn it on"
 	return 1
@@ -979,7 +988,7 @@ function mysqlstop() {
     sudo /usr/local/mysql/support-files/mysql.server stop
 }
 function mysqlstatus() {
-    if [[ -n `ls /usr/local/mysql/data/*.pid 2>/dev/null` ]]; then
+    if [[ -n $(ls /usr/local/mysql/data/*.pid 2>/dev/null) ]]; then
 	echo -n "Running"
 	if [ -e "/usr/local/mysql/data/mysqld.local.pid" ]; then
 	    echo " via system preferences"
@@ -1001,14 +1010,14 @@ function transfer() {
     fi
 
     local basefile tmp
-    if [ `tty -s` ]; then
+    if [ "$(tty -s)" ]; then
 	basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
 	tmp=$(curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile")
     else
 	tmp=$(curl --progress-bar --upload-file "$1" "https://transfer.sh/$1")
     fi
-    echo -n $tmp | pbcopy
-    echo $tmp
+    echo -n "$tmp" | pbcopy
+    echo "$tmp"
 }
 
 function twinmos() {
@@ -1036,9 +1045,9 @@ alias whotunes='lsof -r 2 -n -P -F n -c iTunes -a -i TCP@Durandal.local:3689'
 # Volume control, potentially using osxutils
 if [ ! -x /opt/local/bin/setvolume ]; then
     function setvolume() {
-	if [ ! $1 ]; then
+	if [ ! "$1" ]; then
 	    echo "setvolume <0-100>"
-	elif [ $1 -lt 0 -o $1 -gt 100 ]; then
+	elif [ "$1" -lt 0 -o "$1" -gt 100 ]; then
 	    echo "setvolume <0-100>"
 	else
 	    local val=$1*7/100
@@ -1146,21 +1155,20 @@ alias downforeveryoneorjustme='down4me'
 #alias ip='dig +short myip.opendns.com @resolver1.opendns.com'
 #alias ip="ifconfig -a | grep -o 'inet6\? \(\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\)\|[a-fA-F0-9:]\+\)' | sed -e 's/inet6* //'"
 #alias ip='curl -s icanhazip.com'
-# function myip()
-# {
+# function myip() {
 #     MY_IP=$(ifconfig en1 | awk '/inet/ { print $2 } ' | sed -e s/addr://)
-#     echo ${MY_IP:-"Not connected"}
+#     echo "${MY_IP:-"Not connected"}"
 # }
-function ip()
-{
-    local iplist=$(ifconfig -a | perl -nle'/inet (?:addr:)?(\d+\.\d+\.\d+\.\d+)/ && print $1')
+function ip() {
+    local iplist
+    iplist=$(ifconfig -a | perl -nle'/inet (?:addr:)?(\d+\.\d+\.\d+\.\d+)/ && print $1')
 
     if [ "$1" ]; then
-	if [ "$(echo $iplist | grep -w $1)" ]; then
-	    echo $1
+	if [ "$(echo "$iplist" | grep -w "$1")" ]; then
+	    echo "$1"
 	fi
     else
-	echo $iplist
+	echo "$iplist"
     fi
     # Ugly hacky fix
     curl -s icanhazip.com
@@ -1178,18 +1186,18 @@ alias ipinfo='http -b ipinfo.io/json'
 # $OSTYPE == darwin* FIXME TODO
 # Should include fallback for no network, etc.
 function ssid() {
-    local ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | grep " SSID" | sed "s/.*: //")
+    local ssid
+    ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | grep " SSID" | sed "s/.*: //")
 
     if [ "$1" ]; then
-	if [ "$(echo $ssid | grep -w $1)" ]; then
-	    echo $1
+	if [ "$(echo "$ssid" | grep -w "$1")" ]; then
+	    echo :
 	fi
     else
-	echo $ssid
+	echo "$ssid"
     fi
 }
 # Should probably export more/all of these... FIXME TODO
-# Also: -f `command -v func` is a weird pattern
 export -f ssid
 
 # View HTTP traffic
@@ -1201,9 +1209,9 @@ alias eaves='lsof -iTCP -sTCP:LISTEN -P "$@"'
 # Change mac address https://jezenthomas.com/free-internet-on-trains/
 function remac {
     sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -z
-    sudo ifconfig en0 ether $(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')
+    sudo ifconfig en0 ether "$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')"
     sudo networksetup -detectnewhardware
-    echo $(ifconfig en0 | grep ether)
+    ifconfig en0 | grep ether
 }
 
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
@@ -1219,14 +1227,14 @@ alias pbp='pbpaste'
 alias clipboard="tr -d '\n' | pbcopy"
 
 function uniqsort() {
-    sort $1 | uniq -c | sort -nr
+    sort "$1" | uniq -c | sort -nr
 }
 # quicksort in three lines from http://git.io/UzwyWQ
 qsort()
 {
-    local L=""; local G=""; [ $# -eq 1 ] && echo $1 && return;
-    P=$1; shift; for i in $@; do [ $i -lt $P ] && L="$L $i" || G="$G $i"; done
-    [ -z "$L" ] || L=`qsort $L`; [ -z "$G" ] || G=`qsort $G`; echo "$L $P $G"
+    local L=""; local G=""; [ $# -eq 1 ] && echo "$1" && return;
+    P=$1; shift; for i in "$@"; do [ "$i" -lt "$P" ] && L="$L $i" || G="$G $i"; done
+    [ -z "$L" ] || L=$(qsort "$L"); [ -z "$G" ] || G=$(qsort "$G"); echo "$L $P $G"
 }
 
 # Get rid of pesky .DS_Store files, recursively
@@ -1239,7 +1247,7 @@ alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 # Alias for playball a la nba-watch
 # https://www.npmjs.com/package/playball
 # https://github.com/chentsulin/watch-nba
-if [[ -f `command -v playball` ]]; then
+if [[ -f $(command -v playball) ]]; then
     alias watch-mlb='playball';
 fi
 
@@ -1287,24 +1295,23 @@ function uc {
 alias shout='uc'
 
 # Backup file
-function backup-file()
-{
+function backup-file() {
     local filename=$@
 
     for i in $filename
     do
-	cp $i $i.bak
+	cp "$i" "$i.bak"
     done
 }
 # Backup file with timestamp
-function backup-file-with-timestamp()
-{
+function backup-file-with-timestamp() {
     local filename=$@
-    local filetime=$(date +%Y%m%d_%H%M%S)
+    local filetime
+    filetime=$(date +%Y%m%d_%H%M%S)
 
     for i in $filename
     do
-	cp ${i} ${i}_${filetime}
+	cp "${i}" "${i}_${filetime}"
     done
 }
 
@@ -1323,10 +1330,10 @@ alias hidehidden="defaults write com.apple.Finder AppleShowAllFiles -bool false 
 
 # Merge PDF files
 function mergepdf() {
-    if [ ! $1 ]; then
+    if [ ! "$1" ]; then
 	echo "Usage: mergepdf -o output.pdf input{1,2,3}.pdf";
     else
-	/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py $@;
+	/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py "$@";
     fi
 }
 
@@ -1340,26 +1347,23 @@ alias cdf='cdfinder'
 ## Couple of functions jacked from bash-it
 ## https://github.com/revans/bash-it
 # Pick random line from a file
-pickfrom ()
-{
+pickfrom () {
     local file=$1
     [ -z "$file" ] && reference $FUNCNAME && return
     length=$(cat $file | wc -l)
     n=$(expr $RANDOM \* $length \/ 32768 + 1)
-    head -n $n $file | tail -1
+    head -n "$n" "$file" | tail -1
 }
 # Generate random password from dictionary words
 # Passed number gives length
-pass ()
-{
+pass () {
     local i pass length=${1:-4}
-    pass=$(echo $(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done))
+    pass="$(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done)"
     echo "With spaces (easier to memorize): $pass"
     echo "Without (use this as the pass): $(echo $pass | tr -d ' ')"
 }
 # Same, but from /dev/urandom
-randpass ()
-{
+randpass () {
     local length=$1
     if [[ -z $length ]]; then
 	length=8
@@ -1369,47 +1373,50 @@ randpass ()
 }
 
 # Dashboard stock prices, use ticker for price, stockclose for last close
+# Need to rewrite ticker FIXME TODO
+# https://github.com/matryer/xbar-plugins/commit/4f9571ab263ded71eee35884ef24d326aa9bf844
+# https://github.com/matryer/xbar-plugins/commit/9d8c5fbbfe211b6d767ffe6aba03349b9c466b8c
 function marketupdate() {
     local FILES="SSO QLD VOOG QQQ .DJI .IXIC .INX INDEXNYSEGIS:NYA TNX"
 
     # Only show investments if after market close or weekend
     # Based on DST, correct using Eastern time??
-    if ((`date -u '+%H'` < 13)) || ((`date -u '+%u'` > 5)); then
+    if (($(date -u '+%H') < 13)) || (($(date -u '+%u') > 5)); then
 	FILES="FGCKX FDIKX VFTNX VSCPX VGSNX VTSMX VFFVX RDITX $FILES"
     fi
 
-    ticker $FILES | column -t
+    ticker "$FILES" | column -t
 }
 alias mu='marketupdate'
 alias stockmarket='ticker'
-alias inflation="perl $PERL_PERS_DIR/sandbox/inflation.pl"
+alias inflation='perl $PERL_PERS_DIR/sandbox/inflation.pl'
 
 # Robinhood dashboard
 # https://github.com/bcwik9/robinhood-on-rails
 function robinhood() {
-    (cd $GIT_PERS_DIR/robinhood-on-rails@bcwik9/ ; exec bundle exec rails server & sleep 1 & browser http://localhost:3000/)
+    (cd "$GIT_PERS_DIR"/robinhood-on-rails@bcwik9/ ; exec bundle exec rails server & sleep 1 & browser http://localhost:3000/)
 }
 # Shell
 # https://github.com/anilshanbhag/RobinhoodShell
 function robinhood-shell() {
-    (cd $GIT_PERS_DIR/RobinhoodShell@anilshanbhag ; ./shell.py)
+    (cd "$GIT_PERS_DIR"/RobinhoodShell@anilshanbhag ; ./shell.py)
 }
 
 # Update crathighlighter
 function crathighlighter() {
-    (cd $PERL_PERS_DIR/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl "$@")
+    (cd "$PERL_PERS_DIR"/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl "$@")
 }
 # Check twinkle
 function twinkleCheck() {
-    (cd $PERL_PERS_DIR/wiki/twinkle/ ; perl twinkleCheck.pl $@)
+    (cd "$PERL_PERS_DIR"/wiki/twinkle/ ; perl twinkleCheck.pl $@)
 }
 # Easy
-alias toolforge="ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org"
+alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
 
 # Get the weather
 function weather() {
     local where
-    if [ $1 ]; then
+    if [ "$1" ]; then
 	where=$1;
     fi
     if [[ $where =~ help ]]; then
@@ -1434,7 +1441,8 @@ function metar()
 	return
     fi
     # Convert to all caps
-    local code=$(echo -n $1|tr '[a-z]' '[A-Z]')
+    local code
+    code=$(echo -n "$1"|tr 'a-z' 'A-Z')
 
     local URL="http://weather.noaa.gov/pub/data/observations/metar/decoded/"
     wget -q -O - "${URL}${code}.TXT" 2>/dev/null
@@ -1455,11 +1463,12 @@ function dad {
 
 # Print the given text in the center of the screen.
 function center {
-    local width=$(tput cols);
+    local width
+    width=$(tput cols);
     local str="$@";
     local len=${#str};
     [ $len -ge $width ] && echo "$str" && return;
-    for ((i = 0; i < $(((($width - $len)) / 2)); i++)); do
+    for ((i = 0; i < $((((width - len)) / 2)); i++)); do
 	echo -n " ";
     done;
     echo "$str";
@@ -1501,7 +1510,8 @@ function codepoint()
 
 # Create a data URL from a file
 function dataurl() {
-    local mimeType=$(file -b --mime-type "$1");
+    local mimeType
+    mimeType=$(file -b --mime-type "$1");
     if [[ $mimeType == text/* ]]; then
 	mimeType="${mimeType};charset=utf-8";
     fi
@@ -1520,13 +1530,15 @@ function getcertnames() {
     echo "Testing ${domain}..."
     echo # newline
 
-    local tmp=$(echo -e "GET / HTTP/1.0\nEOT" \
-		    | openssl s_client -connect "${domain}:443" 2>&1);
+    local tmp
+    tmp=$(echo -e "GET / HTTP/1.0\nEOT" \
+	      | openssl s_client -connect "${domain}:443" 2>&1);
 
     if [[ "${tmp}" = *"-----BEGIN CERTIFICATE-----"* ]]; then
-	local certText=$(echo "${tmp}" \
-			     | openssl x509 -text -certopt "no_header, no_serial, no_version, \
-			no_signame, no_validity, no_issuer, no_pubkey, no_sigdump, no_aux");
+	local certText
+	certText=$(echo "${tmp}" \
+		       | openssl x509 -text -certopt "no_header, no_serial, no_version, \
+		       no_signame, no_validity, no_issuer, no_pubkey, no_sigdump, no_aux");
 	echo "Common Name:"
 	echo # newline
 	echo "${certText}" | grep "Subject:" | sed -e "s/^.*CN=//";
@@ -1552,7 +1564,7 @@ function unquarantine() {
 
 # Monitor file live with tail
 function monitor() {
-    tail -f $1 | while read line; do printf "$(date '+%F %T')\t$line\n"; done;
+    tail -f "$1" | while read -r line; do printf "$(date '+%F %T')\t$line\n"; done;
 }
 
 # /. headlines, turn into shell script to option output?
@@ -1572,7 +1584,7 @@ function writetest() {
 
 # Find a file with a pattern in name, excluding a bunch of useless locations
 function ff() {
-    find . -path './.cpan' -prune -o - path './.git' -prune -o -path './.config' -prune -o -path './Library' -prune -o -path './.fseventsd' -prune -o -path './.Spotlight-V100' -prune -o -path './.Trashes' -prune -o -type f -iname '*'$*'*' -ls;
+    find . -path './.cpan' -prune -o - path './.git' -prune -o -path './.config' -prune -o -path './Library' -prune -o -path './.fseventsd' -prune -o -path './.Spotlight-V100' -prune -o -path './.Trashes' -prune -o -type f -iname '*'"$*"'*' -ls;
 }
 
 # Remove empty directories under and including <path>s.
@@ -1664,14 +1676,14 @@ function family()
 alias calc='Rscript -e "eval( parse( text=commandArgs( TRUE ) ) )"'
 
 function =() {
-    calc $@
+    calc "$@"
 }
 
 # Calculate factors
 # https://twitter.com/climagic/status/550355281415503872
 function factors {
     local num=$1;
-    seq $(($num/2)) | awk '"'$num'"%$0==0'
+    seq $((num/2)) | awk '"'"$num"'"%$0==0'
 }
 
 alias sumup="perl -MList::Util=sum -alne 'push @S,@F; END { print sum @S }'"
@@ -1685,22 +1697,22 @@ function exp {
 
 # Extract most types of compressed files
 function extract {
-    echo Extracting $1 ...
-    if [ -f $1 ] ; then
-	case $1 in
-	    *.tar.bz2)tar xjf $1;;
-	    *.tar.gz)tar xzf $1;;
-	    *.tar.Z)tar xzf $1;;
-	    *.bz2)bunzip2 $1;;
-	    *.rar)unrar x $1;;
-	    *.gz) gunzip $1;;
-	    *.jar)unzip $1;;
-	    *.tar)tar xf $1;;
-	    *.tbz2)tar xjf $1;;
-	    *.tgz)tar xzf $1;;
-	    *.zip)unzip $1;;
-	    *.Z)uncompress $1;;
-	    *.7z)7z x $1;;
+    echo Extracting "$1" ...
+    if [ -f "$1" ] ; then
+	case "$1" in
+	    *.tar.bz2)tar xjf "$1";;
+	    *.tar.gz)tar xzf "$1";;
+	    *.tar.Z)tar xzf "$1";;
+	    *.bz2)bunzip2 "$1";;
+	    *.rar)unrar x "$1";;
+	    *.gz) gunzip "$1";;
+	    *.jar)unzip "$1";;
+	    *.tar)tar xf "$1";;
+	    *.tbz2)tar xjf "$1";;
+	    *.tgz)tar xzf "$1";;
+	    *.zip)unzip "$1";;
+	    *.Z)uncompress "$1";;
+	    *.7z)7z x "$1";;
 	    *)echo "'$1' cannot be extracted via extract()" ;;
 	esac
     else
@@ -1710,13 +1722,15 @@ function extract {
 
 # Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
 function targz() {
-    local tmpFile="${@%/}.tar";
+    local tmpFile
+    tmpFile="${@%/}.tar";
     tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
 
-    local size=$(
+    local size
+    size=$(
 	stat -f"%z" "${tmpFile}" 2> /dev/null; # OS X `stat`
 	stat -c"%s" "${tmpFile}" 2> /dev/null; # GNU `stat`
-	  );
+	);
 
     local cmd="";
     if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
@@ -1744,10 +1758,13 @@ function targz() {
 
 # Compare original and gzipped file size
 function gz() {
-    local origsize=$(wc -c < "$1")
-    local gzipsize=$(gzip -c "$1" | wc -c)
+    local origsize
+    origsize=$(wc -c < "$1")
+    local gzipsize
+    gzipsize=$(gzip -c "$1" | wc -c)
     # Percent of total
-    local ratio=$(echo "$gzipsize * 100/ $origsize" | bc -l)
+    local ration
+    ratio=$(echo "$gzipsize * 100/ $origsize" | bc -l)
     # Percent reduction
     #    local ratio=$(echo "100 - ($gzipsize * 100/ $origsize)" | bc -l)
     printf "orig: %d bytes\n" "$origsize"
@@ -1758,21 +1775,20 @@ function gz() {
 
 #### Dictionary stuff
 # wordnet
-dictionary () { curl dict://dict.org/d:${1}:wn; }
+dictionary () { curl dict://dict.org/d:"${1}":wn; }
 alias define='dictionary'
 alias dict='dictionary'
 # Moby thesaurus
-thesaurus () { curl dict://dict.org/d:${1}:moby-thes; }
+thesaurus () { curl dict://dict.org/d:"${1}":moby-thes; }
 alias synonym='thesaurus'
 # vera acronyms
-acronym () { curl dict://dict.org/d:${1}:vera; }
+acronym () { curl dict://dict.org/d:"${1}":vera; }
 # jargon files
-jargon () { curl dict://dict.org/d:${1}:jargon; }
-# foldoc
-# free-online dictionary of computing
-foldoc () { curl dict://dict.org/d:${1}:foldoc; }
+jargon () { curl dict://dict.org/d:"${1}":jargon; }
+# foldoc, free-online dictionary of computing
+foldoc () { curl dict://dict.org/d:"${1}":foldoc; }
 # urbandict
-urban() { word=`echo $* | sed 's/ /%20/g'`; curl -s http://api.urbandictionary.com/v0/define?term=$word | jq -reM .list[0].definition; }
+urban() { word=$(echo "$*" | sed 's/ /%20/g'); curl -s http://api.urbandictionary.com/v0/define?term="$word" | jq -reM .list[0].definition; }
 
 # Add note to Notes.app (OS X 10.8+)
 # Usage: `note 'title' 'body'` or `echo 'body' | note`
