@@ -2911,6 +2911,10 @@ This checks in turn:
 ;;;;;;;;;;;;;;;;;;;;
 
 
+;; restclient https://github.com/pashky/restclient.el
+(setq restclient-same-buffer-response-name "*Restclient Response*")
+
+
 ;; FUCKS SHIT UP ;;;;;;; #########
 ;; Use pretty symbols in buffer
 ;; (require 'pretty-mode)
