@@ -11,7 +11,7 @@
 z="$(wc -l < ~/.z | tr -d ' ')"
 b="$(wc -l < ~/.z.bk | tr -d ' ')"
 
-if [ $z -lt $b ]; then
+if [ "$z" -lt "$b" ]; then
     date="$(date)"
     # Hellow darkness my old friend...
     /opt/local/bin/terminal-notifier -message "As of $date

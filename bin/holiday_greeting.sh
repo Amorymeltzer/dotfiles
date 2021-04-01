@@ -7,7 +7,7 @@
 case $(date +"%B %d") in
     "January 01")
 	# get current year (for new years greeting)
-	local year=$(date +"%Y")
+	year=$(date +"%Y")
 	holgreet="${Color_Magenta_Intense}Happy ${Color_Red_Intense}New ${Color_Blue_Intense}Year!${Color_zOff} Have a great $year.";;
     "February 02") holgreet="Happy Groundhog Day!";;
     "February 14") holgreet="Happy ${Color_Magenta}Valentine's Day!${Color_zOff}";;

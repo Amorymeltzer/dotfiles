@@ -4,7 +4,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-h] [new|notes|last|show|rand|log|remove|rm|delete|YYY-MM-DD|stats]
+Usage: $(basename "$0") [-h] [new|notes|last|show|rand|log|remove|rm|delete|YYY-MM-DD|stats]
 
   Without any parameters, diary will open today's entry for you; if it hasn't
   been started yet, it will create the file with, and populate it with the
@@ -27,8 +27,9 @@ END_HELP
 
 while getopts 'h' opt; do
     case $opt in
-	h) help $0
+	h) help "$0"
 	   exit 0;;
+	*) exit 0;;
     esac
 done
 
@@ -48,17 +49,17 @@ function newDay {
 	title=$(date +"%A, %B %d, %Y")
 
 	# Try to check ssid, insert a reminder to note location if not at home
-	if [[ -n `command -v ssid` ]] && [[ -n $HOME_SSID ]] && [[ $HOME_SSID != "$(ssid)" ]]; then
+	if [[ -n $(command -v ssid) ]] && [[ -n $HOME_SSID ]] && [[ $HOME_SSID != "$(ssid)" ]]; then
 	    away=" (INSERTLOCATION)"
 	fi
 
-	printf "# ${title}${away}\n\n" > $today
+	printf "# ${title}${away}\n\n" > "$today"
 	notes=$(cat notes)
 	if [[ -n $notes ]]; then
-	    printf "## Thoughts\n" >> $today
-	    printf "$notes\n" >> $today
+	    printf "## Thoughts\n" >> "$today"
+	    printf "$notes\n" >> "$today"
 	fi
-	printf "## Morning\n\n\n## Afternoon\n\n\n## Evening\n" >> $today
+	printf "## Morning\n\n\n## Afternoon\n\n\n## Evening\n" >> "$today"
     fi
 }
 
@@ -84,7 +85,7 @@ else
 	showDate "$1"
     else
 	function showLast {
-	    cat $(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1)
+	    cat "$(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1)"
 	}
 
 	case "$1" in
@@ -98,7 +99,7 @@ else
 		[[ $2 ]] && showDate "$2" || showLast;; # Second param by this point
 	    "rand")
 		# Display a random entry
-		cat $(ls -1 | shuf | head -n 1);;
+		cat "$(ls -1 | shuf | head -n 1)";;
 	    "remove"|"rm"|"delete")
 		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
 	    "log")
@@ -117,10 +118,10 @@ else
 		    exit 1
 		fi
 
-		git add $today
+		git add "$today"
 		# Commit if untracked, amend if already present
 		if [[ "$(cut -c 1-2 <<< "$status")" == "??" ]]; then
-		    git commit -m $today
+		    git commit -m "$today"
 		elif [[ "$(cut -c 1-2 <<< "$status")" == " M" ]]; then
 		    git commit --amend --no-edit
 		else
@@ -134,7 +135,7 @@ else
 		files=$(ls -1 | grep -E "^\d{4}-\d{2}-\d{2}\.md$")
 		total=$(wc -l <<<"$files" | tr -d ' ')
 		# Here so the command command isn't called multiple times
-		hasSpark=`command -v spark`
+		hasSpark=$(command -v spark)
 
 		if [[ $total -gt 0 ]]; then
 		    IFS=$'\n' results=($(cut -f 1 -d - <<<"$files" | sort | uniq -c))
@@ -153,17 +154,17 @@ else
 			# Note the leading ! in the array, means iterate over the index
 			for i in "${!mons[@]}"; do
 			    # 1-indexing
-			    if [ $i -eq 0 ]; then
+			    if [ "$i" -eq 0 ]; then
 				continue
 			    fi
 			    # Zero-pad month number
-			    find=$(printf "%02d" $i)
+			    find=$(printf "%02d" "$i")
 			    mcount=$(echo "$yfiles" | grep -E "^\d{4}-$find-\d{2}\.md$" | wc -l | tr -d ' ')
-			    if [ $mcount -gt 0 ]; then
+			    if [ "$mcount" -gt 0 ]; then
 				mon=${mons[$i]}
 				echo -e "\t$mon: $mcount"
 				# Add to spark array
-				spark+=($mcount)
+				spark+=("$mcount")
 			    fi
 			done
 

@@ -16,11 +16,11 @@ fi
 
 while true; do
     range=$(echo "$high - $low" | bc)
-    time=$(echo $RANDOM % $range + $low | bc)
-    minutes=$(echo $time*60 | bc)
-    sleep $minutes
+    time=$(echo $RANDOM % "$range" + $low | bc)
+    minutes=$(echo "$time"*60 | bc)
+    sleep "$minutes"
 
-    echo -n $(date)
+    echo -n"$(date) "
     echo -e "$time minutes have elapsed\007"
     sleep .25
     echo -en "\007"
