@@ -2525,8 +2525,9 @@ in the buffer." t)
 	("^/\([^:@]+@\)?\([^:]+\):/*" . "ftp://\1\2")
 	("^/+" . "file:/")))
 
-(global-set-key (kbd "C-c C-v") 'browse-url-of-buffer)
+
 (global-set-key (kbd "C-c v") 'browse-url)
+(global-set-key (kbd "C-c C-v") 'browse-url)
 
 ;; There are lots of ways to view a file/commit/whatever at some web address,
 ;; each with different features, but ideally I'd have one for url browsing and
