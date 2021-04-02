@@ -6,5 +6,10 @@
 # Strip headers for full division/league/etc.
 # Sort by rank
 
-import statsapi
-print(statsapi.standings(), end='')
+import datetime, statsapi
+# Only show wildcard info starting in September
+if datetime.datetime.now().month>=9:
+    standings=statsapi.standings()
+else:
+    standings=statsapi.standings(include_wildcard=False)
+print(standings, end='')
