@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+# Print MLB standings table using https://github.com/toddrob99/MLB-StatsAPI
+# Basically trying to recreate https://github.com/spraints/mlb-standings
+# TODO: Recreate previous mlb functionality:
+# Args for just AL or NL
+# Strip headers for full division/league/etc.
+# Sort by rank
+
+import statsapi
+print(statsapi.standings(), end='')
