@@ -142,6 +142,15 @@ Record that in `paradox--backups', but do nothing if
     (advice-add sym :override newdef '((name . :paradox-override)))
     (add-to-list 'paradox--backups sym)))
 
+;; Enable sorting on the downloads column, https://github.com/Malabarba/paradox/pull/190
+(paradox--define-sort paradox--column-name-download "d")
+
+;; Refresh stars and downloads.  Probably only need to do once per session to
+;; get around https://github.com/Malabarba/paradox/issues/176.  Can't seem to
+;; hook this into something like `paradox-menu-mode-hook' or make use of
+;; advice-add without causing errors, so just run manually for now.
+;; (paradox--refresh-remote-data)
+
 (paradox-enable)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-theme 'kaolin-galaxy)
@@ -1594,6 +1603,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 
 ;;;;;;;;;;;;;;;;;;;
 ;; Smex stuff, better M-x using ido
+;; Maybe migrate to amx? Try it out? https://github.com/DarwinAwardWinner/amx
 ;; Should put this closer to the end since (smex-initialize) so early will
 ;; miss functions loaded via autoload
 ;; While smex is active...
@@ -2541,6 +2551,8 @@ in the buffer." t)
 
 ;; github-explorer https://github.com/TxGVNN/github-explorer
 ;; Browse files from a repo locally
+;; Latest version a right pain when using IDO!  Can't get tree ("") at all, need
+;; to disable ido-ubiquitous-mode or something FIXME TODO
 (defalias 'browse-github-repo 'github-explorer)
 
 (defun view-url ()
