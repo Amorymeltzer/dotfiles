@@ -151,6 +151,18 @@ Record that in `paradox--backups', but do nothing if
 ;; advice-add without causing errors, so just run manually for now.
 ;; (paradox--refresh-remote-data)
 
+;; Can set a key, though.  Will only run if data not loaded
+(defun my/paradox-menu-refresh-data ()
+  "Refresh stars and downloads.  Will only run once."
+  (interactive)
+  ;; Hash table only populated once data refreshed
+  (when (eq 0 (hash-table-count paradox--star-count))
+    (paradox--refresh-remote-data)
+    ;; Remove the mode-map definition now that we've run it once
+    (define-key paradox-menu-mode-map "r" nil)))
+(define-key paradox-menu-mode-map "r" #'my/paradox-menu-refresh-data)
+
+
 (paradox-enable)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-theme 'kaolin-galaxy)
