@@ -19,9 +19,11 @@ elif argN==2:
         league='104'
 
 import datetime, statsapi
-# Only show wildcard info starting in September
-if datetime.datetime.now().month>=9:
+# Only show wildcard info August and September
+month=datetime.datetime.now().month
+if month==8 or month==9:
     standings=statsapi.standings(leagueId=league)
 else:
     standings=statsapi.standings(leagueId=league, include_wildcard=False)
+
 print(standings, end='')
