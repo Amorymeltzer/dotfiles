@@ -6,6 +6,45 @@
 # unavailable without addition standings_data params
 # https://github.com/toddrob99/MLB-StatsAPI/issues/52
 
+# Recreate formatted standings output, incorporating league_rank and sport_rank
+# https://github.com/toddrob99/MLB-StatsAPI/blob/a31a84b2eaaace1636d7ed08323b999fce2069e7/statsapi/__init__.py#L1309
+def ranked_standings(
+        leagueId="103,104",
+        division="all",
+        include_wildcard=False,
+        season=None,
+        standingsTypes=None,
+        date=None,
+        leagueRank=False,
+        sportsRank=False
+):
+    """Get formatted standings for a given league/division and season."""
+    divisions = statsapi.standings_data(
+        leagueId, division, include_wildcard, season, standingsTypes, date
+    )
+
+    standings = "MLB Standings\n"
+    standings += "{:^4} {:<21} {:^3} {:^3} {:^4} {:^4}\n".format(
+        # Probably only care about GB in the league/division context...
+        *["Rank", "Team", "W", "L", "GB", "(E#)"]
+    )
+
+    # It's 30, and given the structure of this, there's no point in pretending
+    # to calculate it when it's just simply 30.
+    teams=list(range(30))
+    for div in divisions.values():
+        for t in div["teams"]:
+            teams[int(t['sport_rank'])-1]=t
+
+    # Annoying to go through everything twice just to sort 'em, but that's the
+    # data structure we've got!  At least it's always short.
+    for t in teams:
+        standings += "{sport_rank:^4} {name:<21} {w:^3} {l:^3} {gb:^4} {elim_num:^4}\n".format(
+            **t
+        )
+
+    return standings
+
 import sys
 argN=len(sys.argv)
 league='103,104'
@@ -13,11 +52,20 @@ if argN>=3:
     exit()
 elif argN==2:
     opt=sys.argv[1]
-    if opt=='al' or opt=='a':
-        league='103'
-    elif opt=='nl' or opt=='n':
-        league='104'
+    if opt=='sort' or opt=='rank':
+        # DRY
+        import statsapi
+        # Just sportsRank (for now?)
+        standings=ranked_standings(sportsRank=True)
+        print(standings, end='')
+        exit()
+    else:
+        if opt=='al' or opt=='a':
+            league='103'
+        elif opt=='nl' or opt=='n':
+            league='104'
 
+# Maybe remove pointless Rank?  Redundant with listing
 import datetime, statsapi
 # Only show wildcard info August and September
 month=datetime.datetime.now().month
