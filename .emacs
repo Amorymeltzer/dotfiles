@@ -1960,6 +1960,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Reclaim C-t as a general transposition map
 ;; Maybe better as C-c t?  M-t?
 ;; Why on earth does this not show up in which-key but C-q does??? FIXME TODO
+;; Maybe doing what flycheck-keymap-prefix suggests would work...
 ;; Maybe add transpose-frame stuff? FIXME TODO
 ;; Unset a few scattered here n' there; maybe a 'bind or something would be better?
 (global-unset-key (kbd "C-t"))	   ;; was transpose-chars
