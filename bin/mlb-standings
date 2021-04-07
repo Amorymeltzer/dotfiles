@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # Print MLB standings table using https://github.com/toddrob99/MLB-StatsAPI
 # Basically trying to recreate https://github.com/spraints/mlb-standings
-
-# Previous mlb functionality (full league/sport ranking, sorting, etc.)
-# unavailable without addition standings_data params
-# https://github.com/toddrob99/MLB-StatsAPI/issues/52
+# Team W L PCT GB HOME ROAD RS RA DIFF STRK
 
 # Recreate formatted standings output, incorporating league_rank and sport_rank
 # https://github.com/toddrob99/MLB-StatsAPI/blob/a31a84b2eaaace1636d7ed08323b999fce2069e7/statsapi/__init__.py#L1309
@@ -23,25 +20,37 @@ def ranked_standings(
         leagueId, division, include_wildcard, season, standingsTypes, date
     )
 
-    standings = "MLB Standings\n"
-    standings += "{:^4} {:<21} {:^3} {:^3} {:^4} {:^4}\n".format(
-        # Probably only care about GB in the league/division context...
-        *["Rank", "Team", "W", "L", "GB", "(E#)"]
+    standings = "{:^4} {:<21} {:^3} {:^3} {:^4}\n".format(
+        *["Rank", "Team", "W", "L", "(E#)"]
     )
+    if sportsRank:
+        # It's 30, and given the structure of this, there's no point in pretending
+        # to calculate it when it's just simply 30.
+        teams=list(range(30))
+        for div in divisions.values():
+            for t in div["teams"]:
+                teams[int(t['sport_rank'])-1]=t
 
-    # It's 30, and given the structure of this, there's no point in pretending
-    # to calculate it when it's just simply 30.
-    teams=list(range(30))
-    for div in divisions.values():
-        for t in div["teams"]:
-            teams[int(t['sport_rank'])-1]=t
+        # Annoying to go through everything twice just to sort 'em, but that's the
+        # data structure we've got!  At least it's always short.
+        for t in teams:
+            standings += "{sport_rank:^4} {name:<21} {w:^3} {l:^3} {elim_num:^4}\n".format(
+                **t
+            )
+    elif leagueRank:
+        # It's 15, and given the structure of this, there's no point in pretending
+        # to calculate it when it's just simply 15.
+        teams=list(range(15))
+        for div in divisions.values():
+            for t in div["teams"]:
+                teams[int(t['league_rank'])-1]=t
 
-    # Annoying to go through everything twice just to sort 'em, but that's the
-    # data structure we've got!  At least it's always short.
-    for t in teams:
-        standings += "{sport_rank:^4} {name:<21} {w:^3} {l:^3} {gb:^4} {elim_num:^4}\n".format(
-            **t
-        )
+        # Annoying to go through everything twice just to sort 'em, but that's the
+        # data structure we've got!  At least it's always short.
+        for t in teams:
+            standings += "{league_rank:^4} {name:<21} {w:^3} {l:^3} {elim_num:^4}\n".format(
+                **t
+            )
 
     return standings
 
@@ -50,13 +59,19 @@ argN=len(sys.argv)
 league='103,104'
 if argN>=3:
     exit()
-elif argN==2:
+
+import statsapi
+if argN==2:
     opt=sys.argv[1]
     if opt=='sort' or opt=='rank':
-        # DRY
-        import statsapi
-        # Just sportsRank (for now?)
         standings=ranked_standings(sportsRank=True)
+        print(standings, end='')
+        exit()
+    elif opt=='league':
+        standings="American League\n"
+        standings+=ranked_standings(leagueId=103,leagueRank=True)
+        standings+="\nNational League\n"
+        standings+=ranked_standings(leagueId=104,leagueRank=True)
         print(standings, end='')
         exit()
     else:
@@ -65,8 +80,8 @@ elif argN==2:
         elif opt=='nl' or opt=='n':
             league='104'
 
-# Maybe remove pointless Rank?  Redundant with listing
-import datetime, statsapi
+# Maybe remove pointless Rank?  Redundant with listing FIXME TODO
+import datetime
 # Only show wildcard info August and September
 month=datetime.datetime.now().month
 if month==8 or month==9:
