@@ -417,14 +417,19 @@ Record that in `paradox--backups', but do nothing if
 ;; Okay weird but maybe?  Lots of clobbering elsewhere...
 (define-key js2-mode-map (kbd "C-c 2") 'js2-jump-to-definition)
 
-;; Add globals for Twinkle development, temporary until I get flycheck up and running
-(add-hook 'js2-mode-hook
-	  (lambda ()
-	    (when (buffer-file-name)
-	      (when (string-match "twinkle@azatoth" (buffer-file-name))
-		(setq js2-additional-externs
-		      '("$" "mw" "Morebits" "Twinkle"))))))
+;; Error checking can be slow on large files, slightly increase this
+;; Then again, maybe just don't do this since doing it with flycheck is probably
+;; (always?) better?  Would probably want to adjust the faces though.
+(setq js2-idle-timer-delay 0.5
+      js2-dynamic-idle-timer-adjust 3000)
+
 ;; Make faces pop
+;; Collision with flycheck/flymake?
+;; There's a weird thing where these don't show up for new errors, nor do other
+;; js2 faces for new insertions, but reloading the buffer sets everything
+;; right.  Maybe an issue with font-lock stuff? FIXME TODO
+;; js2-reparse does the trick, but annoying that it needs to?
+;; Not just externals (https://github.com/mooz/js2-mode/commit/1b0e174d801d147aec88ecff7b50bb163b3cd2e8)
 (set-face-attribute 'js2-warning nil
 		    :background "DarkBlue" :foreground "white")
 (set-face-attribute 'js2-error nil
@@ -459,19 +464,6 @@ Record that in `paradox--backups', but do nothing if
 	      ;; clobbers js-set-js-context, whatever that did
 	      (define-key js2-mode-map "\C-c\C-j" 'js-doc-insert-function-doc)
 	      (define-key js2-mode-map "@" 'js-doc-insert-tag)))
-
-;; flymake-eslint
-;; Nice to have but slow when enabled, maybe turn on manually?
-(autoload 'flymake-eslint-enable "flymake-eslint" "Enable Flymake and add flymake-eslint as a buffer-local Flymake backend." t)
-;; (add-hook 'js2-mode-hook
-;;   (lambda ()
-;;     (flymake-eslint-enable)))
-;; Would be nice to have a toggle
-(defun flymake-eslint-disable ()
-  "Reverse `flymake-eslint-enable': Remove the availability of `eslint' as a Flymake backend and turn off Flymake."
-  (interactive "P")
-  (remove-hook 'flymake-diagnostic-functions 'flymake-eslint--checker t)
-  (flymake-mode -1))
 ;;;;;;;;;;;;;;;;;;;
 
 ;; emmet-mode expansions, super cool if I ever remember (use C-j)
@@ -492,9 +484,6 @@ Record that in `paradox--backups', but do nothing if
 (add-to-list 'auto-mode-alist '("\\.[sx]?html?\\(\\.[a-zA-Z_]+\\)?\\'" . html-mode))
 
 ;; php-mode https://github.com/emacs-php/php-mode
-;; Relies on flymake-php: https://github.com/purcell/flymake-php
-;; which in turn relies on flymake-easy: https://github.com/purcell/flymake-easy
-;; Which is unnecessary with flycheck
 (autoload 'php-mode "php-mode" "Major mode for editing PHP code." t)
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
@@ -508,28 +497,23 @@ Record that in `paradox--backups', but do nothing if
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Flycheck stuff
+;;; https://github.com/flycheck/flycheck and https://www.flycheck.org
+;; Turn on for everybody, prog and text alike
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
 ;;; Flymake stuff
 ;; Really should use flycheck,maybe reverting back to flymake if not available
 ;; flymake is newer on MELPA, as is eldoc
 (require 'flymake)
-;; Remove annoying logging.  Doesn't quite get all of 'em?  Last one is for
-;; `elisp-flymake-checkdoc' on startup, wrong-type-argument integer-or-marker-p nil
-(remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-;; Good?  Maybe just for cperl (done there) and elisp, given js2 is fine for js
-;; Then again, if this is present, given the presence of flymake-proselint in
-;; text-mode-hook, flymake would be on basically everywhere...
-;; (add-hook 'prog-mode-hook 'flymake-mode)
-
-;; Deal with stupid jshint/javascript/csslint stuff
-;; I really need to migrate to flycheck
-(delete '("\\.js\\'" flymake-javascript-init) flymake-proc-allowed-file-name-masks)
-(delete '("\\.css\\'" flymake-css-init) flymake-proc-allowed-file-name-masks)
 
 ;; Static analysis can be slow, so only run flymake if I've not been typing for
 ;; 5 seconds.  It will still run on save or hitting return.
+;; Modify flycheck prefs to match this???
 (setq flymake-no-changes-timeout 3)
 
-;; Make flymake faces pop
+;; Make flymake faces pop; convert to flycheck? FIXME TODO
+;; flycheck: flycheck-info, flycheck-warning, flycheck-error, etc.
 (set-face-attribute 'flymake-note nil
 		    :background "DarkGreen" :foreground "white")
 (set-face-attribute 'flymake-warning nil
@@ -537,31 +521,14 @@ Record that in `paradox--backups', but do nothing if
 (set-face-attribute 'flymake-error nil
 		    :background "Firebrick4" :foreground "white")
 
-;;Turn on automatically
-;; (add-hook 'find-file-hook 'flymake-find-file-hook)
-
-;; perlcritic stuff, stored from when flymake-perlcritic was a thing.  Could
-;; maybe write a quick miniversion based on flymake-easy or flymake-quickdef?
-;; https://github.com/illusori/emacs-flymake-perlcritic
-;; (when (executable-find "perlcritic")
-;;   (require 'flymake-perlcritic)
-;;   (setq flymake-perlcritic-severity 2))
-
-;; https://github.com/purcell/flymake-easy
-(require 'flymake-easy)
-;; https://github.com/purcell/flymake-php
-(require 'flymake-php)
-(add-hook 'php-mode-hook 'flymake-php-load)
-
 
 ;; C-c C-v to go to next error
+;; Clobbered in markdown-mode, care?  Reclaim for flycheck?  Or meh?  Might need
+;; to deal with flyspell...
 (global-set-key (kbd "C-c '") 'flymake-goto-next-error)
 ;; C-c C-C to go to prev error
 (global-set-key (kbd "C-c ;") 'flymake-goto-prev-error)
-
-;; Perltidy: https://github.com/emacsmirror/emacswiki.org/blob/master/perltidy.el
-;; requires stand-alone command line program; uses ~/.perltidyrc
-(require 'perltidy)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;; editorconfig https://editorconfig.org/
@@ -788,6 +755,16 @@ backups." t)
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
+
+;; Annoyingly, flycheck doesn't automatically include proselint as a
+;; next-checker for markdown mode (okay, fine, I guess it makes sense), so let's
+;; just make it so.  Clearly depends on the proselint executable (pip, macports,
+;; brew, etc)
+;; https://github.com/amperser/proselint/
+;; Consider textlint as well?  Less popular/fewer stars, but more actively developed
+;; https://github.com/textlint/textlint
+(flycheck-add-next-checker 'markdown-markdownlint-cli 'proselint)
+
 ;; Edit git commit messages in markdown, since mostly for GitHub.  Not that
 ;; common since magit/git-commit-mode usurps most of these, but occasionally
 ;; they do popup, especially around amend/fixup/squash
@@ -798,7 +775,6 @@ backups." t)
 
 ;; Should add some more here
 ;; Also need to make interactives for bold, italics, headers, etc
-;; Stop clobbering flymake-goto error commands FIXME TODO
 (eval-after-load "markdown-mode"
   '(progn
      ;; Colorize code blocks
@@ -2670,8 +2646,6 @@ This checks in turn:
 ;; Don't mess with C-h; would be useful but for the above
 ;; Not working???
 (setq cperl-clobber-lisp-bindings 1)
-;; flymake in cperl
-(add-hook 'cperl-mode-hook 'flymake-mode)
 ;; Treat _ as word character, probably counter-intuitive.  cperl-under-as-char
 ;; is deprecated, so use superword-mode (well, don't, but you know)
 ;; (setq cperl-under-as-char t)
@@ -2707,6 +2681,13 @@ This checks in turn:
 
 ;; Perldoc in emacs
 (defalias 'perldoc 'cperl-perldoc)
+
+
+;; Perltidy: https://github.com/emacsmirror/emacswiki.org/blob/master/perltidy.el
+;; Requires stand-alone command line program; uses ~/.perltidyrc
+;; Requires loading tramp beforehand, or should I just patch?
+;; Required?  Can hook into flycheck or not needed since not using flymake? FIXME TODO
+(require 'perltidy)
 ;;;;;;;;;;;;;;;;;;;;
 
 
@@ -2818,10 +2799,6 @@ This checks in turn:
 
 
 (defalias 'elisp-mode 'emacs-lisp-mode)
-;; Doesn't handle (M)ELPA well since this just defaults to "./" Should probably
-;; be setq-local, but whatever
-(setq elisp-flymake-byte-compile-load-path load-path)
-(add-hook 'emacs-lisp-mode-hook 'flymake-mode)
 
 ;; Give info at point in elisp mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
@@ -2922,21 +2899,9 @@ This checks in turn:
   ;; Add working flyspell bindings, since C-, and C-; don't
   ;; Could even have a fly prefix, taking over C-c f or C-c C-f that I don't use much?
   ;; Good place for a hydra, actually, since often want flys to continue to next...
-  ;; Is there a way to hook flyspell and flymake into same key?  Next of either?
+  ;; Is there a way to hook flyspell and flycheck into same key?  Next of either?
   (define-key flyspell-mode-map (kbd "C-c \"") 'flyspell-goto-next-error)
   (define-key flyspell-mode-map (kbd "C-c :") 'flyspell-goto-prev-error))
-
-;; flymake-proselint https://github.com/manuel-uberti/flymake-proselint
-;; Clearly depends on the proselint executable (pip, macports, brew, etc)
-;; https://github.com/amperser/proselint/
-;; Consider textlint as well?  Fewer stars, but updated more recently
-;; https://github.com/textlint/textlint
-(add-hook 'text-mode-hook
-	  (lambda ()
-	    ;; With this, flymake is on for (c)perl and text modes, pretty close
-	    ;; to everything I care about...
-	    (flymake-mode +1)
-	    (flymake-proselint-setup)))
 ;;;;;;;;;;;;;;;;;;;;
 
 
@@ -3529,6 +3494,3 @@ This checks in turn:
 ;; fancy-narrow
 ;; btc ticker?? Maybe switch
 ;; Remove typing game, etc?
-
-;; flymake-perlcritic is using an old version of flymake, can't delete from
-;; site-lisp until moving to flycheck
