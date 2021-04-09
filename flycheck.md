@@ -56,6 +56,6 @@ Todo list:
   - [ ] flycheck-color-mode-line (also above) (Not unless/until customizing mode line differently/better)
   - [ ] flycheck-elsa / elsa
   - [ ] flycheck-grammarly
-  - [ ] flycheck-relint
+  - [x] flycheck-relint
   - [x] flycheck-title (also above) (Nah)
   - [ ] magit-diff-flycheck

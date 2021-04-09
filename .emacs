@@ -510,11 +510,20 @@ Record that in `paradox--backups', but do nothing if
 ;; I don't rightly care about ensuring lisps have the "proper" package comments
 (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
-;; flycheck-bashisms https://github.com/cuonglm/flycheck-checkbashisms
-;; Ensure no bashisms in sh code, no shisms in bash code; mostly the former
-(add-hook 'flycheck-mode-hook #'flycheck-checkbashisms-setup)
-(setq flycheck-checkbashisms-posix t
-      flycheck-checkbashisms-newline t)
+;; Some additional checkers; could probably just run these straight-up
+(with-eval-after-load 'flycheck
+  ;; flycheck-bashisms https://github.com/cuonglm/flycheck-checkbashisms
+  ;; Ensure no bashisms in sh code, no shisms in bash code; mostly the former
+  (flycheck-checkbashisms-setup)
+  (setq flycheck-checkbashisms-posix t
+	flycheck-checkbashisms-newline t)
+  ;; flycheck-relint https://github.com/purcell/flycheck-relint
+  ;; Check elisp regexes with relint
+  (flycheck-relint-setup)
+  ;; flycheck-relint assumes that emacs-lisp-checkdoc is enabled, so we need to
+  ;; manually set the checker to follow emacs-lisp
+  (flycheck-add-next-checker 'emacs-lisp 'emacs-lisp-relint))
+
 
 ;;; Flymake stuff
 ;; Really should use flycheck,maybe reverting back to flymake if not available
@@ -544,6 +553,10 @@ Record that in `paradox--backups', but do nothing if
 (global-set-key (kbd "C-c ;") 'flymake-goto-prev-error)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;; relint: Check elisp regexes https://elpa.gnu.org/packages/relint.html
+;; `relint-buffer' is a better name than `relint-current-buffer', but that's taken
+(defalias 'relint-buffer-current 'relint-current-buffer)
 
 ;; editorconfig https://editorconfig.org/
 ;; https://github.com/editorconfig/editorconfig-emacs
