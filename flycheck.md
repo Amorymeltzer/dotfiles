@@ -15,33 +15,36 @@ Todo list:
 	- [ ] Maybe take over flymake commands?
   - [x] Customize-group, etc.
   - [ ] Faces?  Copy flymake, or start over fresh, using whatever the theme picks up?  Split the difference?
-- [ ] Language-specific stuff <https://www.flycheck.org/en/latest/languages.html>
+  - [ ] Consider turning margin on?  Big change for everybody but maybe worth it long-term?
+- [x] Language-specific stuff <https://www.flycheck.org/en/latest/languages.html>
   - For each, check:
 	- Correct program found and working; Maybe: <https://www.flycheck.org/en/latest/user/syntax-checkers.html>
 	- Turns on and runs automatically
 	- Modeline works
 	- Not too slow
 	- Other customizations
-  - [ ] Language list:
+  - Language list:
 	- [x] css: <https://www.flycheck.org/en/latest/languages.html#css>
 	- [x] elisp: <https://www.flycheck.org/en/latest/languages.html#emacs-lisp>
-	- [ ] html: <https://www.flycheck.org/en/latest/languages.html#html>
-	- [ ] js: <https://www.flycheck.org/en/latest/languages.html#javascript>
+	- [x] html: <https://www.flycheck.org/en/latest/languages.html#html>
+	- [x] js: <https://www.flycheck.org/en/latest/languages.html#javascript>
 	  - Possibly annoyingly slow?  That's likely just `js2-mode` though
 	- [x] json: <https://www.flycheck.org/en/latest/languages.html#json>
 	- [x] markdown: <https://www.flycheck.org/en/latest/languages.html#markdown>
 	- [x] perl: <https://www.flycheck.org/en/latest/languages.html#perl>
 	  - [x] perlcritic
-	  - [ ] perltidy as well? (perltidyrc) Does that even make sense?
-	- [ ] php: <https://www.flycheck.org/en/latest/languages.html#php>
-	- [ ] python: <https://www.flycheck.org/en/latest/languages.html#python>
+	  - [x] perltidy as well? (perltidyrc) Does that even make sense?  Doesn't seem possible, no "dry run" or "report only" options AFAICT
+	- [x] php: <https://www.flycheck.org/en/latest/languages.html#php>
+	  - Requires a linter, not installed ATM
+	- [x] python: <https://www.flycheck.org/en/latest/languages.html#python>
+	  - Note that default executable is python3, which is good, but you know...
 	- [x] r (aka ess): <https://www.flycheck.org/en/latest/languages.html#r>
 		- Requires lintr package installation (`install.packages("lintr")`) <https://github.com/jimhester/lintr>
-	- [ ] ruby: <https://www.flycheck.org/en/latest/languages.html#ruby>
-	- [ ] bash: <https://www.flycheck.org/en/latest/languages.html#shell-scripting-languages>
-	- [ ] text: <https://www.flycheck.org/en/latest/languages.html#text>
+	- [x] ruby: <https://www.flycheck.org/en/latest/languages.html#ruby>
+	- [x] bash: <https://www.flycheck.org/en/latest/languages.html#shell-scripting-languages>
+	- [x] text: <https://www.flycheck.org/en/latest/languages.html#text>
 	- [ ] ts: <https://www.flycheck.org/en/latest/languages.html#typescript>
-	- [ ] yaml: <https://www.flycheck.org/en/latest/languages.html#yaml>
+	- [x] yaml: <https://www.flycheck.org/en/latest/languages.html#yaml>
 - [ ] Recommended extensions: <https://www.flycheck.org/en/latest/community/extensions.html>
   - [ ] <https://github.com/flycheck/flycheck-pos-tip>
   - [ ] <https://github.com/flycheck/flycheck-inline>

@@ -11,7 +11,7 @@
  '(flycheck-display-errors-function 'flycheck-display-error-messages-unless-error-list)
  '(flycheck-idle-buffer-switch-delay 2)
  '(flycheck-idle-change-delay 2)	; Maybe okay?  Slow otherwise in morebits...
- '(flycheck-indication-mode 'left-margin)
+ '(flycheck-indication-mode 'left-margin) ; Pointless atm since no margin enabled...
  '(flycheck-markdown-markdownlint-cli-config ".markdownlintrc")
  '(flycheck-mode-line-prefix "FlyC")
  '(flycheck-perlcritic-severity 2)
