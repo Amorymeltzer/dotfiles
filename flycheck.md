@@ -23,7 +23,7 @@ Todo list:
 	- Not too slow
 	- Other customizations
   - [ ] Language list:
-	- [ ] css: <https://www.flycheck.org/en/latest/languages.html#css>
+	- [x] css: <https://www.flycheck.org/en/latest/languages.html#css>
 	- [x] elisp: <https://www.flycheck.org/en/latest/languages.html#emacs-lisp>
 	- [ ] html: <https://www.flycheck.org/en/latest/languages.html#html>
 	- [ ] js: <https://www.flycheck.org/en/latest/languages.html#javascript>

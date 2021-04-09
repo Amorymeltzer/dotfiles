@@ -1,0 +1,12 @@
+{
+    "extends": "stylelint-config-standard",
+    "rules": {
+	"indentation": "tab",
+	"color-hex-case": [
+	    "upper",
+	    {
+		"severity": "warning"
+	    }
+	]
+    }
+}
