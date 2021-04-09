@@ -35,7 +35,8 @@ Todo list:
 	  - [ ] perltidy as well? (perltidyrc) Does that even make sense?
 	- [ ] php: <https://www.flycheck.org/en/latest/languages.html#php>
 	- [ ] python: <https://www.flycheck.org/en/latest/languages.html#python>
-	- [ ] r: <https://www.flycheck.org/en/latest/languages.html#r>
+	- [x] r (aka ess): <https://www.flycheck.org/en/latest/languages.html#r>
+		- Requires lintr package installation (`install.packages("lintr")`) <https://github.com/jimhester/lintr>
 	- [ ] ruby: <https://www.flycheck.org/en/latest/languages.html#ruby>
 	- [ ] bash: <https://www.flycheck.org/en/latest/languages.html#shell-scripting-languages>
 	- [ ] text: <https://www.flycheck.org/en/latest/languages.html#text>

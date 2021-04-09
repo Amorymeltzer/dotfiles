@@ -495,6 +495,11 @@ Record that in `paradox--backups', but do nothing if
 (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
 
 
+;; ess-mode aka R mode https://ess.r-project.org/
+;; Should maybe customize the linters (like not whining about `=` for
+;; assignment) but I don't use R enough to care, and certainly not in Emacs
+;; No need for flymake
+(setq ess-use-flymake nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Flycheck stuff
