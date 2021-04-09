@@ -24,11 +24,11 @@ Todo list:
 	- Other customizations
   - [ ] Language list:
 	- [ ] css: <https://www.flycheck.org/en/latest/languages.html#css>
-	- [ ] elisp: <https://www.flycheck.org/en/latest/languages.html#emacs-lisp>
+	- [x] elisp: <https://www.flycheck.org/en/latest/languages.html#emacs-lisp>
 	- [ ] html: <https://www.flycheck.org/en/latest/languages.html#html>
 	- [ ] js: <https://www.flycheck.org/en/latest/languages.html#javascript>
 	  - Possibly annoyingly slow?  That's likely just `js2-mode` though
-	- [ ] json: <https://www.flycheck.org/en/latest/languages.html#json>
+	- [x] json: <https://www.flycheck.org/en/latest/languages.html#json>
 	- [x] markdown: <https://www.flycheck.org/en/latest/languages.html#markdown>
 	- [x] perl: <https://www.flycheck.org/en/latest/languages.html#perl>
 	  - [x] perlcritic

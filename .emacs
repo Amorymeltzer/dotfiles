@@ -502,6 +502,9 @@ Record that in `paradox--backups', but do nothing if
 ;; Turn on for everybody, prog and text alike
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
+;; I don't rightly care about ensuring lisps have the "proper" package comments
+(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+
 ;;; Flymake stuff
 ;; Really should use flycheck,maybe reverting back to flymake if not available
 ;; flymake is newer on MELPA, as is eldoc
