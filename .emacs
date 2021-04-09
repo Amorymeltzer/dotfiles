@@ -510,6 +510,12 @@ Record that in `paradox--backups', but do nothing if
 ;; I don't rightly care about ensuring lisps have the "proper" package comments
 (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
+;; flycheck-bashisms https://github.com/cuonglm/flycheck-checkbashisms
+;; Ensure no bashisms in sh code, no shisms in bash code; mostly the former
+(add-hook 'flycheck-mode-hook #'flycheck-checkbashisms-setup)
+(setq flycheck-checkbashisms-posix t
+      flycheck-checkbashisms-newline t)
+
 ;;; Flymake stuff
 ;; Really should use flycheck,maybe reverting back to flymake if not available
 ;; flymake is newer on MELPA, as is eldoc

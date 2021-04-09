@@ -16,6 +16,8 @@ Todo list:
   - [x] Customize-group, etc.
   - [ ] Faces?  Copy flymake, or start over fresh, using whatever the theme picks up?  Split the difference?
   - [ ] Consider turning margin on?  Big change for everybody but maybe worth it long-term?
+  - [ ] Consider whether to include stuff in custom or init file
+	- If custom, easier (no buffer-local, etc.) but nicer/cleaner if init?
 - [x] Language-specific stuff <https://www.flycheck.org/en/latest/languages.html>
   - For each, check:
 	- Correct program found and working; Maybe: <https://www.flycheck.org/en/latest/user/syntax-checkers.html>
@@ -46,14 +48,14 @@ Todo list:
 	- [ ] ts: <https://www.flycheck.org/en/latest/languages.html#typescript>
 	- [x] yaml: <https://www.flycheck.org/en/latest/languages.html#yaml>
 - [ ] Recommended extensions: <https://www.flycheck.org/en/latest/community/extensions.html>
-  - [ ] <https://github.com/flycheck/flycheck-pos-tip>
+  - [x] <https://github.com/flycheck/flycheck-pos-tip> (Doesn't work?  Don't really care anyway?)
   - [ ] <https://github.com/flycheck/flycheck-inline>
-  - [ ] <https://github.com/cuonglm/flycheck-checkbashisms> (<https://salsa.debian.org/debian/devscripts/-/blob/master/scripts/checkbashisms.pl>)
+  - [x] <https://github.com/cuonglm/flycheck-checkbashisms> (<https://salsa.debian.org/debian/devscripts/-/blob/master/scripts/checkbashisms.pl>)
 - [ ] Other extensions/packages:
   - [ ] flycheck-aspell
-  - [ ] flycheck-color-mode-line (also above)
+  - [ ] flycheck-color-mode-line (also above) (Not unless/until customizing mode line differently/better)
   - [ ] flycheck-elsa / elsa
   - [ ] flycheck-grammarly
   - [ ] flycheck-relint
-  - [ ] flycheck-title (also above)
+  - [x] flycheck-title (also above) (Nah)
   - [ ] magit-diff-flycheck
