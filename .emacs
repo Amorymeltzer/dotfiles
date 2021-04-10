@@ -504,7 +504,12 @@ Record that in `paradox--backups', but do nothing if
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Flycheck stuff
 ;;; https://github.com/flycheck/flycheck and https://www.flycheck.org
-;; Turn on for everybody, prog and text alike
+;;; FIXME TODO:
+;;; Consider turning margin on?  Big change for everybody but maybe worth it long-term?
+;;; Possible additional extensions: flycheck-inline, flycheck-elsa/elsa, flycheck-grammarly
+;;; Consdier flycheck-color-mode-line if/when tweaking mode-line
+
+;; Turn on for everybody
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; I don't rightly care about ensuring lisps have the "proper" package comments

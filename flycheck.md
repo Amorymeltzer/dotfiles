@@ -15,7 +15,7 @@ Todo list:
 	- [ ] Maybe take over flymake commands?
   - [x] Customize-group, etc.
   - [ ] Faces?  Copy flymake, or start over fresh, using whatever the theme picks up?  Split the difference?
-  - [ ] Consider turning margin on?  Big change for everybody but maybe worth it long-term?
+  - [x] Consider turning margin on?  Big change for everybody but maybe worth it long-term?
   - [ ] Consider whether to include stuff in custom or init file
 	- If custom, easier (no buffer-local, etc.) but nicer/cleaner if init?
 - [x] Language-specific stuff <https://www.flycheck.org/en/latest/languages.html>
@@ -47,15 +47,15 @@ Todo list:
 	- [x] text: <https://www.flycheck.org/en/latest/languages.html#text>
 	- [ ] ts: <https://www.flycheck.org/en/latest/languages.html#typescript>
 	- [x] yaml: <https://www.flycheck.org/en/latest/languages.html#yaml>
-- [ ] Recommended extensions: <https://www.flycheck.org/en/latest/community/extensions.html>
+- [x] Recommended extensions: <https://www.flycheck.org/en/latest/community/extensions.html>
   - [x] <https://github.com/flycheck/flycheck-pos-tip> (Doesn't work?  Don't really care anyway?)
-  - [ ] <https://github.com/flycheck/flycheck-inline>
+  - [x] <https://github.com/flycheck/flycheck-inline>
   - [x] <https://github.com/cuonglm/flycheck-checkbashisms> (<https://salsa.debian.org/debian/devscripts/-/blob/master/scripts/checkbashisms.pl>)
-- [ ] Other extensions/packages:
-  - [ ] flycheck-aspell
-  - [ ] flycheck-color-mode-line (also above) (Not unless/until customizing mode line differently/better)
-  - [ ] flycheck-elsa / elsa
-  - [ ] flycheck-grammarly
+- [x] Other extensions/packages:
+  - [x] flycheck-aspell (Nah - flyspell good enough, possibly even preferable, despite (slight) lagtime when typing.  Should look into [flycheck-correct](https://github.com/d12frosted/flyspell-correct), though)
+  - [x] flycheck-color-mode-line (also above) (Not unless/until customizing mode line differently/better)
+  - [x] flycheck-elsa / elsa (requires cask?  ugh)
+  - [x] flycheck-grammarly
   - [x] flycheck-relint
   - [x] flycheck-title (also above) (Nah)
-  - [ ] magit-diff-flycheck
+  - [x] magit-diff-flycheck (Nah; doesn't seem to work well, limited use anyway, doing it all beforehand...)
