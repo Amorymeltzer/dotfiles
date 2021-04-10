@@ -527,19 +527,6 @@ Record that in `paradox--backups', but do nothing if
 		    :inherit 'js2-object-property)
 (set-face-attribute 'flycheck-error nil
 		    :inherit 'js2-external-variable)
-
-
-;;; Flymake stuff
-;; Really should use flycheck,maybe reverting back to flymake if not available
-;; flymake is newer on MELPA, as is eldoc
-(require 'flymake)
-
-;; C-c C-v to go to next error
-;; Clobbered in markdown-mode, care?  Reclaim for flycheck?  Or meh?  Might need
-;; to deal with flyspell...
-(global-set-key (kbd "C-c '") 'flymake-goto-next-error)
-;; C-c C-C to go to prev error
-(global-set-key (kbd "C-c ;") 'flymake-goto-prev-error)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -811,7 +798,10 @@ backups." t)
      (define-key markdown-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading)
      (define-key markdown-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
      (define-key markdown-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
-     (define-key markdown-mode-map (kbd "C-c C-u") 'outline-up-heading)))
+     (define-key markdown-mode-map (kbd "C-c C-u") 'outline-up-heading)
+
+     ;; Clobbered by flyspell, this makes more semantic sense anyway
+     (define-key markdown-mode-map (kbd "C-c `") 'markdown-edit-code-block)))
 
 ;; Generate README.md markdown from header of elisp file for github
 ;; checkdoc might be useful beforehand
@@ -2865,6 +2855,7 @@ This checks in turn:
 (setq flyspell-auto-correct-binding (kbd "C-M-i"))
 ;; Lots of ispell process instances being started then killed, especially
 ;; around git/magit?? FIXME TODO
+;; Faces don't ever seem to take precedence?  FIXME TODO
 (require 'flyspell)
 (with-eval-after-load "flyspell"
   (setq flyspell-highlight-properties t
@@ -2921,8 +2912,8 @@ This checks in turn:
   ;; Could even have a fly prefix, taking over C-c f or C-c C-f that I don't use much?
   ;; Good place for a hydra, actually, since often want flys to continue to next...
   ;; Is there a way to hook flyspell and flycheck into same key?  Next of either?
-  (define-key flyspell-mode-map (kbd "C-c \"") 'flyspell-goto-next-error)
-  (define-key flyspell-mode-map (kbd "C-c :") 'flyspell-goto-prev-error))
+  (define-key flyspell-mode-map (kbd "C-c '") 'flyspell-goto-next-error)
+  (define-key flyspell-mode-map (kbd "C-c ;") 'flyspell-goto-prev-error))
 ;;;;;;;;;;;;;;;;;;;;
 
 
