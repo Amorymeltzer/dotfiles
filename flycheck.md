@@ -7,12 +7,12 @@ Todo list:
 - [x] `global-flycheck-mode` or just `prog-mode-hook` and `text-mode-hook`?  Try former?
   - [x] `(add-hook 'after-init-hook #'global-flycheck-mode)`
 - [ ] Basic customizations
-  - [ ] Keybindings
+  - [x] Keybindings
+	- [x] Maybe take over flymake commands?
   - [ ] Learn to use it!
 	- [ ] <https://www.flycheck.org/en/latest/user/error-list.html>
 	- [ ] <https://www.flycheck.org/en/latest/user/error-reports.html>
 	- [ ] <https://www.flycheck.org/en/latest/user/syntax-checkers.html>
-	- [ ] Maybe take over flymake commands?
   - [x] Customize-group, etc.
   - [x] Faces?  Copy flymake, or start over fresh, using whatever the theme picks up?  Split the difference?
   - [x] Consider turning margin on?  Big change for everybody but maybe worth it long-term?
