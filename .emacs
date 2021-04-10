@@ -781,9 +781,11 @@ backups." t)
 ;; https://github.com/textlint/textlint
 (flycheck-add-next-checker 'markdown-markdownlint-cli 'proselint)
 
-;; Edit git commit messages in markdown, since mostly for GitHub.  Not that
-;; common since magit/git-commit-mode usurps most of these, but occasionally
-;; they do popup, especially around amend/fixup/squash
+;; Ensure git commit messages are edited in markdown, since this is mostly for
+;; GitHub.  Not that common since magit usurps most of these (via
+;; `with-editor-mode'), but occasionally they do popup, especially around
+;; amend/fixup/squash.  See also the customization of `git-commit-mode-hook',
+;; namely that flycheck is turned off for the sake of sanity.
 (add-to-list 'auto-mode-alist
 	     '("/\\.git/COMMIT_EDITMSG\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist
@@ -1761,6 +1763,9 @@ when in source code modes such as python-mode or perl-mode" t)
       git-rebase-confirm-cancel nil)
 ;; Edit git messages in markdown as these are mostly targeted for GitHub
 (add-hook 'git-commit-mode-hook 'markdown-mode)
+;; But turn off flycheck since markdownlint is awful in `git-commit-mode'
+(add-hook 'git-commit-mode-hook
+	  '(lambda () (flycheck-mode 0)) t)
 (setq magit-log-section-commit-count 25 ; default 10
       ;; Display buffers in same buffer, except for diffs
       ;; Eh, they multiply too much, things get
@@ -1771,7 +1776,7 @@ when in source code modes such as python-mode or perl-mode" t)
       ;; Not entirely sure what this does, but seems worthwhile
       magit-diff-refine-hunk t)
 
-;; Various items not available right away since not magit require-d...
+;; Various items not available right away since magit not require-d...
 (with-eval-after-load "magit"
   ;; Add any ongoing merge-log to status sections; check out other magit-insert functions
   (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-merge-log)
