@@ -771,12 +771,19 @@ backups." t)
 ;; Ensure git commit messages are edited in markdown, since this is mostly for
 ;; GitHub.  Not that common since magit usurps most of these (via
 ;; `with-editor-mode'), but occasionally they do popup, especially around
-;; amend/fixup/squash.  See also the customization of `git-commit-mode-hook',
-;; namely that flycheck is turned off for the sake of sanity.
+;; amend/fixup/squash.  markdownlint is awful when writing these, though, so
+;; let's just turn `flycheck-mode' off when editing 'em.  See also the
+;; customization of `git-commit-mode-hook', which does the same thing.
 (add-to-list 'auto-mode-alist
 	     '("/\\.git/COMMIT_EDITMSG\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist
 	     '("/\\.git/PULLREQ_EDITMSG\\'" . markdown-mode))
+(add-hook 'markdown-mode-hook
+      (lambda ()
+	(when (buffer-file-name)
+	  ;; Actually, maybe this doesn't need to be for PULLREQ? FIXME TODO
+	  (when (string-match "/\\.git/\\(COMMIT_EDITMSG\\|PULLREQ_EDITMSG\\)\\'" (buffer-file-name))
+	    (flycheck-mode 0)))))
 
 ;; Should add some more here
 ;; Also need to make interactives for bold, italics, headers, etc
