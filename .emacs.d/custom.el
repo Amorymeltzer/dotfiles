@@ -10,8 +10,11 @@
  '(flycheck-display-errors-delay 0.25)
  '(flycheck-display-errors-function 'flycheck-display-error-messages-unless-error-list)
  '(flycheck-idle-buffer-switch-delay 2)
+ ;; Static analysis can be slow and delay text entry
  '(flycheck-idle-change-delay 2)	; Maybe okay?  Slow otherwise in morebits...
  '(flycheck-indication-mode 'left-margin) ; Pointless atm since no margin enabled...
+ ;; '(flycheck-highlighting-mode 'lines)
+ '(flycheck-highlighting-mode 'sexps)	; possibly slow?
  '(flycheck-markdown-markdownlint-cli-config ".markdownlintrc")
  '(flycheck-mode-line-prefix "FlyC")
  '(flycheck-perlcritic-severity 2)

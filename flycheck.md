@@ -14,7 +14,7 @@ Todo list:
 	- [ ] <https://www.flycheck.org/en/latest/user/syntax-checkers.html>
 	- [ ] Maybe take over flymake commands?
   - [x] Customize-group, etc.
-  - [ ] Faces?  Copy flymake, or start over fresh, using whatever the theme picks up?  Split the difference?
+  - [x] Faces?  Copy flymake, or start over fresh, using whatever the theme picks up?  Split the difference?
   - [x] Consider turning margin on?  Big change for everybody but maybe worth it long-term?
   - [ ] Consider whether to include stuff in custom or init file
 	- If custom, easier (no buffer-local, etc.) but nicer/cleaner if init?

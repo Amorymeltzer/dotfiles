@@ -418,23 +418,12 @@ Record that in `paradox--backups', but do nothing if
 (define-key js2-mode-map (kbd "C-c 2") 'js2-jump-to-definition)
 
 ;; Error checking can be slow on large files, slightly increase this
-;; Then again, maybe just don't do this since doing it with flycheck is probably
-;; (always?) better?  Would probably want to adjust the faces though.
-(setq js2-idle-timer-delay 0.5
-      js2-dynamic-idle-timer-adjust 3000)
-
-;; Make faces pop
-;; Collision with flycheck/flymake?
-;; There's a weird thing where these don't show up for new errors, nor do other
-;; js2 faces for new insertions, but reloading the buffer sets everything
-;; right.  Maybe an issue with font-lock stuff? FIXME TODO
-;; js2-reparse does the trick, but annoying that it needs to?
-;; Not just externals (https://github.com/mooz/js2-mode/commit/1b0e174d801d147aec88ecff7b50bb163b3cd2e8)
-(set-face-attribute 'js2-warning nil
-		    :background "DarkBlue" :foreground "white")
-(set-face-attribute 'js2-error nil
-		    :background "Firebrick4" :foreground "white")
-
+;; (setq js2-idle-timer-delay 0.5
+;;       js2-dynamic-idle-timer-adjust 3000)
+;; Nah, just turn off error checking entirely, rely on flycheck
+;; There's also an annoying fact that js2-mode's checker doesn't update for new errors
+(setq js2-mode-show-strict-warnings nil
+      js2-mode-show-parse-errors nil)
 
 ;; Part of js2-mode package
 (require 'js2-imenu-extras)
@@ -496,7 +485,7 @@ Record that in `paradox--backups', but do nothing if
 
 
 ;; ess-mode aka R mode https://ess.r-project.org/
-;; Should maybe customize the linters (like not whining about `=` for
+;; Should probably customize the linters used (like not whining about `=` for
 ;; assignment) but I don't use R enough to care, and certainly not in Emacs
 ;; No need for flymake
 (setq ess-use-flymake nil)
@@ -529,26 +518,21 @@ Record that in `paradox--backups', but do nothing if
   ;; manually set the checker to follow emacs-lisp
   (flycheck-add-next-checker 'emacs-lisp 'emacs-lisp-relint))
 
+;; Make flycheck faces pop a bit more.  Keeps the underlining from
+;; flycheck, but snags colors from the theme's js2-mode colors.  Using
+;; kaolin-themes, these (respectively) come out to: spring-green3, capri3, crimson3
+(set-face-attribute 'flycheck-info nil
+		    :inherit 'js2-jsdoc-value)
+(set-face-attribute 'flycheck-warning nil
+		    :inherit 'js2-object-property)
+(set-face-attribute 'flycheck-error nil
+		    :inherit 'js2-external-variable)
+
 
 ;;; Flymake stuff
 ;; Really should use flycheck,maybe reverting back to flymake if not available
 ;; flymake is newer on MELPA, as is eldoc
 (require 'flymake)
-
-;; Static analysis can be slow, so only run flymake if I've not been typing for
-;; 5 seconds.  It will still run on save or hitting return.
-;; Modify flycheck prefs to match this???
-(setq flymake-no-changes-timeout 3)
-
-;; Make flymake faces pop; convert to flycheck? FIXME TODO
-;; flycheck: flycheck-info, flycheck-warning, flycheck-error, etc.
-(set-face-attribute 'flymake-note nil
-		    :background "DarkGreen" :foreground "white")
-(set-face-attribute 'flymake-warning nil
-		    :background "DarkBlue" :foreground "white")
-(set-face-attribute 'flymake-error nil
-		    :background "Firebrick4" :foreground "white")
-
 
 ;; C-c C-v to go to next error
 ;; Clobbered in markdown-mode, care?  Reclaim for flycheck?  Or meh?  Might need
@@ -2717,8 +2701,8 @@ This checks in turn:
 
 ;; Perltidy: https://github.com/emacsmirror/emacswiki.org/blob/master/perltidy.el
 ;; Requires stand-alone command line program; uses ~/.perltidyrc
-;; Requires loading tramp beforehand, or should I just patch?
-;; Required?  Can hook into flycheck or not needed since not using flymake? FIXME TODO
+;; Requires loading tramp beforehand, or should I just patch? FIXME TODO
+;; Required?  Hook into cperl mode or something? FIXME TODO
 (require 'perltidy)
 ;;;;;;;;;;;;;;;;;;;;
 
