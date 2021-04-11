@@ -496,13 +496,40 @@ Record that in `paradox--backups', but do nothing if
 ;;; FIXME TODO:
 ;;; Consider turning margin on?  Big change for everybody but maybe worth it long-term?
 ;;; Possible additional extensions: flycheck-inline, flycheck-elsa/elsa, flycheck-grammarly
-;;; Consdier flycheck-color-mode-line if/when tweaking mode-line
+;;; Consider flycheck-color-mode-line if/when tweaking mode-line
 
 ;; Turn on for everybody
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; I don't rightly care about ensuring lisps have the "proper" package comments
 (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+
+(setq flycheck-check-syntax-automatically '(save idle-change idle-buffer-switch new-line mode-enabled)
+      flycheck-relevant-error-other-file-minimum-level 'warning
+      flycheck-standard-error-navigation t
+      flycheck-display-errors-function 'flycheck-display-error-messages-unless-error-list
+      flycheck-display-errors-delay 0.25
+      flycheck-idle-buffer-switch-delay 2
+      ;; Static analysis can be slow and delay text entry, besides rarely need
+      ;; right away?  Maybe this is excessively cautious?
+      flycheck-idle-change-delay 2
+      ;; Pointless atm since no margin enabled...
+      flycheck-indication-mode 'left-margin
+      ;; '(flycheck-highlighting-mode 'lines
+      ;; Slow in python mode, but neat regardless
+      flycheck-highlighting-mode 'sexps
+      flycheck-mode-line-prefix "FlyC"
+
+      flycheck-markdown-markdownlint-cli-config ".markdownlintrc"
+      flycheck-perlcritic-severity 2)
+
+;; Annoyingly, flycheck doesn't automatically include proselint as a
+;; next-checker for markdown mode (okay, fine, I guess it makes sense), so let's
+;; just make it so.  Clearly depends on the proselint executable (via pip,
+;; macports, brew, etc). https://github.com/amperser/proselint/
+;; Consider textlint as well?  Less popular/fewer stars, but more actively developed
+;; https://github.com/textlint/textlint
+(flycheck-add-next-checker 'markdown-markdownlint-cli 'proselint)
 
 ;; Some additional checkers; could probably just run these straight-up
 (with-eval-after-load 'flycheck
@@ -758,15 +785,6 @@ backups." t)
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
-
-;; Annoyingly, flycheck doesn't automatically include proselint as a
-;; next-checker for markdown mode (okay, fine, I guess it makes sense), so let's
-;; just make it so.  Clearly depends on the proselint executable (pip, macports,
-;; brew, etc)
-;; https://github.com/amperser/proselint/
-;; Consider textlint as well?  Less popular/fewer stars, but more actively developed
-;; https://github.com/textlint/textlint
-(flycheck-add-next-checker 'markdown-markdownlint-cli 'proselint)
 
 ;; Ensure git commit messages are edited in markdown, since this is mostly for
 ;; GitHub.  Not that common since magit usurps most of these (via

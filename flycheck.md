@@ -6,17 +6,17 @@ Todo list:
 
 - [x] `global-flycheck-mode` or just `prog-mode-hook` and `text-mode-hook`?  Try former?
   - [x] `(add-hook 'after-init-hook #'global-flycheck-mode)`
-- [ ] Basic customizations
+- [x] Basic customizations
   - [x] Keybindings
 	- [x] Maybe take over flymake commands?
-  - [ ] Learn to use it!
-	- [ ] <https://www.flycheck.org/en/latest/user/error-list.html>
-	- [ ] <https://www.flycheck.org/en/latest/user/error-reports.html>
-	- [ ] <https://www.flycheck.org/en/latest/user/syntax-checkers.html>
+  - [x] Learn to use it!
+	- [x] <https://www.flycheck.org/en/latest/user/error-list.html>
+	- [x] <https://www.flycheck.org/en/latest/user/error-reports.html>
+	- [x] <https://www.flycheck.org/en/latest/user/syntax-checkers.html>
   - [x] Customize-group, etc.
   - [x] Faces?  Copy flymake, or start over fresh, using whatever the theme picks up?  Split the difference?
   - [x] Consider turning margin on?  Big change for everybody but maybe worth it long-term?
-  - [ ] Consider whether to include stuff in custom or init file
+  - [x] Consider whether to include stuff in custom or init file
 	- If custom, easier (no buffer-local, etc.) but nicer/cleaner if init?
 - [x] Language-specific stuff <https://www.flycheck.org/en/latest/languages.html>
   - For each, check:
