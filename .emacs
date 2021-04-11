@@ -504,7 +504,8 @@ Record that in `paradox--backups', but do nothing if
 ;; I don't rightly care about ensuring lisps have the "proper" package comments
 (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
-(setq flycheck-check-syntax-automatically '(save idle-change idle-buffer-switch new-line mode-enabled)
+(setq flycheck-emacs-lisp-load-path 'inherit
+      flycheck-check-syntax-automatically '(save idle-change idle-buffer-switch new-line mode-enabled)
       flycheck-relevant-error-other-file-minimum-level 'warning
       flycheck-standard-error-navigation t
       flycheck-display-errors-function 'flycheck-display-error-messages-unless-error-list
