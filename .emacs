@@ -474,8 +474,8 @@ Record that in `paradox--backups', but do nothing if
 
 ;; php-mode https://github.com/emacs-php/php-mode
 (autoload 'php-mode "php-mode" "Major mode for editing PHP code." t)
-(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc\\'" . php-mode))
 
 
 ;; yaml-mode
@@ -2216,7 +2216,7 @@ using `ido-completing-read'."
 ;; ssh editing, just kinda nice
 ;; https://github.com/jhgorrell/ssh-config-mode-el
 (autoload 'ssh-config-mode "ssh-config-mode" t)
-(add-to-list 'auto-mode-alist '(".ssh/config\\'"  . ssh-config-mode))
+(add-to-list 'auto-mode-alist '("\\.ssh/config\\'"  . ssh-config-mode))
 (add-to-list 'auto-mode-alist '("sshd?_config\\'" . ssh-config-mode))
 (add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
 
@@ -2560,8 +2560,8 @@ in the buffer." t)
 ;; Emacs how to map a given filename to a url. Check out skewer
 ;; https://github.com/skeeto/skewer-mode
 (setq browse-url-filename-alist
-      '(("^/\(ftp@\|anonymous@\)?\([^:]+\):/*" . "ftp://\2/")
-	("^/\([^:@]+@\)?\([^:]+\):/*" . "ftp://\1\2")
+      '(("^/\\(ftp@\\|anonymous@\\)?\\([^:]+\\):/*" . "ftp://\2/")
+	("^/\\([^:@]+@\\)?\\([^:]+\\):/*" . "ftp://\1\2")
 	("^/+" . "file:/")))
 
 
@@ -2716,7 +2716,7 @@ This checks in turn:
 ;; Not complete but pod can be let through
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 ;; Ensure cgi ends up there too
-(add-to-list 'auto-mode-alist '("\\.[cC][gG][iI]$" . cperl-mode))
+(add-to-list 'auto-mode-alist '("\\.[cC][gG][iI]\\'" . cperl-mode))
 
 ;; Perldoc in emacs
 (defalias 'perldoc 'cperl-perldoc)
@@ -3249,7 +3249,7 @@ This checks in turn:
 (defun fixme-insert ()
   "Signal something that needs to be dealt with."
   (interactive)
-  (insert "F\IXME T\ODO"))
+  (insert "FIX" "ME" " " "TO" "DO"))
 (defalias 'insert-fixme 'fixme-insert)
 
 (defun lorem ()

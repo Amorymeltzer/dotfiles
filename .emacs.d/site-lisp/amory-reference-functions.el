@@ -3,62 +3,7 @@
 
 ;; The genetic code stuff needs to fixed ;;;;;; ##### FIXME TODO
 
-;; Display what we want
-(defun amory-display-something-big (contents &optional title)
-  "Display string CONTENTS in a buffer named TITLE."
-  (let ((buf (get-buffer-create (or title "*STUFF*"))))
-    (save-excursion
-      (set-buffer buf)
-      (erase-buffer)
-      (insert contents)
-      (goto-char (point-min)))
-    (display-buffer buf)))
-
-(defmacro amory-gen-displayer (txt-sym fn-doc-str buf-name &optional fn-alias)
-  "Generate an interactive function with the same symbol name as TXT-SYM,
-whose doc string is FN-DOC-STR, and that when invoked displays TXT-SYM
-in a buffer named BUF-NAME using `display-buffer'."
-  (declare (indent 2))
-  `(progn
-     (defun ,txt-sym ()
-       ,fn-doc-str
-       (interactive)
-       (amory-display-something-big ,txt-sym ,buf-name))
-     (when (or (not (boundp ',fn-alias)) (not (eq nil ,fn-alias)))
-       (defalias ',fn-alias ',txt-sym))))
-
-;; Individual functions for the individual tables
-(amory-gen-displayer amory-ascii
-    "Display the ASCII character table in its own buffer."
-  "*ASCII*")
-
-(amory-gen-displayer amory-datetime-formats
-    "Display date/time format codes in their own buffer"
-  "*Date / Time Formats*")
-
-(amory-gen-displayer amory-radio-alphabet
-    "Display the radio alphabet in its own buffer."
-  "*RADIO ALPHABET*")
-
-(amory-gen-displayer amory-stellar-statistics
-    "Display some statistics about the solar system."
-  "*Solar System*")
-
-(amory-gen-displayer amory-latin-abbreviation-help
-    (concat
-     "No other language is so rich in expressions "
-     "for clarifying what has been previously said.")
-  "*It's what they speak in Latin America.*")
-
-(amory-gen-displayer amory-genetic-code
-    "Display the genetic code in its own buffer."
-  "*THE GENETIC CODE*")
-
-(amory-gen-displayer amory-recentf-help
-    "Cheats for opening files, buffer, and rrecently used files and buffer."
-  "*Open shit*")
-
-;; References tables
+;; Reference tables
 (defconst amory-recentf-help
   "         Bindings for opening
 C-x C-f               Open file
@@ -547,6 +492,59 @@ M - Mike                   Z - Zulu"
  UAG = *  CAG = Q  AAG = K  GAG = E    UGG = W  CGG = R  AGG = R  GGG = G
  "
   "The genetic code: nucleotides -> amino acids.")
+
+
+;; Display what we want
+(defun amory-display-something-big (contents &optional title)
+  "Display string CONTENTS in a buffer named TITLE."
+  (let ((buf (get-buffer-create (or title "*STUFF*"))))
+    (with-current-buffer buf
+      (erase-buffer)
+      (insert contents)
+      (goto-char (point-min)))
+    (display-buffer buf)))
+
+(defmacro amory-gen-displayer (txt-sym fn-doc-str buf-name &optional fn-alias)
+  "Generate an interactive function with the same symbol name as TXT-SYM,
+whose doc string is FN-DOC-STR, and that when invoked displays TXT-SYM
+in a buffer named BUF-NAME using `display-buffer'."
+  (declare (indent 2))
+  `(progn
+     (defun ,txt-sym ()
+       ,fn-doc-str
+       (interactive)
+       (amory-display-something-big ,txt-sym ,buf-name))
+     (when (or (not (boundp ',fn-alias)) (not (eq nil ,fn-alias)))
+       (defalias ',fn-alias ',txt-sym))))
+
+;; Individual functions for the individual tables
+(amory-gen-displayer amory-ascii
+    "Display the ASCII character table in its own buffer."
+  "*ASCII*")
+
+(amory-gen-displayer amory-datetime-formats
+    "Display date/time format codes in their own buffer"
+  "*Date / Time Formats*")
+
+(amory-gen-displayer amory-radio-alphabet
+    "Display the radio alphabet in its own buffer."
+  "*RADIO ALPHABET*")
+
+(amory-gen-displayer amory-stellar-statistics
+    "Display some statistics about the solar system."
+  "*Solar System*")
+
+(amory-gen-displayer amory-latin-abbreviation-help
+    "No other language is so rich in expressions for clarifying what has been previously said."
+  "*It's what they speak in Latin America.*")
+
+(amory-gen-displayer amory-genetic-code
+    "Display the genetic code in its own buffer."
+  "*THE GENETIC CODE*")
+
+(amory-gen-displayer amory-recentf-help
+    "Cheats for opening files, buffer, and rrecently used files and buffer."
+  "*Open shit*")
 
 
 ;; BUSTED FIXME TODO ;;;;;;;;;;;;;; ##########

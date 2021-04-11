@@ -159,10 +159,11 @@ linum-relative and linum" t)
 
 
 ;; Fix odd highlighting after? ;;;;; ###### FIXME TODO
+;; Maybe just use something like edit-indirect
 (defun edit-region (&optional edit-mode)
   "Edit the current region in a separate buffer.
 With a prefix arg, change `major-mode' to EDIT-MODE."
-  (interactive (list (when current-prefix-arg (ted-read-major-mode))))
+  (interactive)
   (clone-indirect-buffer nil t)
   (narrow-to-region (region-beginning) (region-end))
   (shrink-window-if-larger-than-buffer)
