@@ -10,7 +10,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename $0) [-bBmMekEKcCnNgrRpPLhH] [-sd]
+Usage: $(basename "$0") [-bBmMekEKcCnNgrRpPLhH] [-sd]
 
   -S		Skip all items that might need sudo (Macports, CPAN, ruby, cask)
   -d		Debug mode: outputs timestamps for actions (WIP)
@@ -58,12 +58,10 @@ while getopts 'SdbBcCeEgkKLmMnNpPrRhH' opt; do
 	p) python_flag='1';;
 	P) python_all_flag='2';;
 	L) emacs_all_flag='2';;
-	h|H) help $0
+	h|H) help
 	     exit 0;;
-	\?) printf "Invalid option: -"$opt", try $0 -h\n" >&2
+	*) printf "Invalid option provided, try %s -h\n" "$0" >&2
 	    exit 1;;
-	:) printf "Option -"$opt" requires an argument, try $0 -h\n" >&2
-	   exit 1;;
     esac
 done
 
@@ -186,7 +184,7 @@ if [[ -z $nosudo && -z $cpan_all_flag ]]; then
 	    updating 'CPAN modules'
 	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
 
-	    if [[ -f `command -v cpanm` ]]; then
+	    if [[ -f $(command -v cpanm) ]]; then
 		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; done'
 	    else
 		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpan -i "$arg"; done'

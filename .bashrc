@@ -1408,7 +1408,7 @@ function crathighlighter() {
 }
 # Check twinkle
 function twinkleCheck() {
-    (cd "$PERL_PERS_DIR"/wiki/twinkle/ ; perl twinkleCheck.pl $@)
+    (cd "$PERL_PERS_DIR"/wiki/twinkle/ ; perl twinkleCheck.pl "$@")
 }
 # Easy
 alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
@@ -1491,7 +1491,7 @@ EOF
 # Escape UTF-8 characters into their 3-byte format
 function escape()
 {
-    printf "\\\x%s" $(printf "$@" | xxd -p -c1 -u)
+    printf "\\\x%s" "$(printf "$@" | xxd -p -c1 -u)"
     # print a newline unless we're piping the output to another program
     if [ -t 1 ]; then
 	echo # newline
@@ -1763,7 +1763,7 @@ function gz() {
     local gzipsize
     gzipsize=$(gzip -c "$1" | wc -c)
     # Percent of total
-    local ration
+    local ratio
     ratio=$(echo "$gzipsize * 100/ $origsize" | bc -l)
     # Percent reduction
     #    local ratio=$(echo "100 - ($gzipsize * 100/ $origsize)" | bc -l)

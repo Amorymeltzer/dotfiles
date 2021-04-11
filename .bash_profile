@@ -43,8 +43,7 @@ fi
 # also briefly used in .bashrc a bit.  Here because newer perls (from
 # macports/homebrew) are now available in path.  Could also do -V::version:,
 # PERL_VERSION, etc., but all need massaging.
-export PERL5=$(perl -e'print substr($^V, 1, -2)') # trim leading v and trailing subversion
-
+PERL5=$(perl -e'print substr($^V, 1, -2)'); export PERL5 # trim leading v and trailing subversion
 
 # Differentiate between home machine and ssh, mainly for perl, which needs
 # different items (local::lib perl, etc.)
@@ -55,7 +54,7 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
 
     PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
     PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-    PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
+    PERL_MB_OPT="--install_base $HOME/perl5"; export PERL_MB_OPT;
     PERL_MM_OPT="INSTALL_BASE=/$HOME/perl5"; export PERL_MM_OPT;
 else
     ## Add perl execs
@@ -71,7 +70,7 @@ else
 
     # Add unloved perl modules' manpages to the manpath, not as easy as above
     # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
-    export MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$(manpath)"
+    MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$(manpath)"; export MANPATH
 
     # Stuck on some 2007-era organization
     export GIT_PERS_DIR="$HOME/Documents/git"
@@ -80,7 +79,7 @@ fi
 
 # Add $HOME's node_modules, if present
 # Globally installed modules should already be on the path
-if [[ `command -v npm` ]]; then
+if [[ $(command -v npm) ]]; then
     npm_bin=$(npm bin)
     if [[ -d "$npm_bin" ]]; then
 	# export PATH="$PATH:$(npm bin)"
@@ -162,22 +161,23 @@ shopt -s histreedit
 
 
 # Load in .bashrc -------------------------------------------------
+# shellcheck source=./.bashrc
 source ~/.bashrc
 
 # Welcome Messsage --------------------------------------------------
-echo -ne "Welcome to${Color_Green}" `hostname -s` "${Color_zOff}on"
+echo -ne "Welcome to ${Color_Green}$(hostname -s)${Color_zOff} on "
 if [[ $OSTYPE == darwin* ]]; then
-    echo -ne "${Color_Green}" `sw_vers -productName` `sw_vers -productVersion`
+    echo -ne "${Color_Green}$(sw_vers -productName) $(sw_vers -productVersion)"
 elif [[ $OSTYPE == linux* ]]; then
-    echo -ne "${Color_Green}" `uname -o`
+    echo -ne "${Color_Green}$(uname -o)"
 else
-    echo -ne "${Color_Green}" `uname -a`
+    echo -ne "${Color_Green}$(uname -a)"
 fi
-echo -e "${Color_zOff} ("`uname -m`")"
-if [[ `command -v fortune` && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; then
+echo -e "${Color_zOff} ($(uname -m))"
+if [[ $(command -v fortune) && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; then
     echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_zOff}" # only short ones
 fi
-echo -ne "${Color_Magenta}`uname -sr` up" ; uptime | awk -F'(  |up)' '{print $2$3$4}'
+echo -ne "${Color_Magenta}$(uname -sr) up" ; uptime | awk -F'(  |up)' '{print $2$3$4}'
 # if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && $(which weather) ]]; then
 #     weather ?Qn0		# Uses wttr.in
 # fi
