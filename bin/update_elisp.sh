@@ -11,4 +11,6 @@
     (message "New packages: %s" package-menu--new-package-list)
   (message "No new packages"))
 (package-menu-mark-upgrades)
-(package-menu-execute t)
+(when (package-menu--find-upgrades)
+  (message "Upgrading packages: %s" (map-keys (package-menu--find-upgrades)))
+  (package-menu-execute t))
