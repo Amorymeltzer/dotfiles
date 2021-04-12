@@ -59,6 +59,8 @@ tramp
 *_archive
 # flymake-mode
 *_flymake.*
+# flycheck-mode
+flycheck_*
 
 # R stuff #
 ###########
