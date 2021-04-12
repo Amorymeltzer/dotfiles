@@ -532,6 +532,41 @@ Record that in `paradox--backups', but do nothing if
 
 ;; Some additional checkers; could probably just run these straight-up
 (with-eval-after-load 'flycheck
+  ;; Overwrite the built-in perlcritic checker, but with an added
+  ;; error-explainer linking to CPAN.  PR opened at
+  ;; https://github.com/flycheck/flycheck/pull/1873
+  (flycheck-define-checker perl-perlcritic
+    "A Perl syntax checker using Perl::Critic.
+
+See URL `https://metacpan.org/pod/Perl::Critic'."
+    :command ("perlcritic" "--no-color" "--verbose" "%f/%l/%c/%s/%p/%m (%e)\n"
+	      (config-file "--profile" flycheck-perlcriticrc)
+	      (option "--severity" flycheck-perlcritic-severity nil
+		      flycheck-option-int)
+	      (option "--theme" flycheck-perlcritic-theme))
+    :standard-input t
+    :error-patterns
+    ((info line-start
+	   "STDIN/" line "/" column "/" (any "1") "/"
+	   (id (one-or-more (not (any "/")))) "/" (message)
+	   line-end)
+     (warning line-start
+	      "STDIN/" line "/" column "/" (any "234") "/"
+	      (id (one-or-more (not (any "/")))) "/" (message)
+	      line-end)
+     (error line-start
+	    "STDIN/" line "/" column "/" (any "5") "/"
+	    (id (one-or-more (not (any "/")))) "/" (message)
+	    line-end))
+    :modes (cperl-mode perl-mode)
+
+    :error-explainer
+    (lambda (err)
+      (let ((error-code (flycheck-error-id err))
+	    (url "https://metacpan.org/pod/Perl::Critic::Policy::%s"))
+	(and error-code `(url . ,(format url error-code))))))
+
+
   ;; flycheck-bashisms https://github.com/cuonglm/flycheck-checkbashisms
   ;; Ensure no bashisms in sh code, no shisms in bash code; mostly the former
   (flycheck-checkbashisms-setup)
