@@ -14,14 +14,8 @@
 -vt=2
 # No extra indentation for closing brackets
 -cti=0
-# Medium parenthesis tightness, busted ;;;;;; ##### FIXME TODO
-#-t=1
-# Medium brace tightness
--bt=1
-# Medium square bracket tightness
--sbt=1
-# Medium block brace tightness
--bbt=1
+# All containers tight (parentheses, braces, square brackets, block braces)
+-act=2
 # No space before semicolons
 -nsfs
 # Don't outdent long quoted strings
