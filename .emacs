@@ -409,9 +409,7 @@ Record that in `paradox--backups', but do nothing if
  js2-strict-inconsistent-return-warning nil ; warning if both return and return foo
  js2-strict-trailing-comma-warning t)	    ; trailing commas in array/objects
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'interpreter-mode-alist
-	     '(("node" . js2-mode)
-	       ("nodejs" . js2-mode)))
+(add-to-list 'interpreter-mode-alist '("node\\|nodejs" . js2-mode))
 ;; js2-jump-to-definition takes this over, annoying given everyone else respects it
 (define-key js2-mode-map (kbd "M-.") 'end-of-buffer)
 ;; Okay weird but maybe?  Lots of clobbering elsewhere...
