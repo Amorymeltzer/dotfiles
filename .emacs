@@ -567,6 +567,35 @@ See URL `https://metacpan.org/pod/Perl::Critic'."
 	(and error-code `(url . ,(format url error-code))))))
 
 
+  ;; Add hook to `recenter' frame after jumping to an error from the list, just
+  ;; like `occur-mode-find-occurrence-hook'.  This seems to work just fine, and
+  ;; I have the code written locally in list-jump-hook; I opened
+  ;; https://github.com/flycheck/flycheck/issues/1874
+  (defcustom flycheck-error-list-after-jump-hook nil
+    "Functions to run after jumping to the error from the error list.
+
+This hook is run after moving to the error.  A possible idea
+is to adjust the frame to bring the full context into view.
+
+This variable is a normal hook.  See Info node `(elisp)Hooks'."
+    :group 'flycheck
+    :type 'hook
+    :risky t
+    :package-version '(flycheck . "0.33"))
+
+  (add-hook 'flycheck-error-list-after-jump-hook 'recenter)
+
+  ;; Of course, it means overwriting `flycheck-error-list-goto-error'
+  (defun flycheck-error-list-goto-error (&optional pos)
+    "Go to the location of the error at POS in the error list.
+
+POS defaults to `point'."
+    (interactive)
+    (-when-let* ((error (tabulated-list-get-id pos)))
+      (flycheck-jump-to-error error)
+      (run-hooks 'flycheck-error-list-after-jump-hook)))
+
+
   ;; flycheck-bashisms https://github.com/cuonglm/flycheck-checkbashisms
   ;; Ensure no bashisms in sh code, no shisms in bash code; mostly the former
   (flycheck-checkbashisms-setup)
