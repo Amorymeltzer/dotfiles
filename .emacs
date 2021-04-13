@@ -522,14 +522,6 @@ Record that in `paradox--backups', but do nothing if
       flycheck-markdown-markdownlint-cli-config ".markdownlintrc"
       flycheck-perlcritic-severity 2)
 
-;; Annoyingly, flycheck doesn't automatically include proselint as a
-;; next-checker for markdown mode (okay, fine, I guess it makes sense), so let's
-;; just make it so.  Clearly depends on the proselint executable (via pip,
-;; macports, brew, etc). https://github.com/amperser/proselint/
-;; Consider textlint as well?  Less popular/fewer stars, but more actively developed
-;; https://github.com/textlint/textlint
-(flycheck-add-next-checker 'markdown-markdownlint-cli 'proselint)
-
 ;; Some additional checkers; could probably just run these straight-up
 (with-eval-after-load 'flycheck
   ;; Overwrite the built-in perlcritic checker, but with an added
@@ -591,6 +583,32 @@ See URL `http://stylelint.io/'."
 	(and error-code `(url . ,(format url error-code))))))
 
 
+  ;; Overwrite the built-in markdownlint checker, but with an added
+  ;; error-explainer linking to the repo docs.  PR opened at
+  ;; https://github.com/flycheck/flycheck/pull/1876
+  (flycheck-define-checker markdown-markdownlint-cli
+    "Markdown checker using markdownlint-cli.
+
+See URL `https://github.com/igorshubovych/markdownlint-cli'."
+    :command ("markdownlint"
+	      (config-file "--config" flycheck-markdown-markdownlint-cli-config)
+	      source)
+    :error-patterns
+    ((error line-start
+	    (file-name) ":" line
+	    (? ":" column) " " (id (one-or-more (not (any space))))
+	    " " (message) line-end))
+    :error-filter
+    (lambda (errors)
+      (flycheck-sanitize-errors
+       (flycheck-remove-error-file-names "(string)" errors)))
+    :modes (markdown-mode gfm-mode)
+    :error-explainer
+    (lambda (err)
+      (let ((error-code (substring (flycheck-error-id err) 0 5))
+	    (url "https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#%s"))
+	(and error-code `(url . ,(format url error-code))))))
+
   ;; Add hook to `recenter' frame after jumping to an error from the list, just
   ;; like `occur-mode-find-occurrence-hook'.  This seems to work just fine, and
   ;; I have the code written locally in list-jump-hook; I opened
@@ -631,6 +649,14 @@ POS defaults to `point'."
   ;; flycheck-relint assumes that emacs-lisp-checkdoc is enabled, so we need to
   ;; manually set the checker to follow emacs-lisp
   (flycheck-add-next-checker 'emacs-lisp 'emacs-lisp-relint))
+
+;; Annoyingly, flycheck doesn't automatically include proselint as a
+;; next-checker for markdown mode (okay, fine, I guess it makes sense), so let's
+;; just make it so.  Clearly depends on the proselint executable (via pip,
+;; macports, brew, etc). https://github.com/amperser/proselint/
+;; Consider textlint as well?  Less popular/fewer stars, but more actively developed
+;; https://github.com/textlint/textlint
+(flycheck-add-next-checker 'markdown-markdownlint-cli 'proselint)
 
 ;; Make flycheck faces pop a bit more.  Keeps the underlining from
 ;; flycheck, but snags colors from the theme's js2-mode colors.  Using
