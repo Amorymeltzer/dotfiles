@@ -2156,8 +2156,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (eval-after-load 'ace-window
   '(progn
      (set-face-attribute 'aw-leading-char-face nil
-			 ;; Make purple FIXME TODO
-			 :foreground "deep sky blue"
+			 :foreground "color-207" ; #ff5fff
 			 :weight 'bold
 			 :height 3.0)))
 
@@ -3255,7 +3254,7 @@ This checks in turn:
 ;; (key-chord-define-global "9i" "(")
 ;; (key-chord-define-global "-p" "_") ;; Gets annoying since works both ways
 
-;; ;;;;;;;;;;;;;; ############ FIXME TODO ;;;;;;;;;;;;;; ############
+
 ;; ;;; http://blogs.fluidinfo.com/terry/2011/11/10/emacs-buffer-mode-histogram/
 (defun word-histogram-region (posBegin posEnd)
   "Display word histogram showing frequency of word occurrence."
@@ -3317,34 +3316,6 @@ This checks in turn:
 ;; wc-goal-mode shows original+added/total words
 ;; wc-goal-word/line/char-goal to set a target
 (autoload 'wc-goal-mode "wc-goal-mode" "Toggle wc-goal-mode." t)
-
-
-(defun kf-reverse-lines-region (b e)
-  "Reverse the order of lines containing B (inclusive) to E (exclusive)."
-  (interactive "r")
-  ;; There are two ways to do this: the Emacs way, and the easy way.
-  ;; We're going to do it the easy way.
-  (save-excursion
-    (let ((lines ())
-	  (b (progn (goto-char b) (beginning-of-line) (point)))
-	  (e (progn (goto-char e) (beginning-of-line) (point))))
-      (goto-char b)
-      (while (< (point) e)
-	(setq lines
-	      (cons
-	       (buffer-substring (point) (progn (forward-line 1) (point)))
-	       lines)))
-      (delete-region b e)
-      (mapcar 'insert lines))))
-
-(defun kf-randomize-region (b e)
-  "Randomize the order of words in the region."
-  (interactive "*r")
-  (save-excursion
-    (apply
-     'insert
-     (sort (split-string (delete-and-extract-region b e) "\\b")
-	   (function (lambda (a b) (> (random 2) 0)))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
