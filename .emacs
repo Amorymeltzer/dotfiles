@@ -567,6 +567,30 @@ See URL `https://metacpan.org/pod/Perl::Critic'."
 	(and error-code `(url . ,(format url error-code))))))
 
 
+  ;; Overwrite the built-in css-stylelint checker, but with an added
+  ;; error-explainer linking to stylelint.io.  PR draft opened at
+  ;; https://github.com/flycheck/flycheck/pull/1875 although I'm not sure
+  ;; whether this should be added to less-stylelint and scss-stylelint as well
+  (flycheck-define-checker css-stylelint
+    "A CSS syntax and style checker using stylelint.
+
+See URL `http://stylelint.io/'."
+    :command ("stylelint"
+	      (eval flycheck-stylelint-args)
+	      (option-flag "--quiet" flycheck-stylelint-quiet)
+	      (config-file "--config" flycheck-stylelintrc)
+	      "--stdin-filename" (eval (or (buffer-file-name) "style.css")))
+    :standard-input t
+    :error-parser flycheck-parse-stylelint
+    :predicate flycheck-buffer-nonempty-p
+    :modes (css-mode)
+    :error-explainer
+    (lambda (err)
+      (let ((error-code (flycheck-error-id err))
+	    (url "https://stylelint.io/user-guide/rules/%s"))
+	(and error-code `(url . ,(format url error-code))))))
+
+
   ;; Add hook to `recenter' frame after jumping to an error from the list, just
   ;; like `occur-mode-find-occurrence-hook'.  This seems to work just fine, and
   ;; I have the code written locally in list-jump-hook; I opened
