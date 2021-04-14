@@ -1372,20 +1372,11 @@ randpass () {
     echo $(cat /dev/urandom | env LC_CTYPE=C tr -cd "[:graph:]" | head -c $length)
 }
 
-# Dashboard stock prices, use ticker for price, stockclose for last close
-# Need to rewrite ticker FIXME TODO
-# https://github.com/matryer/xbar-plugins/commit/4f9571ab263ded71eee35884ef24d326aa9bf844
-# https://github.com/matryer/xbar-plugins/commit/9d8c5fbbfe211b6d767ffe6aba03349b9c466b8c
+# Quick view of the market
 function marketupdate() {
-    local FILES="SSO QLD VOOG QQQ .DJI .IXIC .INX INDEXNYSEGIS:NYA TNX"
+    local FILES=("^GSPC" "^DJI" "^IXIC")
 
-    # Only show investments if after market close or weekend
-    # Based on DST, correct using Eastern time??
-    if (($(date -u '+%H') < 13)) || (($(date -u '+%u') > 5)); then
-	FILES="FGCKX FDIKX VFTNX VSCPX VGSNX VTSMX VFFVX RDITX $FILES"
-    fi
-
-    ticker "$FILES" | column -t
+    ticker "${FILES[@]}"
 }
 alias mu='marketupdate'
 alias stockmarket='ticker'

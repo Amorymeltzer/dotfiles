@@ -1,46 +1,71 @@
 #!/usr/bin/env python
 # Grab current price of stock or index
 # Use python to colorize, columnize, etc.
-# Heavily based off bitbar gfinance plugin:
-# https://github.com/matryer/bitbar-plugins/blob/master/Finance/gfinance.5m.py
-# TODO: Use up/down arrows instead of up/down?
+# Heavily based off xbar yahoo_stock_ticker plugin:
+# https://github.com/matryer/xbar-plugins/blob/f1004a74a0d887b9655c71a1d52ba4e02b37fd77/Finance/yahoo_stock_ticker.10m.py
 
+__doc__ = 'Print current price of a stock or index, colorizing as appropriate'
+
+import json
+import os
 import sys
 
+
+# Ensure there's at least one item to lookup
 if len(sys.argv) <= 1:
     sys.exit(1)
 
-# Stocks can be provided as symbol (AAPL) or exchange:symbol (NASDAQ:AAPL)
-stocks=sys.argv[1:]
+# List of all tickers
+symbols = sys.argv[1:]
 
 # Nothing fancy
-class colors:
-    GREEN = '\033[32m'
-    RED = '\033[31m'
-    ENDC = '\033[0m'
+GREEN = '\033[32m'
+RED = '\033[31m'
+ENDC = '\033[0m'
 
-import urllib2
-import json
-import re
-for i in stocks:
-    url = "http://finance.google.com/finance/info?client=ig&q=" + i
+# Bulk curl the yahoo api for data
+# Lots of unused stuff here, in case I feel like expanding
+library = 'curl --silent '
+api = 'https://query1.finance.yahoo.com/v7/finance/quote?'
+fields = ['symbol', 'marketState', 'regularMarketTime', 'regularMarketPrice',
+          'regularMarketChangePercent', 'fullExchangeName', 'currency',
+          'regularMarketPreviousClose', 'regularMarketOpen', 'bid', 'ask',
+          'regularMarketDayRange', 'fiftyTwoWeekRange', 'fiftyDayAverage',
+          'twoHundredDayAverage', 'shortName', 'fiftyDayAverageChangePercent',
+          'twoHundredDayAverageChangePercent']
+fields_string = 'fields=' + ','.join(fields)
+cmd = library + "'" + api + fields_string + '&symbols=' + ','.join(symbols) + "'"
 
+# Popen to run the curl command and retrieve the output
+output = os.popen(cmd).read()
+# JSONify the output from the curl command
+json_output = json.loads(output)
+# Any erroneous tickers not part of result object
+# Consider print note in those cases, or nah?
+stock_data = json_output['quoteResponse']['result']
+
+
+# Pretty-print the data
+# Assume the state of the market is the same for everyone
+if stock_data[0]['marketState'] != 'REGULAR':
+    print('Market closed')
+
+for index in stock_data:
+    name=index['symbol']
     try:
-        u = urllib2.urlopen(url)
-    except Exception:
-        print "Ticker lookup of %s failed" % i
+        change = index['regularMarketChangePercent']
+    except KeyError:
+        print('Invalid stock symbol: ' + name)
         continue
 
-    quote = u.read()
-    obj = json.loads(quote[4:-1])
+    # Set colors for positive and negative values
+    color = ''
+    if change > 0:
+        color = GREEN + '↑'
+    elif change < 0:
+        color = RED + '↓'
 
-    for ticker in obj:
-        name = re.sub('^\.', '', ticker["t"])
-        perc = "(" + ticker["cp"] + "%)"
-        if float(ticker["c"]) < 0:
-            color = colors.RED
-            perc = re.sub('-', '', perc)
-        else:
-            color = colors.GREEN
-
-        print color + "\t".join([name, ticker["l"], ticker["c"], perc]) + colors.ENDC
+    # Format change to decimal with a precision of two and reset ansi color at the end
+    colored_change = color + ' (' + '{:.2f}'.format(change) + '%) ' + ENDC
+    # Print the results
+    print(name, '\t', colored_change)
