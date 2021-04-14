@@ -476,7 +476,7 @@ trap _exit EXIT
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
 # DIARY_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
-sources=("$HOME/.config/bash/priv-env.sh")
+sources=("$HOME/.config/bash/priv-env.bash")
 # Homebrew completion directory, here before macports since I generally use
 # the latter.  Confident glob probably fine given the -f -r checks below.
 sources+=(/usr/local/etc/bash_completion.d/*)
