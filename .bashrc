@@ -422,7 +422,7 @@ function prompt_command {
     fi
     PS1+="$holiday_greeting\n\[$Color_Cyan\]└─["
 
-    if ((${ERRORS} > 0)); then
+    if ((ERRORS > 0)); then
 	PS1+="\[$Color_Red_Intense\]\$"
     else
 	PS1+="\[$Color_Magenta\]\#"
@@ -501,7 +501,7 @@ unset file;
 if [[ -e ~/.ssh/known_hosts ]]; then
     # This completely supersedes the above-sourced ssh.completion file, need
     # to stop that from happening. ;;;;;; ##### FIXME TODO
-    complete -o default -W "$(cat ~/.ssh/known_hosts | sed 's/[, ].*//' | sort | uniq | grep -v '[0-9]')" whois nslookup nmap
+    complete -o default -W "$(sed 's/[, ].*//' < ~/.ssh/known_hosts | sort | uniq | grep -v '[0-9]')" whois nslookup nmap
 fi
 # Complete for g alias
 if type __git_complete &> /dev/null; then
@@ -1044,7 +1044,7 @@ if [ ! -x /opt/local/bin/setvolume ]; then
     function setvolume() {
 	if [ ! "$1" ]; then
 	    echo "setvolume <0-100>"
-	elif [ "$1" -lt 0 -o "$1" -gt 100 ]; then
+	elif [ "$1" -lt 0 ] || [ "$1" -gt 100 ]; then
 	    echo "setvolume <0-100>"
 	else
 	    local val=$1*7/100
@@ -1365,8 +1365,10 @@ randpass () {
     if [[ -z $length ]]; then
 	length=8
     fi
-    echo $(cat /dev/urandom | env LC_CTYPE=C tr -cd "[:alnum:]" | head -c $length)
-    echo $(cat /dev/urandom | env LC_CTYPE=C tr -cd "[:graph:]" | head -c $length)
+    alnum=$(env LC_CTYPE=C tr -cd '[:alnum:]' < /dev/urandom | head -c $length)
+    echo "$alnum"
+    graph=$(cat  | env LC_CTYPE=C tr -cd '[:graph:]' < /dev/urandom | head -c $length)
+    echo "$graph"
 }
 
 # Quick view of the market
