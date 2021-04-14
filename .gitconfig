@@ -554,7 +554,7 @@ smudge = git-lfs smudge -- %f
 
 # Customize based on local environment, etc.
 # eg: core.editor, core.pager, gpg, icdiff, ghi
-# Example file at ~/.local-gitconfig.example
+# Example file at .local-gitconfig.example
 [include]
 path = ~/.local-gitconfig
 # user.name, user.email, github.user
