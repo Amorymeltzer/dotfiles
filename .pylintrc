@@ -1,0 +1,4 @@
+# Don't require constants to be upper case
+[ BASIC ]
+class-const-naming-style=any
+const-naming-style=any
