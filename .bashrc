@@ -773,10 +773,6 @@ function diskusage() {
 function psu {
     ps -U "${1:-$USER}" -o 'pid,%cpu,%mem,command'
 }
-# Find and kill processes by name.  Be careful!
-killsearch() {
-    ps ax | grep "$1" | grep -v grep | cut -f1 -d ' ' | xargs kill
-}
 
 
 # Top by memory, not in delta
