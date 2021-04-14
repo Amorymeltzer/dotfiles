@@ -476,6 +476,7 @@ trap _exit EXIT
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
 # DIARY_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
+# STOCK_TICKERS
 sources=("$HOME/.config/bash/priv-env.bash")
 # Homebrew completion directory, here before macports since I generally use
 # the latter.  Confident glob probably fine given the -f -r checks below.
@@ -1374,9 +1375,11 @@ randpass () {
 
 # Quick view of the market
 function marketupdate() {
-    local FILES=("^GSPC" "^DJI" "^IXIC")
+    local tickers=("^GSPC" "^DJI" "^IXIC")
+    # Add any personal tickers
+    tickers+=("${STOCK_TICKERS[@]}")
 
-    ticker "${FILES[@]}"
+    ticker "${tickers[@]}"
 }
 alias mu='marketupdate'
 alias stockmarket='ticker'
