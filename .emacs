@@ -910,11 +910,11 @@ backups." t)
 (add-to-list 'auto-mode-alist
 	     '("/\\.git/PULLREQ_EDITMSG\\'" . markdown-mode))
 (add-hook 'markdown-mode-hook
-      (lambda ()
-	(when (buffer-file-name)
-	  ;; Actually, maybe this doesn't need to be for PULLREQ? FIXME TODO
-	  (when (string-match "/\\.git/\\(COMMIT_EDITMSG\\|PULLREQ_EDITMSG\\)\\'" (buffer-file-name))
-	    (flycheck-mode 0)))))
+	  (lambda ()
+	    (when (buffer-file-name)
+	      ;; Actually, maybe this doesn't need to be for PULLREQ? FIXME TODO
+	      (when (string-match "/\\.git/\\(COMMIT_EDITMSG\\|PULLREQ_EDITMSG\\)\\'" (buffer-file-name))
+		(flycheck-mode 0)))))
 
 ;; Should add some more here
 ;; Also need to make interactives for bold, italics, headers, etc
@@ -1639,9 +1639,9 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
   "Sort the buffers by last viewed time."
   (:description "last viewed")
   (string-lessp (with-current-buffer (car a)
-       (format-time-string "%Y-%m-%d %R" buffer-display-time))
-     (with-current-buffer (car b)
-       (format-time-string "%Y-%m-%d %R" buffer-display-time))))
+		  (format-time-string "%Y-%m-%d %R" buffer-display-time))
+		(with-current-buffer (car b)
+		  (format-time-string "%Y-%m-%d %R" buffer-display-time))))
 (define-key ibuffer-mode-map (kbd "s v") 'ibuffer-do-sort-by-last-viewed)
 
 ;; ibuffer-sidebar https://github.com/jojojames/ibuffer-sidebar
@@ -1801,17 +1801,6 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Comment-starter color
 (set-face-attribute 'font-lock-comment-delimiter-face nil :foreground "red")
 
-
-;; open my init files
-(defun dot-emacs ()
-  "Open `~/.emacs'."
-  (interactive)
-  (find-file (expand-file-name "~/.emacs")))
-
-(defun dot-bashrc ()
-  "Open `~/.bashrc'."
-  (interactive)
-  (find-file (expand-file-name "~/.bashrc")))
 
 (defalias 'bash-mode 'sh-mode)
 (add-to-list 'auto-mode-alist
