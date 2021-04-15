@@ -3,11 +3,6 @@
 # man fold
 # man sysctl
 
-# if not running interactively, don't do anything
-# I see this around, seems good?  ;;;;;; ##### FIXME TODO
-if [ -z "$PS1" ]; then
-    return
-fi
 
 # Localization
 export LC_ALL=C

@@ -158,6 +158,8 @@ shopt -s no_empty_cmd_completion
 shopt -s histreedit
 # Prevent file overwrite on stdout redirection
 # set -o noclobber
+# Expand aliases in non-interactive shells
+shopt -s expand_aliases
 
 
 # Load in .bashrc -------------------------------------------------
