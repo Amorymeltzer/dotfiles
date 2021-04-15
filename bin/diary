@@ -53,11 +53,11 @@ function newDay {
 	    away=" (INSERTLOCATION)"
 	fi
 
-	printf "# ${title}${away}\n\n" > "$today"
+	printf "# %s%s\n\n" "${title}" "${away}" > "$today"
 	notes=$(cat notes)
 	if [[ -n $notes ]]; then
-	    printf "## Thoughts\n" >> "$today"
-	    printf "$notes\n" >> "$today"
+	    printf "## Thoughts\n\n" >> "$today"
+	    printf "%s\n\n" "$notes" >> "$today"
 	fi
 	printf "## Morning\n\n\n## Afternoon\n\n\n## Evening\n" >> "$today"
     fi
@@ -72,7 +72,7 @@ else
 	[[ $1 =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}(\.md)?$ ]]
     }
     function showDate {
-	if date=$1 && date=$(sed 's/\.md$//' <<< "$date") && validDate "$date" && [[ -f "$date.md" ]]; then
+	if date="${1/.md}" && validDate "$date" && [[ -f "$date.md" ]]; then
 	    cat "$date.md"
 	else
 	    echo "No entry for $date"
@@ -85,7 +85,7 @@ else
 	showDate "$1"
     else
 	function showLast {
-	    cat "$(ls -1tr *.md | tail -n 2 | grep -v $today | tail -n 1)"
+	    cat "$(find . -maxdepth 1 -name '*.md' | tail -n 2 | grep -v "$today" | tail -n 1)"
 	}
 
 	case "$1" in
@@ -95,11 +95,22 @@ else
 		# Display latest entry, not including today's
 		showLast;;
 	    "show")
-		# Show the specific entry
-		[[ $2 ]] && showDate "$2" || showLast;; # Second param by this point
+		# Show the specific entry, second param by this point
+		if [[ $2 ]]; then
+		    showDate "$2"
+		else
+		    showLast
+		fi;;
 	    "rand")
 		# Display a random entry
-		cat "$(ls -1 | shuf | head -n 1)";;
+		# OSX doesn't have shuf, approximate it via perl
+		# https://stackoverflow.com/a/6511327/2521092
+		if [[ ! $(command -v 2>/dev/null shuf) ]]; then
+		    function shuf() {
+			perl -MList::Util=shuffle -e 'print shuffle(<>);';
+		    }
+		fi
+		cat "$(find . -maxdepth 1 -name '*.md' | shuf | head -n 1)";;
 	    "remove"|"rm"|"delete")
 		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
 	    "log")
@@ -131,18 +142,23 @@ else
 		fi;;
 	    "stats")
 		# Basic stats, should expand this (days done (since date?), etc.)
-		# This should be find but whatever
-		files=$(ls -1 | grep -E "^\d{4}-\d{2}-\d{2}\.md$")
+		# This should probably be find but whatever
+		files=$(grep -E "^\d{4}-\d{2}-\d{2}\.md$" < <(ls -1))
 		total=$(wc -l <<<"$files" | tr -d ' ')
 		# Here so the command command isn't called multiple times
 		hasSpark=$(command -v spark)
 
 		if [[ $total -gt 0 ]]; then
-		    IFS=$'\n' results=($(cut -f 1 -d - <<<"$files" | sort | uniq -c))
+		    results=()
+		    while IFS='' read -r line; do results+=("$line"); done < <(cut -f 1 -d - <<<"$files" | sort | uniq -c)
 		    # Used below, 1-indexing
 		    mons=(null Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
 		    for result in "${results[@]}"; do
-			result=$(sed -e 's/^[[:space:]]*//' <<<"${result}")
+			# Bash expansion matching is awful
+			# Remove two leading spaces
+			result="${result#'  '}"
+
+			# Split on single space; first is entry count, second is year
 			year="${result#*' '}"
 			count="${result%' '*}"
 			echo "$year:"
@@ -159,7 +175,7 @@ else
 			    fi
 			    # Zero-pad month number
 			    find=$(printf "%02d" "$i")
-			    mcount=$(echo "$yfiles" | grep -E "^\d{4}-$find-\d{2}\.md$" | wc -l | tr -d ' ')
+			    mcount=$(echo "$yfiles" | grep -cE "^\d{4}-$find-\d{2}\.md$" | tr -d ' ')
 			    if [ "$mcount" -gt 0 ]; then
 				mon=${mons[$i]}
 				echo -e "\t$mon: $mcount"
