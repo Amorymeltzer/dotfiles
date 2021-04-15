@@ -1071,25 +1071,24 @@ current buffer" t)
 (autoload 'reveal-in-osx-finder "reveal-in-osx-finder" "Reveal file/folder in finder" t)
 (global-set-key (kbd "C-c z") 'reveal-in-osx-finder)
 
-;; Save a list of open files
-;; Not great with emacsclient server?  Not great with dashboard, that's for sure...
-;; Load the desktop *after* all init stuff is done.
-(eval-after-load "init"
-  '(progn
-     (desktop-read)
-     (desktop-save-mode 1)))
-;; Automatically unless nonexistent
-(setq desktop-save 'ask-if-new
+
+;; Requires some tweaking to be fine with emacsclient, but works okay
+;; In theory, should confirm exactly which ones need tweaking for emacsclient
+;; and then set accordingly.  Hell, I could probably make more things contingent
+;; on emacs-server or not, especially lazy-loading stuff (`server-running-p') FIXME TODO
+(require 'desktop)
+(desktop-save-mode 1)
+(setq desktop-save 't			; Always save, nicer for emacsclient
       desktop-restore-eager 2		; Load this many buffers, rest when lazy
-      desktop-load-locked-desktop 'ask	; Just as a reminder
+      desktop-lazy-idle-delay 2		; Okay not that lazy
+      desktop-load-locked-desktop 't	; Always load, nicer for emacsclient
       desktop-restore-forces-onscreen nil ; Don't restore frames onto the screen
-      desktop-dirname user-emacs-directory
       desktop-base-file-name my/desktop-file	  ; Not .emacs.desktop
       desktop-base-lock-name (concat my/desktop-file ".lock") ; Not .emacs.desktop.lock
       ;; Don't try to save if file is locked, I'll always be quick
-      desktop-not-loaded-hook (quote (desktop-save-mode-off))
-      desktop-path (quote (user-emacs-directory "~"))) ; Just in case
-
+      desktop-not-loaded-hook '(desktop-save-mode-off) ; Pointless with the above for emacsclient
+      desktop-path (list user-emacs-directory "~")) ; Just in case
+(add-to-list 'desktop-modes-not-to-save 'helpful-mode)
 ;; Save a bunch of variables to the desktop file.  For lists specify the len
 ;; of the maximal saved data also
 (setq desktop-globals-to-save
