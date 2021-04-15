@@ -28,10 +28,11 @@ ENDC = '\033[0m'
 library = 'curl --silent '
 api = 'https://query1.finance.yahoo.com/v7/finance/quote?'
 fields = ['symbol', 'marketState', 'regularMarketTime', 'regularMarketPrice',
-          'regularMarketChangePercent', 'fullExchangeName', 'currency',
-          'regularMarketPreviousClose', 'regularMarketOpen', 'bid', 'ask',
-          'regularMarketDayRange', 'fiftyTwoWeekRange', 'fiftyDayAverage',
-          'twoHundredDayAverage', 'shortName', 'fiftyDayAverageChangePercent',
+          'regularMarketChange', 'regularMarketChangePercent',
+          'fullExchangeName', 'currency', 'regularMarketPreviousClose',
+          'regularMarketOpen', 'bid', 'ask', 'regularMarketDayRange',
+          'fiftyTwoWeekRange', 'fiftyDayAverage', 'twoHundredDayAverage',
+          'shortName', 'fiftyDayAverageChangePercent',
           'twoHundredDayAverageChangePercent']
 fields_string = 'fields=' + ','.join(fields)
 cmd = library + "'" + api + fields_string + '&symbols=' + ','.join(symbols) + "'"
@@ -66,6 +67,6 @@ for index in stock_data:
         color = RED + '↓'
 
     # Format change to decimal with a precision of two and reset ansi color at the end
-    colored_change = color + ' (' + '{:.2f}'.format(change) + '%) ' + ENDC
+    colored_change = color + ' (' + '{:.2f}'.format(change) + '%)\t' + '{:.2f}'.format(index['regularMarketPrice']) + ' (' + '{:.2f}'.format(index['regularMarketChange']) + ')' + ENDC
     # Print the results
     print(name, '\t', colored_change)
