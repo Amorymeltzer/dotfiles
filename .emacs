@@ -920,8 +920,9 @@ backups." t)
 ;; Also need to make interactives for bold, italics, headers, etc
 (eval-after-load "markdown-mode"
   '(progn
-     ;; Colorize code blocks
-     (setq markdown-fontify-code-blocks-natively t)
+     ;
+     (setq markdown-fontify-code-blocks-natively t ; Colorize code blocks
+	   markdown-hr-strings '("----"))	   ; I only ever want to use ----
      ;; Add a few missing from block highlighting
      (add-to-list 'markdown-code-lang-modes '("js\\|javascript" . js2-mode))
      (add-to-list 'markdown-code-lang-modes '("css" . css-mode))
