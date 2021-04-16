@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Grab current price of stock or index
 # Use python to colorize, columnize, etc.
 # Heavily based off xbar yahoo_stock_ticker plugin:

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # coding=UTF-8
 # Report on git status of a given folder.  Faster than some bash-based options
 # Borrows HEAVILY from mnagel's excellent clustergit (Github: mnagel/clustergit)

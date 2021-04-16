@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # tab_cleanup.py by Amory Meltzer
 # Encourage me to cleanup my beowser tabs, one a day
 ### Hall of Shame ###

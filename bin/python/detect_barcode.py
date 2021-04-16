@@ -1,4 +1,4 @@
-#!/usr/bin/env pythong
+#!/usr/bin/env python
 # http://www.pyimagesearch.com/2014/11/24/detecting-barcodes-images-python-opencv
 
 # import the necessary packages
