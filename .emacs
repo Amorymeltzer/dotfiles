@@ -2000,9 +2000,9 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq show-paren-style 'expression
       show-paren-delay 0.5)
 ;; Highlight parens currently between
-;; https://github.com/nschum/highlight-parentheses.el
+;; https://sr.ht/~tsdh/highlight-parentheses.el
 (require 'highlight-parentheses)
-(highlight-parentheses-mode t)
+(add-hook 'prog-mode-hook #'highlight-parentheses-mode)
 ;; Bold 'em, Color mismatched differently
 ;; These two share faces
 (progn
