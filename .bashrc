@@ -567,6 +567,7 @@ fi
 # emacs daemon/emacsclient
 alias emd='\emacs --daemon '
 # Get server status
+# Improvable with https://stackoverflow.com/q/1510481/2521092 ?
 function eserver-status() {
     if [[ $(ps -Af | grep "emacs --daemon") ]]; then
 	echo "Emacs server running"
@@ -574,11 +575,12 @@ function eserver-status() {
 	echo "Emacs server not running"
     fi
 }
+# Improvable with https://emacs.stackexchange.com/a/5453/2051 ?
 alias killemacs-server="\emacsclient -e '(kill-emacs)'"
 alias kemacs-server='killemacs-server'
 alias ke='kemacs-server'
 alias kef="\emacsclient -e '(server-force-delete)'"
-alias emacsclient='\emacsclient -cqu '
+alias emacsclient='\emacsclient -tqu '
 alias emacs='emacsclient '
 # Recompile all elisp files, with proper warnings/output
 function recompile_emacs() {
