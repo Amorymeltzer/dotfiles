@@ -887,10 +887,11 @@ backups." t)
 
 
 ;; Markdown mode
-(autoload 'markdown-mode "markdown-mode"
-  "Major mode for editing Markdown files" t)
+(require 'markdown-mode)
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
+(setq markdown-fontify-code-blocks-natively t ; Colorize code blocks
+      markdown-hr-strings '("----"))	      ; I only ever want to use ----
 
 ;; Ensure git commit messages are edited in markdown, since this is mostly for
 ;; GitHub.  Not that common since magit usurps most of these (via
@@ -909,31 +910,27 @@ backups." t)
 	      (when (string-match "/\\.git/\\(COMMIT_EDITMSG\\|PULLREQ_EDITMSG\\)\\'" (buffer-file-name))
 		(flycheck-mode 0)))))
 
-;; Should add some more here
-;; Also need to make interactives for bold, italics, headers, etc
-(eval-after-load "markdown-mode"
-  '(progn
-     ;
-     (setq markdown-fontify-code-blocks-natively t ; Colorize code blocks
-	   markdown-hr-strings '("----"))	   ; I only ever want to use ----
-     ;; Add a few missing from block highlighting
-     (add-to-list 'markdown-code-lang-modes '("js\\|javascript" . js2-mode))
-     (add-to-list 'markdown-code-lang-modes '("css" . css-mode))
-     (add-to-list 'markdown-code-lang-modes '("json" . json-mode))
-     (add-to-list 'markdown-code-lang-modes '("perl" . cperl-mode))
+;; Add a few items missing from block highlighting
+(add-to-list 'markdown-code-lang-modes '("js\\|javascript" . js2-mode))
+(add-to-list 'markdown-code-lang-modes '("css" . css-mode))
+(add-to-list 'markdown-code-lang-modes '("json" . json-mode))
+(add-to-list 'markdown-code-lang-modes '("perl" . cperl-mode))
 
-     ;; key bindings
-     (define-key markdown-mode-map (kbd "C-M-f") 'forward-symbol)
-     (define-key markdown-mode-map (kbd "C-M-b") 'editutil-backward-symbol)
+;; Key bindings, probably needs tweaking
+;; Maybe make use of C-c C-s, etc.
+(let* ((map 'markdown-mode-map))
+  (define-key map (kbd "C-M-f") 'forward-symbol)
+  (define-key map (kbd "C-M-b") 'editutil-backward-symbol)
 
-     (define-key markdown-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
-     (define-key markdown-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading)
-     (define-key markdown-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
-     (define-key markdown-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
-     (define-key markdown-mode-map (kbd "C-c C-u") 'outline-up-heading)
+  (define-key map (kbd "C-c C-n") 'outline-next-visible-heading)
+  (define-key map (kbd "C-c C-p") 'outline-previous-visible-heading)
+  (define-key map (kbd "C-c C-f") 'outline-forward-same-level)
+  (define-key map (kbd "C-c C-b") 'outline-backward-same-level)
+  (define-key map (kbd "C-c C-u") 'outline-up-heading)
 
-     ;; Clobbered by flyspell, this makes more semantic sense anyway
-     (define-key markdown-mode-map (kbd "C-c `") 'markdown-edit-code-block)))
+  ;; Clobbered by flyspell, this makes more semantic sense anyway
+  (define-key map (kbd "C-c `") 'markdown-edit-code-block))
+
 
 ;; Generate README.md markdown from header of elisp file for github
 ;; checkdoc might be useful beforehand
