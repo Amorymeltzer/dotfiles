@@ -25,9 +25,6 @@ ENDC = '\033[0m'
 
 # Bulk curl the yahoo api for data
 # Lots of unused stuff here, in case I feel like expanding
-# Maybe: regularMarketPrice, fiftyDayAverageChangePercent, regularMarketPreviousClose,
-# fiftyTwoWeekRange
-# Maybe there are others that aren't using average?
 library = 'curl --silent '
 api = 'https://query1.finance.yahoo.com/v7/finance/quote?'
 fields = ['symbol', 'marketState', 'regularMarketTime', 'regularMarketPrice',
@@ -66,7 +63,7 @@ states = {
     'POSTPOST' : 'After-after',
     'CLOSED' : 'Closed'
 }
-print(states[stock_data[0]['marketState']], '\t  Percent\tPrice (G/L)')
+print(states[stock_data[0]['marketState']], '\t  Percent\tPrice (G/L)\tYear range')
 
 for index in stock_data:
     name=index['symbol']
@@ -80,13 +77,17 @@ for index in stock_data:
 
     # Set colors for positive and negative values
     if change > 0:
-        color = GREEN + '↑'
+        output = GREEN + '↑'
     elif change < 0:
-        color = RED + '↓'
+        output = RED + '↓'
     else:
-        color = ' '
+        output = ' '
 
-    # Format change to decimal with a precision of two and reset ansi color at the end
-    colored_change = color + ' (' + two_d(change) + '%)\t$' + two_d(index['regularMarketPrice']) + ' (' + two_d(index['regularMarketChange']) + ')' + ENDC
+    # Build output
+    output += ' (' + two_d(change) + '%)'
+    if index['quoteType'] != 'INDEX':
+        output += '\t$' + two_d(index['regularMarketPrice']) + ' (' + two_d(index['regularMarketChange']) + ')'
+        output += '\t' + index['fiftyTwoWeekRange']
+    output += ENDC
     # Print the results
-    print(name, '\t', colored_change)
+    print(name, '\t', output)
