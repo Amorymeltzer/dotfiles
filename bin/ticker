@@ -25,6 +25,9 @@ ENDC = '\033[0m'
 
 # Bulk curl the yahoo api for data
 # Lots of unused stuff here, in case I feel like expanding
+# Maybe: regularMarketPrice, fiftyDayAverageChangePercent, regularMarketPreviousClose,
+# fiftyTwoWeekRange
+# Maybe there are others that aren't using average?
 library = 'curl --silent '
 api = 'https://query1.finance.yahoo.com/v7/finance/quote?'
 fields = ['symbol', 'marketState', 'regularMarketTime', 'regularMarketPrice',
@@ -47,12 +50,28 @@ stock_data = json_output['quoteResponse']['result']
 
 
 # Pretty-print the data
+def two_d(value):
+    """Format to two decimal places"""
+    return '{:.2f}'.format(value)
+
 # Assume the state of the market is the same for everyone
-if stock_data[0]['marketState'] != 'REGULAR':
-    print('Market closed')
+# PRE = Before open
+# POST = After close (but when does it switch?)
+# POSTPOST = Maybe after after-hours?
+states = {
+    'PRE' : 'Closed',
+    'PREPRE' : 'Early-hours',
+    'REGULAR' : 'Open',
+    'POST' : 'After-hours',
+    'POSTPOST' : 'After-after',
+    'CLOSED' : 'Closed'
+}
+print(states[stock_data[0]['marketState']], '\t  Percent\tPrice (G/L)')
 
 for index in stock_data:
     name=index['symbol']
+
+    # Test stand-in for everyone
     try:
         change = index['regularMarketChangePercent']
     except KeyError:
@@ -60,13 +79,14 @@ for index in stock_data:
         continue
 
     # Set colors for positive and negative values
-    color = ''
     if change > 0:
         color = GREEN + '↑'
     elif change < 0:
         color = RED + '↓'
+    else:
+        color = ' '
 
     # Format change to decimal with a precision of two and reset ansi color at the end
-    colored_change = color + ' (' + '{:.2f}'.format(change) + '%)\t' + '{:.2f}'.format(index['regularMarketPrice']) + ' (' + '{:.2f}'.format(index['regularMarketChange']) + ')' + ENDC
+    colored_change = color + ' (' + two_d(change) + '%)\t$' + two_d(index['regularMarketPrice']) + ' (' + two_d(index['regularMarketChange']) + ')' + ENDC
     # Print the results
     print(name, '\t', colored_change)
