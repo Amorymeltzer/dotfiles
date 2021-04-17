@@ -17,23 +17,16 @@
 
 ;; Notes
 
-;; M-x customize-group, then option, gives customizable things for .emacs
-;; F1 or C-h for help, then b for all bindings
-;; Anything, then C-h for all that begin with it (C-x, C-c)
-;; C-h c command, explain what that key command does (C-h c C-x C-c)
-;; C-h f function, explain what that function does (C-h f calendar)
+;; C-h b for all bindings
 ;; Or M-x where-is function
 ;; C-h a regex, search for that in commands ie anything with rot13
-;; C-h v or M-x describe-variable for setq variables
 ;; C-x z, repeat last command
 ;; M-x man, man in emacs
 ;; C-j, newline
 ;; C-m, newline-and-indent
 ;; C-h l, last inputs
 ;; C-u M-!, insert shell command into buffer
-;; M-q, justify a paragraph
-;; C-x 8 C-h, list of special characters
-;; sort-lines
+;; C-x 8 C-h, list of special characters; RET to enter by name
 
 ;; http://www.emacswiki.org/emacs/EmacsNewbieKeyReference
 ;; http://www.rgrjr.com/emacs/emacs_cheat.html
