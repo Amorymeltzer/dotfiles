@@ -916,20 +916,18 @@ backups." t)
 (add-to-list 'markdown-code-lang-modes '("json" . json-mode))
 (add-to-list 'markdown-code-lang-modes '("perl" . cperl-mode))
 
-;; Key bindings, probably needs tweaking
-;; Maybe make use of C-c C-s, etc.
-(let* ((map 'markdown-mode-map))
-  (define-key map (kbd "C-M-f") 'forward-symbol)
-  (define-key map (kbd "C-M-b") 'editutil-backward-symbol)
+;; Key bindings, probably needs tweaking; maybe make use of C-c C-s, etc.?
+(define-key markdown-mode-map (kbd "C-M-f") 'forward-symbol)
+(define-key markdown-mode-map (kbd "C-M-b") 'editutil-backward-symbol)
 
-  (define-key map (kbd "C-c C-n") 'outline-next-visible-heading)
-  (define-key map (kbd "C-c C-p") 'outline-previous-visible-heading)
-  (define-key map (kbd "C-c C-f") 'outline-forward-same-level)
-  (define-key map (kbd "C-c C-b") 'outline-backward-same-level)
-  (define-key map (kbd "C-c C-u") 'outline-up-heading)
+(define-key markdown-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
+(define-key markdown-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading)
+(define-key markdown-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
+(define-key markdown-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
+(define-key markdown-mode-map (kbd "C-c C-u") 'outline-up-heading)
 
-  ;; Clobbered by flyspell, this makes more semantic sense anyway
-  (define-key map (kbd "C-c `") 'markdown-edit-code-block))
+;; Clobbered by flyspell, this makes more semantic sense anyway
+(define-key markdown-mode-map (kbd "C-c `") 'markdown-edit-code-block)
 
 
 ;; Generate README.md markdown from header of elisp file for github
