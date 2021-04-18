@@ -2859,32 +2859,29 @@ This checks in turn:
 ;; which-key has better sorting than guide-key
 ;; https://github.com/justbur/emacs-which-key
 (require 'which-key)
-(with-eval-after-load "which-key"
-  ;; https://github.com/justbur/emacs-which-key#face-customization-options
-  ;; (set-face-attribute 'which-key-key-face nil :foreground "magenta")
-  (set-face-attribute 'which-key-separator-face nil :foreground "magenta")
-  (set-face-attribute 'which-key-note-face nil :foreground "black")
-  ;; (set-face-attribute 'which-key-special-key-face nil :foreground "red")
-  ;; color of prefix command
-  (set-face-attribute 'which-key-group-description-face nil :foreground "blue" :bold nil)
-  (set-face-attribute 'which-key-command-description-face nil :inherit nil)
-
-  ;; These first few are from the which-key-setup-side-window-bottom
-  ;; function, but here so as not to separate out/overwrite preferences
-  (which-key--setup-echo-keystrokes)
-  ;; https://github.com/justbur/emacs-which-key#other-options
-  (setq which-key-popup-type 'side-window
-	which-key-side-window-location 'bottom
-	which-key-show-prefix 'top	; default echo
-	;; There are a lot of these, all have merits
-	which-key-sort-order 'which-key-local-then-key-order
-	which-key-side-window-max-height 0.5 ; default 0.25
-	which-key-idle-delay 0.25		 ; default 1.0
-	which-key-prefix-prefix "=> "	 ; default +
-	which-key-show-remaining-keys t
-	which-key-lighter nil	; Diminish not working properly...
-	))
+;; The default behavior of `which-key-setup-side-window-bottom' is just fine.
+;; In theory, I want top for `which-key-show-prefix', but it appears to devolve
+;; to the same results as echo.
 (which-key-mode)
+;; There are a lot of these, all have merits
+;; https://github.com/justbur/emacs-which-key#other-options
+(setq which-key-sort-order 'which-key-local-then-key-order
+      which-key-side-window-max-height 0.5 ; default 0.25
+      which-key-idle-delay 0.25		   ; default 1.0
+      which-key-prefix-prefix "=>"	   ; default +
+      which-key-show-remaining-keys t
+      which-key-lighter nil  ; Don't rely on diminish, which doesn't work anyway
+      which-key-compute-remaps t
+      which-key-is-verbose t)
+;; https://github.com/justbur/emacs-which-key#face-customization-options
+;; (set-face-attribute 'which-key-key-face nil :foreground "magenta")
+(set-face-attribute 'which-key-separator-face nil :foreground "magenta")
+(set-face-attribute 'which-key-note-face nil :foreground "black")
+;; (set-face-attribute 'which-key-special-key-face nil :foreground "red")
+;; color of prefix command
+(set-face-attribute 'which-key-group-description-face nil :foreground "blue" :bold nil)
+(set-face-attribute 'which-key-command-description-face nil :inherit nil)
+
 
 ;; Display what function block if I'm in in certain modes
 ;; reenable?  prog-mode-hook?
@@ -3214,7 +3211,6 @@ This checks in turn:
 (key-chord-define-global "xx" 'er/expand-region)
 (key-chord-define-global "zz" 'er/contract-region)
 (key-chord-define-global "uu" 'undo-tree-undo)
-;; (key-chord-define prog-mode-map "rr" 'undo-tree-redo) ; not in text
 (key-chord-define prog-mode-map "--" 'undo-tree-redo) ; not in text or conf mode?
 
 ;; Avoid reaching for shift for common symbols
@@ -3293,6 +3289,7 @@ This checks in turn:
 ;; Just total line count
 (eval-after-load "wc-mode" '(setq wc-modeline-format "%tl"))
 ;; wc-goal-mode shows original+added/total words
+;; https://github.com/bnbeckwith/wc-goal-mode
 ;; wc-goal-word/line/char-goal to set a target
 (autoload 'wc-goal-mode "wc-goal-mode" "Toggle wc-goal-mode." t)
 
