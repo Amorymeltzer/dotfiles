@@ -34,7 +34,7 @@ z=" "
 # variable, in that order.
 ### CAN USE FOR SINGLE LINE???
 __git_eread () {
-    test -r "$1" && IFS=$'\r\n' read "$2" <"$1"
+    test -r "$1" && IFS=$'\r\n' read -r "$2" <"$1"
 }
 
 # Wrap colors around a variable
@@ -53,7 +53,7 @@ __wrap_color () {
 
 	*) color=${Color_Yellow} # default
     esac
-    echo -ne $color$1${Color_Yellow}
+    echo -ne "$color$1${Color_Yellow}"
 }
 
 # See if a cherry-pick or revert is in progress, if the user has committed a
@@ -148,7 +148,7 @@ if [ -d "$gitdir/rebase-merge" ]; then
     done=$(tail -n 1 "$gitdir/rebase-merge/done" 2>/dev/null)
     if [[ -n "$done" ]]; then
 	a="$done"
-	if [[ "$a" != "break" && `echo "$done" | cut -f 1 -d ' '` != "exec" ]]; then
+	if [[ "$a" != "break" && $(echo "$done" | cut -f 1 -d ' ') != "exec" ]]; then
 	    a=$(echo -n "$done" | grep "$short_sha" | cut -f 1 -d ' ')
 	    # There's a way to get better message here?  reword sha steps
 	    # instead of just reword steps, like with stopped? FIXME TODO
@@ -196,7 +196,7 @@ else
 	head=""
 	# Quit, what state is this?  No head...
 	if ! __git_eread "$gitdir/HEAD" head; then
-	    echo -n $out
+	    echo -n "$out"
 	    exit
 	fi
 	# is it a symbolic ref?
@@ -272,30 +272,32 @@ elif [ "true" = "$inside_worktree" ]; then
     # porcelain=v2 is inconsistent in the leading character for untracked
     # ?? is hard to match properly in a case, behaves very weirdly
     status=$(git status --porcelain|cut -c 1-2|sed 's/??/untracked/'|sort|uniq)
-    IFS=$'\n' status=($status)
-    for stat in "${status[@]}"; do
-	case "$stat" in
-	    # Green=not staged, magenta=staged
-	    # Currently ignores [ D][RC] and could maybe do better with
-	    # renames (R), copies (C), and deletions (D)
-	    [MARC][MD]) w=$(__wrap_color "+" "Green")
-			i=$(__wrap_color "!" "Magenta");;
-	    ' '[MAC]) w=$(__wrap_color "+" "Green");;
-	    [MAC]' ') i=$(__wrap_color "!" "Magenta");;
-	    untracked) u=$(__wrap_color "?" "Cyan");;
-	    ' T') t=$(__wrap_color "T" "Green");;
-	    'T ') t=$(__wrap_color "T" "Magenta");;
-	    ' R') m=$(__wrap_color "R" "Green");;
-	    'R ') m=$(__wrap_color "R" "Magenta");;
-	    ' D') d=$(__wrap_color "D" "Green");;
-	    'D ') d=$(__wrap_color "D" "Magenta");;
-	    # Various merge states in red
-	    UU) x=$(__wrap_color "U" "Red");;
-	    DD|DU|UD) y=$(__wrap_color "D" "Red");;
-	    AA|AU|UA) n=$(__wrap_color "A" "Red");;
-	    *) e=$(__wrap_color "FIX" "Red");;
-	esac
-    done
+    if [[ -n "$status" ]]; then
+	mapfile -t status <<< "$status"
+	for stat in "${status[@]}"; do
+	    case "$stat" in
+		# Green=not staged, magenta=staged
+		# Currently ignores [ D][RC] and could maybe do better with
+		# renames (R), copies (C), and deletions (D)
+		[MARC][MD]) w=$(__wrap_color "+" "Green")
+			    i=$(__wrap_color "!" "Magenta");;
+		' '[MAC]) w=$(__wrap_color "+" "Green");;
+		[MAC]' ') i=$(__wrap_color "!" "Magenta");;
+		untracked) u=$(__wrap_color "?" "Cyan");;
+		' T') t=$(__wrap_color "T" "Green");;
+		'T ') t=$(__wrap_color "T" "Magenta");;
+		' R') m=$(__wrap_color "R" "Green");;
+		'R ') m=$(__wrap_color "R" "Magenta");;
+		' D') d=$(__wrap_color "D" "Green");;
+		'D ') d=$(__wrap_color "D" "Magenta");;
+		# Various merge states in red
+		UU) x=$(__wrap_color "U" "Red");;
+		DD|DU|UD) y=$(__wrap_color "D" "Red");;
+		AA|AU|UA) n=$(__wrap_color "A" "Red");;
+		*) e=$(__wrap_color "FIX" "Red");;
+	    esac
+	done
+    fi
     # Old, imperfect:
     # git diff --no-ext-diff --quiet || w=$(__wrap_color "+" "Green")	     # Unstaged
     # git diff --no-ext-diff --cached --quiet || i=$(__wrap_color "!" "Magenta") # Staged
@@ -381,4 +383,4 @@ gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 printf -v gitstring '%s' "$gitstring"
 out="$gitstring"
 
-echo -n $out
+echo -n "$out"
