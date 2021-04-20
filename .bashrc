@@ -52,7 +52,9 @@ alias lad='ls -Al | grep "^d" --color=never'
 alias lda='lad'
 
 # Colorized, recursive ls-like tree
-alias treed='tree -aC -I ".git" --dirsfirst "$@" | less -FRNX'
+function treed {
+    tree -aC -I ".git" --dirsfirst "$@" | less -FRNX
+}
 alias tree='tree -Csuh'
 
 # Preserve environment
@@ -630,22 +632,22 @@ alias bin="cd ~/bin"
 alias dt="cd ~/dotfiles"
 alias dr="cd ~/Dropbox"
 alias de="cd ~/Desktop"
-alias dg="cd $GIT_PERS_DIR"
-alias dgt="cd $GIT_PERS_DIR/twinkle@azatoth"
-alias dgm="cd $GIT_PERS_DIR/twinkle@azatoth/modules"
+alias dg='cd $GIT_PERS_DIR'
+alias dgt='cd $GIT_PERS_DIR/twinkle@azatoth'
+alias dgm='cd $GIT_PERS_DIR/twinkle@azatoth/modules'
 alias dgj="dgm"
-alias dgs="cd $GIT_PERS_DIR/mls"
-alias dgw="cd $GIT_PERS_DIR/mediawiki"
-alias dp="cd $PERL_PERS_DIR"
-alias dps="cd $PERL_PERS_DIR/sandbox"
-alias dpk="cd $PERL_PERS_DIR/ksp"
-alias dpw="cd $PERL_PERS_DIR/wiki"
-alias dpc="cd $PERL_PERS_DIR/wiki/crathighlighter"
-alias dws="cd $PERL_PERS_DIR/wiki/sysopIndex"
-alias dwu="cd $PERL_PERS_DIR/wiki/userScripts"
+alias dgs='cd $GIT_PERS_DIR/mls'
+alias dgw='cd $GIT_PERS_DIR/mediawiki'
+alias dp='cd $PERL_PERS_DIR'
+alias dps='cd $PERL_PERS_DIR/sandbox'
+alias dpk='cd $PERL_PERS_DIR/ksp'
+alias dpw='cd $PERL_PERS_DIR/wiki'
+alias dpc='cd $PERL_PERS_DIR/wiki/crathighlighter'
+alias dws='cd $PERL_PERS_DIR/wiki/sysopIndex'
+alias dwu='cd $PERL_PERS_DIR/wiki/userScripts'
 alias drk="cd ~/Documents/R/kinship/"
 alias edd="cd ~/.emacs.d/"
-alias e="$VISUAL "
+alias e='$VISUAL '
 alias hig='history | grep -i'
 alias cl='clear'
 alias cls='clear'
@@ -667,7 +669,8 @@ function o() {
 
 # cd and ls together
 function cdl() {
-    cd "$1" ; ls ;
+    cd "$1" || return
+    ls
 }
 
 # Run perl without going there, in case it needs local files
@@ -713,9 +716,10 @@ function mkcd() {
 	echo "Enter a directory name"
     elif [ -d "$1" ]; then
 	echo "$1 already exists"
-	cd "$1"
+	cd "$1" || return
     else
-	mkdir "$1" && cd "$1"
+	mkdir "$1" || return
+	cd "$1" || return
     fi
 }
 alias mkd='mkcd'
@@ -783,7 +787,9 @@ function memstat {
 }
 
 # Show five most recently modified files.
-alias last-modified='ls -t $* 2> /dev/null | head -n 5'
+function last-modified {
+    ls -t "$@" 2> /dev/null | head -n 5
+}
 
 # growlnotify: add after to show when done
 # Maybe other options...
@@ -885,8 +891,8 @@ fi
 # Homebrew/Cask
 if [[ -f $(command -v brew) ]]; then
     brew_repo=$(brew --repo)
-    alias dgh="cd $brew_repo"
-    alias dgc="cd $brew_repo/Library/Taps/homebrew/homebrew-cask"
+    alias dgh='cd $brew_repo'
+    alias dgc='cd $brew_repo/Library/Taps/homebrew/homebrew-cask'
 
     # Make homebrew verbose by defaults
     # export HOMEBREW_VERBOSE=1
@@ -1070,7 +1076,9 @@ alias mplayer='mpv'
 
 # Show most used commands, fixed by doing $4 instead of $2, from:
 # http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
-alias profileme="history | awk '{print \$4}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
+function profileme {
+    history | awk '{print $4}' | awk 'BEGIN{FS="|"}{print $1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr
+}
 
 # Lack of space important!
 alias which='type -a 2>/dev/null'
@@ -1198,7 +1206,9 @@ export -f ssid
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\"'
 # Which processes are listening on ports
-alias eaves='lsof -iTCP -sTCP:LISTEN -P "$@"'
+function eaves {
+    lsof -iTCP -sTCP:LISTEN -P "$@"
+}
 
 # Change mac address https://jezenthomas.com/free-internet-on-trains/
 function remac {
@@ -1290,20 +1300,20 @@ alias shout='uc'
 
 # Backup file
 function backup-file() {
-    local filename=$@
+    local filenames=("$@")
 
-    for i in $filename
+    for i in "${filenames[@]}"
     do
 	cp "$i" "$i.bak"
     done
 }
 # Backup file with timestamp
 function backup-file-with-timestamp() {
-    local filename=$@
+    local filenames=("$@")
     local filetime
     filetime=$(date +%Y%m%d_%H%M%S)
 
-    for i in $filename
+    for i in "${filenames[@]}"
     do
 	cp "${i}" "${i}_${filetime}"
     done
@@ -1333,7 +1343,7 @@ function mergepdf() {
 
 # Change working directory to the top-most Finder window location
 function cdfinder() {
-    cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
+    cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || return
 }
 alias cdf='cdfinder'
 
@@ -1431,7 +1441,7 @@ function metar()
     fi
     # Convert to all caps
     local code
-    code=$(echo -n "$1"|tr 'a-z' 'A-Z')
+    code=$(echo -n "$1" | tr '[:lower:]' '[:upper:]')
 
     local URL="http://weather.noaa.gov/pub/data/observations/metar/decoded/"
     wget -q -O - "${URL}${code}.TXT" 2>/dev/null
@@ -1454,7 +1464,7 @@ function dad {
 function center {
     local width
     width=$(tput cols);
-    local str="$@";
+    local str="$*";
     local len=${#str};
     [ $len -ge $width ] && echo "$str" && return;
     for ((i = 0; i < $((((width - len)) / 2)); i++)); do
@@ -1490,7 +1500,7 @@ function escape()
 # Get a character's Unicode code point
 function codepoint()
 {
-    perl -e "use utf8; print sprintf('U+%04X', ord(\"$@\"))"
+    perl -e "use utf8; print sprintf('U+%04X', ord(\"$*\"))"
     # print a newline unless we're piping the output to another program
     if [ -t 1 ]; then
 	echo # newline
@@ -1577,7 +1587,9 @@ function ff() {
 }
 
 # Remove empty directories under and including <path>s.
-alias prunedirs='find "$@" -type d -empty -depth | xargs rmdir'
+function prunedirs {
+    find "$@" -type d -empty -depth -print0 | xargs rmdir
+}
 
 # Count files in each sub-directory
 # Make script to option count versus list?????????????
@@ -1593,7 +1605,7 @@ function filesize() {
     else
 	local arg=-sh
     fi
-    if [[ -n "$@" ]]; then
+    if [[ -n "$*" ]]; then
 	du $arg -- "$@"
     else
 	du $arg .[^.]* ./*
@@ -1712,7 +1724,7 @@ function extract {
 # Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
 function targz() {
     local tmpFile
-    tmpFile="${@%/}.tar";
+    tmpFile="${*%/}.tar";
     tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
 
     local size
