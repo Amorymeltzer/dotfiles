@@ -18,9 +18,9 @@ if len(sys.argv) <= 1:
 # List of all tickers
 symbols = sys.argv[1:]
 
-# Nothing fancy
-GREEN = '\033[32m'
-RED = '\033[31m'
+# Slightly fancy
+GREEN = '\033[38;5;71m'
+RED = '\033[38;5;131m'
 ENDC = '\033[0m'
 
 # Bulk curl the yahoo api for data
@@ -52,16 +52,13 @@ def two_d(value):
     return '{:.2f}'.format(value)
 
 # Assume the state of the market is the same for everyone
-# PRE = Before open
-# POST = After close (but when does it switch?)
-# POSTPOST = Maybe after after-hours?
+# Could display different messages, but eh
 states = {
-    'PRE' : 'Closed',
-    'PREPRE' : 'Early-hours',
-    'REGULAR' : 'Open',
-    'POST' : 'After-hours',
-    'POSTPOST' : 'After-after',
-    'CLOSED' : 'Closed'
+    'PRE' : 'Closed',           # Pre-market but not necessarily early
+    'REGULAR' : 'OPEN',
+    'POST' : 'Closed',          # After-hours
+    'POSTPOST' : 'Closed',      # After after-hours?
+    'CLOSED' : 'Closed'         # When's the changeover?
 }
 print(states[stock_data[0]['marketState']], '\t  Percent\tPrice (G/L)\tYear range')
 
