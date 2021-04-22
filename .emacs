@@ -488,7 +488,7 @@ Record that in `paradox--backups', but do nothing if
 ;;; Consider turning margin on?  Big change for everybody but maybe worth it long-term?
 ;;; Possible additional extensions: flycheck-inline, flycheck-elsa/elsa, flycheck-grammarly
 ;;; Consider flycheck-color-mode-line if/when tweaking mode-line
-
+(require 'flycheck)
 ;; Turn on for everybody
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
@@ -695,11 +695,11 @@ POS defaults to `point'."
 ;; There are a lot of ways to do this.  Previously I used fic-mode
 ;; (<https://github.com/lewang/fic-mode>) which is fairly bare-bones.  It looks
 ;; like hl-todo (<hl-todo better? https://github.com/tarsius/hl-todo>) is better
-;; (more customization options, ability to jump to each in turn), but, honestly,
-;; I kind of just like the simple method here.  In the end, that means something
-;; roughly at the level of fic-mode, but probably less-well integrated.  If I
-;; really need something more full-fledged, I'll just use hl-todo, with
-;; something like the below:
+;; (more customization options, ability to jump to each in turn), as is
+;; hl-prog-extra, but, honestly, I kind of just like the simple method here.  In
+;; the end, that means something roughly at the level of fic-mode, but probably
+;; less-well integrated.  If I really need something more full-fledged, I can
+;; just use hl-todo, with something like the below:
 ;; (setq hl-todo '(t (:foreground "#e55c7a" :weight normal)))
 ;; (setq hl-todo-keyword-faces
 ;;       '(("TODO"  . "pink")
@@ -1846,11 +1846,18 @@ when in source code modes such as python-mode or perl-mode" t)
 
 
 ;; Magit stuff
+;; Manual: https://magit.vc/manual/magit.html
+(require 'magit)
 ;; C-x g for status, but C-x M-g for magit-dispatch: trigger command directly
 ;; C-c M-g: magit-file-dispatch; super convenient, so let's make it more so
 (global-set-key (kbd "C-c g") 'magit-file-dispatch)
 ;; Actually, maybe that'd be better as a prefix, then have C-c g f or something
 ;; for this and C-c g l for git-link, etc.  Maybe?
+
+;; From within an ido prompt, open that file into magit-status.  Doesn't seem
+;; like there are other options?
+(define-key ido-common-completion-map
+  (kbd "C-x C-g") 'ido-enter-magit-status)
 ;; Open log, etc. in separate window?  Like vc-print-log
 ;; Look into tweaking faces?
 ;; Prior to magit, I turned off built-in vc handling, preferring manual git:
@@ -1865,12 +1872,17 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; ensure git commit is within guidance (git-commit-summary-max-length)
 ;; git-commit-turn-on-flyspell ???
 (setq git-commit-major-mode 'markdown-mode
-      git-rebase-confirm-cancel nil)
+      git-rebase-confirm-cancel nil
+      ;; This is the default less git-commit-turn-on-auto-fill, since I don't
+      ;; want to wrap lines in commit messages by default (GitHub don't care)
+      git-commit-setup-hook
+      '(git-commit-save-message git-commit-setup-changelog-support git-commit-propertize-diff bug-reference-mode with-editor-usage-message))
 ;; Edit git messages in markdown as these are mostly targeted for GitHub
 (add-hook 'git-commit-mode-hook 'markdown-mode)
 ;; But turn off flycheck since markdownlint is awful in `git-commit-mode'
 (add-hook 'git-commit-mode-hook
 	  '(lambda () (flycheck-mode 0)) t)
+
 (setq magit-log-section-commit-count 25 ; default 10
       ;; Display buffers in same buffer, except for diffs
       ;; Eh, they multiply too much, things get
@@ -1881,14 +1893,8 @@ when in source code modes such as python-mode or perl-mode" t)
       ;; Not entirely sure what this does, but seems worthwhile
       magit-diff-refine-hunk t)
 
-;; Various items not available right away since magit not require-d...
-(with-eval-after-load "magit"
-  ;; Add any ongoing merge-log to status sections; check out other magit-insert functions
-  (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-merge-log)
-  ;; This is the default less git-commit-turn-on-auto-fill, since I don't want
-  ;; to wrap lines in commit messages by default (GitHub don't care)
-  (setq git-commit-setup-hook
-	'(git-commit-save-message git-commit-setup-changelog-support git-commit-propertize-diff bug-reference-mode with-editor-usage-message)))
+;; Add any ongoing merge-log to status sections; check out other magit-insert functions
+(magit-add-section-hook 'magit-status-sections-hook 'magit-insert-merge-log)
 ;; magit-section-initial-visibility-alist to customize initial visibility
 
 ;; Log stylin', just minor tweak to author length; L l/d to toggle
@@ -1925,6 +1931,10 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; https://github.com/dandavison/delta
 (when (executable-find "delta")
   (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
+
+;; Should really tweak some of the magit faces, such as magit-blame-* to match
+;; what's in my gitconfig FIXME TODO
+
 ;; abridge-diff https://github.com/jdtsmith/abridge-diff
 ;; Show refined, abridged diff hunks in magit
 ;; Really neat but doesn't work with magit-delta
