@@ -2513,8 +2513,6 @@ round to ones, tens, etc."
 (autoload 'unicode-troll-stopper-mode "unicode-troll-stopper" "Stop unicode
 trolls" t)
 
-;; From https://github.com/purcell/emacs-xkcd
-;; (require 'xkcd);
 
 ;; Requires howdoi to be installed (python)
 (autoload 'howdoi "howdoi" "Instant SX answers" t)
