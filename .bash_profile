@@ -1,6 +1,6 @@
 ## Some helpful environment vars and configs
 # Worth noting that export doesn't take in aliases
-export EDITOR='emacsclient '
+export EDITOR='emacsclient -tqu '
 # Used by emacsclient in case no daemon is running, such as with sudo
 # Ideally, this would be empty, so emacsclient would start the server as a
 # daemon, but that means those specific cases wouldn't fly
