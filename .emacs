@@ -2175,6 +2175,8 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key (kbd "C-x C-x") 'delete-other-windows)
 ;; aka C-x C-SPC
 (global-set-key (kbd "C-x C-@") 'exchange-point-and-mark)
+;; After C-u C-@/SPC to pop the mark (ie jump back), a simple C-SPC/@ does so again
+(setq set-mark-command-repeat-pop t)
 
 ;; C-x u for tree, C-_ to undo, M-_ to redo, etc.
 (require 'undo-tree)
