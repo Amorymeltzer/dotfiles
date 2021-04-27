@@ -742,7 +742,9 @@ function mkmv() {
 # something, so let's make this more useful for day-to-day usage.
 function cal {
     # Smartypants
-    if [[ "$1" == '-m' ]]; then
+    if [[ -z "$1" ]]; then
+	command cal
+    elif [[ "$1" == '-m' ]]; then
 	command cal "$@"
     else
 	month=$1
