@@ -749,8 +749,12 @@ function cal {
     else
 	month=$1
 	year=$2
-	if [[ -z $year ]] && [[ $month -lt 13 ]]; then
-	    command cal -m "$month"
+	if [[ $month -lt 13 ]]; then
+	    if [[ -z $year ]]; then
+		command cal -m "$month"
+	    else
+		command cal "$month" "$year"
+	    fi
 	else
 	    command cal "$month"
 	fi
