@@ -2587,72 +2587,68 @@ in the buffer." t)
 (autoload 'eprime-mode "eprime-mode" "Check text conforms to E', disallowing forms of \"to be\".")
 
 ;; webjump for searching easily
+(require 'webjump)
 (global-set-key (kbd "C-x j") 'webjump)
-(eval-after-load "webjump"
-  '(progn
-     ;; webjump doesn't take at-point/region by default, so overwrite the
-     ;; relevant function with a tiny bit of code to help it do so
-     (defun webjump-read-string (prompt)
-       (let ((input
-	      (read-string (concat prompt ": ")
-			   (if mark-active
-			       (buffer-substring (region-beginning) (region-end))
-			     (thing-at-point 'symbol t)))))
-	 (if (webjump-null-or-blank-string-p input) nil input)))
+;; webjump doesn't take at-point/region by default, so overwrite the
+;; relevant function with a tiny bit of code to help it do so
+(defun webjump-read-string (prompt)
+  (let ((input
+	 (read-string (concat prompt ": ")
+		      (if mark-active
+			  (buffer-substring (region-beginning) (region-end))
+			(thing-at-point 'symbol t)))))
+    (if (webjump-null-or-blank-string-p input) nil input)))
 
-     ;; Add some missing items to the webjump catalog
-     (add-to-list 'webjump-sites
-		  '("Urban Dict" .  [simple-query
-				     "www.urbandictionary.com"
-				     "https://www.urbandictionary.com/define.php?term="
-				     ""]))
-     (add-to-list 'webjump-sites
-		  '("IMDB" .  [simple-query
-			       "www.imdb.com"
-			       "https://www.imdb.com/find?q="
-			       "&s=all"]))
-     (add-to-list 'webjump-sites
-		  '("Google translate" .  [simple-query
-					   "translate.google.com"
-					   "https://translate.google.com/?sl=auto&tl=en&text="
-					   ""]))
-     (add-to-list 'webjump-sites
-		  '("DOI" .  [simple-query
-			      "www.dx.doi.org/"
-			      "www.dx.doi.org/"
-			      ""]))
-     (add-to-list 'webjump-sites
-		  '("Youtube" .  [simple-query
-				  "www.youtube.com"
-				  "https://www.youtube.com/results?search_query="
-				  ""]))
-     (add-to-list 'webjump-sites
-		  '("MediaWiki API" .  [simple-query
-					"www.mediawiki.org"
-					"https://www.mediawiki.org/wiki/API:"
-					""]))
-     (add-to-list 'webjump-sites
-		  '("MDN" .  [simple-query
-			      "developer.mozilla.org"
-			      "https://developer.mozilla.org/en-US/search?q="
-			      ""]))
-     (add-to-list 'webjump-sites
-		  '("devdocs" .  [simple-query
-				  "devdocs.io"
-				  "https://devdocs.io/#q="
-				  ""]))
+;; Add some missing items to the webjump catalog
+(add-to-list 'webjump-sites
+	     '("Urban Dict" .
+	       [simple-query
+		"www.urbandictionary.com" "https://www.urbandictionary.com/define.php?term=" ""]))
+(add-to-list 'webjump-sites
+	     '("IMDB" .
+	       [simple-query
+		"www.imdb.com" "https://www.imdb.com/find?q=" "&s=all"]))
+(add-to-list 'webjump-sites
+	     '("Google translate" .
+	       [simple-query
+		"translate.google.com" "https://translate.google.com/?sl=auto&tl=en&text="""]))
+(add-to-list 'webjump-sites
+	     '("DOI" .
+	       [simple-query
+		"www.dx.doi.org/" "www.dx.doi.org/" ""]))
+(add-to-list 'webjump-sites
+	     '("Youtube" .
+	       [simple-query
+		"www.youtube.com" "https://www.youtube.com/results?search_query=" ""]))
+(add-to-list 'webjump-sites
+	     '("MediaWiki API" .
+	       [simple-query
+		"www.mediawiki.org" "https://www.mediawiki.org/wiki/API:" ""]))
+(add-to-list 'webjump-sites
+	     '("MDN" .
+	       [simple-query
+		"developer.mozilla.org" "https://developer.mozilla.org/en-US/search?q=" ""]))
+(add-to-list 'webjump-sites
+	     '("devdocs" .
+	       [simple-query
+		"devdocs.io" "https://devdocs.io/#q=" ""]))
 
-     ;; Some wiki defaults aren't great
-     (add-to-list 'webjump-sites
-		  '("Emacs Wiki" .  [simple-query
-				     "www.emacswiki.org"
-				     "https://duckduckgo.com/?q="
-				     "+site%3Aemacswiki.org"]))
-     (add-to-list 'webjump-sites
-		  '("Wikipedia" .  [simple-query
-				    "en.wikipedia.org"
-				    "https://en.wikipedia.org/wiki/Special:Search/"
-				    ""]))))
+;; Some wiki defaults aren't great
+(add-to-list 'webjump-sites
+	     '("Emacs Wiki" .
+	       [simple-query
+		"www.emacswiki.org" "https://duckduckgo.com/?q=" "+site%3Aemacswiki.org"]))
+(add-to-list 'webjump-sites
+	     '("Wikipedia" .
+	       [simple-query
+		"en.wikipedia.org" "https://en.wikipedia.org/wiki/Special:Search/" ""]))
+
+;; Redefine so it's first, or at least before google translate
+;; Needs to be slightly different than the previous one, hence the https
+(add-to-list 'webjump-sites
+	     '("Google" .
+	       [simple-query
+		"https://www.google.com" "www.google.com/search?q=" ""]))
 
 
 ;; browse-url-of-buffer will render the url assigned to a buffer.  This tells
@@ -2771,6 +2767,7 @@ This checks in turn:
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; cperl-mode: Better than perl-mode
+(require 'cperl-mode)
 ;; All the cperl options, bad?  Read docs for more info
 ;; Affects:
 ;; cperl-font-lock, cperl-electric-lbrace-space, cperl-electric-parens
@@ -2791,23 +2788,21 @@ This checks in turn:
 ;; Good?
 (setq cperl-highlight-variables-indiscriminately t)
 
-(eval-after-load "cperl-mode"
-  '(progn
-     ;; Do some color fixin' in cperl-mode, check out cperl-tips-faces
-     ;; Really need to play around with these when themin' FIXME TODO
-     (set-face-attribute 'cperl-array-face nil :background "nil" :foreground
-			 "blue") ; arrays
-     (set-face-attribute 'cperl-hash-face nil :background "nil" :foreground
-			 "red") ; hashes
-     ;; (set-face-attribute 'cperl-nonoverridable-face nil :background "nil"
-     ;;				 :foreground "nil") ; `print`, etc.
+;; Do some color fixin' in cperl-mode, check out cperl-tips-faces
+;; Really need to play around with these when themin' FIXME TODO
+(set-face-attribute 'cperl-array-face nil :background "nil" :foreground
+		    "blue") ; arrays
+(set-face-attribute 'cperl-hash-face nil :background "nil" :foreground
+		    "red") ; hashes
+;; (set-face-attribute 'cperl-nonoverridable-face nil :background "nil"
+;;				 :foreground "nil") ; `print`, etc.
 
-     ;; Was cperl-next-interpolated-REx-1
-     (define-key cperl-mode-map (kbd "C-c C-y") nil)
-     ;; Was auto-fill-mode
-     (define-key cperl-mode-map (kbd "C-c C-f") nil)
-     ;; Was cperl-find-bad-style
-     (define-key cperl-mode-map (kbd "C-c C-b") nil)))
+;; Was cperl-next-interpolated-REx-1
+(define-key cperl-mode-map (kbd "C-c C-y") nil)
+;; Was auto-fill-mode
+(define-key cperl-mode-map (kbd "C-c C-f") nil)
+;; Was cperl-find-bad-style
+(define-key cperl-mode-map (kbd "C-c C-b") nil)
 
 ;; cperl always better than perl
 (defalias 'perl-mode 'cperl-mode)
@@ -2824,6 +2819,7 @@ This checks in turn:
 ;; Perltidy: https://github.com/emacsmirror/emacswiki.org/blob/master/perltidy.el
 ;; Requires stand-alone command line program; uses ~/.perltidyrc
 ;; Requires loading tramp beforehand, or should I just patch? FIXME TODO
+(require 'tramp)
 ;; Required?  Hook into cperl mode or something? FIXME TODO
 (require 'perltidy)
 ;;;;;;;;;;;;;;;;;;;;
