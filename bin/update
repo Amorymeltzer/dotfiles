@@ -10,18 +10,20 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename "$0") [-bBmMekEKcCnNgrRpPLhH] [-sd]
+Usage: $(basename "$0") [-bBmMeEkKWcCnNgrRpPLhH] [-Sd]
 
-  -S		Skip all items that might need sudo (Macports, CPAN, ruby, cask)
+  -S		Skip all items that might need sudo (Macports, CPAN, ruby, homebrew-cask)
   -d		Debug mode: outputs timestamps for actions (WIP)
 
-  -b		skip updating macports base, but 'port sync' to update tree
-  -B		skip updating macports base AND 'port sync' to update tree
+  -b		skip updating macports base, but still 'port sync' to update definitions
+  -B		skip updating macports base AND skip 'port sync' to update definitions
   -m		check for macports updates but don't upgrade
   -M		skip all macports actions
-  -e		pull homebrew and hombrew-cask changes but don't upgrade homebrew
-  -k		skip all homebrew-cask updates
-  -E -K		skip all homebrew and homebrew-cask updates
+  -e		check for homebrew updates but don't upgrade
+  -E		skip all homebrew actions
+  -k		check for homebrew-cask updates but don't upgrade
+  -K		skip all homebrew-caske actions
+  -W		skip all homebrew and homebrew-cask updates
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
   -n		check for npm nodejs updates (global) but don't upgrade
@@ -37,7 +39,7 @@ END_HELP
 }
 
 # Parse commandline options
-while getopts 'SdbBcCeEgkKLmMnNpPrRhH' opt; do
+while getopts 'SdbBcCeEgkKWLmMnNpPrRhH' opt; do
     case $opt in
 	S) nosudo='1';;
 	d) debug='1';;
@@ -45,9 +47,11 @@ while getopts 'SdbBcCeEgkKLmMnNpPrRhH' opt; do
 	B) port_tree_flag='2';;
 	m) macports_flag='1';;
 	M) macports_all_flag='2';;
-	e) homebrew_flag='1';;
+	e) brew_flag='1';;
+	E) brew_all_flag='2';;
 	k) brewcask_flag='1';;
-	E|K) homebrew_all_flag='2';;
+	K) brewcask_all_flag='2';;
+	W) homebrew_all_flag='2';;
 	c) cpan_flag='1';;
 	C) cpan_all_flag='2';;
 	n) npm_flag='1';;
@@ -199,39 +203,42 @@ if [[ -z $nosudo && -z $cpan_all_flag ]]; then
 fi
 
 ## Should probably make this verbose or something
-## Something wrong with flags here FIXME TODO
 if [[ -z $homebrew_all_flag ]]; then
     updating 'Homebrew repository'
     brew update
-    if [[ -z $homebrew_flag ]]; then
+    if [[ -z $brew_all_flag ]]; then
 	brew_todo=$(brew outdated --formula)
 	if [[ -n $brew_todo ]]; then
-	    updating 'brews'
 	    echo "$brew_todo"
-	    # brew upgrade now handles casks, but I still prefer cu
-	    bug && echo "${brew_todo[@]}" | xargs bash -c 'for arg; do brew upgrade --formula "$arg"; done'
+	    if [[ -z $brew_flag ]]; then
+		updating 'brews'
+		# brew upgrade now handles casks, but I still prefer cu
+		bug && echo "${brew_todo[@]}" | xargs bash -c 'for arg; do brew upgrade --formula "$arg"; done'
 
-	    cleaning 'brews'
-	    brew cleanup -s
+		cleaning 'brews'
+		brew cleanup -s
+	    fi
 	else
 	    echo -e "${Color_Green}brews already up-to-date!${Color_zOff}"
 	fi
     fi
 
     # Might use sudo
-    if [[ -z $nosudo && -z $brewcask_flag ]]; then
+    if [[ -z $nosudo && -z $brewcask_all_flag ]]; then
 	# Uses brew cu, mainly for the superior pinning ability
 	# https://github.com/buo/homebrew-cask-upgrade
 	# Want autoupdating casks, but not latest
 	cask_todo=$(brew outdated --cask --greedy --verbose|grep -v latest)
 	if [[ -n $cask_todo ]]; then
-	    updating 'casks'
-	    # echo "$cask_todo"
-	    # Some apps require sudo
-	    brew cu -aqy --no-brew-update
+	    echo "$cask_todo"
+	    if [[ -z $brewcask_flag ]]; then
+		updating 'casks'
+		# Some apps require sudo
+		brew cu -aqy --no-brew-update
 
-	    cleaning 'casks'
-	    brew cleanup -s
+		cleaning 'casks'
+		brew cleanup -s
+	    fi
 	else
 	    echo -e "${Color_Green}casks already up-to-date!${Color_zOff}"
 	fi
