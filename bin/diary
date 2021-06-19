@@ -121,7 +121,10 @@ else
 
 		# Ensure there's just one file, and that it's today
 		status=$(git status --porcelain)
-		if [[ $(wc -l <<< "$status") -ne 1 ]]; then
+		if [[ -z $status ]]; then
+		    echo "No files present, exiting"
+		    exit 1
+		elif [[ $(wc -l <<< "$status") -ne 1 ]]; then
 		    echo "Too many files present, exiting"
 		    exit 1
 		elif [[ "$(cut -c 4- <<< "$status")" != "$today" ]]; then
