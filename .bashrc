@@ -1780,6 +1780,27 @@ function gz() {
 }
 
 
+# Copy OCR text from an image using tesseract
+# from https://www.stefanjudis.com/snippets/how-to-extract-text-from-an-image-via-the-cli/
+# via https://til.simonwillison.net/tesseract/tesseract-cli
+function extract-text-from-image() {
+  if [ $# -eq 0 ]; then
+    echo "Please specify the file you want to scan.";
+    echo "  -> extract-text-from-image /some/path/image.png";
+    return 1;
+  fi
+
+  TARGET_DIR=$(dirname "$1");
+  FILENAME=$(basename -- "$1");
+  FILENAME_WITHOUT_EXTENSION="${FILENAME%.*}";
+
+  tesseract "$1" "$TARGET_DIR/$FILENAME_WITHOUT_EXTENSION" -l eng txt;
+  pbcopy < "$TARGET_DIR/$FILENAME_WITHOUT_EXTENSION.txt";
+  rm "$TARGET_DIR/$FILENAME_WITHOUT_EXTENSION.txt";
+  echo "Text copied to clipboard!";
+}
+
+
 #### Dictionary stuff
 # wordnet
 dictionary () { curl dict://dict.org/d:"${1}":wn; }
