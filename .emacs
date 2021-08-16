@@ -1151,13 +1151,14 @@ current buffer" t)
 (display-time-mode t)
 
 ;; Battery percentage
-(when (not (equal "Battery status not available"
-		  (battery)))
-  (display-battery-mode t)
-  (setq battery-update-interval 180 ;; Default 60s
-	battery-mode-line-limit 95  ;; Default 100
-	battery-load-low 20	    ;; Default 25
-	battery-load-critical 10))  ;; Default 10
+;; Off because laptop battery is fucked
+;; (when (not (equal "Battery status not available"
+;; 		  (battery)))
+;;   (display-battery-mode t)
+;;   (setq battery-update-interval 180 ;; Default 60s
+;; 	battery-mode-line-limit 95  ;; Default 100
+;; 	battery-load-low 20	    ;; Default 25
+;; 	battery-load-critical 10))  ;; Default 10
 
 ;; Show column-number, size in the mode line
 (column-number-mode 1) ; performance hit?
