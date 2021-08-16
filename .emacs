@@ -1954,8 +1954,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;;    magit-todos-rg-extra-args '("--hidden")
 ;;    ;; Only go one level below the repo directory
 ;;    magit-todos-depth 1
-;;    ;; .git should be handled by the depth, but still.  See also:
-;;    ;; https://github.com/alphapapa/magit-todos/pull/115
+;;    ;; .git/ is the default
 ;;    magit-todos-exclude-globs '(".git/" ".emacs.d/")
 ;;    ;; hl-todo defines XXX+, a regex, which doesn't work
 ;;    ;; https://github.com/alphapapa/magit-todos/issues/101
