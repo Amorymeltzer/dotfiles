@@ -701,6 +701,7 @@ POS defaults to `point'."
 ;; less-well integrated.  If I really need something more full-fledged, I can
 ;; just use hl-todo, with something like the below:
 ;; (setq hl-todo '(t (:foreground "#e55c7a" :weight normal)))
+;; (setq hl-todo-wrap-movement t)
 ;; (setq hl-todo-keyword-faces
 ;;       '(("TODO"  . "pink")
 ;;	("FIXME" . "#cc9393")
