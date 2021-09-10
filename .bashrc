@@ -590,7 +590,8 @@ function recompile_emacs() {
 }
 alias ii=recompile_emacs
 
-alias m='emacs --eval "(progn (magit-status) (delete-other-windows))"'
+alias magit='emacs --eval "(progn (magit-status) (delete-other-windows))"'
+alias m='magit'
 # Make customization easier
 # Should these use $HOME? FIXME TODO
 alias bashrc='$VISUAL ~/.bashrc'
