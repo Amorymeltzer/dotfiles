@@ -105,6 +105,12 @@ if [[ -z $nosudo ]]; then
     fi
 fi
 
+# Keep-alive: update existing `sudo` time stamp until finished
+# Originally from https://gist.github.com/cowboy/3118588, but probably most
+# famously used in https://github.com/mathiasbynens/dotfiles
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+
 # Capture things it suggests, like port select and so on ;;;;;; ##### FIXME TODO
 # Uses sudo
 if [[ -z $nosudo && -z $macports_all_flag ]]; then
