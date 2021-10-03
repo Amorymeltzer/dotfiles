@@ -195,13 +195,18 @@ if [[ -z $nosudo && -z $cpan_all_flag ]]; then
 	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
 
 	    if [[ -f $(command -v cpanm) ]]; then
-		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; done'
+		if [[ -f $(command -v cpanm-reporter) ]]; then
+		    # Submit tests via cpanm
+		    bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; cpanm-reporter; done'
+		else
+		    bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; done'
+		fi
 	    else
 		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpan -i "$arg"; done'
+		# Unnecessary with cpanm
+		cleaning 'CPAN directories'
+		sudo cpanclean;
 	    fi
-	    # Unnecessary with cpanm
-	    # cleaning 'CPAN directories'
-	    # sudo cpanclean;
 	fi
     else
 	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
