@@ -20,12 +20,6 @@ lines = 20
 [ValuesAndExpressions::ProhibitMagicNumbers]
 allowed_values = all_integers
 
-# ProhibitStringyEval rightly prevents "eval $thing" but
-# the allow_includes let's a few minor cases sneak in
-# that I apparently find useful ("eval use diagnostics")
-[Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval]
-allow_includes = 1
-
 # Turn off warning, since the penalty is on perls less than 5.18, which is not
 # super common in my life
 [-Modules::RequireNoMatchVarsWithUseEnglish]
