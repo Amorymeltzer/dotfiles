@@ -57,3 +57,5 @@ severity = 1
 [-ErrorHandling::RequireCarping]
 # Don't demand long numbers have underscores, that's absurd
 [-ValuesAndExpressions::RequireNumberSeparators]
+# Don't worry about capitalization of variables, camelCase rules anyway
+[-NamingConventions::Capitalization]
