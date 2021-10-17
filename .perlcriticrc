@@ -33,6 +33,10 @@ only_in_void_context = 1
 [Subroutines::RequireArgUnpacking]
 short_subroutine_statements = 1
 
+# Allow terminal Log::Log4perl functions
+[Subroutines::RequireFinalReturn]
+terminal_funcs = LOGDIE LOGEXIT
+
 # Bump these up from level 1 to level 2
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 severity = 2
