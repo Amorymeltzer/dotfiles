@@ -22,7 +22,7 @@ Usage: $(basename "$0") [-bBmMeEkKWcCnNgrRpPLhH] [-Sd]
   -e		check for homebrew updates but don't upgrade
   -E		skip all homebrew actions
   -k		check for homebrew-cask updates but don't upgrade
-  -K		skip all homebrew-caske actions
+  -K		skip all homebrew-cask actions
   -W		skip all homebrew and homebrew-cask updates
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
@@ -185,6 +185,8 @@ if [[ -z $nosudo && -z $ruby_all_flag ]]; then
 fi
 
 # Uses sudo; requires cpan-outdated https://metacpan.org/pod/cpan-outdated
+## TODO: Figure out if installed with sudo, probably by checking $PERL5LIB,
+## $PERL_MM_OPT, @INC, etc.
 if [[ -z $nosudo && -z $cpan_all_flag ]]; then
     checking 'CPAN modules'
     cpan_todo=$(cpan-outdated --verbose --exclude-core)

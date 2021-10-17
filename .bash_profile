@@ -57,11 +57,11 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     PERL_MB_OPT="--install_base $HOME/perl5"; export PERL_MB_OPT;
     PERL_MM_OPT="INSTALL_BASE=/$HOME/perl5"; export PERL_MM_OPT;
 else
-    ## Add perl execs
     # Perhaps the next time I upgrade perl, I'll wait before installing
     # anything, and set PERL5LIB, etc. to something like the above.  Might be
-    # easier (https://formyfriendswithmacs.com/macports.html) but seemsa  pain
+    # easier (https://formyfriendswithmacs.com/macports.html) but seems a pain
     # to actively convert the current setup.
+    ## Add perl execs
     # Wrapped quotes and trailing space is annoying, but probably more
     # portable not to hardcode these
     perl5_vendorbin=$(perl -V::vendorbin:|tr -d ' '|tr -d \')
