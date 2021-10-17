@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Data::Printer
+# key: ddp
+# --
+use DDP;
+p ${1:var};
