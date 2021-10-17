@@ -59,3 +59,17 @@ severity = 1
 [-ValuesAndExpressions::RequireNumberSeparators]
 # Don't worry about capitalization of variables, camelCase rules anyway
 [-NamingConventions::Capitalization]
+
+## Perl::Critic::Bangs https://metacpan.org/pod/Perl::Critic::Bangs
+# Allow TODOs, etc.
+[-Bangs::ProhibitFlagComments]
+# Raise to severity 4 from 3, despite being largely cosmetic
+[Bangs::ProhibitNumberedNames]
+severity = 4
+[Bangs::ProhibitVagueNames]
+severity = 4
+
+## Perl::Critic::Pulp https://metacpan.org/pod/Perl::Critic::Pulp
+# Yes, easier to maintain, but unnecessary, and I prefer the visual difference
+# for the last item, just as with JavaScript
+[-CodeLayout::RequireTrailingCommaAtNewline]
