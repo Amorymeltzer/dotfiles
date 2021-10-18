@@ -901,7 +901,7 @@ if [[ -f $(command -v brew) ]]; then
     alias dgh='cd $brew_repo'
     alias dgc='cd $brew_repo/Library/Taps/homebrew/homebrew-cask'
 
-    # Make homebrew verbose by defaults
+    # Make homebrew verbose by default
     # export HOMEBREW_VERBOSE=1
     # Don't build from source
     export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=1
@@ -924,7 +924,7 @@ if [[ -f $(command -v brew) ]]; then
 
     # Homebrew-cask
     # Symlink in /Applications
-    export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook"
+    export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook  --fontdir=/Library/Fonts"
 fi
 
 # bundle exec alias
