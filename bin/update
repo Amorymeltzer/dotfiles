@@ -198,8 +198,10 @@ if [[ -z $nosudo && -z $cpan_all_flag ]]; then
 
 	    if [[ -f $(command -v cpanm) ]]; then
 		if [[ -f $(command -v cpanm-reporter) ]]; then
-		    # Submit tests via cpanm
-		    bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; cpanm-reporter; done' _
+
+		    # Manually submit tests via cpanm, as it's not fully
+		    # integrated to cpanm, as opposed to cpan (when configured)
+		    bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; echo -e "${Color_Green}Submitting test results to CPAN{Color_zOff}..."; cpanm-reporter; done' _
 		else
 		    bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; done' _
 		fi
