@@ -49,6 +49,12 @@ severity = 1
 # [ErrorHandling::RequireCarping]
 # severity = 2
 
+# Haha no
+[InputOutput::RequireCheckedSyscalls]
+functions = :builtins
+exclude_functions = print
+
+
 ## I do not agree with these, so never load them
 # [-CodeLayout::ProhibitHardTabs]
 # Requires /m flag on regex (^ and $ match line not just string)
@@ -63,6 +69,8 @@ severity = 1
 [-ValuesAndExpressions::RequireNumberSeparators]
 # Don't worry about capitalization of variables, camelCase rules anyway
 [-NamingConventions::Capitalization]
+# Similar to Pulp's newline below; technically easier, but nah
+[-CodeLayout::RequireTrailingCommas]
 
 ## Perl::Critic::Bangs https://metacpan.org/pod/Perl::Critic::Bangs
 # Allow TODOs, etc.
