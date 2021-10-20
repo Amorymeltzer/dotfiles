@@ -1,5 +1,9 @@
 verbose = 9
 
+# Sigh.  Perl::Critic::Community is nice, but the alias with Freenode just means
+# there's a fair bit if duplication.  Annoying.
+exclude = Freenode
+
 #safari = 1
 
 # Minimum length of regex before whining about /x
