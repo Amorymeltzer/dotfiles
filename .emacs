@@ -2633,6 +2633,11 @@ in the buffer." t)
 	     '("devdocs" .
 	       [simple-query
 		"devdocs.io" "https://devdocs.io/#q=" ""]))
+(add-to-list 'webjump-sites
+	     '("MetaCPAN" .
+	       [simple-query
+		;; Jump right to the pod page, rather than search; liable to be fine
+		"metacpan.org" "https://metacpan.org/pod/" ""]))
 
 ;; Some wiki defaults aren't great
 (add-to-list 'webjump-sites
