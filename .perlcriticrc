@@ -85,3 +85,10 @@ severity = 4
 # Yes, easier to maintain, but unnecessary, and I prefer the visual difference
 # for the last item, just as with JavaScript
 [-CodeLayout::RequireTrailingCommaAtNewline]
+
+## Perl::Critic::Community https://metacpan.org/pod/Perl::Critic::Community
+# Require while <> to do while my $line <>.  I *do* agree it's better, but
+# somtimes I just want something short and $_ is *very* Perlish.
+# Lower severity to 3 from 4
+[Community::WhileDiamondDefaultAssignment]
+severity = 3
