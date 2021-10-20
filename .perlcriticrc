@@ -86,6 +86,9 @@ severity = 4
 severity = 4
 
 ## Perl::Critic::Pulp https://metacpan.org/pod/Perl::Critic::Pulp
+# This feels like it should be much higher!  Annoying duplication in flycheck?
+[ValuesAndExpressions::ProhibitArrayAssignAref]
+severity = 5
 # Yes, easier to maintain, but unnecessary, and I prefer the visual difference
 # for the last item, just as with JavaScript
 [-CodeLayout::RequireTrailingCommaAtNewline]
