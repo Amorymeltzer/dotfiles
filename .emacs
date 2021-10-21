@@ -1007,7 +1007,8 @@ current buffer" t)
 	     "# " _ \n
 	     \n "use strict;" \n
 	     "use warnings;" \n
-	     "use diagnostics;" \n))
+	     "use English qw(-no_match_vars); # Avoid regex speed penalty in perl <=5.16" \n \n
+	     "use diagnostics # Remove after development;" \n))
 
      ;; shell script
      (define-auto-insert '("\\.\\(ba\\)?sh\\'" . "Bash skeleton")
