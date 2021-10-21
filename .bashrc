@@ -269,6 +269,12 @@ export LESS_TERMCAP_us=$'\033[4;35m' # begin underline
 
 # more is less
 alias more='less'
+# bat is even more, and at this point, the muscle memory is engrained
+# https://github.com/sharkdp/bat
+if [[ ! -f $(command -v bat) ]]; then
+    alias bat='more'
+fi
+
 
 # Open the manual page for the last command you executed.
 function lastman {
