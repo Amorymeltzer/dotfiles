@@ -905,7 +905,7 @@ if [[ -f $(command -v port) ]]; then
     alias pun='sudo port uninstall'
 
     function pmoreinfo() {
-	psearch "$1" | grep @ | cut -f 1 -d ' ' | while read -r prt; do pinfo "$prt"; done;
+	port search "$1" | grep @ | cut -f 1 -d ' ' | while read -r prt; do port info "$prt"; done;
     }
 
     # Macports changelog
