@@ -665,6 +665,18 @@ alias linecount='count'
 # Colorized cat
 alias cot='pygmentize -O bg=light -g'
 
+# Get equivalent of open on non-macOS systems
+if [[ ! -f $(command -v open) ]]; then
+    case "$OSTYPE" in
+	cygwin*)
+	    alias open="cmd /c start";;
+	linux*)
+	    alias open="xdg-open";;
+	darwin*)
+	    alias open='echo "How is there no open here?"'
+    esac
+fi
+
 # o with no args opens current directory, otherwise opens the given location
 function o() {
     if [ $# -eq 0 ]; then
