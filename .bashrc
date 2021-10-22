@@ -943,6 +943,16 @@ if [[ -f $(command -v brew) ]]; then
     # Homebrew-cask
     # Symlink in /Applications
     export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook  --fontdir=/Library/Fonts"
+
+    # Quick homebrew-cask livecheck, relies on HOMEBREW_LIVECHECK_WATCHLIST,
+    # which defaults to ~/.brew_livecheck_watchlist
+    function livecheck-cask() {
+	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
+	    brew update && brew livecheck --cask --newer-only -q
+	else
+	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
+	fi
+    }
 fi
 
 # bundle exec alias
