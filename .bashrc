@@ -731,7 +731,7 @@ alias rd='rmdir'
 
 # mkdir then cd
 function mkcd() {
-    if [ -z  "$1" ]; then
+    if [ -z "$1" ]; then
 	echo "Enter a directory name"
     elif [ -d "$1" ]; then
 	echo "$1 already exists"
@@ -872,7 +872,7 @@ if [[ -f $(command -v rg) ]]; then
     alias rgiC='rgC -i'
 fi
 
-# Applications
+# Applications, probably only useful on $OSTYPE=darwin
 #ls | open -f # pipe ls, open in default application (probably texteditor)
 alias reveal='open -R'
 alias preview='open -a preview'
@@ -987,9 +987,20 @@ alias d="diary "
 
 alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 
+# Quickly open MetaCPAN.  Probably pointless, but I find I'm reaching for the
+# terminal and not a launcher or something more correct
+function metacpan() {
+    if [ -n "$1" ]; then
+	open "https://metacpan.org/pod/${1}"
+    else
+	open "https://metacpan.org/"
+    fi
+
+}
+
 # Start an HTTP server from a directory, optionally specifying the port
 function server() {
-    local port="${1:-8000}"
+    local port="${1:+$1}"
     sleep 1 && open "http://localhost:${port}/" &
     python -m SimpleHTTPServer "$port"
 }
