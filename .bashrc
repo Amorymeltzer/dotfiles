@@ -535,6 +535,13 @@ fi
 # Needs to be dependent on existing FIXME TODO
 export PERL5DB='use Devel::NYTProf'
 
+# Easier Devel::Cover tests.  Could set HARNESS_PERL_SWITCHES=-MDevel::Cover but
+# then prove would *always* use Devel::Cover and I definitely don't want that.
+# FIXME TODO Should probably make this a function so as to better send
+# parameters to the right place, whatever that is.  Right now it's the directory
+# for prove
+alias provecover="prove -e 'perl -MDevel::Cover' "
+
 # Access Perl::Critic documentation
 if [[ -f $(command -v perlcritic) ]]; then
     function explain_perlcritic() {
