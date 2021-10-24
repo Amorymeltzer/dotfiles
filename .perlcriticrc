@@ -89,6 +89,10 @@ severity = 4
 # This feels like it should be much higher!  Annoying duplication in flycheck?
 [ValuesAndExpressions::ProhibitArrayAssignAref]
 severity = 5
+# Lower to 1 from 2, a bit much for personal stuff.  Only turned on if
+# Perl::MinimumVersion is available
+[Compatibility::PerlMinimumVersionAndWhy]
+severity = 1
 # Yes, easier to maintain, but unnecessary, and I prefer the visual difference
 # for the last item, just as with JavaScript
 [-CodeLayout::RequireTrailingCommaAtNewline]
