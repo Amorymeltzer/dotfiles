@@ -485,12 +485,12 @@ sources=("$HOME/.config/bash/priv-env.bash")
 # the latter.  Confident glob probably fine given the -f -r checks below.
 sources+=(/usr/local/etc/bash_completion.d/*)
 # Advanced bash completion https://github.com/scop/bash-completion
-# Standard location, in turn sources /usr/share/bash-completion/bash_completion
+# Standard location, would in turn source /usr/share/bash-completion/bash_completion
 sources+=("/etc/bash_completion")
 # Macports, in turn sources /opt/local/share/bash-completion/bash_completion
 sources+=("/opt/local/etc/bash_completion")
 # Supplement the above with some missing items (pip, gem), some mac-specific
-# ones (defaults, eject), and some personal pecadilloes
+# ones (defaults, eject), and some personal peccadilloes
 sources+=(~/.completions.d/*)
 # Source all the (readable) things (files)!
 for file in "${sources[@]}"; do
@@ -498,15 +498,13 @@ for file in "${sources[@]}"; do
 done;
 unset file;
 
-
-# whois, etc. auto-completion based on entries in known_hosts.
-# [[ -e "$HOME/.ssh/config" ]] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
+# Half-assedly replicate ssh, etc. completion for whois
 if [[ -e ~/.ssh/known_hosts ]]; then
-    # This completely supersedes the above-sourced ssh.completion file, need
-    # to stop that from happening. ;;;;;; ##### FIXME TODO
-    complete -o default -W "$(sed 's/[, ].*//' < ~/.ssh/known_hosts | sort | uniq | grep -v '[0-9]')" whois nslookup nmap
+    complete -o default -W "$(sed 's/[, ].*//' < ~/.ssh/known_hosts | sort | uniq | grep -v '[0-9]')" whois
 fi
-# Complete for g alias
+
+
+# Completion for g alias
 if type __git_complete &> /dev/null; then
     __git_complete g __git_main
 fi
