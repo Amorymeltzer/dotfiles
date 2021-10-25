@@ -533,12 +533,12 @@ fi
 # Needs to be dependent on existing FIXME TODO
 export PERL5DB='use Devel::NYTProf'
 
-# Easier Devel::Cover tests.  Could set HARNESS_PERL_SWITCHES=-MDevel::Cover but
-# then prove would *always* use Devel::Cover and I definitely don't want that.
-# FIXME TODO Should probably make this a function so as to better send
-# parameters to the right place, whatever that is.  Right now it's the directory
-# for prove
+# Easier Devel::Cover tests.  Should probably make these functions so as to
+# better send parameters to the right place, whatever that is.  Right now it's
+# the directory for prove FIXME TODO
 alias provecover="prove -e 'perl -MDevel::Cover' "
+# Set the harness, useful for testing with a local/uninstalled lib
+alias proveharness='HARNESS_PERL_SWITCHES=-MDevel::Cover prove -l '
 
 # Access Perl::Critic documentation
 if [[ -f $(command -v perlcritic) ]]; then
