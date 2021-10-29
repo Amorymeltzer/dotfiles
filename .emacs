@@ -512,6 +512,10 @@ Record that in `paradox--backups', but do nothing if
       flycheck-highlighting-mode 'sexps
       flycheck-mode-line-prefix "FlyC"
 
+      ;; Tell flycheck that sometimes Perl modules are in ./lib, or ../lib if
+      ;; you're in a testing directory /t.  Used with perl -I
+      flycheck-perl-include-path (list "./lib/" "../lib")
+
       flycheck-markdown-markdownlint-cli-config ".markdownlintrc"
       flycheck-perlcritic-severity 2)
 
