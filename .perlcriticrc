@@ -41,6 +41,18 @@ short_subroutine_statements = 1
 [Subroutines::RequireFinalReturn]
 terminal_funcs = LOGDIE LOGEXIT
 
+# Subroutine signatures are... fine?  They have been experimental for the better
+# part of a decade now but I think they're generally okay, if unused (see
+# https://github.com/Perl/perl5/issues/18537).  Perl::Critic takes umbrage with
+# 'em, even beyond their "experimental" status, so let's do this.  Turn off the
+# "zOMG you turned off warnings!" for experimental::signatures, and then ease up
+# a bit on disallowing signatures at all, lowering from severity 5 to 4, which
+# is what ProhibitNoWarnings ranks as.
+[TestingAndDebugging::ProhibitNoWarnings]
+allow = experimental::signatures
+[Subroutines::ProhibitSubroutinePrototypes]
+severity = 4
+
 # Bump these up from level 1 to level 2
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 severity = 2
