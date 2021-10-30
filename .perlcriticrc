@@ -56,8 +56,7 @@ severity = 1
 # Haha no
 [InputOutput::RequireCheckedSyscalls]
 functions = :builtins
-exclude_functions = print
-
+exclude_functions = print say
 
 ## I do not agree with these, so never load them
 # [-CodeLayout::ProhibitHardTabs]
@@ -75,6 +74,7 @@ exclude_functions = print
 [-NamingConventions::Capitalization]
 # Similar to Pulp's newline below; technically easier, but nah
 [-CodeLayout::RequireTrailingCommas]
+
 
 ## Perl::Critic::Bangs https://metacpan.org/pod/Perl::Critic::Bangs
 # Allow TODOs, etc.
