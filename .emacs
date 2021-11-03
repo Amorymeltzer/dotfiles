@@ -1980,6 +1980,18 @@ when in source code modes such as python-mode or perl-mode" t)
 (autoload 'gitattributes-mode "gitattributes-mode" "A major mode for editing .gitattributes files." t)
 
 
+;; Ability to mark commits in magit; not hugely used, but neat
+;; https://gitlab.com/ideasman42/emacs-magit-commit-mark
+;; Should maybe consider adjusting faces? FIXME TODO
+(with-eval-after-load 'magit
+  (add-hook 'magit-mode-hook 'magit-commit-mark-mode))
+(with-eval-after-load 'magit-log
+  (define-key magit-log-mode-map (kbd ";") 'magit-commit-mark-toggle-read)
+  (define-key magit-log-mode-map (kbd "M-;") 'magit-commit-mark-toggle-star)
+  ;; C-; no good?
+  (define-key magit-log-mode-map (kbd "M-'") 'magit-commit-mark-toggle-urgent))
+
+
 ;; git-timemachine https://gitlab.com/pidu/git-timemachine
 ;; Pretty cool!  t to search by commit, b to blame, c to view commit in magit
 (setq git-timemachine-abbreviation-length 8)
