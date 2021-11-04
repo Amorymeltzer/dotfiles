@@ -10,10 +10,9 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename "$0") [-bBmMeEkKWcCnNgrRpPLhH] [-Sd]
+Usage: $(basename "$0") [-bBmMeEkKWcCnNgrRpPLhH] [-S]
 
   -S		Skip all items that might need sudo (Macports, CPAN, ruby, homebrew-cask)
-  -d		Debug mode: outputs timestamps for actions (WIP)
 
   -b		skip updating macports base, but still 'port sync' to update definitions
   -B		skip updating macports base AND skip 'port sync' to update definitions
@@ -42,7 +41,6 @@ END_HELP
 while getopts 'SdbBcCeEgkKWLmMnNpPrRhH' opt; do
     case $opt in
 	S) nosudo='1';;
-	d) debug='1';;
 	b) port_base_flag='1';;
 	B) port_tree_flag='2';;
 	m) macports_flag='1';;
@@ -70,23 +68,16 @@ while getopts 'SdbBcCeEgkKWLmMnNpPrRhH' opt; do
 done
 
 
-# Modify output for debugging
-bug () {
-    if [[ -n "$debug" ]]; then
-	echo -ne "$(date -u +'%H:%M') "
-    fi
-}
-
 # Efficiently colorize
 updating () {
-    bug && echo -e "${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
+    echo -e "${Color_Cyan}Updating ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 cleaning () {
-    bug && echo -e "${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
+    echo -e "${Color_White}Cleaning ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 # FIXME TODO What's the issue?
 checking () {
-    bug && echo -e "${Color_Green}Checking ${Color_Magenta_Intense}$1${Color_zOff}..."
+    echo -e "${Color_Green}Checking ${Color_Magenta_Intense}$1${Color_zOff}..."
 }
 
 
@@ -127,13 +118,11 @@ if [[ -z $nosudo && -z $macports_all_flag ]]; then
     port_todo=$(port outdated | tail +2)
     if [[ -n $port_todo ]]; then
 	echo "$port_todo"
-	# Remove now-unnecessary version info
-	port_todo=$(cut -f 1 -d ' ' <<< "$port_todo")
 	echo -e "${Color_Green}What's new in ${Color_Red_Intense}MacPorts${Color_zOff}..."
-	echo "$port_todo" | xargs -n 1 ~/bin/port-whatsnew.sh
+	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [[ -z $macports_flag ]]; then
 	    updating 'Macports'
-	    bug && echo "${port_todo[@]}" | xargs bash -c 'for arg; do sudo port -p upgrade "$arg"; done' _
+	    sudo port -p upgrade outdated
 	    cleaning 'Macports'
 	    sudo port uninstall inactive;
 	    if [[ -n $(port echo leaves) ]]; then
@@ -175,7 +164,7 @@ if [[ -z $nosudo && -z $ruby_all_flag ]]; then
 	echo "$ruby_todo"
 	if [[ -z $ruby_flag ]]; then
 	    updating 'ruby gems'
-	    bug && echo "${ruby_todo[@]}" | cut -f 1 -d ' ' | xargs bash -c 'for arg; do sudo gem update "$arg"; done' _
+	    sudo gem update
 	    cleaning 'ruby gems'
 	    sudo gem cleanup;
 	fi
@@ -197,16 +186,14 @@ if [[ -z $nosudo && -z $cpan_all_flag ]]; then
 	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
 
 	    if [[ -f $(command -v cpanm) ]]; then
+		echo "$cpan_todo" | sudo cpanm
+		# Manually submit tests via cpanm-reporter, as it's not fully
+		# integrated to cpanm, as opposed to cpan (when configured)
 		if [[ -f $(command -v cpanm-reporter) ]]; then
-
-		    # Manually submit tests via cpanm, as it's not fully
-		    # integrated to cpanm, as opposed to cpan (when configured)
-		    bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; echo -e "${Color_Green}Submitting test results to CPAN${Color_zOff}..."; cpanm-reporter; done' _
-		else
-		    bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpanm "$arg"; done' _
+		    cpanm-reporter
 		fi
 	    else
-		bug && echo "${cpan_todo[@]}" | xargs bash -c 'for arg; do sudo cpan -i "$arg"; done' _
+		echo "$cpan_todo" | xargs sudo cpan -i
 		# Unnecessary with cpanm
 		cleaning 'CPAN directories'
 		sudo cpanclean;
@@ -228,7 +215,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	    if [[ -z $brew_flag ]]; then
 		updating 'brews'
 		# brew upgrade now handles casks, but I still prefer cu
-		bug && echo "${brew_todo[@]}" | xargs bash -c 'for arg; do brew upgrade --formula "$arg"; done' _
+		echo "$brew_todo" | xargs brew upgrade --formula
 
 		cleaning 'brews'
 		brew cleanup -s
@@ -270,7 +257,7 @@ if [[ -z $npm_all_flag ]]; then
 	    updating 'npm nodejs packages (global)'
 	    # skip column headers, pass package names to npm install since
 	    # global implies caret semver https://github.com/npm/cli/issues/746
-	    bug && echo "${npm_todo[@]}" | tail -n +2 | cut -f 1 -d ' ' | xargs bash -c 'for arg; do npm install --global "$arg"; done' _
+	    echo "$npm_todo" | tail -n +2 | cut -f 1 -d ' ' | xargs npm install --global
 	fi
     else
 	echo -e "${Color_Green}npm nodejs packages already up-to-date!${Color_zOff}"
@@ -284,7 +271,7 @@ if [[ -z $python_all_flag ]]; then
 	echo "$python_todo"
 	if [[ -z $python_flag ]]; then
 	    updating 'pip python packages'
-	    bug && grep -v '^\-e' <<< "$python_todo" | cut -d ' ' -f 1 | tail +3 | xargs bash -c 'for arg; do pip install --upgrade --user "$arg"; done' _
+	    grep -v '^\-e' <<< "$python_todo" | cut -d ' ' -f 1 | tail +3 | xargs pip install --upgrade --user
 	fi
     else
 	echo -e "${Color_Green}pip python packages already up-to-date!${Color_zOff}"
