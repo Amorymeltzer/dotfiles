@@ -562,7 +562,9 @@ if [[ -f $(command -v perlcritic) ]]; then
     }
     complete -F _explain_perlcritic explain_perlcritic
 fi
-# shorthand for perlfunc
+
+# perldoc shorthands
+# perlfunc
 function pf() {
     if [ $# -eq 0 ]; then
 	perldoc perlfunc
@@ -570,6 +572,15 @@ function pf() {
 	perldoc -f "$@"
     fi
 }
+# perlvar
+function pv() {
+    if [ $# -eq 0 ]; then
+	perldoc perlvar
+    else
+	perldoc -v "$@"
+    fi
+}
+# search perlfaq
 function pq() {
     perldoc -q "$@"
 }
