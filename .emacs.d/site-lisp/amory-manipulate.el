@@ -52,6 +52,7 @@
 
 ;; Make three follow-mode windows, evenly spaced
 (defun all-over-the-screen ()
+  "Split the window and turn on follow-mode."
   (interactive)
   (delete-other-windows)
   (split-window-horizontally)
