@@ -273,6 +273,11 @@ alias more='less'
 # https://github.com/sharkdp/bat
 if [[ ! -f $(command -v bat) ]]; then
     alias bat='more'
+
+    # I think the manpager above is fine (less -FXiRgMw) but for perldoc bat
+    # makes at least a modicum of effort.  Not perfect but at least there's
+    # *some* delineation
+    export PERLDOC_PAGER="sh -c 'col -bx | bat -l man -p'"
 fi
 
 
