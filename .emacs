@@ -2370,6 +2370,11 @@ using `ido-completing-read'."
 ;; Make links in man pages, etc., work, in ansi-mode
 (add-hook 'term-mode-hook 'goto-address-mode)
 
+;; Add some coloring to manpages, not much tbh
+(require 'man)
+(set-face-attribute 'Man-overstrike nil :inherit font-lock-builtin-face :bold t)
+(set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t)
+
 ;; Convert DOS `^M' end of lines to Unix end of lines.  See also
 ;; set-buffer-file-coding-system (C-x RET f) with unix.  Do for mac?
 (defun dos-to-unix ()
