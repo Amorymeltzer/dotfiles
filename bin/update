@@ -181,9 +181,13 @@ if [[ -z $nosudo && -z $cpan_all_flag ]]; then
     cpan_todo=$(cpan-outdated --verbose --exclude-core)
     if [[ -n $cpan_todo ]]; then
 	echo "$cpan_todo"
+	cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
+	if [[ -f $(command -v cpan-listchanges) ]]; then
+	    echo -e "${Color_Green}What's new in ${Color_Red_Intense}CPAN modules${Color_zOff}..."
+	    cpan-listchanges `echo "$cpan_todo"`
+	fi
 	if [[ -z $cpan_flag ]]; then
 	    updating 'CPAN modules'
-	    cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
 
 	    if [[ -f $(command -v cpanm) ]]; then
 		echo "$cpan_todo" | sudo cpanm
