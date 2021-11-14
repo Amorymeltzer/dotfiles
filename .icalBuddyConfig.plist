@@ -17,16 +17,18 @@
   <key>excludeEventProps</key>
   <string>url</string>
   <key>excludeCals</key>
-  <string>Birthdays,Moon Phases</string>
+  <string>Birthdays,Moon Phases,NYT Astronomy and Space</string>
   <key>formatOutput</key>
   <true/>
+  <key>dateFormat</key>
+  <string>%RD (%a %b %e)</string>
 </dict>
 <key>formatting</key>
 <dict>
   <key>datetimeName</key>
   <string>cyan</string>
   <key>datetimeValue</key>
-  <string>yellow</string>
+  <string>cyan</string>
   <key>titleValue</key>
   <string>bright-magenta</string>
   <key>notesName</key>
@@ -40,7 +42,7 @@
   <key>locationName</key>
   <string>cyan</string>
   <key>locationValue</key>
-  <string>white</string>
+  <string>bright-black</string>
   <key>dueDateName</key>
   <string>cyan</string>
   <key>dueDateValue</key>
