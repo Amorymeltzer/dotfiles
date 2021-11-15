@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 echo -e "\t${Color_Magenta}Scanning $HOME/${Color_zOff}"
-clustergit -Rqd $HOME -b 'master'
+clustergit -a 80 -Hqd $HOME
 echo -e "\t${Color_Magenta}Scanning $PERL_PERS_DIR/${Color_zOff}"
-clustergit -Rqd $PERL_PERS_DIR -b 'master'
+clustergit -a 80 -Hqd $PERL_PERS_DIR
 echo -e "\t${Color_Magenta}Scanning $GIT_PERS_DIR/${Color_zOff}"
-clustergit -Rqd $GIT_PERS_DIR -b 'master'
+clustergit -a 80 -Hqd $GIT_PERS_DIR
