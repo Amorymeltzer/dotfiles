@@ -447,6 +447,7 @@ singleKey = true
 
 [help]
 # If there's only suggestion from a typo, automatically call it after 1.5s
+# On git 2.34, this can be prompt for interactive
 autocorrect = 15
 
 [diff]

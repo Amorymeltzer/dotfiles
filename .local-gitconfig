@@ -102,3 +102,6 @@ remote = origin
 
 [ghi]
 token = !security find-internet-password -a $(git config --get github.user) -s github.com -l 'ghi token' -w
+	
+# Might be good to start using this a bit?  Maybe with gc on
+# [maintenance]

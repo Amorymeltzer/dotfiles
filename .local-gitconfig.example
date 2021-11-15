@@ -99,3 +99,6 @@ pager = less
 
 [tiny-scripts]
 remote = origin
+
+# Might be good to start using this a bit?  Maybe with gc on
+# [maintenance]
