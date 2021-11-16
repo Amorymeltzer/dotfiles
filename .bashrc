@@ -1742,9 +1742,13 @@ function family()
 # Using Rscript allows more complex constructions, wrap () in quotes
 # http://www.compbiome.com/2010/06/r-command-line-calculator-using-rscript.html
 alias calc='Rscript -e "eval( parse( text=commandArgs( TRUE ) ) )"'
-
 function =() {
     calc "$@"
+}
+
+# Basic summary statistics.  md/msdir was better
+function summary-stats {
+    Rscript -e 'summary (as.numeric (readLines ("stdin")))' "$@"
 }
 
 # Calculate factors
