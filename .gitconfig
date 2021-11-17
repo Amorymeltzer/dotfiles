@@ -64,8 +64,10 @@ gpgSign = true
 #
 # Thus, this is used (via https://stackoverflow.com/a/65859728/2521092): it's
 # (probably) faster, doesn't rely on remotes, and can have several backup
-# options
-default-branch = "!git branch | grep -o -m1 '\\b\\(main\\|master\\)\\b'"
+# options.  It uses the inverse of the default, descending refname, to enable
+# "dev" as a third option when main or master are not found.  This is only
+# possible since we're using the -m1 option for grep.
+default-branch = "!git branch --sort=-refname | grep -o -m1 '\\b\\(main\\|master\\|dev\\)\\b'"
 	
 
 h = help
@@ -109,6 +111,11 @@ acc = "!git add -A; git diff --staged --name-only --quiet || git commit --amend 
 ap  = add -p
 ai  = add -p
 
+# Create and/or go to a branch
+# With git 2.23, uses switch -c; can do the same with checkout -b
+go = "!f() { git switch -c \"$1\" 2> /dev/null || git switch \"$1\"; }; f"
+
+# Intentionally missing -b to avoid erroneous checkouts of wrong default branch
 co = checkout
 com = "!git checkout $(git default-branch)"
 cog = checkout gh-pages
@@ -116,6 +123,7 @@ cod = checkout dev
 gom = "!git checkout $(git default-branch)"
 gog = checkout gh-pages
 god = checkout dev
+
 wc = whatchanged
 
 s = status --short --branch
@@ -253,10 +261,6 @@ recently-checkedout-branches = "!git reflog -n 100 | egrep -io \"moving from ([^
 # Only show most recent 15, could also use branch --sort=-committerdate as of 2.7
 # Potentially overridden in local-config to use date=human after 2.21, see also lor and [log]
 recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(color:red)%(objectname:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset)) %(contents:subject) %(color:blue)[%(authorname)]%(color:reset)'
-
-# Create and/or go to a branch
-# With git 2.23, uses switch -c; can do the same with checkout -b
-go = "!f() { git switch -c \"$1\" 2> /dev/null || git switch \"$1\"; }; f"
 
 # Easily rememberable
 remove-merged-branches = delete-merged-branches
