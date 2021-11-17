@@ -49,8 +49,8 @@ icd = icdiff
 ic = icdiff
 icdc = icdiff --cached
 icc = icdiff --cached
-icm = icdiff master
-icmc = icdiff --cached master
+icm = "!git icdiff $(git default-branch)"
+icmc = "!git icdiff --cached $(git default-branch)"
 icu = icdiff @{upstream}
 icuc = icdiff --cached @{upstream}
 icp = "!f() { c=${1:-HEAD}; git icdiff $c~ $c; }; f"
@@ -64,8 +64,8 @@ si = "!git diff --no-color $@ | delta --features 'side-styles inline-line-styles
 sid = si
 sic = si --cached
 sidc = sic
-sim = si master
-simc = si --cached master
+sim = "!git si $(git default-branch)"
+simc = "!git si --cached $(git default-branch)"
 siu = si @{upstream}
 siuc = si --cached @{upstream}
 sip = "!f() { c=${1:-HEAD}; git si $c~ $c; }; f"

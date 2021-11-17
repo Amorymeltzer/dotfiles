@@ -2,6 +2,8 @@
 protocol = https
 
 [credential]
+# Should maybe just remove and rely on shipped gitconfig, since that should be
+# appropriate for the system?
 helper = osxkeychain
 
 [core]
@@ -36,6 +38,36 @@ gpgSign = true
 # gpg.program set in include
 
 [alias]
+# HEAVILY relied upon
+
+# With git 2.28, init can set a defaultBranch different than `master`, and a lot
+# of projects are now using main.  That's good.  It's a pain for git aliases,
+# though, since git (unlike, say, bash), can't really "store" information, so
+# there's no way to set ahead of time what the current repo's main branch is.
+# As such, any alias that wants to, say, show commits between the main branch
+# and HEAD can't assume `git log master..HEAD` or `git log main..HEAD` will
+# work. Instead, we have to use a function that will figure out the default
+# branch and then supply that to other aliases.  This is a pain since a simple
+# `lm = log main..HEAD` has to instead become `lm = "!git log $(git
+# default-branch)..HEAD"` but here we are.
+
+# The concept of a default branch doesn't really make sense in the lofty sense
+# of git (reasonably good (if under-appreciated) comment here gets into it a
+# bit: https://stackoverflow.com/a/65710958/2521092) but in practice, we all
+# know what that means.  It's possible to figure it out by parsing remotes with
+# `git show remote` (https://stackoverflow.com/a/50056710/2521092) or `git
+# symbolic-ref refs/remotes/origin/HEAD`
+# (https://stackoverflow.com/a/44750379/2521092) but those rely on there *being*
+# a remote, and that there is a reliable, consistent naming scheme to those
+# remotes.  In practice, both are likely, but neither is reliable; moreover,
+# they don't fail nicely.
+#
+# Thus, this is used (via https://stackoverflow.com/a/65859728/2521092): it's
+# (probably) faster, doesn't rely on remotes, and can have several backup
+# options
+default-branch = "!git branch | grep -o -m1 '\\b\\(main\\|master\\)\\b'"
+	
+
 h = help
 hc = help config
 cfg = config
@@ -78,10 +110,10 @@ ap  = add -p
 ai  = add -p
 
 co = checkout
-com = checkout master
+com = "!git checkout $(git default-branch)"
 cog = checkout gh-pages
 cod = checkout dev
-gom = checkout master
+gom = "!git checkout $(git default-branch)"
 gog = checkout gh-pages
 god = checkout dev
 wc = whatchanged
@@ -118,9 +150,9 @@ las = log --graph --decorate --oneline --all --simplify-by-decoration
 
 ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
 ld5 = ld -5
-ldm = ld master..HEAD
+ldm = "!git ld $(git default-branch)..HEAD"
 lmd = ldm
-ldm5 = ld5 master..HEAD
+ldm5 = "!git ld5 $(git default-branch)..HEAD"
 ld5m = ldm5
 
 # Potentially overridden in local-config to use date=human after 2.21, see also recent-branches-by-commit and [log]
@@ -128,15 +160,15 @@ lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]
 lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %Cgreen(A: %cr, C: %ar)%C(blue) [%an]%Creset' --abbrev-commit --date=relative
 
 lr5 = lr -5
-lrm = lr master..HEAD
+lrm = "!git lr $(git default-branch)..HEAD"
 lmr = lrm
-lrm5 = lr5 master..HEAD
+lrm5 = "!git lr5 $(git default-branch)..HEAD"
 lr5m = lrm5
 
 graph = lg
 
-lm = log --oneline --decorate master..HEAD
-llm = log --notes --decorate master..HEAD
+lm = "!git log --oneline --decorate $(git default-branch)..HEAD"
+llm = "!git log --notes --decorate $(git default-branch)..HEAD"
 
 loh = log --oneline --decorate origin/HEAD..HEAD
 lloh = log --notes --decorate origin/HEAD..HEAD
@@ -158,7 +190,7 @@ lls = "!git log $(git split-from)..head"
 # Should probably use $@ in more places to allow subsequent flags to pass
 
 # @ == HEAD, but head is complicated
-# Can prefix with a ref (master, dev, etc.), otherwise assumes current branch
+# Can prefix with a ref (main, dev, etc.), otherwise assumes current branch
 # @{1} is the previous value of the ref (eg. prior to an amend), which is
 # *almost* the same as ORIG_HEAD, which is the previous value of head before a
 # drastic/risky operation (man gitrevisions and https://stackoverflow.com/a/967611/2521092)
@@ -234,7 +266,7 @@ list-large-files = big-object-report
 # Feels like --fork-point should help but no???
 # The trailing # means the $1 and $2 arguments don't get gobbled up along the
 # way, should probably make better use of this throughout this config
-split-from = "!git merge-base ${1:-master} ${2:-HEAD} #"
+split-from = "!git merge-base ${1:-$(git default-branch)} ${2:-HEAD} #"
 
 
 rb = rebase
@@ -243,8 +275,8 @@ reba = rebase --abort
 rebc = rebase --continue
 rebs = rebase --skip
 rebq = rebase --quit
-rbm = rebase master
-rebm = rebase master
+rbm = "!git rebase $(git default-branch)"
+rebm = "!git rebase $(git default-branch)"
 rebd = rebase dev
 rebu = rebase @{upstream}
 # Interactive rebase with the selected number of latest commits
@@ -252,7 +284,7 @@ rebu = rebase @{upstream}
 rebi = "!git rebase -i HEAD~$1 \"${@:2}\" #"
 # As above, but with the --exec option
 rebix = "!git rebase -i -x \"$2\" HEAD~$1 \"${@:3}\" #"
-rebim = rebase -i master
+rebim = "!git rebase -i $(git default-branch)"
 # Relies on split-from alias, rebases commits since splitting this branch
 rebis = "!git rebase -i $(git split-from)"
 
@@ -270,17 +302,17 @@ squash-fixup-pick = "!sha=$(git rev-parse $1) && git commit --squash $sha && git
 # Push and Pull
 po = push origin
 pou = push -u origin
-pom = push origin master
+pom = "!git push origin $(git default-branch)"
 pog = push origin gh-pages
 pod = push origin dev
 # Use rebase to prevent unnecessary commits
-pum = pull --rebase origin master
+pum = "!git pull --rebase origin $(git default-branch)"
 puo = pull --rebase origin
 pu = pull --rebase
 # Personal remote
 pa = push Amorymeltzer
 pau = push -u Amorymeltzer
-pam = push Amorymeltzer master
+pam = "!git push Amorymeltzer $(git default-branch)"
 please = push --force-with-lease
 
 d = diff
@@ -289,10 +321,10 @@ dc = diff --cached
 dwc = diff --cached --word-diff
 patience = diff --patience
 dn = diff --name-only
-dm = diff master
-dmc = diff --cached master
-dmn = diff --name-only master
-dnm = diff --name-only master
+dm = "!git diff $(git default-branch)"
+dmc = "!git diff --cached $(git default-branch)"
+dmn = "!git diff --name-only $(git default-branch)"
+dnm = "!git diff --name-only $(git default-branch)"
 dnp = "!f() { c=${1:-HEAD}; git diff --name-only $c~ $c; }; f"
 du  = diff @{upstream}
 dun = diff --name-only @{upstream}
@@ -450,6 +482,11 @@ singleKey = true
 # On git 2.34, this can be prompt for interactive
 autocorrect = 15
 
+# Only added in 2.28, but unlike other config options, doesn't break on older
+# versions of git, so safe for legacy systems (no need for .local-gitconfig)
+[init]
+defaultBranch = main
+
 [diff]
 compactionHeuristic = true
 noprefix = true
@@ -529,7 +566,7 @@ error = red bold # Takes the help color unless otherwise specificed, default is 
 
 [gc]
 reflogExpire = 365		# Default 90 days
-reflogExpireUnreachable = 60 	# Default 30 days
+reflogExpireUnreachable = 60	# Default 30 days
 rerereResolved = 30		# Default is 15
 rerereUnresolved = 30		# Default is 15
 
