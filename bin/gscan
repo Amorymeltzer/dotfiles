@@ -2,7 +2,7 @@
 
 echo -e "\t${Color_Magenta}Scanning $HOME/${Color_zOff}"
 clustergit -a 80 -Hqd $HOME
-echo -e "\t${Color_Magenta}Scanning $PERL_PERS_DIR/${Color_zOff}"
-clustergit -a 80 -Hqd $PERL_PERS_DIR
 echo -e "\t${Color_Magenta}Scanning $GIT_PERS_DIR/${Color_zOff}"
 clustergit -a 80 -Hqd $GIT_PERS_DIR
+echo -e "\t${Color_Magenta}Scanning $GIT_EXTL_DIR/${Color_zOff}"
+clustergit -a 80 -Hqd $GIT_EXTL_DIR

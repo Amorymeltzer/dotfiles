@@ -480,7 +480,7 @@ trap _exit EXIT
 ## Sourcin'
 ## Throw all potential sources into an array, check, then source
 # Some personal/private stuff, used in various places, both bash and lisp
-# Consider loading in .bash_profile, with GIT_PERS_DIR and PERL_PERS_DIR??
+# Consider loading in .bash_profile, with GIT_PERS_DIR and GIT_EXTL_DIR??
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
 # DIARY_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
@@ -660,19 +660,21 @@ alias bin="cd ~/bin"
 alias dt="cd ~/dotfiles"
 alias dr="cd ~/Dropbox"
 alias de="cd ~/Desktop"
-alias dg='cd $GIT_PERS_DIR'
-alias dgt='cd $GIT_PERS_DIR/twinkle@azatoth'
-alias dgm='cd $GIT_PERS_DIR/twinkle@azatoth/modules'
+alias dg='cd $GIT_MAIN_DIR'
+alias dge='cd $GIT_EXTL_DIR'
+alias dgt='cd $GIT_EXTL_DIR/twinkle@azatoth'
+alias dgm='cd $GIT_EXTL_DIR/twinkle@azatoth/modules'
 alias dgj="dgm"
+alias dgp='cd $GIT_PERS_DIR'
+alias dp="dgp"
 alias dgs='cd $GIT_PERS_DIR/mls'
 alias dgw='cd $GIT_PERS_DIR/mediawiki'
-alias dp='cd $PERL_PERS_DIR'
-alias dps='cd $PERL_PERS_DIR/sandbox'
-alias dpk='cd $PERL_PERS_DIR/ksp'
-alias dpw='cd $PERL_PERS_DIR/wiki'
-alias dpc='cd $PERL_PERS_DIR/wiki/crathighlighter'
-alias dws='cd $PERL_PERS_DIR/wiki/sysopIndex'
-alias dwu='cd $PERL_PERS_DIR/wiki/userScripts'
+alias dps='cd $GIT_PERS_DIR/sandbox'
+alias dpk='cd $GIT_PERS_DIR/ksp'
+alias dpw='cd $GIT_PERS_DIR/wiki'
+alias dwc='cd $GIT_PERS_DIR/wiki/crathighlighter'
+alias dws='cd $GIT_PERS_DIR/wiki/sysopIndex'
+alias dwu='cd $GIT_PERS_DIR/wiki/userScripts'
 alias drk="cd ~/Documents/R/kinship/"
 alias edd="cd ~/.emacs.d/"
 alias e='$VISUAL '
@@ -1455,26 +1457,15 @@ function marketupdate() {
 }
 alias mu='marketupdate'
 alias stockmarket='ticker'
-alias inflation='perl $PERL_PERS_DIR/sandbox/inflation.pl'
-
-# Robinhood dashboard
-# https://github.com/bcwik9/robinhood-on-rails
-function robinhood() {
-    (cd "$GIT_PERS_DIR"/robinhood-on-rails@bcwik9/ ; exec bundle exec rails server & sleep 1 & browser http://localhost:3000/)
-}
-# Shell
-# https://github.com/anilshanbhag/RobinhoodShell
-function robinhood-shell() {
-    (cd "$GIT_PERS_DIR"/RobinhoodShell@anilshanbhag ; ./shell.py)
-}
+alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 
 # Update crathighlighter
 function crathighlighter() {
-    (cd "$PERL_PERS_DIR"/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl "$@")
+    (cd "$GIT_PERS_DIR"/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl "$@")
 }
 # Check twinkle
 function twinkleCheck() {
-    (cd "$PERL_PERS_DIR"/wiki/twinkle/ ; perl twinkleCheck.pl "$@")
+    (cd "$GIT_PERS_DIR"/wiki/twinkle/ ; perl twinkleCheck.pl "$@")
 }
 # Easy
 alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'

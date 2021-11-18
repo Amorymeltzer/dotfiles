@@ -11,8 +11,9 @@ export PERL_MM_USE_DEFAULT=1
 
 # Used in .bashrc as well
 # Generic default
-export GIT_PERS_DIR="$HOME"
-export PERL_PERS_DIR="$HOME"
+export GIT_MAIN_DIR="$HOME"
+export GIT_PERS_DIR="$GIT_MAIN_DIR"
+export GIT_EXTL_DIR="$GIT_MAIN_DIR"
 
 # Path ------------------------------------------------------------
 # Hold onto original path, defined first from /etc/profile, which on macOS
@@ -72,9 +73,9 @@ else
     # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
     MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$(manpath)"; export MANPATH
 
-    # Stuck on some 2007-era organization
-    export GIT_PERS_DIR="$HOME/Documents/git"
-    export PERL_PERS_DIR="$HOME/Documents/perl"
+    export GIT_MAIN_DIR="$HOME/Documents/git"
+    export GIT_PERS_DIR="$GIT_MAIN_DIR/personal"
+    export GIT_EXTL_DIR="$GIT_MAIN_DIR/external"
 fi
 
 # Add $HOME's node_modules, if present
@@ -101,14 +102,14 @@ new_path="$new_path:$(python -c 'import os;print(os.path.join(os.__file__.split(
 new_path="$new_path:$orig_path"
 
 # Latecomers
-if [[ -d "$GIT_PERS_DIR/git-extra-commands@unixorn" ]]; then
+if [[ -d "$GIT_EXTL_DIR/git-extra-commands@unixorn" ]]; then
     # Add git-extra-commands https://github.com/unixorn/git-extra-commands
-    new_path="$new_path:$GIT_PERS_DIR/git-extra-commands@unixorn/bin"
+    new_path="$new_path:$GIT_EXTL_DIR/git-extra-commands@unixorn/bin"
 fi
-if [[ -d "$GIT_PERS_DIR/tiny-scripts@vitorgalvao" ]]; then
+if [[ -d "$GIT_EXTL_DIR/tiny-scripts@vitorgalvao" ]]; then
     # Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
     # Don't need 'em all but better than alias/function-ing just a handful
-    new_path="$new_path:$GIT_PERS_DIR/tiny-scripts@vitorgalvao"
+    new_path="$new_path:$GIT_EXTL_DIR/tiny-scripts@vitorgalvao"
 fi
 
 # Add ~/bin ahead of everybody
