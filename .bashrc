@@ -273,7 +273,7 @@ alias more='less'
 # https://github.com/sharkdp/bat
 if [[ ! -f $(command -v bat) ]]; then
     alias bat='more'
-
+else
     # I think the manpager above is fine (less -FXiRgMw) but for perldoc bat
     # makes at least a modicum of effort.  Not perfect but at least there's
     # *some* delineation
