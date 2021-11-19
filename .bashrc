@@ -1410,6 +1410,9 @@ function mergepdf() {
     fi
 }
 
+# Can never remember
+alias htmltopdf='wkhtmltopdf'
+
 # Change working directory to the top-most Finder window location
 function cdfinder() {
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || return
