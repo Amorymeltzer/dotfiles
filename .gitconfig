@@ -275,6 +275,8 @@ list-large-files = big-object-report
 split-from = "!git merge-base ${1:-$(git default-branch)} ${2:-HEAD} #"
 
 
+first-commit = rev-list --max-parents=0 HEAD
+
 rb = rebase
 reb = rebase
 reba = rebase --abort
