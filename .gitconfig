@@ -140,6 +140,7 @@ stup = stash push -p		# Or just stash -p
 stum = stash push -m
 stump = stash push -pm
 stud = "!git stash push -m \"$(date)\""
+stash-backup = "!git stash push -m \"$(date)\" && git stash apply \"stash@{0}\""
 std = stash drop
 drop = stash drop
 stl = stash list
