@@ -1914,7 +1914,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq magit-repository-directories
       `(("~/dotfiles" . 0)
 	(,(getenv "GIT_PERS_DIR") . 1)
-	(,(getenv "PERL_PERS_DIR") . 1))
+	(,(getenv "GIT_EXTL_DIR") . 1))
       ;; Swap order so N is last
       magit-repolist-column-flag-alist
       '((magit-unstaged-files . "U")

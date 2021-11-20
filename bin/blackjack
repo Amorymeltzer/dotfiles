@@ -202,7 +202,7 @@ function predict() {
     # Shows proper strategy alongside. Good for learning, bad for playing
     echo -n "You should "
     echo -en ${Color_Red}
-    todo=$(perl ~/Documents/perl/sandbox/blackjackTester.pl $type $shown $toplay)
+    todo=$(perl $GIT_PERS_DIR/sandbox/blackjackTester.pl $type $shown $toplay)
     if [ $todo == H ]; then
 	echo -en ${Color_Red}
     elif [ $todo == S ]; then

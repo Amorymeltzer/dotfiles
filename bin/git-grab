@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CODE="$HOME/Documents/git"
+CODE="$GIT_EXTL_DIR"
 [ $# -eq 0 ] && {
   echo "Clones a repository to $CODE/name@owner"
 	echo "usage: git-grab <repo>"
