@@ -806,8 +806,7 @@ function cal {
 
 # Human-readable values, and a total for du
 alias df='df -h'
-# Also ignore stupid things that require permissions
-alias du='du -hc -I .cpan -I .config'
+alias du='du -hc'
 # Depth of 1, the minimum
 alias dud='du -d 1'
 
@@ -1230,6 +1229,7 @@ alias downforeveryoneorjustme='down4me'
 #     MY_IP=$(ifconfig en1 | awk '/inet/ { print $2 } ' | sed -e s/addr://)
 #     echo "${MY_IP:-"Not connected"}"
 # }
+# curl ifconfig.io
 function ip() {
     local iplist
     iplist=$(ifconfig -a | perl -nle'/inet (?:addr:)?(\d+\.\d+\.\d+\.\d+)/ && print $1')
