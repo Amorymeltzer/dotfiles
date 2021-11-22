@@ -177,6 +177,9 @@ lmr = lrm
 lrm5 = "!git lr5 $(git default-branch)..HEAD"
 lr5m = lrm5
 
+# Show date a file was added
+when-added = log --pretty=format:"%ad" --date=short --diff-filter=A
+
 graph = lg
 
 lm = "!git log --oneline --decorate $(git default-branch)..HEAD"
