@@ -279,7 +279,7 @@ list-large-files = big-object-report
 # The trailing # means the $1 and $2 arguments don't get gobbled up along the
 # way, should probably make better use of this throughout this config
 split-from = "!git merge-base ${1:-$(git default-branch)} ${2:-HEAD} #"
-
+is-ancestor = merge-base --is-ancestor
 
 first-commit = rev-list --max-parents=0 HEAD
 
