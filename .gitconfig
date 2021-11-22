@@ -240,7 +240,7 @@ cl = clone
 tags = tag -n
 remotes = remote -v
 
-# Probably branch is more expect, but honestly, I use this more
+# Probably branch is more expected, but honestly, I use this more
 b = blame
 
 br = branch
@@ -256,6 +256,7 @@ local-branches = "!git branch -a --color | grep -v remotes"
 branches-long = branch -a -vv
 local-branches-long = "!git branch -avv --color | grep -v remotes"
 branch-name = copy-branch-name
+branch-contains = branch --contains
 
 # More detailed script in unixorn, with dates
 recently-checkedout-branches = "!git reflog -n 100 | egrep -io \"moving from ([^[:space:]]+)\" | awk '{ print $3 }' | awk ' !x[$0]++' | egrep -v '^[a-f0-9]{40}$' | head -n 10"
@@ -264,8 +265,8 @@ recently-checkedout-branches = "!git reflog -n 100 | egrep -io \"moving from ([^
 # Potentially overridden in local-config to use date=human after 2.21, see also lor and [log]
 recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(color:red)%(objectname:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset)) %(contents:subject) %(color:blue)[%(authorname)]%(color:reset)'
 
-# Easily rememberable
-remove-merged-branches = delete-merged-branches
+# More easily rememberable external commands, may or may not exist
+remove-merged-branches = delete-merged-branches # git-extras
 list-large-files = big-object-report
 
 # Find the commit this commit split off from
