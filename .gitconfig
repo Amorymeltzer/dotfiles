@@ -150,6 +150,8 @@ stb = stash branch
 # Various log shorthands and improvements, some accessed via .bashrc aliases
 l = log --oneline
 l5 = log --oneline -5
+lstat = log --stat --oneline
+logstat = log --oneline
 
 full = log --pretty=fuller --notes
 lf1 = log --pretty=fuller --notes -1
