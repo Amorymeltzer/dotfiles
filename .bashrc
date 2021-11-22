@@ -937,14 +937,21 @@ fi
 
 # Homebrew/Cask
 if [[ -f $(command -v brew) ]]; then
+    # Make homebrew verbose by default
+    # export HOMEBREW_VERBOSE=1
+    # Use bat for brew cat, but only if installed via homebrew
+    if [ -f "$(brew --prefix)/bin/bat" ]; then
+	export HOMEBREW_BAT=1
+    fi
+    # Use the API rather than the (possibly?) slower checkout.  Requires
+    # homebrew's developer mode to be off (use latest release, not latest)
+    export HOMEBREW_INSTALL_FROM_API=1
+    export HOMEBREW_DISPLAY_INSTALL_TIMES=1
+
     brew_repo=$(brew --repo)
     alias dgh='cd $brew_repo'
     alias dgc='cd $brew_repo/Library/Taps/homebrew/homebrew-cask'
 
-    # Make homebrew verbose by default
-    # export HOMEBREW_VERBOSE=1
-    # Don't build from source
-    export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=1
     alias ball='brew update ; brew outdated ; brew upgrade'
     alias bclean='brew cleanup ; brew cleanup -s'
     alias bsearch='brew search'
@@ -970,7 +977,9 @@ if [[ -f $(command -v brew) ]]; then
     # which defaults to ~/.brew_livecheck_watchlist
     function livecheck-cask() {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
-	    brew update && brew livecheck --cask --newer-only -q
+
+	    brew update && brew developer on && HOMEBREW_INSTALL_FROM_API='' brew livecheck --cask --newer-only -q
+	    brew developer off
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
