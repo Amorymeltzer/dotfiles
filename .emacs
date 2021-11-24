@@ -1347,6 +1347,8 @@ current buffer" t)
 ;; Use a rather than return so as not to open up so many damn windows
 ;; Don't warn/disable/whatever
 (put 'dired-find-alternate-file 'disabled nil)
+;; Seems neat
+(define-key dired-mode-map (kbd "F") 'dired-create-empty-file)
 ;; Remap ^ to use find-alternate-file to move up, thus not opening another dired
 ;; buffer.  In theory that might be nice, but in practice I'm just passing through.
 ;; Could probably just use dired-single https://github.com/crocket/dired-single
