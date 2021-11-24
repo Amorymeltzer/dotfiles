@@ -8,6 +8,9 @@ export ALTERNATE_EDITOR='emacs '
 
 # Make CPAN always select the default option
 export PERL_MM_USE_DEFAULT=1
+# Use https with cpanm:
+# http://blogs.perl.org/users/neilb/2021/11/addressing-cpan-vulnerabilities-related-to-checksums.html
+export PERLCPANMOPT="--verify --from https://www.cpan.org"
 
 # Used in .bashrc as well
 # Generic default
