@@ -892,6 +892,13 @@ if [[ -f $(command -v rg) ]]; then
     alias rgic='rgc -i'
     alias rgC='rg -C 10'
     alias rgiC='rgC -i'
+
+    # If delta exists, additional function to pipe output there
+    if [[ -f $(command -v delta) ]]; then
+	function rg-delta() {
+	    rg --json "$1" | delta
+	}
+    fi
 fi
 
 # Applications, probably only useful on $OSTYPE=darwin
