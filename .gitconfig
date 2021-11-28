@@ -505,6 +505,7 @@ defaultBranch = main
 compactionHeuristic = true
 noprefix = true
 guitool = opendiff
+colorMoved = default # zebra (for now).  Already the default but set just in case
 
 [difftool]
 prompt = false
