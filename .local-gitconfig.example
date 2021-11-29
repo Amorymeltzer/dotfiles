@@ -27,7 +27,7 @@ plus-style = syntax auto
 plus-emph-style = syntax auto
 plus-non-emph-style = auto normal
 #keep-plus-minus-markers = true
-max-line-distance = 0.7 	# Default 0.6
+max-line-distance = 0.8 	# Default 0.6, was 0.7
 
 [delta "side-styles"]
 side-by-side = true
