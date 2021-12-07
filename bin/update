@@ -122,9 +122,9 @@ if [[ -z $nosudo && -z $macports_all_flag ]]; then
 	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
 	if [[ -z $macports_flag ]]; then
 	    updating 'Macports'
-	    sudo port -p upgrade outdated
+	    sudo port -N -p upgrade outdated
 	    cleaning 'Macports'
-	    sudo port uninstall inactive;
+	    sudo port -N uninstall inactive;
 	    if [[ -n $(port echo leaves) ]]; then
 		while [[ -n $(port echo leaves) ]]; do
 		    echo -e "${Color_Green}Logging and cleaning leaves${Color_zOff}..."
