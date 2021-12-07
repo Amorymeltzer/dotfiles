@@ -535,7 +535,6 @@ fi
 
 
 # Make perl -d automatically use NYTProf.  See also dprofpp
-# Needs to be dependent on existing FIXME TODO
 export PERL5DB='use Devel::NYTProf'
 
 # Easier Devel::Cover tests.  Should probably make these functions so as to
@@ -946,7 +945,9 @@ fi
 if [[ -f $(command -v brew) ]]; then
     # Make homebrew verbose by default
     # export HOMEBREW_VERBOSE=1
-    # Use bat for brew cat, but only if installed via homebrew
+    # Use bat for brew cat, but only if installed via homebrew; As of v3.3.6,
+    # homebrew will attempt to automatically install bat if this is set and it's
+    # not installed (by homebrew!)
     if [ -f "$(brew --prefix)/bin/bat" ]; then
 	export HOMEBREW_BAT=1
     fi
@@ -969,6 +970,7 @@ if [[ -f $(command -v brew) ]]; then
 
     # This could just be `brew deps --installed --formula` and would be *much* faster,
     # but the blue coloring is nice?  Maybe stupid
+    # Do --tree
     function homebrew-deps() {
 	brew list --formula | while read -r formula; do echo -en "${Color_Blue_Bold}$formula ->${Color_zOff}"; brew deps --formula --installed "$formula" | awk '{printf(" %s ", $0)}'; echo ""; done
     }
