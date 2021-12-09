@@ -19,18 +19,19 @@ export GIT_PERS_DIR="$GIT_MAIN_DIR"
 export GIT_EXTL_DIR="$GIT_MAIN_DIR"
 
 # Path ------------------------------------------------------------
-# Hold onto original path, defined first from /etc/profile, which on macOS
-# uses /usr/libexec/path_helper to read /etc/paths and then add items from
-# /etc/paths.d/.  In this way, we ensure that the additional items below show
-# up in our desired order, or closer, at least, without unsightly duplications
-# or going through the extra effort of bash variable expansion to insert
-# in-place.  The main disadvantage here is that items in /usr/local/bin are
-# not as high as might be desired.
-# Order will be: ~/bin:macports:perl:local_npm:python:etc:git_repos
+# Hold onto original path, defined first from /etc/profile, which on macOS uses
+# /usr/libexec/path_helper to read /etc/paths and then add items from
+# /etc/paths.d/.  In this way, we ensure that the additional items below show up
+# in our desired order, or closer, at least, without unsightly duplications or
+# going through the extra effort of bash variable expansion to insert in-place.
+# The main disadvantage here is that items in /usr/local/bin are not as high as
+# might be desired, given that it is used by Homebrew for intel installations,
+# so some duplication ends up happening.
+# Order will be: ~/bin:macports:brew:perl:local_npm:python:etc:git_repos
 orig_path=$PATH
 new_path=''
-# Add MacPorts (if present), ahead of Homebrew (/usr/local already present
-# from /etc/paths); required for getting proper perl/python versions/paths
+
+# Add MacPorts (if present), ahead of Homebrew
 macports_pathstring=''
 if [[ -d "/opt/local/bin" ]]; then
     macports_pathstring="/opt/local/bin"
@@ -39,9 +40,25 @@ if [[ -d "/opt/local/sbin" ]]; then
     macports_pathstring="${macports_pathstring:+${macports_pathstring}:}/opt/local/sbin"
 fi
 if [[ -n "$macports_pathstring" ]]; then
-    export PATH="$macports_pathstring:$PATH"
     new_path="$macports_pathstring"
 fi
+
+# Add Homebrew (if present); /usr/local already present from /etc/paths but
+# homebrew should be higher than /usr/bin.  See also brew shellenv
+homebrew_pathstring=''
+HOMEBREW_PREFIX=$(brew --prefix)
+if [[ -d "$HOMEBREW_PREFIX/bin" ]]; then
+    homebrew_pathstring="$HOMEBREW_PREFIX/bin"
+fi
+if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
+    homebrew_pathstring="${homebrew_pathstring:+${homebrew_pathstring}:}$HOMEBREW_PREFIX/sbin"
+fi
+if [[ -n "$homebrew_pathstring" ]]; then
+    new_path="${new_path:+${new_path}:}$homebrew_pathstring"
+fi
+
+# Intermediate export, required for getting proper perl/python versions/paths
+export PATH="$macports_pathstring:$PATH"
 
 # Perl major version, e.g. 5.30.  Used below for building up some paths, but
 # also briefly used in .bashrc a bit.  Here because newer perls (from
@@ -120,8 +137,10 @@ if [[ -d "$HOME/bin" ]]; then
     new_path="$HOME/bin:$new_path"
 fi
 
-# Finally done building path, export it
-export PATH="$new_path"
+# Finally done building path, so remove dupes and export it
+# via https://unix.stackexchange.com/a/14896/43935
+PATH="$(printf "%s" "$new_path" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf RS; printf $1 }')"
+export PATH
 
 # Modern day, I always want a visual editor
 # https://unix.stackexchange.com/q/4859/43935
