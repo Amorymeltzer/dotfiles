@@ -952,8 +952,9 @@ if [[ -f $(command -v brew) ]]; then
 	export HOMEBREW_BAT=1
     fi
     # Use the API rather than the (possibly?) slower checkout.  Requires
-    # homebrew's developer mode to be off (use latest release, not latest)
-    export HOMEBREW_INSTALL_FROM_API=1
+    # homebrew's developer mode to be off (use latest release, not latest).
+    # More of a pain than anything else
+    # export HOMEBREW_INSTALL_FROM_API=1
     export HOMEBREW_DISPLAY_INSTALL_TIMES=1
 
     brew_repo=$(brew --repo)
@@ -987,8 +988,7 @@ if [[ -f $(command -v brew) ]]; then
     function livecheck-cask() {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
 
-	    brew update && brew developer on && HOMEBREW_INSTALL_FROM_API='' brew livecheck --cask --newer-only -q
-	    brew developer off
+	    brew update && brew livecheck --cask --newer-only -q
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
