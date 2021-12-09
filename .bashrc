@@ -988,7 +988,7 @@ if [[ -f $(command -v brew) ]]; then
     function livecheck-cask() {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
 
-	    brew update && brew livecheck --cask --newer-only -q
+	    brew update --preinstall && brew livecheck --cask --newer-only -q
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
