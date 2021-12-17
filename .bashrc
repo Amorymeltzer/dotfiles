@@ -959,6 +959,7 @@ if [[ -f $(command -v brew) ]]; then
 
     brew_repo=$(brew --repo)
     alias dgh='cd $brew_repo'
+    alias dgf='cd $brew_repo/Library/Taps/homebrew/homebrew-core'
     alias dgc='cd $brew_repo/Library/Taps/homebrew/homebrew-cask'
 
     alias ball='brew update ; brew outdated ; brew upgrade'
