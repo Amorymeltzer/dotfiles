@@ -111,7 +111,9 @@
     (package-install package)
     (require 'use-package)
     (setq use-package-always-ensure t
-	  use-package-verbose t)))
+	  use-package-verbose t
+	  ;; In theory, calling `use-package-report' would display some info
+	  use-package-compute-statistics t)))
 
 
 ;; paradox https://github.com/Malabarba/paradox
