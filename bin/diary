@@ -152,14 +152,14 @@ else
 		hasSpark=$(command -v spark)
 
 		if [[ $total -gt 0 ]]; then
-		    results=()
-		    while IFS='' read -r line; do results+=("$line"); done < <(cut -f 1 -d - <<<"$files" | sort | uniq -c)
 		    # Used below, 1-indexing
 		    mons=(null Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
+		    results=()
+		    while IFS='' read -r line; do results+=("$line"); done < <(cut -f 1 -d - <<<"$files" | sort | uniq -c)
 		    for result in "${results[@]}"; do
-			# Bash expansion matching is awful
-			# Remove two leading spaces
-			result="${result#'  '}"
+			# Bash expansion matching is awful for this sort of
+			# thing, remove all leading spaces
+			result="$(echo "${result}" | sed 's/^[[:space:]]*//')"
 
 			# Split on single space; first is entry count, second is year
 			year="${result#*' '}"
@@ -195,14 +195,12 @@ else
 			    if [[ -n "${hasSpark}" ]] && [ ${#spark[@]} -gt 1 ]; then
 				echo -n " "
 				spark "${spark[@]}"
-			    else
-				echo
 			    fi
+				echo
 			else
 			    echo -n "entry"
 			fi
 		    done
-		    echo
 		    echo "$total total"
 		else
 		    echo "No entries found"
