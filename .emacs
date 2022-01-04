@@ -399,6 +399,7 @@ Record that in `paradox--backups', but do nothing if
 (require 'js2-mode)
 (setq
  js-switch-indent-offset 8	    ; tab indent switch cases
+ js-chain-indent t		    ; line up successive indents with .
  js2-highlight-level 3		    ; highlight more built-in functions
  js2-mode-indent-ignore-first-tab t ; make first tab doesn't toggle between valid indents
  js2-strict-inconsistent-return-warning nil ; warning if both return and return foo
@@ -428,7 +429,7 @@ Record that in `paradox--backups', but do nothing if
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
 ;; Requires yasnippet and multiple-cursors
 ;; https://github.com/magnars/multiple-cursors.el (maybe do C-c m or something?)
-;; Should probably learn more of these https://github.com/magnars/js2-refactor.el#refactorings
+;; Full list at https://github.com/magnars/js2-refactor.el#refactorings
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 (setq js2r-prefered-quote-type 2)	; single, not double
@@ -436,7 +437,7 @@ Record that in `paradox--backups', but do nothing if
 ;; js2-refactor does not work in a buffer that has Javascript parse
 ;; errors. This tells js2-mode to treat octothorpes and hashbangs as comments,
 ;; preventing them from causing parse errors
-;; (setq js2-skip-preprocessor-directives t)
+(setq js2-skip-preprocessor-directives t)
 
 ;; jsdoc https://github.com/mooz/js-doc
 ;; old and creaky, but okay enough for now.  Honestly, maybe yas would just be better?
@@ -842,6 +843,7 @@ backups." t)
 
 ;; Recent files (~/.emacs.d/recentf)
 ;; Pointless if saving buffers as below?
+;; Something busted, nothing saved when restarting server FIXME TODO
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-save-file (expand-file-name my/recentf-file user-emacs-directory))
@@ -3609,7 +3611,7 @@ This checks in turn:
 ;; more ido stuff
 ;; more auto-complete stuff, company mode?
 ;; discover-js2-refactor
-;; More js/2 stuff?  node/npm
+;; More js/2 stuff?  node/npm mode?
 ;; ivy?
 ;; More yasnippet stuff? (helm/ivy)
 ;; frecentf and other recentf stuff?
