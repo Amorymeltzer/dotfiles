@@ -32,29 +32,33 @@ orig_path=$PATH
 new_path=''
 
 # Add MacPorts (if present), ahead of Homebrew
-macports_pathstring=''
-if [[ -d "/opt/local/bin" ]]; then
-    macports_pathstring="/opt/local/bin"
-fi
-if [[ -d "/opt/local/sbin" ]]; then
-    macports_pathstring="${macports_pathstring:+${macports_pathstring}:}/opt/local/sbin"
-fi
-if [[ -n "$macports_pathstring" ]]; then
-    new_path="$macports_pathstring"
+if [[ -f $(command -v port) ]]; then
+    macports_pathstring=''
+    if [[ -d "/opt/local/bin" ]]; then
+	macports_pathstring="/opt/local/bin"
+    fi
+    if [[ -d "/opt/local/sbin" ]]; then
+	macports_pathstring="${macports_pathstring:+${macports_pathstring}:}/opt/local/sbin"
+    fi
+    if [[ -n "$macports_pathstring" ]]; then
+	new_path="$macports_pathstring"
+    fi
 fi
 
 # Add Homebrew (if present); /usr/local already present from /etc/paths but
 # homebrew should be higher than /usr/bin.  See also brew shellenv
-homebrew_pathstring=''
-HOMEBREW_PREFIX=$(brew --prefix)
-if [[ -d "$HOMEBREW_PREFIX/bin" ]]; then
-    homebrew_pathstring="$HOMEBREW_PREFIX/bin"
-fi
-if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
-    homebrew_pathstring="${homebrew_pathstring:+${homebrew_pathstring}:}$HOMEBREW_PREFIX/sbin"
-fi
-if [[ -n "$homebrew_pathstring" ]]; then
-    new_path="${new_path:+${new_path}:}$homebrew_pathstring"
+if [[ -f $(command -v brew) ]]; then
+    homebrew_pathstring=''
+    HOMEBREW_PREFIX=$(brew --prefix)
+    if [[ -d "$HOMEBREW_PREFIX/bin" ]]; then
+	homebrew_pathstring="$HOMEBREW_PREFIX/bin"
+    fi
+    if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
+	homebrew_pathstring="${homebrew_pathstring:+${homebrew_pathstring}:}$HOMEBREW_PREFIX/sbin"
+    fi
+    if [[ -n "$homebrew_pathstring" ]]; then
+	new_path="${new_path:+${new_path}:}$homebrew_pathstring"
+    fi
 fi
 
 # Intermediate export, required for getting proper perl/python versions/paths
