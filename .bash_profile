@@ -77,6 +77,12 @@ if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
     PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
     PERL_MB_OPT="--install_base $HOME/perl5"; export PERL_MB_OPT;
     PERL_MM_OPT="INSTALL_BASE=/$HOME/perl5"; export PERL_MM_OPT;
+
+    # Get ripgrep https://wikitech.wikimedia.org/wiki/Tool:Rustup
+    rustup="/data/project/rustup/rustup/.cargo/bin"
+    if [[ -d "$rustup" ]]; then
+	new_path="${new_path:+${new_path}:}$rustup"
+    fi
 else
     # Perhaps the next time I upgrade perl, I'll wait before installing
     # anything, and set PERL5LIB, etc. to something like the above.  Might be
@@ -103,7 +109,6 @@ fi
 if [[ $(command -v npm) ]]; then
     npm_bin=$(npm bin)
     if [[ -d "$npm_bin" ]]; then
-	# export PATH="$PATH:$(npm bin)"
 	new_path="$new_path:$(npm bin)"
     fi
 fi
