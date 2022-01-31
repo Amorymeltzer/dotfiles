@@ -32,18 +32,17 @@ orig_path=$PATH
 new_path=''
 
 # Add MacPorts (if present), ahead of Homebrew
-if [[ -f $(command -v port) ]]; then
-    macports_pathstring=''
-    if [[ -d "/opt/local/bin" ]]; then
-	macports_pathstring="/opt/local/bin"
-    fi
-    if [[ -d "/opt/local/sbin" ]]; then
-	macports_pathstring="${macports_pathstring:+${macports_pathstring}:}/opt/local/sbin"
-    fi
-    if [[ -n "$macports_pathstring" ]]; then
-	new_path="$macports_pathstring"
-    fi
+macports_pathstring=''
+if [[ -d "/opt/local/bin" ]]; then
+    macports_pathstring="/opt/local/bin"
 fi
+if [[ -d "/opt/local/sbin" ]]; then
+    macports_pathstring="${macports_pathstring:+${macports_pathstring}:}/opt/local/sbin"
+fi
+if [[ -n "$macports_pathstring" ]]; then
+    new_path="$macports_pathstring"
+fi
+
 
 # Add Homebrew (if present); /usr/local already present from /etc/paths but
 # homebrew should be higher than /usr/bin.  See also brew shellenv
