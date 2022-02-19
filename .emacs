@@ -2381,8 +2381,8 @@ using `ido-completing-read'."
 (set-face-attribute 'Man-overstrike nil :inherit font-lock-builtin-face :bold t)
 (set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t)
 
-;; Convert DOS `^M' end of lines to Unix end of lines.  See also
-;; set-buffer-file-coding-system (C-x RET f) with unix.  Do for mac?
+;; Convert DOS/Mac `^M' end of lines to Unix end of lines.  See also
+;; set-buffer-file-coding-system (C-x RET f) with unix.
 (defun dos-to-unix ()
   "Cut all visible ^M from the current buffer."
   (interactive)
@@ -2393,6 +2393,8 @@ using `ido-completing-read'."
 ;; They all sound the same
 (defalias 'dos2unix 'dos-to-unix)
 (defalias 'dostounix 'dos-to-unix)
+(defalias 'mac2unix 'dos-to-unix)
+(defalias 'mactounix 'dos-to-unix)
 
 (defun replace-smart-quotes ()
   "Replace MS smart quotes with normal quotes in this buffer."
