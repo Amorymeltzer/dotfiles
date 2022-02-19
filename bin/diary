@@ -210,6 +210,9 @@ else
 				echo -e "\t$mon: $mcount"
 				# Add to spark array
 				spark+=("$mcount")
+			    else
+				mon=0
+				spark+=("0")
 			    fi
 			done
 
