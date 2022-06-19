@@ -240,7 +240,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	    if [[ -z $brewcask_flag ]]; then
 		updating 'casks'
 		# Some apps require sudo
-		brew cu -aqy --no-brew-update
+		brew cu -aqy --no-brew-update --cleanup
 
 		cleaning 'casks'
 		brew cleanup -s
