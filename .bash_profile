@@ -11,6 +11,9 @@ export PERL_MM_USE_DEFAULT=1
 # Use https with cpanm:
 # http://blogs.perl.org/users/neilb/2021/11/addressing-cpan-vulnerabilities-related-to-checksums.html
 export PERL_CPANM_OPT="--verify --from https://www.cpan.org"
+# Generally the default but let's just make this explicit.  Used throughout.
+export PERL5_DIR="$HOME/perl5"
+
 
 # Used in .bashrc as well
 # Generic default
@@ -73,13 +76,13 @@ PERL5_V=$(perl -e'print substr($^V, 1, -2)'); export PERL5_V # trim leading v an
 # different items (local::lib perl, etc.)
 # toolforge tool account isn't SSH_TTY, but does have the same env variable
 if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
-    # This from cpan
-    new_path="${new_path:+${new_path}:}$HOME/perl5/bin" # Okay this one was modified
+    # This all is from cpan
+    new_path="${new_path:+${new_path}:}$PERL5_DIR/bin" # Okay this one was modified
 
-    PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-    PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-    PERL_MB_OPT="--install_base $HOME/perl5"; export PERL_MB_OPT;
-    PERL_MM_OPT="INSTALL_BASE=/$HOME/perl5"; export PERL_MM_OPT;
+    PERL5LIB="$PERL5_DIR/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+    PERL_LOCAL_LIB_ROOT="$PERL5_DIR${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+    PERL_MB_OPT="--install_base $PERL5_DIR"; export PERL_MB_OPT;
+    PERL_MM_OPT="INSTALL_BASE=/$PERL5_DIR"; export PERL_MM_OPT;
 
     # Get ripgrep https://wikitech.wikimedia.org/wiki/Tool:Rustup
     rustup="/data/project/rustup/rustup/.cargo/bin"
