@@ -553,7 +553,7 @@ if [[ -f $(command -v perlcritic) ]]; then
     {
 	local cur="${COMP_WORDS[COMP_CWORD]}"
 	local list
-	list="$(\ls /opt/local/share/perl$PERL5/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
+	list="$(\ls /opt/local/share/perl$PERL5_V/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
 	local clean
 	clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')"
 

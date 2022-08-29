@@ -67,7 +67,7 @@ export PATH="$macports_pathstring:$PATH"
 # also briefly used in .bashrc a bit.  Here because newer perls (from
 # macports/homebrew) are now available in path.  Could also do -V::version:,
 # PERL_VERSION, etc., but all need massaging.
-PERL5=$(perl -e'print substr($^V, 1, -2)'); export PERL5 # trim leading v and trailing subversion
+PERL5_V=$(perl -e'print substr($^V, 1, -2)'); export PERL5_V # trim leading v and trailing subversion
 
 # Differentiate between home machine and ssh, mainly for perl, which needs
 # different items (local::lib perl, etc.)
@@ -100,7 +100,7 @@ else
 
     # Add unloved perl modules' manpages to the manpath, not as easy as above
     # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
-    MANPATH="/opt/local/share/perl$PERL5/siteman:/opt/local/share/perl$PERL5/man:$(manpath)"; export MANPATH
+    MANPATH="/opt/local/share/perl$PERL5_V/siteman:/opt/local/share/perl$PERL5_V/man:$(manpath)"; export MANPATH
 
     export GIT_MAIN_DIR="$HOME/Documents/git"
     export GIT_PERS_DIR="$GIT_MAIN_DIR/personal"
