@@ -1126,9 +1126,6 @@ alias previous='itunes prev'
 alias play='itunes play'
 alias pause='itunes pause'
 
-# Track who is listening to your iTunes music
-alias whotunes='lsof -r 2 -n -P -F n -c iTunes -a -i TCP@Durandal.local:3689'
-
 # Volume control, potentially using osxutils
 if [ ! -x /opt/local/bin/setvolume ]; then
     function setvolume() {
