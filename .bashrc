@@ -477,6 +477,7 @@ function _exit()
 trap _exit EXIT
 
 
+# Add perlbrew completion FIXME TODO
 ## Sourcin'
 ## Throw all potential sources into an array, check, then source
 # Some personal/private stuff, used in various places, both bash and lisp

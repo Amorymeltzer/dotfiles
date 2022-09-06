@@ -14,7 +14,6 @@ export PERL_CPANM_OPT="--verify --from https://www.cpan.org"
 # Generally the default but let's just make this explicit.  Used throughout.
 export PERL5_DIR="$HOME/perl5"
 
-
 # Used in .bashrc as well
 # Generic default
 export GIT_MAIN_DIR="$HOME"
@@ -30,17 +29,21 @@ export GIT_EXTL_DIR="$GIT_MAIN_DIR"
 # The main disadvantage here is that items in /usr/local/bin are not as high as
 # might be desired, given that it is used by Homebrew for intel installations,
 # so some duplication ends up happening.
-# Order will be: ~/bin:macports:brew:perl:local_npm:python:etc:git_repos
+# Order will be: ~/bin:perlbrew:macports:brew:perl:local_npm:python:etc:git_repos
 orig_path=$PATH
 new_path=''
 
+
 # Add MacPorts (if present), ahead of Homebrew
 macports_pathstring=''
-if [[ -d "/opt/local/bin" ]]; then
-    macports_pathstring="/opt/local/bin"
+# Feels like this should be defined somewhere else
+# https://guide.macports.org/chunked/reference.variables.html
+macports_prefix='/opt/local'
+if [[ -d "$macports_prefix/bin" ]]; then
+    macports_pathstring="$macports_prefix/bin"
 fi
-if [[ -d "/opt/local/sbin" ]]; then
-    macports_pathstring="${macports_pathstring:+${macports_pathstring}:}/opt/local/sbin"
+if [[ -d "$macports_prefix/sbin" ]]; then
+    macports_pathstring="${macports_pathstring:+${macports_pathstring}:}$macports_prefix/sbin"
 fi
 if [[ -n "$macports_pathstring" ]]; then
     new_path="$macports_pathstring"
@@ -63,48 +66,92 @@ if [[ -f $(command -v brew) ]]; then
     fi
 fi
 
-# Intermediate export, required for getting proper perl/python versions/paths
-export PATH="$macports_pathstring:$PATH"
+# Intermediate pathing to get the right perl/python versions/paths
+# favor brewperl over macports over homebrew
+PATH="$new_path:$PATH"
+
+# Yay perlbrew.  The default, but again, make explicit
+export PERLBREW_ROOT="$PERL5_DIR/perlbrew"
+# Used later to test if perlbrew exists and there are installs
+perlbrew_installs=''
+if [[ -d "$PERLBREW_ROOT" ]]; then
+    # This will put perlbrew first in line of the path, so now we have:
+    # perlbrew:macports:homebrew:system
+    source "$PERLBREW_ROOT/etc/bashrc"
+
+    # `perlbrew list` plenty effective much slower
+    if [[ -n "$(ls -A "$PERL5_DIR/perlbrew/perls/")" ]]; then
+	perlbrew_installs='true'
+    fi
+fi
 
 # Perl major version, e.g. 5.30.  Used below for building up some paths, but
 # also briefly used in .bashrc a bit.  Here because newer perls (from
-# macports/homebrew) are now available in path.  Could also do -V::version:,
-# PERL_VERSION, etc., but all need massaging.
-PERL5_V=$(perl -e'print substr($^V, 1, -2)'); export PERL5_V # trim leading v and trailing subversion
+# perlbrew/macports/homebrew) are now available in path.  Could also do
+# -V::version:, PERL_VERSION, etc., but all need massaging.
+PERL5_V=$(perl -e'print substr($^V, 1, -2)'); export PERL5_V # trim leading v
+# and trailing subversion
 
-# Differentiate between home machine and ssh, mainly for perl, which needs
-# different items (local::lib perl, etc.)
-# toolforge tool account isn't SSH_TTY, but does have the same env variable
+# Perlbrew doesn't exist or we don't have any perls installed with it, so let's
+# set the perl environment ourselves.  Perlbrew doesn't like these, see
+# <https://github.com/gugod/App-perlbrew/issues/513> and
+# <https://stackoverflow.com/q/5447595/2521092>.  I think perlbrew will take
+# care of any such statements it finds by itself, but there's a world where
+# perlbrew is installed (yay) but no perls are installed with it (boo) where we
+# *would* want some of this.
+# This all is from cpan, to enable local::lib perl stuff if desired (i.e. not
+# using perlbrew and maybe not if macports)
+if [[ -z "$perlbrew_installs" ]]; then
+
+    # Perl from macports, so use a different directory
+    # if it's installed
+    # Check the actual string FIXME TODO
+    if [[ -n "$macports_pathstring" ]]; then
+	export PERL5_DIR="$macports_prefix"
+	macports_perl="$PERL5_DIR/lib/perl5/$PERL5_V"
+
+	# See <https://formyfriendswithmacs.com/macports.html>, note the
+	# different path from what is used for cpan/local::lib
+	export PERL5LIB="$macports_perl${PERL5LIB:+:${PERL5LIB}}"
+	export PERL_LOCAL_LIB_ROOT="$macports_perl${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+	export PERL_MB_OPT="--install_base $macports_perl"
+	export PERL_MM_OPT="INSTALL_BASE=/$macports_perl"
+
+	## Add perl execs
+	# Wrapped quotes and trailing space is annoying, but probably more
+	# portable not to hardcode these
+	perl5_vendorbin=$(perl -V::vendorbin:|tr -d ' '|tr -d \')
+	perl5_sitebin=$(perl -V::sitebin:|tr -d ' '|tr -d \')
+	new_path="${new_path:+${new_path}:}$perl5_sitebin:$perl5_vendorbin"
+
+	# Add unloved perl modules' manpages to the manpath, not as easy as above
+	# since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
+	MANPATH="$macports_prefix/share/perl$PERL5_V/siteman:$macports_prefix/share/perl$PERL5_V/man:$(manpath)"; export MANPATH
+
+    else # Investigate homebrew? FIXME TODO
+
+	# This path already added if perlbrew or macports
+	new_path="${new_path:+${new_path}:}$PERL5_DIR/bin" # Okay this one was modified
+
+	export PERL5LIB="$PERL5_DIR/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+	export PERL_LOCAL_LIB_ROOT="$PERL5_DIR${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+	export PERL_MB_OPT="--install_base $PERL5_DIR"
+	export PERL_MM_OPT="INSTALL_BASE=/$PERL5_DIR"
+    fi
+
+fi
+
+
+# Differentiate between home machine and ssh.  Toolforge tool account isn't
+# SSH_TTY, but does have the same env variable
 if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
-    # This all is from cpan
-    new_path="${new_path:+${new_path}:}$PERL5_DIR/bin" # Okay this one was modified
-
-    PERL5LIB="$PERL5_DIR/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-    PERL_LOCAL_LIB_ROOT="$PERL5_DIR${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-    PERL_MB_OPT="--install_base $PERL5_DIR"; export PERL_MB_OPT;
-    PERL_MM_OPT="INSTALL_BASE=/$PERL5_DIR"; export PERL_MM_OPT;
-
     # Get ripgrep https://wikitech.wikimedia.org/wiki/Tool:Rustup
     rustup="/data/project/rustup/rustup/.cargo/bin"
     if [[ -d "$rustup" ]]; then
 	new_path="${new_path:+${new_path}:}$rustup"
     fi
 else
-    # Perhaps the next time I upgrade perl, I'll wait before installing
-    # anything, and set PERL5LIB, etc. to something like the above.  Might be
-    # easier (https://formyfriendswithmacs.com/macports.html) but seems a pain
-    # to actively convert the current setup.
-    ## Add perl execs
-    # Wrapped quotes and trailing space is annoying, but probably more
-    # portable not to hardcode these
-    perl5_vendorbin=$(perl -V::vendorbin:|tr -d ' '|tr -d \')
-    perl5_sitebin=$(perl -V::sitebin:|tr -d ' '|tr -d \')
-    new_path="${new_path:+${new_path}:}$perl5_sitebin:$perl5_vendorbin"
-
-    # Add unloved perl modules' manpages to the manpath, not as easy as above
-    # since perl -V returns man/man1, man/man3, siteman/man1, siteman/man3
-    MANPATH="/opt/local/share/perl$PERL5_V/siteman:/opt/local/share/perl$PERL5_V/man:$(manpath)"; export MANPATH
-
+    # Some personal, local directories
     export GIT_MAIN_DIR="$HOME/Documents/git"
     export GIT_PERS_DIR="$GIT_MAIN_DIR/personal"
     export GIT_EXTL_DIR="$GIT_MAIN_DIR/external"
@@ -143,14 +190,20 @@ if [[ -d "$GIT_EXTL_DIR/tiny-scripts@vitorgalvao" ]]; then
     new_path="$new_path:$GIT_EXTL_DIR/tiny-scripts@vitorgalvao"
 fi
 
-# Add ~/bin ahead of everybody
-if [[ -d "$HOME/bin" ]]; then
-    new_path="$HOME/bin:$new_path"
-fi
 
-# Finally done building path, so remove dupes and export it
+# Nearly done building path, so remove dupes and prepare for export
 # via https://unix.stackexchange.com/a/14896/43935
 PATH="$(printf "%s" "$new_path" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf RS; printf $1 }')"
+
+# Ensure perlbrew is on top, but only if it's useful
+if [[ -n "$perlbrew_installs" ]]; then
+    source "$PERLBREW_ROOT/etc/bashrc"
+fi
+# Add ~/bin ahead of everybody
+if [[ -d "$HOME/bin" ]]; then
+    PATH="$HOME/bin:$PATH"
+fi
+
 export PATH
 
 # Modern day, I always want a visual editor
