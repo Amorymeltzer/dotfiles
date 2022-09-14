@@ -26,9 +26,9 @@ export GIT_EXTL_DIR="$GIT_MAIN_DIR"
 # /etc/paths.d/.  In this way, we ensure that the additional items below show up
 # in our desired order, or closer, at least, without unsightly duplications or
 # going through the extra effort of bash variable expansion to insert in-place.
-# The main disadvantage here is that items in /usr/local/bin are not as high as
-# might be desired, given that it is used by Homebrew for intel installations,
-# so some duplication ends up happening.
+# The main disadvantage here is that on some older macOS', items in
+# /usr/local/bin might not be as high as might be desired, given that it is used
+# by Homebrew for intel installations, so some duplication ends up happening.
 # Order will be: ~/bin:perlbrew:macports:brew:perl:local_npm:python:etc:git_repos
 orig_path=$PATH
 new_path=''
@@ -47,23 +47,34 @@ if [[ -d "$macports_prefix/sbin" ]]; then
 fi
 if [[ -n "$macports_pathstring" ]]; then
     new_path="$macports_pathstring"
+
+    export PORT_INSTALLED=1  # Largely used to confirm installation for sourcing
 fi
 
 
-# Add Homebrew (if present); /usr/local already present from /etc/paths but
-# homebrew should be higher than /usr/bin.  See also brew shellenv
-if [[ -f $(command -v brew) ]]; then
-    homebrew_pathstring=''
-    HOMEBREW_PREFIX=$(brew --prefix)
-    if [[ -d "$HOMEBREW_PREFIX/bin" ]]; then
-	homebrew_pathstring="$HOMEBREW_PREFIX/bin"
-    fi
-    if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
-	homebrew_pathstring="${homebrew_pathstring:+${homebrew_pathstring}:}$HOMEBREW_PREFIX/sbin"
-    fi
-    if [[ -n "$homebrew_pathstring" ]]; then
-	new_path="${new_path:+${new_path}:}$homebrew_pathstring"
-    fi
+# Add Homebrew (if present):
+# If on intel, /usr/local/bin is already present from /etc/paths, but we want
+# homebrew to take precedence over /usr/bin.  Not sure when but at some point,
+# Apple moved /usr/local/bin up the precedence list.
+# If on arm/Apple Silicon, it's /opt/homebrew.
+# See also brew shellenv FIXME TODO
+if [[ "$(/usr/bin/uname -m)" == "arm64" ]]; then
+    HOMEBREW_PREFIX="/opt/homebrew"
+else
+    HOMEBREW_PREFIX="/usr/local"
+fi
+
+homebrew_pathstring=''
+if [[ -d "$HOMEBREW_PREFIX/bin" ]]; then
+    homebrew_pathstring="$HOMEBREW_PREFIX/bin"
+fi
+if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
+    homebrew_pathstring="${homebrew_pathstring:+${homebrew_pathstring}:}$HOMEBREW_PREFIX/sbin"
+fi
+if [[ -n "$homebrew_pathstring" ]]; then
+    new_path="${new_path:+${new_path}:}$homebrew_pathstring"
+
+    export BREW_INSTALLED=1  # Largely used to confirm installation for sourcing
 fi
 
 # Intermediate pathing to get the right perl/python versions/paths
@@ -72,8 +83,8 @@ PATH="$new_path:$PATH"
 
 # Yay perlbrew.  The default, but again, make explicit
 export PERLBREW_ROOT="$PERL5_DIR/perlbrew"
-# Used later to test if perlbrew exists and there are installs
-perlbrew_installs=''
+# Used later to test if perlbrew exists AND there are installs
+PERLBREW_INSTALLED=''
 if [[ -d "$PERLBREW_ROOT" ]]; then
     # This will put perlbrew first in line of the path, so now we have:
     # perlbrew:macports:homebrew:system
@@ -81,7 +92,7 @@ if [[ -d "$PERLBREW_ROOT" ]]; then
 
     # `perlbrew list` plenty effective much slower
     if [[ -n "$(ls -A "$PERL5_DIR/perlbrew/perls/")" ]]; then
-	perlbrew_installs='true'
+	PERLBREW_INSTALLED='true'
     fi
 fi
 
@@ -92,6 +103,7 @@ fi
 PERL5_V=$(perl -e'print substr($^V, 1, -2)'); export PERL5_V # trim leading v
 # and trailing subversion
 
+# See `brew shellenv` for manpath, infopath, etc FIXME TODO
 # Perlbrew doesn't exist or we don't have any perls installed with it, so let's
 # set the perl environment ourselves.  Perlbrew doesn't like these, see
 # <https://github.com/gugod/App-perlbrew/issues/513> and
@@ -101,7 +113,7 @@ PERL5_V=$(perl -e'print substr($^V, 1, -2)'); export PERL5_V # trim leading v
 # *would* want some of this.
 # This all is from cpan, to enable local::lib perl stuff if desired (i.e. not
 # using perlbrew and maybe not if macports)
-if [[ -z "$perlbrew_installs" ]]; then
+if [[ -z "$PERLBREW_INSTALLED" ]]; then
 
     # Perl from macports, so use a different directory
     # if it's installed
@@ -169,6 +181,8 @@ fi
 # Add python execs
 # Doesn't really work on SSH FIXME TODO
 # local; preferable to global
+# FIXME TODO macOS default is just python3, no python executable, should alias
+# or something by default, if if we are going to install a newer version
 new_path="$new_path:$(python -m site --user-base)/bin"
 # global; not preferred but just in case
 # With various installations (*cough macports cough*) there are a bunch of
@@ -196,7 +210,7 @@ fi
 PATH="$(printf "%s" "$new_path" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf RS; printf $1 }')"
 
 # Ensure perlbrew is on top, but only if it's useful
-if [[ -n "$perlbrew_installs" ]]; then
+if [[ -n "$PERLBREW_INSTALLED" ]]; then
     source "$PERLBREW_ROOT/etc/bashrc"
 fi
 # Add ~/bin ahead of everybody

@@ -487,14 +487,17 @@ trap _exit EXIT
 # DIARY_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
 # STOCK_TICKERS
 sources=("$HOME/.config/bash/priv-env.bash")
-# Homebrew completion directory, here before macports since I generally use
-# the latter.  Confident glob probably fine given the -f -r checks below.
-sources+=(/usr/local/etc/bash_completion.d/*)
 # Advanced bash completion https://github.com/scop/bash-completion
-# Standard location, would in turn source /usr/share/bash-completion/bash_completion
-sources+=("/etc/bash_completion")
-# Macports, in turn sources /opt/local/share/bash-completion/bash_completion
-sources+=("/opt/local/etc/bash_completion")
+# Installed from either Macports or Homebrew, preferably the latter
+# Macports, will source /opt/local/share/bash-completion/bash_completion
+if [[ -n "$PORT_INSTALLED" ]]; then
+    sources+=("/opt/local/etc/bash_completion")
+fi
+# Homebrew.  Confident glob probably fine given the -f -r checks below.
+# bash-completion@2 covers folks in "${HOMEBREW_PREFIX}"/etc/bash_completion.d/
+if [[ -n "$BREW_INSTALLED" ]]; then
+    sources+=("${HOMEBREW_PREFIX}"/etc/profile.d/*)
+fi
 # Supplement the above with some missing items (pip, gem), some mac-specific
 # ones (defaults, eject), and some personal peccadilloes
 sources+=(~/.completions.d/*)
@@ -915,7 +918,7 @@ alias vlc='open -a vlc'
 alias excel='open -a microsoft\ excel'
 
 # Macports
-if [[ -f $(command -v port) ]]; then
+if [[ -n "$PORT_INSTALLED" ]]; then
     alias pecho='port echo'
     alias psync='sudo port sync'
     alias pself='sudo port selfupdate'
@@ -943,7 +946,7 @@ if [[ -f $(command -v port) ]]; then
 fi
 
 # Homebrew/Cask
-if [[ -f $(command -v brew) ]]; then
+if [[ -n "$BREW_INSTALLED" ]]; then
     # Make homebrew verbose by default
     # export HOMEBREW_VERBOSE=1
     # Use bat for brew cat, but only if installed via homebrew; As of v3.3.6,
