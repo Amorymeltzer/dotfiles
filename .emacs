@@ -3303,11 +3303,11 @@ This checks in turn:
   "Display a histogram of buffer modes."
   (interactive)
   (let* ((ht (make-hash-table :test 'equal))
-	 (number-of-buffers (loop for buffer being the buffers
+	 (number-of-buffers (cl-loop for buffer being the buffers
 				  for mode-name = (symbol-name (buffer-local-value 'major-mode buffer))
-				  do (incf (gethash mode-name ht 0))
+				  do (cl-incf (gethash mode-name ht 0))
 				  count 1))
-	 (totals (sort (loop for key being the hash-keys of ht
+	 (totals (sort (cl-loop for key being the hash-keys of ht
 			     using (hash-values value)
 			     collect (list key value))
 		       (lambda (x y) (if (eql (second x) (second y))
@@ -3316,7 +3316,7 @@ This checks in turn:
     (with-output-to-temp-buffer "Buffer mode histogram"
       (princ (format "%d buffers open, in %d distinct modes\n\n"
 		     number-of-buffers (length totals)))
-      (loop for (key count) in totals
+      (cl-loop for (key count) in totals
 	    do (princ (format "%2d %20s %s\n"
 			      count
 			      (if (equal (substring key -5) "-mode")
