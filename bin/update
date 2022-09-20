@@ -4,7 +4,7 @@
 # Fight https://xkcd.com/1579/
 
 ## TODO:
-## More sudo deescalation (macports, cpan, gem)
+## More sudo deescalation (macports, gem)
 ## Better color management
 ## Detect errors
 
@@ -173,10 +173,8 @@ if [[ -z $nosudo && -z $ruby_all_flag ]]; then
     fi
 fi
 
-# Uses sudo; requires cpan-outdated https://metacpan.org/pod/cpan-outdated
-## TODO: Figure out if installed with sudo, probably by checking $PERL5LIB,
-## $PERL_MM_OPT, @INC, etc.
-if [[ -z $nosudo && -z $cpan_all_flag ]]; then
+# Requires cpan-outdated https://metacpan.org/pod/cpan-outdated
+if [[ -z $cpan_all_flag ]]; then
     checking 'CPAN modules'
     cpan_todo=$(cpan-outdated --verbose --exclude-core)
     if [[ -n $cpan_todo ]]; then
@@ -190,17 +188,17 @@ if [[ -z $nosudo && -z $cpan_all_flag ]]; then
 	    updating 'CPAN modules'
 
 	    if [[ -f $(command -v cpanm) ]]; then
-		echo "$cpan_todo" | sudo cpanm
+		echo "$cpan_todo" | cpanm
 		# Manually submit tests via cpanm-reporter, as it's not fully
 		# integrated to cpanm, as opposed to cpan (when configured)
 		if [[ -f $(command -v cpanm-reporter) ]]; then
 		    cpanm-reporter
 		fi
 	    else
-		echo "$cpan_todo" | xargs sudo cpan -i
+		echo "$cpan_todo" | xargs cpan -i
 		# Unnecessary with cpanm
 		cleaning 'CPAN directories'
-		sudo cpanclean;
+		cpanclean;
 	    fi
 	fi
     else
