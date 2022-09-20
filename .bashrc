@@ -477,7 +477,6 @@ function _exit()
 trap _exit EXIT
 
 
-# Add perlbrew completion FIXME TODO
 ## Sourcin'
 ## Throw all potential sources into an array, check, then source
 # Some personal/private stuff, used in various places, both bash and lisp
@@ -498,6 +497,11 @@ fi
 if [[ -n "$BREW_INSTALLED" ]]; then
     sources+=("${HOMEBREW_PREFIX}"/etc/profile.d/*)
 fi
+# Perlbrew completion
+if [[ -n "$PERLBREW_INSTALLED" ]]; then
+    sources+=("${PERLBREW_ROOT}"/etc/perlbrew-completion.bash)
+fi
+
 # Supplement the above with some missing items (pip, gem), some mac-specific
 # ones (defaults, eject), and some personal peccadilloes
 sources+=(~/.completions.d/*)
