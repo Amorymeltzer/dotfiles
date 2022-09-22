@@ -956,6 +956,7 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # Use bat for brew cat, but only if installed via homebrew; As of v3.3.6,
     # homebrew will attempt to automatically install bat if this is set and it's
     # not installed (by homebrew!)
+    # So why do I have the if? FIXME TODO
     if [ -f "$(brew --prefix)/bin/bat" ]; then
 	export HOMEBREW_BAT=1
     fi
@@ -965,10 +966,11 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # export HOMEBREW_INSTALL_FROM_API=1
     export HOMEBREW_DISPLAY_INSTALL_TIMES=1
 
-    brew_repo=$(brew --repo)
-    alias dgh='cd $brew_repo'
-    alias dgf='cd $brew_repo/Library/Taps/homebrew/homebrew-core'
-    alias dgc='cd $brew_repo/Library/Taps/homebrew/homebrew-cask'
+    # See also brew shellenv
+    HOMEBREW_REPOSITORY=$(brew --repo)
+    alias dgh='cd $HOMEBREW_REPOSITORY'
+    alias dgf='cd $HOMEBREW_REPOSITORY/Library/Taps/homebrew/homebrew-core'
+    alias dgc='cd $HOMEBREW_REPOSITORY/Library/Taps/homebrew/homebrew-cask'
 
     alias ball='brew update ; brew outdated ; brew upgrade'
     alias bclean='brew cleanup ; brew cleanup -s'
@@ -992,11 +994,17 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # Symlink in /Applications
     export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook  --fontdir=/Library/Fonts"
 
-    # Quick homebrew-cask livecheck, relies on HOMEBREW_LIVECHECK_WATCHLIST,
+    # Quick homebrew livecheck, relies on HOMEBREW_LIVECHECK_WATCHLIST,
     # which defaults to ~/.brew_livecheck_watchlist
+    function livecheck-formula() {
+	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
+	    brew update --preinstall && brew livecheck --formula --newer-only -q
+	else
+	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
+	fi
+    }
     function livecheck-cask() {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
-
 	    brew update --preinstall && brew livecheck --cask --newer-only -q
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
