@@ -39,7 +39,7 @@ gpgSign = true
 
 [alias]
 # HEAVILY relied upon
-
+#
 # With git 2.28, init can set a defaultBranch different than `master`, and a lot
 # of projects are now using main.  That's good.  It's a pain for git aliases,
 # though, since git (unlike, say, bash), can't really "store" information, so
@@ -50,7 +50,7 @@ gpgSign = true
 # branch and then supply that to other aliases.  This is a pain since a simple
 # `lm = log main..HEAD` has to instead become `lm = "!git log $(git
 # default-branch)..HEAD"` but here we are.
-
+#
 # The concept of a default branch doesn't really make sense in the lofty sense
 # of git (reasonably good (if under-appreciated) comment here gets into it a
 # bit: https://stackoverflow.com/a/65710958/2521092) but in practice, we all
@@ -71,6 +71,7 @@ default-branch = "!git branch --sort=-refname | grep -o -m1 '\\b\\(main\\|master
 	
 
 h = help
+which = help # bash hangover
 hc = help config
 cfg = config
 cfgg = config --get
