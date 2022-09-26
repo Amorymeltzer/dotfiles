@@ -98,7 +98,7 @@ else
     else
 	function showLast {
 	    moveDir
-	    cat "$(find . -maxdepth 1 -name '*.md' | tail -n 2 | grep -v "$today" | tail -n 1)"
+	    cat "$(find -s . -maxdepth 1 -name '*.md' | tail -n 2 | grep -v "$today" | tail -n 1)"
 	}
 
 	case "$1" in
