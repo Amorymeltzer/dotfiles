@@ -496,6 +496,11 @@ fi
 # bash-completion@2 covers folks in "${HOMEBREW_PREFIX}"/etc/bash_completion.d/
 if [[ -n "$BREW_INSTALLED" ]]; then
     sources+=("${HOMEBREW_PREFIX}"/etc/profile.d/*)
+
+    # fzf via homebrew doesn't install its completion in the same way.  Stupid.
+    if [[ -f $(command -v fzf) ]]; then
+	sources+=("${HOMEBREW_PREFIX}"/opt/fzf/shell/completion.bash)
+    fi
 fi
 # Perlbrew completion
 if [[ -n "$PERLBREW_INSTALLED" ]]; then
