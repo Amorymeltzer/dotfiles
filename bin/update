@@ -5,6 +5,7 @@
 
 ## TODO:
 ## More sudo deescalation (macports, gem)
+## Use a default config file
 ## Better color management
 ## Detect errors
 
@@ -175,34 +176,41 @@ fi
 
 # Requires cpan-outdated https://metacpan.org/pod/cpan-outdated
 if [[ -z $cpan_all_flag ]]; then
-    checking 'CPAN modules'
-    cpan_todo=$(cpan-outdated --verbose --exclude-core)
-    if [[ -n $cpan_todo ]]; then
-	echo "$cpan_todo"
-	cpan_todo=$(cut -f 1 -d ' ' <<< "$cpan_todo")
-	if [[ -f $(command -v cpan-listchanges) ]]; then
-	    echo -e "${Color_Green}What's new in ${Color_Red_Intense}CPAN modules${Color_zOff}..."
-	    cpan-listchanges `echo "$cpan_todo"`
-	fi
-	if [[ -z $cpan_flag ]]; then
-	    updating 'CPAN modules'
+    if [[ -f $(command -v cpan-outdated) ]]; then
+	checking 'CPAN modules'
+	cpan_todo=$(cpan-outdated -p --exclude-core)
+	if [[ -n $cpan_todo ]]; then
+	    echo "$cpan_todo"
 
-	    if [[ -f $(command -v cpanm) ]]; then
-		echo "$cpan_todo" | cpanm
-		# Manually submit tests via cpanm-reporter, as it's not fully
-		# integrated to cpanm, as opposed to cpan (when configured)
-		if [[ -f $(command -v cpanm-reporter) ]]; then
-		    cpanm-reporter
-		fi
-	    else
-		echo "$cpan_todo" | xargs cpan -i
-		# Unnecessary with cpanm
-		cleaning 'CPAN directories'
-		cpanclean;
+	    if [[ -f $(command -v cpan-listchanges) ]]; then
+		echo -e "${Color_Green}What's new in ${Color_Red_Intense}CPAN modules${Color_zOff}..."
+		# shellcheck disable=SC2086
+		cpan-listchanges $cpan_todo
 	    fi
+
+	    if [[ -z $cpan_flag ]]; then
+		updating 'CPAN modules'
+
+		if [[ -f $(command -v cpanm) ]]; then
+		    echo "$cpan_todo" | cpanm
+
+		    # Manually submit tests via cpanm-reporter, as it's not fully
+		    # integrated to cpanm, as opposed to cpan (when configured)
+		    if [[ -f $(command -v cpanm-reporter) ]]; then
+			cpanm-reporter
+		    fi
+		else
+		    echo "$cpan_todo" | xargs cpan -i
+		    # Unnecessary with cpanm
+		    cleaning 'CPAN directories'
+		    cpanclean;
+		fi
+	    fi
+	else
+	    echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
 	fi
     else
-	echo -e "${Color_Green}CPAN modules already up-to-date!${Color_zOff}"
+	echo "Updating Perl CPAN modules requires cpan-outdated aka App::cpanoutdated"
     fi
 fi
 
