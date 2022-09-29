@@ -241,8 +241,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	    echo "$brew_todo"
 	    if [[ -z $brew_flag ]]; then
 		updating 'brews'
-		# brew upgrade now handles casks, but I still prefer cu
-		echo "$brew_todo" | xargs brew upgrade --formula
+		brew upgrade --formula
 
 		cleaning 'brews'
 		brew cleanup -s
@@ -254,16 +253,15 @@ if [[ -z $homebrew_all_flag ]]; then
 
     # Might use sudo
     if [[ -z $nosudo && -z $brewcask_all_flag ]]; then
-	# Uses brew cu, mainly for the superior pinning ability
-	# https://github.com/buo/homebrew-cask-upgrade
-	# Want autoupdating casks, but not latest
-	cask_todo=$(brew outdated --cask --greedy --verbose|grep -v latest)
+	# Want auto_updates casks, but not :latest.  Should probably do a manual
+	# check/brew cu for those: https://github.com/buo/homebrew-cask-upgrade
+	cask_todo=$(brew outdated --cask --greedy-auto-updates)
 	if [[ -n $cask_todo ]]; then
 	    echo "$cask_todo"
 	    if [[ -z $brewcask_flag ]]; then
 		updating 'casks'
-		# Some apps require sudo
-		brew cu -aqy --no-brew-update --cleanup
+		# Some apps may require sudo
+		brew upgrade --cask --greedy-auto-updates
 
 		cleaning 'casks'
 		brew cleanup -s
