@@ -254,8 +254,8 @@ export MANPAGER="less -FXiRgMw";
 export LESS="-FXiRgMw";
 
 # Use lesspipe.sh (look inside archives) just in case
-if [ -x /opt/local/bin/lesspipe.sh ]; then
-    export LESSOPEN='| /opt/local/bin/lesspipe.sh %s'
+if [[ -f $(command -v lesspipe.sh) ]]; then
+    export LESSOPEN="|${HOMEBREW_PREFIX}/bin/lesspipe.sh %s"
 fi
 
 # Give man pages some color.  Can't use color names?
@@ -501,6 +501,16 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     if [[ -f $(command -v fzf) ]]; then
 	sources+=("${HOMEBREW_PREFIX}"/opt/fzf/shell/completion.bash)
     fi
+
+    # z, the awesome helper for moving around to popular directories
+    z_file="${HOMEBREW_PREFIX}"/etc/profile.d/z.sh
+    if [[ -f "$z_file" ]]; then
+	sources+=("$z_file")
+
+	export _Z_MAX_SCORE=13000	# Up from 9000, entries persist longer
+	export _Z_OWNER="$USER"		# Maybe this should be $USER_NAME?
+    fi
+
 fi
 # Perlbrew completion
 if [[ -n "$PERLBREW_INSTALLED" ]]; then
@@ -539,13 +549,6 @@ if [[ -f $(command -v pip) ]]; then
     # export PIP_REQUIRE_VIRTUALENV=true
 fi
 
-# z, the awesome helper for moving around to popular directories
-# Installed via macports: https://github.com/rupa/z
-if [[ -e /opt/local/etc/profile.d/z.sh ]]; then
-    export _Z_MAX_SCORE=13000	# Up from 9000, entries persist longer
-    . /opt/local/etc/profile.d/z.sh
-fi
-
 
 # Make perl -d automatically use NYTProf.  See also dprofpp
 export PERL5DB='use Devel::NYTProf'
@@ -562,13 +565,13 @@ if [[ -f $(command -v perlcritic) ]]; then
     function explain_perlcritic() {
 	perldoc Perl::Critic::Policy::"$1"
     }
-    _explain_perlcritic()		# ;;;;;; ##### FIXME TODO
-    {
+    # Doesn't complete after first portion FIXME TODO
+    _explain_perlcritic() {
 	local cur="${COMP_WORDS[COMP_CWORD]}"
 	local list
-	list="$(\ls /opt/local/share/perl$PERL5_V/siteman/man3/Perl\:\:Critic\:\:Policy\:\:*)"
+	list="$(\ls ${PERLBREW_MANPATH}/man3/Perl\:\:Critic\:\:Policy\:\:*)"
 	local clean
-	clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3pm$//g')"
+	clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3$//g')"
 
 	COMPREPLY=($(compgen -W "$clean" -- "$cur"))
     }
@@ -980,12 +983,13 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     alias bclean='brew cleanup ; brew cleanup -s'
     alias bsearch='brew search'
     alias bs='bsearch '
+    alias bout='brew outdated'
     alias binfo='brew info'
     alias blist='brew list'
     alias bdoctor='brew doctor'
 
-    # This could just be `brew deps --installed --formula` and would be *much* faster,
-    # but the blue coloring is nice?  Maybe stupid
+    # This could just be `brew deps/uses --installed --formula` and would be
+    # *much* faster, but the blue coloring is nice?  Maybe stupid
     # Do --tree
     function homebrew-deps() {
 	brew list --formula | while read -r formula; do echo -en "${Color_Blue_Bold}$formula ->${Color_zOff}"; brew deps --formula --installed "$formula" | awk '{printf(" %s ", $0)}'; echo ""; done
@@ -1147,7 +1151,8 @@ alias play='itunes play'
 alias pause='itunes pause'
 
 # Volume control, potentially using osxutils
-if [ ! -x /opt/local/bin/setvolume ]; then
+# https://github.com/specious/osxutils
+if [[ ! -f $(command -v setvolume) ]]; then
     function setvolume() {
 	if [ ! "$1" ]; then
 	    echo "setvolume <0-100>"
