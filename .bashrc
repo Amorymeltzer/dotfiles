@@ -565,17 +565,27 @@ if [[ -f $(command -v perlcritic) ]]; then
     function explain_perlcritic() {
 	perldoc Perl::Critic::Policy::"$1"
     }
-    # Doesn't complete after first portion FIXME TODO
     _explain_perlcritic() {
-	local cur="${COMP_WORDS[COMP_CWORD]}"
-	local list
-	list="$(\ls ${PERLBREW_MANPATH}/man3/Perl\:\:Critic\:\:Policy\:\:*)"
-	local clean
-	clean="$(echo -n "${list}" | sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3$//g')"
+	local cur cword
+	COMPREPLY=()
+	# Part of bash-completion, this is instead of doing the classic
+	# cur="${COMP_WORDS[COMP_CWORD]}", etc.  Shout out to
+	# https://stackoverflow.com/a/12495480/2521092
+	_get_comp_words_by_ref -n : cur cword
 
-	COMPREPLY=($(compgen -W "$clean" -- "$cur"))
+	# local list of Perl::Critic policies
+	if [[ $cword -eq 1 ]]; then
+	    COMPREPLY=($(compgen -W "$(ls ${PERLBREW_MANPATH}/man3/Perl\:\:Critic\:\:Policy\:\:*|sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3$//g')" -- "$cur"))
+	    # https://stackoverflow.com/a/12495480/2521092
+	    __ltrim_colon_completions "$cur"
+	    return 0
+	fi
     }
     complete -F _explain_perlcritic explain_perlcritic
+
+    # Unnecessary with -n : and __ltrim, but cite anyway:
+    # https://stackoverflow.com/a/2806133/2521092
+    # COMP_WORDBREAKS=${COMP_WORDBREAKS//:}
 fi
 
 # perldoc shorthands
