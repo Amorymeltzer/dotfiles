@@ -517,8 +517,8 @@ if [[ -n "$PERLBREW_INSTALLED" ]]; then
     sources+=("${PERLBREW_ROOT}"/etc/perlbrew-completion.bash)
 fi
 
-# Supplement the above with some missing items (pip), some mac-specific
-# ones (defaults, eject), and some personal peccadilloes
+# Supplement the above with some missing items, at this point just some
+# mac-specific peccadilloes (defaults, eject)
 sources+=(~/.completions.d/*)
 # Source all the (readable) things (files)!
 for file in "${sources[@]}"; do
