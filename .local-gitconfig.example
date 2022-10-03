@@ -86,6 +86,10 @@ commits = browse -- commits
 # FIXME TODO: Colorize
 div = divergence
 
+[merge]
+# Added in git 2.35
+conflictStyle = zdiff3
+
 [log]
 date = auto:human-local
 
