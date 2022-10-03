@@ -494,8 +494,8 @@ singleKey = true
 
 [help]
 # If there's only suggestion from a typo, automatically call it after 1.5s
-# On git 2.34, this can be prompt for interactive
-autocorrect = 15
+# As of git 2.34, this can be prompt for interactive, and is in local-config
+autoCorrect = 15
 
 # Only added in 2.28, but unlike other config options, doesn't break on older
 # versions of git, so safe for legacy systems (no need for .local-gitconfig)

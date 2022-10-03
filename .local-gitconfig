@@ -89,6 +89,10 @@ div = divergence
 [log]
 date = auto:human-local
 
+[help]
+autoCorrect = prompt
+
+
 [blame]
 date = auto:human-local
 
