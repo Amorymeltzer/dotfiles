@@ -612,7 +612,7 @@ required = true
 clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
 
-# Customize based on local environment, etc.
+# Customize based on local environment, newer git versions, etc.
 # eg: core.editor, core.pager, gpg, icdiff, ghi
 # Example file at .local-gitconfig.example
 [include]

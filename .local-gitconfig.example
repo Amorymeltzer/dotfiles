@@ -99,6 +99,10 @@ autoCorrect = prompt
 [blame]
 date = auto:human-local
 
+[transfer]
+# Added in git 2.37
+credentialsInUrl = warn
+
 [icdiff]
 # options = --color-map='change:magenta_bold,meta:white' --tabs=4
 options = --color-map='add:green,change:magenta,description:blue,line-numbers:white,meta:white,separator:blue,subtract:red' --tabs=4
