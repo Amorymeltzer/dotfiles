@@ -994,12 +994,13 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     alias dgf='cd $HOMEBREW_REPOSITORY/Library/Taps/homebrew/homebrew-core'
     alias dgc='cd $HOMEBREW_REPOSITORY/Library/Taps/homebrew/homebrew-cask'
 
-    alias ball='brew update ; brew outdated ; brew upgrade'
+    alias ball='brew update ; brew outdated --greedy-auto-updates ; brew upgrade  --greedy-auto-updates'
     alias bclean='brew cleanup ; brew cleanup -s'
     alias bsearch='brew search'
     alias bs='bsearch '
-    alias bout='brew outdated'
+    alias bout='brew outdated --greedy-auto-updates'
     alias binfo='brew info'
+    alias bhome='brew home'
     alias blist='brew list'
     alias bdoctor='brew doctor'
 
