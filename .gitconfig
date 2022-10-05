@@ -474,6 +474,8 @@ prompt = false
 autoStash = true
 # Automatically file squash! or fixup! prefixed commits where appropriate, --no-autosquash to turn off for incompatible options
 autoSquash = true
+# Automatically update any other branches that point to anything being rebased
+updateRefs = true
 # warn but proceed if commits dropped via exclusion, use drop instead
 missingCommitsCheck = warn
 
