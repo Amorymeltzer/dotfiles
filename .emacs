@@ -2993,7 +2993,9 @@ This checks in turn:
 ;;;;;;;;;;;;;;;;;;;;
 ;; Custom SCOWL dictionary: size 70, variants 2, diacritics both
 ;; http://app.aspell.net/create
-(setq ispell-dictionary "en-custom"
+;; Disabled because it's a drag to symlink my custom dictionary into homebrew's
+;; versioned aspell directory, even with multi dictionaries FIXME TODO
+(setq ;; ispell-dictionary "en-custom"
       ;; This should be the default for aspell, but just in case...
       ;; See also:
       ;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
