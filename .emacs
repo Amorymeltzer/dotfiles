@@ -2974,14 +2974,10 @@ This checks in turn:
 (defalias 'elisp-repl 'ielm)
 
 
-;; Interesting! But no
-;; ;; Make scripts executable after they have been saved.
-;; (add-hook 'after-save-hook
-;;    '(lambda ()
-;;       (let ( (temp (substring buffer-file-name -3)) )
-;;         (if (or (equal temp ".pl")
-;;                 (equal temp ".sh"))
-;;             (executable-make-buffer-file-executable-if-script-p)))))
+;; Make scripts executable after they have been saved.  Probably covered with my
+;; bash newscript function, but just in case
+(add-hook 'after-save-hook
+	  'executable-make-buffer-file-executable-if-script-p)
 
 
 ;; Enable wildcard open files
