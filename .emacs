@@ -859,7 +859,8 @@ backups." t)
 ;; Exclude boring files
 (add-to-list 'recentf-exclude "\\.el.gz\\'")
 (add-to-list 'recentf-exclude "\\.elc\\'")
-(add-to-list 'recentf-exclude "\\/opt\\/local\\/share\\/emacs.*\\'")
+;; Is there a variable for the directory emacs' files come in?
+(add-to-list 'recentf-exclude ".*\\/opt.*\\/share\\/emacs.*\\'")
 (add-to-list 'recentf-exclude (concat my/ido-file "\\'"))
 (add-to-list 'recentf-exclude (concat my/smex-file "\\'"))
 (add-to-list 'recentf-exclude (concat my/recentf-file "\\'"))
@@ -2368,8 +2369,8 @@ using `ido-completing-read'."
 	   (kill-buffer buffer)) ad-do-it))
 (ad-activate 'term-sentinel)
 
-;; Always use /opt/local/bin/bash, don't ask
-(defvar my-term-shell "/opt/local/bin/bash")
+;; Always use new bash, don't ask
+(defvar my-term-shell shell-file-name)
 (defadvice ansi-term (before force-bash)
   (interactive (list my-term-shell)))
 (ad-activate 'ansi-term)
