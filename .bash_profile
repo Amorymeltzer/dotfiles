@@ -203,8 +203,12 @@ if [[ -d "$GIT_EXTL_DIR/tiny-scripts@vitorgalvao" ]]; then
     # Don't need 'em all but better than alias/function-ing just a handful
     new_path="$new_path:$GIT_EXTL_DIR/tiny-scripts@vitorgalvao"
 fi
+# Personal lockquote script
 new_path="$new_path:$GIT_PERS_DIR/lockquote"
-
+# CKAN?  CKAN
+if [[ -d /Applications/CKAN.app/Contents/MacOS/ ]]; then
+    new_path="$new_path:/Applications/CKAN.app/Contents/MacOS/"
+fi
 
 
 # Nearly done building path, so remove dupes and prepare for export
