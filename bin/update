@@ -10,7 +10,7 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename "$0") [-bBmMeEkKWcCnNgrRpPLhH] [-S]
+Usage: $(basename "$0") [-bBmMeEkKWcCaAnNgrRpPLhH] [-S]
 
   -S		Skip all items that might need sudo (Macports, ruby, homebrew-cask)
 
@@ -25,6 +25,8 @@ Usage: $(basename "$0") [-bBmMeEkKWcCnNgrRpPLhH] [-S]
   -W		skip all homebrew and homebrew-cask updates
   -c		check for cpan updates but don't upgrade
   -C		skip all cpan actions
+  -a		check for macOS App store updates but don't upgrade
+  -A		skip all macOS App store updates
   -n		check for npm nodejs updates (global) but don't upgrade
   -N		skip all npm nodejs actions
   -g		skip updating gem itself
@@ -38,7 +40,7 @@ END_HELP
 }
 
 # Parse commandline options
-while getopts 'SdbBcCeEgkKWLmMnNpPrRhH' opt; do
+while getopts 'SaAbBcCeEgkKWLmMnNpPrRhH' opt; do
     case $opt in
 	S) nosudo='1';;
 	b) port_base_flag='1';;
@@ -52,6 +54,8 @@ while getopts 'SdbBcCeEgkKWLmMnNpPrRhH' opt; do
 	W) homebrew_all_flag='2';;
 	c) cpan_flag='1';;
 	C) cpan_all_flag='2';;
+	a) mas_flag='1';;
+	A) mas_all_flag='2';;
 	n) npm_flag='1';;
 	N) npm_all_flag='2';;
 	g) gem_flag='1';;
@@ -269,6 +273,20 @@ if [[ -z $homebrew_all_flag ]]; then
 	else
 	    uptodate 'casks'
 	fi
+    fi
+fi
+
+if [[ -z $mas_all_flag ]]; then
+    checking 'macOS App store updates'
+    mas_todo=$(mas outdated)
+    if [[ -n $mas_todo ]]; then
+	echo "$mas_todo"
+	if [[ -z $mas_flag ]]; then
+	    updating 'macOS App store updates'
+	    mas upgrade
+	fi
+    else
+	uptodate 'macOS App store updates'
     fi
 fi
 
