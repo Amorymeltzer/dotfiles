@@ -1503,7 +1503,7 @@ randpass () {
     fi
     alnum=$(env LC_CTYPE=C tr -cd '[:alnum:]' < /dev/urandom | head -c $length)
     echo "$alnum"
-    graph=$(cat  | env LC_CTYPE=C tr -cd '[:graph:]' < /dev/urandom | head -c $length)
+    graph=$(env LC_CTYPE=C tr -cd '[:graph:]' < /dev/urandom | head -c $length)
     echo "$graph"
 }
 
