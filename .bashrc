@@ -626,9 +626,10 @@ fi
 # emacs daemon/emacsclient
 alias emd='\emacs --daemon '
 # Get server status
-# Improvable with https://stackoverflow.com/q/1510481/2521092 ?
+# Something like <https://stackoverflow.com/a/10565139/2521092> is neat, i.e.
+# `emacsclient -ca false -e '(delete-frame)'`, but this is much faster
 function eserver-status() {
-    if [[ $(ps -Af | grep "emacs --daemon") ]]; then
+    if pgrep -qf 'emacs --daemon'; then
 	echo "Emacs server running"
     else
 	echo "Emacs server not running"
