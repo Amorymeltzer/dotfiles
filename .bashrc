@@ -440,11 +440,11 @@ function prompt_command {
     export PS1
 
     # create a $fill of all screen width minus the time string and a space:
-    let fillsize=${COLUMNS}	# fullscreen
+    ((fillsize=COLUMNS))	# fullscreen
     # room for battery charge plus the color control codes, not if sshing
     if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && $(which battery) ]]; then
 	battery=$(battery -a 2>/dev/null | tr -d ' ')
-	let fillsize=${fillsize}-${#battery}+12
+	((fillsize=fillsize-${#battery}+12))
     fi
 
     if [[ $(which hr) ]]; then
@@ -454,7 +454,7 @@ function prompt_command {
 	while [ "$fillsize" -gt "0" ]
 	do
 	    fill="-${fill}"
-	    let fillsize=${fillsize}-1
+	    ((fillsize=fillsize-1))
 	done
 	fill="${fill}${battery}"
     fi
@@ -672,7 +672,7 @@ function gitignore() {
 }
 
 # Javascript alias, can also just use node
-alias jsc='/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc '
+alias jsc='/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc '
 
 #  alias reload="exec $SHELL -l"
 alias reload='. ~/.bashrc'
@@ -1237,22 +1237,21 @@ alias tron='lightcycle'
 alias zerocool='nc z.ero.cool 1337'
 
 # Lock the screen (when going AFK)
+# Busted in monterey FIXME TODO
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 # Better as just starting screensaver
 alias screensaver='open -a ScreenSaverEngine'
-# Screensaver as wallpaper, ctrl-c or cmd-. to quit
-alias screensaverToWallpaper="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background"
-# Stolen from @cowboy - https://github.com/cowboy/dotfiles/commit/28a3fd898f93c602080e3c3112b0f04854b66f22
-function lock-screen()
-{
+# Originally from @cowboy - https://github.com/cowboy/dotfiles/commit/28a3fd898f93c602080e3c3112b0f04854b66f22
+# Modified for modern macOS
+function lock-screen() {
     sleep 0.5
 
-    if [[ "$(ioreg -c AppleSmartBattery | grep '"ExternalConnected" = Yes')" ]]; then
-	# Plugged in: start screensaver.
-	open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app
+    if "$(ioreg -c AppleSmartBattery | grep -q '"ExternalConnected" = Yes')"; then
+	# Plugged in: start screensaver
+	/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine
     else
-	# Battery power: go to lock menu.
-	/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend
+	# Battery power: blank screen
+	pmset displaysleepnow
     fi
 }
 
@@ -1316,10 +1315,10 @@ alias ipinfo='http -b ipinfo.io/json'
 # Should include fallback for no network, etc.
 function ssid() {
     local ssid
-    ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | grep " SSID" | sed "s/.*: //")
+    ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | sed "s/.*: //")
 
     if [ "$1" ]; then
-	if [ "$(echo "$ssid" | grep -w "$1")" ]; then
+	if echo "$ssid" | grep -qw "$1"; then
 	    echo :
 	fi
     else
