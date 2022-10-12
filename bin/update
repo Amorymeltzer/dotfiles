@@ -5,7 +5,6 @@
 
 ## TODO:
 ## More sudo deescalation (macports, gem)
-## Use a default config file
 ## Detect errors
 
 function help {
@@ -36,8 +35,22 @@ Usage: $(basename "$0") [-bBmMeEkKWcCaAnNgrRpPLhH] [-S]
   -P		skip all python actions
   -L		skip all emacs lisp actions
   -h -H		this help
+
+
+  You can also set a config file at "~/.updaterc" with default options, something like:
+
+  macports_all_flag='1'
+  mas_flag='1'
+
 END_HELP
 }
+
+# Source config file with default options
+configrc=$HOME/.updaterc
+if [ -f "$configrc" ]; then
+    source "$configrc"
+fi
+
 
 # Parse commandline options
 while getopts 'SaAbBcCeEgkKWLmMnNpPrRhH' opt; do
