@@ -1482,9 +1482,9 @@ alias cdf='cdfinder'
 # Pick random line from a file
 pickfrom () {
     local file=$1
-    [ -z "$file" ] && reference $FUNCNAME && return
-    length=$(cat $file | wc -l)
-    n=$(expr $RANDOM \* $length \/ 32768 + 1)
+    [ -z "$file" ] && reference "${FUNCNAME[0]}" && return
+    length=$(wc -l < "$file")
+    n=$((RANDOM * length / 32768 + 1))
     head -n "$n" "$file" | tail -1
 }
 # Generate random password from dictionary words
@@ -1506,6 +1506,7 @@ randpass () {
     graph=$(env LC_CTYPE=C tr -cd '[:graph:]' < /dev/urandom | head -c $length)
     echo "$graph"
 }
+#############
 
 # Quick view of the market
 function marketupdate() {
@@ -1519,15 +1520,7 @@ alias mu='marketupdate'
 alias stockmarket='ticker'
 alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 
-# Update crathighlighter
-function crathighlighter() {
-    (cd "$GIT_PERS_DIR"/wiki/crathighlighter/ ; perl cratHighlighterSubpages.pl "$@")
-}
-# Check twinkle
-function twinkleCheck() {
-    (cd "$GIT_PERS_DIR"/wiki/twinkle/ ; perl twinkleCheck.pl "$@")
-}
-# Easy
+# Easy access to toolforge
 alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
 
 # Get the weather
@@ -1573,7 +1566,7 @@ function thisforthat {
 }
 alias sobasically='thisforthat'
 
-function dad {
+function dadjoke {
     curl https://icanhazdadjoke.com/
     echo
 }
@@ -1584,7 +1577,7 @@ function center {
     width=$(tput cols);
     local str="$*";
     local len=${#str};
-    [ $len -ge $width ] && echo "$str" && return;
+    [ "$len" -ge "$width" ] && echo "$str" && return;
     for ((i = 0; i < $((((width - len)) / 2)); i++)); do
 	echo -n " ";
     done;
@@ -1608,7 +1601,7 @@ EOF
 # Escape UTF-8 characters into their 3-byte format
 function escape()
 {
-    printf "\\\x%s" "$(printf "$@" | xxd -p -c1 -u)"
+    printf "\\\x%s" "$(printf "%s" "$@" | xxd -p -c1 -u)"
     # print a newline unless we're piping the output to another program
     if [ -t 1 ]; then
 	echo # newline
