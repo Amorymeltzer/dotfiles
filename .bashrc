@@ -575,7 +575,7 @@ if [[ -f $(command -v perlcritic) ]]; then
 
 	# local list of Perl::Critic policies
 	if [[ $cword -eq 1 ]]; then
-	    COMPREPLY=($(compgen -W "$(ls ${PERLBREW_MANPATH}/man3/Perl\:\:Critic\:\:Policy\:\:*|sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3$//g')" -- "$cur"))
+	    COMPREPLY=($(compgen -W "$(find "${PERLBREW_MANPATH}/man3" -maxdepth 1 -path '*Perl::Critic::Policy::*'|sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3$//g')" -- "$cur"))
 	    # https://stackoverflow.com/a/12495480/2521092
 	    __ltrim_colon_completions "$cur"
 	    return 0
