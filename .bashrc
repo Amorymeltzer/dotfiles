@@ -995,11 +995,18 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     alias dgf='cd $HOMEBREW_REPOSITORY/Library/Taps/homebrew/homebrew-core'
     alias dgc='cd $HOMEBREW_REPOSITORY/Library/Taps/homebrew/homebrew-cask'
 
+    # Shorthand, useful?
+    alias b='brew '
+    # Toss in the completion
+    complete -o bashdefault -o default -F _brew_with_services b
+
     alias ball='brew update ; brew outdated --greedy-auto-updates ; brew upgrade  --greedy-auto-updates'
     alias bclean='brew cleanup ; brew cleanup -s'
     alias bsearch='brew search'
     alias bs='bsearch '
     alias bout='brew outdated --greedy-auto-updates'
+    alias bupdate='brew update'
+    alias bupgrade='brew upgrade  --greedy-auto-updates'
     alias binfo='brew info'
     alias bhome='brew home'
     alias blist='brew list'
@@ -1038,8 +1045,8 @@ if [[ -n "$BREW_INSTALLED" ]]; then
 fi
 
 # bundle exec alias
-alias be='bundle exec'
-alias bej='be jekyll serve --watch'
+alias bex='bundle exec'
+alias bexj='be jekyll serve --watch'
 alias jes='jekyll serve --watch'
 
 # Quickly open and make a new file executable; emacs will add headers and move
