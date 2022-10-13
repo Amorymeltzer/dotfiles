@@ -85,7 +85,7 @@ function g {
     else
 	case "$1" in
 	    scan|'help'|h|browse|grab|config|cfg|version|notifications) git "$@";;
-	    *) echo "Not a git repository"
+	    *) echo "Not a git repository or other fatal issue"
 	esac
     fi
 }
