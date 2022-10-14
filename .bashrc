@@ -470,8 +470,7 @@ export PS4='+ '				      # Quaternary prompt, ???
 PROMPT_COMMAND=prompt_command
 
 # Function to run upon exit of shell
-function _exit()
-{
+function _exit() {
     echo -e "${Color_Red_Bold_Intense}Thanks for playing${Color_zOff}"
 }
 trap _exit EXIT
@@ -1223,16 +1222,14 @@ alias pretty-manpath="manpath | tr ':' '\n'"
 # Matrix-esque screensaver-esque; man tr for different options
 alias matrix='tr -c "[:print:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=lcase,unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
 # Star Wars
-function starwars()
-{
+function starwars() {
     echo "Loading Star Wars..."
     echo "Use C-] to exit"
     sleep 1
     telnet towel.blinkenlights.nl
 }
 # Lightcycle https://github.com/zachlatta/sshtron
-function lightcycle()
-{
+function lightcycle() {
     echo "Loading Tron Lightcycle..."
     echo "Use WASD to play, ctrl-C to quit"
     sleep 1
@@ -1274,8 +1271,7 @@ alias events='icalBuddy -sd -t -li 7 eventsFrom:today to:today+5'
 
 # Quickly check connection by pinging google
 alias pg='ping -c 1 google.com'
-function down4me()		# FIXME TODO
-{
+function down4me() {		# FIXME TODO
     curl -s "http://www.downforeveryoneorjustme.com/$1" | sed "/just you/!d;s/<[^>]*>//g" | sed -e 's/  //g' | sed -e 's/http.*#x2F;/  /g'
 }
 alias downforeveryoneorjustme='down4me'
@@ -1367,8 +1363,7 @@ function uniqsort() {
     sort "$1" | uniq -c | sort -nr
 }
 # quicksort in three lines from http://git.io/UzwyWQ
-qsort()
-{
+qsort() {
     local L=""; local G=""; [ $# -eq 1 ] && echo "$1" && return;
     P=$1; shift; for i in "$@"; do [ "$i" -lt "$P" ] && L="$L $i" || G="$G $i"; done
     [ -z "$L" ] || L=$(qsort "$L"); [ -z "$G" ] || G=$(qsort "$G"); echo "$L $P $G"
@@ -1550,8 +1545,7 @@ function weather() {
 
 # From https://gist.github.com/komasaru/9635884
 # Busted, replace with https://www.aviationweather.gov/metar FIXME TODO
-function metar()
-{
+function metar() {
     if [[ ! "$1" =~ [0-9A-Z]{4} ]]; then
 	echo "Please enter an appropriate METAR code"
 	echo "Suggestions: KEDU KSMF KSAC KNYC KBOS KSFO"
@@ -1606,8 +1600,7 @@ EOF
 ##############################################################################
 # Things I will never, ever use from https://github.com/mathiasbynens/dotfiles
 # Escape UTF-8 characters into their 3-byte format
-function escape()
-{
+function escape() {
     printf "\\\x%s" "$(printf "%s" "$@" | xxd -p -c1 -u)"
     # print a newline unless we're piping the output to another program
     if [ -t 1 ]; then
@@ -1616,8 +1609,7 @@ function escape()
 }
 
 # Get a character's Unicode code point
-function codepoint()
-{
+function codepoint() {
     perl -e "use utf8; print sprintf('U+%04X', ord(\"$*\"))"
     # print a newline unless we're piping the output to another program
     if [ -t 1 ]; then
@@ -1732,8 +1724,7 @@ alias fs='filesize'
 alias map="xargs -n1 "
 
 # Repeat n times command.
-function repeat()
-{
+function repeat() {
     local i max
     max=$1; shift;
     for ((i=1; i <= max ; i++)); do  # --> C-like syntax
@@ -1746,41 +1737,48 @@ function binaryclock() {
     perl -e 'for(;;){@d=split("",`date +%H%M%S`);print"\r";for(0..5){printf"%.4b ",$d[$_]}sleep 1}'
 }
 
+
+# Just easier and better
+# https://github.com/yt-dlp/yt-dlp
+if [[ -f $(command -v yt-dlp) ]]; then
+    alias youtube-dl='yt-dlp '
+fi
 ######## Scripts originally by @exogen
-function aac {
-    # Get best audio, convert it to AAC, and save it to the current directory.
-    youtube-dl --default-search=ytsearch: \
-	       --restrict-filenames \
-	       --format=bestaudio \
-	       --extract-audio \
-	       --audio-format=aac \
-	       --audio-quality=1 "$*"
-}
-function mp3 {
-    # Get best audio, convert it to MP3, and save it to the current directory.
-    youtube-dl --default-search=ytsearch: \
-	       --restrict-filenames \
-	       --format=bestaudio \
-	       --extract-audio \
-	       --audio-format=mp3 \
-	       --audio-quality=1 "$*"
-}
-function listen-youtube {
-    # Skip DASH manifest for speed purposes. This might actually disable being
-    # able to specify things like 'bestaudio' as the requested format, but try
-    # anyway. Use "$*" so that quoting the requested song isn't necessary.
-    youtube-dl --default-search=ytsearch: \
-	       --youtube-skip-dash-manifest \
-	       --output="${TMPDIR:-/tmp}/%(title)s-%(id)s.%(ext)s" \
-	       --restrict-filenames \
-	       --format=bestaudio \
-	       --exec=mpv "$*"
-}
+if type -a 2>/dev/null youtube-dl; then
+    function aac {
+	# Get best audio, convert it to AAC, and save it to the current directory.
+	youtube-dl --default-search=ytsearch: \
+		   --restrict-filenames \
+		   --format=bestaudio \
+		   --extract-audio \
+		   --audio-format=aac \
+		   --audio-quality=1 "$*"
+    }
+    function mp3 {
+	# Get best audio, convert it to MP3, and save it to the current directory.
+	youtube-dl --default-search=ytsearch: \
+		   --restrict-filenames \
+		   --format=bestaudio \
+		   --extract-audio \
+		   --audio-format=mp3 \
+		   --audio-quality=1 "$*"
+    }
+    function listen-youtube {
+	# Skip DASH manifest for speed purposes. This might actually disable being
+	# able to specify things like 'bestaudio' as the requested format, but try
+	# anyway. Use "$*" so that quoting the requested song isn't necessary.
+	youtube-dl --default-search=ytsearch: \
+		   --youtube-skip-dash-manifest \
+		   --output="${TMPDIR:-/tmp}/%(title)s-%(id)s.%(ext)s" \
+		   --restrict-filenames \
+		   --format=bestaudio \
+		   --exec=mpv "$*"
+    }
+fi
 ########
 
 # Generate family tree without polutting current directory
-function family()
-{
+function family() {
     Rscript ~/Documents/R/kinship/family_tree.R
     rm Rplots.pdf
 }
