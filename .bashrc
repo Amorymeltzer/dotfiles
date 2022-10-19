@@ -1744,7 +1744,8 @@ if [[ -f $(command -v yt-dlp) ]]; then
     alias youtube-dl='yt-dlp '
 fi
 ######## Scripts originally by @exogen
-if type -a 2>/dev/null youtube-dl; then
+# type since it might be an alias
+if type -a &>/dev/null youtube-dl; then
     function aac {
 	# Get best audio, convert it to AAC, and save it to the current directory.
 	youtube-dl --default-search=ytsearch: \
