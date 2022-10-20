@@ -447,7 +447,8 @@ timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --for
 doc = !git --html-path
 
 [push]
-default = simple
+default = upstream
+# autoSetupRemote true added in 2.37, makes push assume -u/--set-upstream
 # Make `git push` push relevant annotated tags when pushing branches out.
 followTags = true
 # Currently unsupported by GitHub https://github.community/t/push-signed/938/4

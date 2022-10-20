@@ -86,6 +86,10 @@ commits = browse -- commits
 # FIXME TODO: Colorize
 div = divergence
 
+[push]
+# Added in git 2.37, assumes -u/--set-upstream for first push
+autoSetupRemote = true
+
 [merge]
 # Added in git 2.35
 conflictStyle = zdiff3
