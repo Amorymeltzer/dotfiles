@@ -154,8 +154,10 @@ sts = stash show
 stb = stash branch
 
 # Various log shorthands and improvements, some accessed via .bashrc aliases
+# that (mostly) align with these
 l = log --oneline
 l5 = log --oneline -5
+l1 = log -1
 lstat = log --stat --oneline
 logstat = log --oneline
 
