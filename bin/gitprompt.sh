@@ -37,6 +37,16 @@ __git_eread () {
     test -r "$1" && IFS=$'\r\n' read -r "$2" <"$1"
 }
 
+# Define some colors
+Color_Black="\033[0;30m"        # Black
+Color_Red="\033[0;31m"          # Red
+Color_Green="\033[0;32m"        # Green
+Color_Yellow="\033[0;33m"       # Yellow
+Color_Blue="\033[0;34m"         # Blue
+Color_Magenta="\033[0;35m"      # Magenta
+Color_Cyan="\033[0;36m"         # Cyan
+Color_White="\033[0;37m"        # White
+
 # Wrap colors around a variable
 # There has got to be a smarter way to do this FIXME TODO
 __wrap_color () {
@@ -338,7 +348,7 @@ fi
 
 ######## ###########
 count="$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)"
-## Alternatively, if doing sit status --porcelain for the above file status,
+## Alternatively, if doing git status --porcelain for the above file status,
 ## could do --branch here, parse for ahead, behind (maybe also ## branchname..upstream)
 # calculate the result
 # note the tabs
