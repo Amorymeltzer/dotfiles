@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# til by Amory Meltzer
+# Basic script to create a new TIL entry
+
+function help {
+    cat <<END_HELP
+Usage: $(basename "$0") [-h] dir title
+END_HELP
+}
+
+# This is commonly called slugify or even identifierify
+# (<http://mbork.pl/2022-10-03_Converting_words_and_sentences_to_identifiers>),
+# but let's standardize it here.  I've split it apart and tweaked things a bit,
+# but this is largely from
+# <https://gist.github.com/oneohthree/f528c7ae1e701ad990e6>
+# Should title-case the header FIXME TODO
+tidyheader (){
+    # Trim, just in case
+    echo "$1" | sed -E s/^[^a-zA-Z0-9]+\|[^a-zA-Z0-9]+$//g
+}
+slugify () {
+    echo "$1" | iconv -t ascii//TRANSLIT | sed -E s/[^a-zA-Z0-9]+/_/g | sed -E s/^[-_]+\|[-_]+$//g | tr '[:upper:]' '[:lower:]'
+}
+
+while getopts 'h' opt; do
+    case $opt in
+	h) help
+	   exit 0;;
+	*) exit 1;;
+    esac
+done
+
+# Need a directory to actually be set in order to do anything
+if [[ -z "$TIL_DIR" ]]; then
+    echo "No TIL directory configured, please set \$TIL_DIR"
+    exit 1
+fi
+
+# Need something to work with
+if [[ ! $1 ]] || [[ ! $2 ]]; then
+    help
+fi
+
+topic="$1"
+header=$(tidyheader "${*:2}")
+title=$(slugify "${*:2}")
+# Let's go!
+cd "$TIL_DIR" || exit
+# Normally I think of -p as being for making nested directories, making any
+# needed ones as necessary, but here it's useful because it also means mkdir
+# won't whine if the directory already exists.  Would probably be helpful to
+# ensure there aren't any sub-directories, which I suppose means probably just
+# doing mkdir without -p and actually bothering to handle the case where the
+# directory already exists.
+mkdir -p "$topic" || exit
+doc="$topic/$title.md"
+touch "$doc"
+echo "# ${header}" > "$doc"
+$VISUAL "$doc"

@@ -482,7 +482,7 @@ trap _exit EXIT
 # Consider loading in .bash_profile, with GIT_PERS_DIR and GIT_EXTL_DIR??
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
-# DIARY_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
+# DIARY_DIR, TIL_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
 # STOCK_TICKERS
 sources=("$HOME/.config/bash/priv-env.bash")
 # Advanced bash completion https://github.com/scop/bash-completion
