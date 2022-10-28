@@ -8,7 +8,7 @@ CODE="$GIT_EXTL_DIR"
 }
 
 
-IFS=' ' read owner name <<< "$(git-nwo $1)"
+IFS=' ' read -r owner name <<< "$(git-nwo "$1")"
 
 dest="$CODE/$name@$owner"
-git clone https://github.com/$owner/$name $dest;
+git clone "https://github.com/$owner/$name" "$dest";
