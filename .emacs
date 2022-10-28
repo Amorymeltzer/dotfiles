@@ -3170,6 +3170,21 @@ This checks in turn:
   (join-following-line (- n)))
 
 
+;; From Marcin Borkowski: http://mbork.pl/2022-10-03_Converting_words_and_sentences_to_identifiers
+;; Tweaked to also remove from beginning of string
+(defun identifierify (beg end)
+  "Convert region to an identifier-ish."
+  (interactive "r")
+  (save-restriction
+    (narrow-to-region beg end)
+    (downcase-region beg end)
+    ;; Remove from beginning
+    (replace-regexp-in-region "\\`[^a-z]+" "" (point-min) (point-max))
+    ;; Remove from end
+    (replace-regexp-in-region "[^a-z]+$" "" (point-min) (point-max))
+    ;; Slugify
+    (replace-regexp-in-region "[^a-z]+" "_" (point-min) (point-max))))
+(defalias 'slugify 'identifierify)
 
 ;; See how annoying it truly is
 ;; (setq garbage-collection-messages t)
