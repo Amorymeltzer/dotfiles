@@ -1,10 +1,5 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
+# slugify, by @oneohthree:
+# https://gist.github.com/oneohthree/f528c7ae1e701ad990e6
 
-def slugify(s)
-  s.strip.gsub(/[^a-zA-Z0-9]+/, '-')
-  .gsub(/[^a-zA-Z0-9]+$/, "")
-  .gsub(/^[^a-zA-Z0-9]+/, "")
-  .downcase
-end
-
-$stdin.readlines.each { |line| puts slugify(line) }
+echo "$1" | iconv -t ascii//TRANSLIT | sed -E s/[^a-zA-Z0-9]+/_/g | sed -E s/^[-_]+\|[-_]+$//g | tr '[:upper:]' '[:lower:]'
