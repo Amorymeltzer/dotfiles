@@ -31,7 +31,7 @@ while getopts 'h' opt; do
     case $opt in
 	h) help "$0"
 	   exit 0;;
-	*) exit 0;;
+	*) exit 1;;
     esac
 done
 
