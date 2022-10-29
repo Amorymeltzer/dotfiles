@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 echo -e "\t${Color_Magenta}Scanning $HOME/${Color_zOff}"
-clustergit -a 80 --print-asap -Hqd $HOME
+clustergit -a 80 --print-asap -Hqd "$HOME"
 echo -e "\t${Color_Magenta}Scanning $GIT_PERS_DIR/${Color_zOff}"
-clustergit -a 80 --print-asap -Hqd $GIT_PERS_DIR
+clustergit -a 80 --print-asap -b '(master|main|blag)' -Hqd "$GIT_PERS_DIR"
 echo -e "\t${Color_Magenta}Scanning $GIT_EXTL_DIR/${Color_zOff}"
-clustergit -a 80 --print-asap -Hqd $GIT_EXTL_DIR
+clustergit -a 80 --print-asap  -b '(master|main|amory-tweaks)' -Hqd "$GIT_EXTL_DIR"
