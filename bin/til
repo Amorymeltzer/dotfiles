@@ -30,11 +30,14 @@ while getopts 'h' opt; do
     esac
 done
 
-# Need a directory to actually be set in order to do anything
-if [[ -z "$TIL_DIR" ]]; then
-    echo "No TIL directory configured, please set \$TIL_DIR"
+# Alas
+dienice () {
+    echo "$1"
     exit 1
-fi
+}
+
+# Need a directory to actually be set in order to do anything
+[ -z "$TIL_DIR" ] && dienice "No TIL directory configured, please set \$TIL_DIR"
 
 # Need something to work with
 if [[ ! $1 ]] || [[ ! $2 ]]; then
@@ -45,14 +48,14 @@ topic="$1"
 header=$(tidyheader "${*:2}")
 title=$(slugify "${*:2}")
 # Let's go!
-cd "$TIL_DIR" || exit
+cd "$TIL_DIR" || dienice
 # Normally I think of -p as being for making nested directories, making any
 # needed ones as necessary, but here it's useful because it also means mkdir
 # won't whine if the directory already exists.  Would probably be helpful to
 # ensure there aren't any sub-directories, which I suppose means probably just
 # doing mkdir without -p and actually bothering to handle the case where the
 # directory already exists.
-mkdir -p "$topic" || exit
+mkdir -p "$topic"
 doc="$topic/$title.md"
 touch "$doc"
 echo "# ${header}" > "$doc"
