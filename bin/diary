@@ -35,22 +35,21 @@ while getopts 'h' opt; do
     esac
 done
 
-# Need a directory to actually be set in order to do anything
-if [[ -z "$DIARY_DIR" ]]; then
-    echo "No diary directory configured, please set \$DIARY_DIR"
+# Alas
+dienice () {
+    echo "$1"
     exit 1
-fi
+}
+
+# Need a directory to actually be set in order to do anything
+[ -z "$DIARY_DIR" ] && dienice "No diary directory configured, please set \$DIARY_DIR"
 # *SOME* things can be allowed even if not in the directory
 checkDir () {
-    if [[ $(pwd) != "$DIARY_DIR" ]]; then
-	echo "Not in $DIARY_DIR, exiting"
-	exit 1
-    fi
+    [ "$(pwd)" != "$DIARY_DIR" ] && dienice "Not in $DIARY_DIR, exiting"
 }
 moveDir () {
     cd "$DIARY_DIR" || exit
 }
-
 
 today=$(date +"%Y-%m-%d").md
 
@@ -87,8 +86,7 @@ else
 	if date="${1/.md}" && validDate "$date" && [[ -f "$date.md" ]]; then
 	    cat "$date.md"
 	else
-	    echo "No entry for $date"
-	    exit 1
+	    dienice "No entry for $date"
 	fi
     }
 
@@ -137,16 +135,9 @@ else
 
 		# Ensure there's just one file, and that it's today
 		status=$(git status --porcelain)
-		if [[ -z $status ]]; then
-		    echo "No files present, exiting"
-		    exit 1
-		elif [[ $(wc -l <<< "$status") -ne 1 ]]; then
-		    echo "Too many files present, exiting"
-		    exit 1
-		elif [[ "$(cut -c 4- <<< "$status")" != "$today" ]]; then
-		    echo "File isn't for today, exiting"
-		    exit 1
-		fi
+		[ -n "$status" ] || dienice "No files present, exiting"
+		[ "$(wc -l <<< "$status")" -eq 1 ] || dienice "Too many files present, exiting"
+		[ "$(cut -c 4- <<< "$status")" == "$today" ] || dienice "File isn't for today, exiting"
 
 		git add "$today"
 		# Commit if untracked, amend if already present
@@ -155,9 +146,7 @@ else
 		elif [[ "$(cut -c 1-2 <<< "$status")" == " M" ]]; then
 		    git commit --amend --no-edit
 		else
-		    echo "$status"
-		    echo "Unknown situation, exiting"
-		    exit 1
+		    dienice "$status\nUnknown situation, exiting"
 		fi;;
 	    "search"|"ss")
 		moveDir
@@ -234,8 +223,7 @@ else
 		else
 		    echo "No entries found"
 		fi;;
-	    *) echo "Unknown option"
-	       exit 1;;
+	    *) dienice "Unknown option";;
 	esac
     fi
 fi
