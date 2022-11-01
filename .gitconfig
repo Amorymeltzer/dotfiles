@@ -405,6 +405,7 @@ assumed = "!git ls-files -v | grep ^h | cut -c 3-"
 assumeall = "!git st -s | awk {'print $2'} | xargs git assume"
 unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 
+# Unused if the git-ignored script is in $PATH, but honestly this might be better, as it doesn't list *everything*, just the folders
 ignored = "!git clean -ndX | sed 's/Would remove //g'"
 
 # Show list of files in a conflict state, also present in git-extra-commands
