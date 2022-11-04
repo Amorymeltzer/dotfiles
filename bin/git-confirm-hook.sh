@@ -1,4 +1,5 @@
 #!/bin/bash
+# By @pimterry: https://github.com/pimterry/git-confirm
 
 # If we have a STDIN, use it, otherwise get one
 if tty >/dev/null 2>&1; then

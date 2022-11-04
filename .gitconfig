@@ -628,6 +628,8 @@ smudge = git-lfs smudge -- %f
 path = ~/.local-gitconfig
 # user.name, user.email, github.user
 path = ~/.config/git/priv-gitconfig
+
+# See git-confirm-hook.sh, via https://github.com/pimterry/git-confirm
 [hooks "confirm"]
 	match = TODO
 	match = FIXME
