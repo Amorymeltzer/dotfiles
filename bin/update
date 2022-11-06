@@ -48,6 +48,7 @@ END_HELP
 # Source config file with default options
 configrc=$HOME/.updaterc
 if [ -f "$configrc" ]; then
+    # shellcheck disable=SC1090
     source "$configrc"
 fi
 
@@ -84,6 +85,19 @@ while getopts 'SaAbBcCeEgkKWLmMnNpPrRhH' opt; do
     esac
 done
 
+# Ensure we have various binaries for each stage
+# Probably a better way to do this
+[ ! -f "$(command -v port)" ] && macports_all_flag=2
+[ ! -f "$(command -v brew)" ] && homebrew_all_flag=2
+[ ! -f "$(command -v cpan)" ] && cpan_all_flag=2 # Unlikely!
+[ ! -f "$(command -v mas)" ] && mas_all_flag=2
+[ ! -f "$(command -v npm)" ] && npm_all_flag=2
+[ ! -f "$(command -v gem)" ] && ruby_all_flag=2
+# Should maybe allow for python/python3 stuff?
+[ ! -f "$(command -v python)" ] && python_all_flag=2
+[ ! -f "$(command -v emacs)" ] && emacs_all_flag=2 # Unlikely!
+
+
 # Define some colors
 Color_Green="\033[0;32m"
 Color_Cyan="\033[0;36m"
@@ -119,14 +133,15 @@ error () {
 # Die if the whole script is run as sudo, just used for specific commands
 # id -u also fine?
 if [[ $EUID == 0 ]]; then
-    echo "Please don't use sudo!"
+    echo "Please don't run the script with sudo!"
+    echo "You'll be prompted immediately if there's a chance it's needed."
     exit 1
 fi
 
 if [[ -z $nosudo ]]; then
-    # Ask for sudo early when possibly needed
-    # Could be smarter about various suboptions, esp around ruby
-    if [[ -z $macports_all_flag ]] || [[ -z $cpan_all_flag ]] || [[ -z $ruby_all_flag ]] || [[ -z $brewcask_flag ]]; then
+    # Ask for sudo early whenever possibly needed
+    # Could be smarter about various suboptions, esp around ruby and homebrew
+    if [[ -z $macports_all_flag ]] || [[ -z $cpan_all_flag ]] || [[ -z $ruby_all_flag ]] || [[ -z $homebrew_all_flag && -z $brewcask_all_flag && -z $brewcask_flag ]]; then
 	sudo -v
     fi
 fi
@@ -253,8 +268,13 @@ fi
 
 ## Should probably make this verbose or something
 if [[ -z $homebrew_all_flag ]]; then
-    updating 'Homebrew repository'
-    brew update
+
+    # Make sure *something* is happening
+    if [[ -z $brew_all_flag || -z $brewcask_all_flag ]]; then
+	updating 'Homebrew repository'
+	brew update
+    fi
+
     if [[ -z $brew_all_flag ]]; then
 	brew_todo=$(brew outdated --formula)
 	if [[ -n $brew_todo ]]; then
@@ -271,14 +291,14 @@ if [[ -z $homebrew_all_flag ]]; then
 	fi
     fi
 
-    # Might use sudo
-    if [[ -z $nosudo && -z $brewcask_all_flag ]]; then
+    if [[ -z $brewcask_all_flag ]]; then
 	# Want auto_updates casks, but not :latest.  Should probably do a manual
 	# check/brew cu for those: https://github.com/buo/homebrew-cask-upgrade
 	cask_todo=$(brew outdated --cask --greedy-auto-updates)
 	if [[ -n $cask_todo ]]; then
 	    echo "$cask_todo"
-	    if [[ -z $brewcask_flag ]]; then
+	    # Might use sudo on (re/un)installing certain casks e.g. firefox
+	    if [[ -z $nosudo && -z $brewcask_flag ]]; then
 		updating 'casks'
 		# Some apps may require sudo
 		brew upgrade --cask --greedy-auto-updates
