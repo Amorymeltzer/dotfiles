@@ -765,10 +765,13 @@ alias cp='cp -Rvi' # recursive if folder, the ending / makes a difference
 # alias rm='rm -i' # Too annoying, perhaps?
 alias rm='rm -v'
 # Move the given file(s) to the Trash. Favor osxutils https://github.com/vasi/osxutils
-# Alias rm to this instead???
+# Often suggest aliasing rm to this instead, but it just sort of engenders
+# unsafe behavior.
 if [[ ! -f $(command -v trash) ]]; then
+    # Can handle globs, directories, multiple files
+    # https://www.stefanjudis.com/snippets/a-native-shell-alternative-to-the-trash-cli/
     function trash() {
-	mv "$1" ~/.Trash
+	for var in "$@"; do mv "$var" "$HOME/.trash"; done
     }
 fi
 function emptyalltrashes() {
@@ -1764,6 +1767,8 @@ if type -a &>/dev/null youtube-dl; then
 		   --audio-format=mp3 \
 		   --audio-quality=1 "$*"
     }
+    # Probably better to just do mpv directly?  It can handle it, but maybe just
+    # audio like above?  Also skip-dash-manifest is deprecated...
     function listen-youtube {
 	# Skip DASH manifest for speed purposes. This might actually disable being
 	# able to specify things like 'bestaudio' as the requested format, but try
