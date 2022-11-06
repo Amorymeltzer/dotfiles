@@ -153,8 +153,11 @@ if [[ -z $nosudo && -z $macports_all_flag ]]; then
     port_todo=$(port outdated | tail +2)
     if [[ -n $port_todo ]]; then
 	echo "$port_todo"
-	whatsnew 'MacPorts'
-	port echo outdated | cut -f 1 -d ' ' | xargs -n 1 ~/bin/port-whatsnew.sh
+	if [[ -f $(command -v port-whatsnew.sh) ]]; then
+	    whatsnew 'MacPorts'
+	    port echo outdated | cut -f 1 -d ' ' | xargs -n 1 port-whatsnew.sh
+	fi
+
 	if [[ -z $macports_flag ]]; then
 	    updating 'Macports'
 	    sudo port -N -p upgrade outdated
