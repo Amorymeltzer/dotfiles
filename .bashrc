@@ -1694,9 +1694,15 @@ function writetest() {
     dd if=/dev/zero of=/dev/null bs=1048576 count=32768;
 }
 
-# Remove empty directories under and including <path>s.
-function prunedirs {
-    find "$@" -type d -empty -depth -print0 | xargs rmdir
+# Find empty directories
+function emptydirs {
+    dir=. && [ -n "$1" ] && dir="$1"
+    find "$dir" -type d -empty
+}
+# And delete them
+function deleteemptydirs {
+    dir=. && [ -n "$1" ] && dir="$1"
+    find "$dir" -type d -empty -delete
 }
 
 # Count files in each sub-directory
