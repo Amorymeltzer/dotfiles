@@ -153,7 +153,9 @@ else
 		# * instead of @ since assigning array to string to concatenate
 		if [[ -f $(command -v rg) ]]; then
 		    # smart-case, not not just case-insensitive
-		    rg -S "${*:2}" -- *.md
+		    # sort by filename, which is just the date.  Default in
+		    # regular grep with multiple files?
+		    rg -S --sort path "${*:2}" -- *.md
 		else
 		    grep -i "${*:2}" -- *.md
 		fi;;
