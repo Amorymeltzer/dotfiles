@@ -1697,12 +1697,12 @@ function writetest() {
 # Find empty directories
 function emptydirs {
     dir=. && [ -n "$1" ] && dir="$1"
-    find "$dir" -type d -empty
+    find "$dir" -type d -empty -not -path '*/\.git/*'
 }
 # And delete them
 function deleteemptydirs {
     dir=. && [ -n "$1" ] && dir="$1"
-    find "$dir" -type d -empty -delete
+    find "$dir" -type d -empty -not -path '*/\.git/*' -delete
 }
 
 # Count files in each sub-directory
