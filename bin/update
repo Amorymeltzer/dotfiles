@@ -141,7 +141,7 @@ fi
 if [[ -z $nosudo ]]; then
     # Ask for sudo early whenever possibly needed
     # Could be smarter about various suboptions, esp around ruby and homebrew
-    if [[ -z $macports_all_flag ]] || [[ -z $cpan_all_flag ]] || [[ -z $ruby_all_flag ]] || [[ -z $homebrew_all_flag && -z $brewcask_all_flag && -z $brewcask_flag ]]; then
+    if [[ -z $macports_all_flag ]] || [[ -z $ruby_all_flag ]] || [[ -z $homebrew_all_flag && -z $brewcask_all_flag && -z $brewcask_flag ]]; then
 	sudo -v
     fi
 fi
