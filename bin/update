@@ -9,8 +9,10 @@
 
 function help {
     cat <<END_HELP
-Usage: $(basename "$0") [-bBmMeEkKWcCaAnNgrRpPLhH] [-S]
+Usage: $(basename "$0") [-uUS] [-bBmMeEkKWcCaAnNgrRpPLhH]
 
+  -u		Check for updates but don't actually update anything.  Implies -bmekcangrpL
+  -U		Turn off the -u option, such as if it was provided via .updaterc
   -S		Skip all items that might need sudo (Macports, ruby, homebrew-cask)
 
   -b		skip updating macports base, but still 'port sync' to update definitions
@@ -54,9 +56,11 @@ fi
 
 
 # Parse commandline options
-while getopts 'SaAbBcCeEgkKWLmMnNpPrRhH' opt; do
+while getopts 'SuUaAbBcCeEgkKWLmMnNpPrRhH' opt; do
     case $opt in
 	S) nosudo='1';;
+	u) noupdate='1';;
+	U) noupdate='';;
 	b) port_base_flag='1';;
 	B) port_tree_flag='2';;
 	m) macports_flag='1';;
@@ -138,10 +142,11 @@ if [[ $EUID == 0 ]]; then
     exit 1
 fi
 
+# FIXME TODO
 if [[ -z $nosudo ]]; then
     # Ask for sudo early whenever possibly needed
     # Could be smarter about various suboptions, esp around ruby and homebrew
-    if [[ -z $macports_all_flag ]] || [[ -z $ruby_all_flag ]] || [[ -z $homebrew_all_flag && -z $brewcask_all_flag && -z $brewcask_flag ]]; then
+    if [[ -z $macports_all_flag ]] || [[ -z $ruby_all_flag ]] || [[ -z $homebrew_all_flag && -z $brewcask_all_flag && -z $brewcask_flag && -z $noupdate ]]; then
 	sudo -v
     fi
 fi
@@ -156,7 +161,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # Uses sudo
 if [[ -z $nosudo && -z $macports_all_flag ]]; then
     if [[ -z $port_tree_flag ]]; then
-	if [[ -z $port_base_flag ]]; then
+	if [[ -z $port_base_flag && -z $noupdate ]]; then
 	    updating 'Macports base'
 	    sudo port selfupdate
 	else
@@ -173,7 +178,7 @@ if [[ -z $nosudo && -z $macports_all_flag ]]; then
 	    port echo outdated | cut -f 1 -d ' ' | xargs -n 1 port-whatsnew.sh
 	fi
 
-	if [[ -z $macports_flag ]]; then
+	if [[ -z $macports_flag && -z $noupdate ]]; then
 	    updating 'Macports'
 	    sudo port -N -p upgrade outdated
 	    cleaning 'Macports'
@@ -207,7 +212,7 @@ fi
 
 # Uses sudo
 if [[ -z $nosudo && -z $ruby_all_flag ]]; then
-    if [[ -z $gem_flag ]]; then
+    if [[ -z $gem_flag && -z $noupdate ]]; then
 	updating 'gem ruby manager'
 	sudo gem update --system
     fi
@@ -215,7 +220,7 @@ if [[ -z $nosudo && -z $ruby_all_flag ]]; then
     ruby_todo=$(gem outdated)
     if [[ -n $ruby_todo ]]; then
 	echo "$ruby_todo"
-	if [[ -z $ruby_flag ]]; then
+	if [[ -z $ruby_flag && -z $noupdate ]]; then
 	    updating 'ruby gems'
 	    sudo gem update
 	    cleaning 'ruby gems'
@@ -240,7 +245,7 @@ if [[ -z $cpan_all_flag ]]; then
 		cpan-listchanges $cpan_todo
 	    fi
 
-	    if [[ -z $cpan_flag ]]; then
+	    if [[ -z $cpan_flag && -z $noupdate ]]; then
 		updating 'CPAN modules'
 
 		if [[ -f $(command -v cpanm) ]]; then
@@ -279,7 +284,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	brew_todo=$(brew outdated --formula)
 	if [[ -n $brew_todo ]]; then
 	    echo "$brew_todo"
-	    if [[ -z $brew_flag ]]; then
+	    if [[ -z $brew_flag && -z $noupdate ]]; then
 		updating 'brews'
 		brew upgrade --formula
 
@@ -298,7 +303,7 @@ if [[ -z $homebrew_all_flag ]]; then
 	if [[ -n $cask_todo ]]; then
 	    echo "$cask_todo"
 	    # Might use sudo on (re/un)installing certain casks e.g. firefox
-	    if [[ -z $nosudo && -z $brewcask_flag ]]; then
+	    if [[ -z $nosudo && -z $brewcask_flag && -z $noupdate ]]; then
 		updating 'casks'
 		# Some apps may require sudo
 		brew upgrade --cask --greedy-auto-updates
@@ -317,7 +322,7 @@ if [[ -z $mas_all_flag ]]; then
     mas_todo=$(mas outdated)
     if [[ -n $mas_todo ]]; then
 	echo "$mas_todo"
-	if [[ -z $mas_flag ]]; then
+	if [[ -z $mas_flag && -z $noupdate ]]; then
 	    updating 'macOS App store updates'
 	    mas upgrade
 	fi
@@ -332,7 +337,7 @@ if [[ -z $npm_all_flag ]]; then
     npm_todo=$(npm outdated --global)
     if [[ -n $npm_todo ]]; then
 	echo "$npm_todo"
-	if [[ -z $npm_flag ]]; then
+	if [[ -z $npm_flag && -z $noupdate ]]; then
 	    updating 'npm nodejs packages (global)'
 	    # skip column headers, pass package names to npm install since
 	    # global implies caret semver https://github.com/npm/cli/issues/746
@@ -348,7 +353,7 @@ if [[ -z $python_all_flag ]]; then
     python_todo=$(pip list --outdated --user)
     if [[ -n $python_todo ]]; then
 	echo "$python_todo"
-	if [[ -z $python_flag ]]; then
+	if [[ -z $python_flag && -z $noupdate ]]; then
 	    updating 'pip python packages'
 	    grep -v '^\-e' <<< "$python_todo" | cut -d ' ' -f 1 | tail +3 | xargs pip install --upgrade --user
 	fi
@@ -357,7 +362,7 @@ if [[ -z $python_all_flag ]]; then
     fi
 fi
 
-if [[ -z $emacs_all_flag ]]; then
+if [[ -z $emacs_all_flag && -z $noupdate ]]; then
     updating 'emacs lisp packages'
     update_elisp.sh;
 fi
