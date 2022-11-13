@@ -1002,7 +1002,7 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # Toss in the completion
     complete -o bashdefault -o default -F _brew_with_services b
 
-    alias ball='brew update ; brew outdated --greedy-auto-updates ; brew upgrade  --greedy-auto-updates'
+    alias ball='brew update ; brew outdated --greedy-auto-updates ; brew upgrade --greedy-auto-updates'
     alias bclean='brew cleanup ; brew cleanup -s'
     alias bsearch='brew search'
     alias bs='bsearch '
@@ -1025,8 +1025,8 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     }
 
     # Homebrew-cask
-    # Symlink in /Applications
-    export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook  --fontdir=/Library/Fonts"
+    # Symlink in /Applications, remove quarantine
+    export HOMEBREW_CASK_OPTS="--appdir=/Applications --qlplugindir=/Library/Quicklook --fontdir=/Library/Fonts --no-quarantine"
 
     # Quick homebrew livecheck, relies on HOMEBREW_LIVECHECK_WATCHLIST,
     # which defaults to ~/.brew_livecheck_watchlist
