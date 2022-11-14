@@ -200,6 +200,22 @@ When there's no active region, act on the buffer."
 	    (forward-line 1)))))))
 
 
+;; Renumber list in region, from https://www.emacswiki.org/emacs/RenumberList#h5o-1
+;; Using regex is neat, but I can never remember \,() for executing lisp, so put
+;; `\,(1+ \#)' in the docs.
+(defun renumber-list (start end &optional num)
+  "Renumber the list items in the current START..END region.
+    If optional prefix arg NUM is given, start numbering from that number
+    instead of 1.  Can also do a regex, e.g. `\\,(1+ \\#)'."
+  (interactive "*r\np")
+  (save-excursion
+    (goto-char start)
+    (setq num (or num 1))
+    (save-match-data
+      (while (re-search-forward "^[0-9]+" end t)
+	(replace-match (number-to-string num))
+	(setq num (1+ num))))))
+
 ;; Control other windows easier
 (global-set-key (kbd "C-M-t") 'scroll-other-window-down)
 (defalias 'scroll-other-window-up 'scroll-other-window)
