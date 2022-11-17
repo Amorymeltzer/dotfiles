@@ -400,6 +400,7 @@ Record that in `paradox--backups', but do nothing if
 (setq
  js-switch-indent-offset 8	    ; tab indent switch cases
  js-chain-indent t		    ; line up successive indents with .
+ js-indent-level 2		    ; Not everyone's got an editorconfig, tighter
  js2-highlight-level 3		    ; highlight more built-in functions
  js2-mode-indent-ignore-first-tab t ; make first tab doesn't toggle between valid indents
  js2-strict-inconsistent-return-warning nil ; warning if both return and return foo
