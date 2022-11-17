@@ -3020,7 +3020,8 @@ This checks in turn:
 (with-eval-after-load "flyspell"
   (setq flyspell-highlight-properties t
 	flyspell-issue-message-flag nil
-	flyspell-issue-welcome-flag nil)
+	flyspell-issue-welcome-flag nil
+	flyspell-duplicate-distance 100) ;Default is 400000
 
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   (add-hook 'text-mode-hook 'flyspell-mode)
@@ -3031,7 +3032,7 @@ This checks in turn:
 
   ;; There's no flyspell-goto-prev-error?  Dumb.
   (defun flyspell-goto-prev-error ()
-    "Go to closest prior detected error.  Derived from FLYSPELL-GOTO-PREV-ERROR."
+    "Go to closest prior detected error.  Derived from FLYSPELL-GOTO-NEXT-ERROR."
     (interactive)
     (let* ((arg 1))
       (while (not (= 0 arg))
