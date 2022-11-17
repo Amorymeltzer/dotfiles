@@ -179,17 +179,25 @@ if [[ $(command -v npm) ]]; then
 fi
 
 # Add python execs
+# In a perfect world everything is python3, but just in case...
+alias python='python3'
 # Doesn't really work on SSH FIXME TODO
-# local; preferable to global
-# FIXME TODO macOS default is just python3, no python executable, should alias
-# or something by default, if if we are going to install a newer version
-new_path="$new_path:$(python -m site --user-base)/bin"
-# global; not preferred but just in case
-# With various installations (*cough macports cough*) there are a bunch of
-# symlinks to follow, so this actually gets the full bin path
-# https://stackoverflow.com/q/749711/2521092
-new_path="$new_path:$(python -c 'import os;print(os.path.join(os.__file__.split("lib/")[0],"bin","python"))')"
+if [[ -n "$PORT_INSTALLED" ]]; then
+    # local; preferable to global
+    new_path="$new_path:$(python -m site --user-base)/bin"
+    # global; not preferred but just in case
+    # With various installations (*cough macports cough*) there are a bunch of
+    # symlinks to follow, so this actually gets the full bin path
+    # https://stackoverflow.com/q/749711/2521092
+    new_path="$new_path:$(python -c 'import os;print(os.path.join(os.__file__.split("lib/")[0],"bin","python"))')"
+elif [[ -n "$BREW_INSTALLED" ]]; then
+    # Unversioned symlinks e.g. python for python3
+    new_path="$new_path:$(brew --prefix python)/libexec/bin"
 
+    # pip packages, alias for e.g. /opt/homebrew/lib/python3.10/site-packages
+    new_path="$new_path:$(python -c 'import site; print(site.getsitepackages()[0])')"
+fi
+unalias python
 # Tack on original path
 new_path="$new_path:$orig_path"
 
