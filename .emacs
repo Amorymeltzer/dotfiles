@@ -1225,7 +1225,12 @@ current buffer" t)
 ;; Python-style regexp instead of stupid-ass friggin' crazy escapes
 ;; https://github.com/benma/visual-regexp-steroids.el
 (require 'visual-regexp-steroids)
-
+;; The default vr/engine is python as in python2, not python3.  pcre2el is
+;; available and easy.  One *could* set vr/command-python to python3, but
+;; honestly that's annoying given that, installed via MELPA, the path to
+;; regexp.py will change with any updates (not that this is actually actively
+;; updated, but still), so this is probably fine.
+(setq vr/engine 'pcre2el)
 (progn
   (defalias 'visual-regexp-replace 'vr/replace)
   (defalias 'replace-visual-regexp 'vr/replace)
