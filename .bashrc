@@ -934,18 +934,20 @@ if [[ -f $(command -v rg) ]]; then
     fi
 fi
 
-# Applications, probably only useful on $OSTYPE=darwin
-#ls | open -f # pipe ls, open in default application (probably texteditor)
-alias reveal='open -R'
-alias preview='open -a preview'
-alias finder='open -a Finder'
-alias textedit='open -a TextEdit'
-alias te='textedit '
-alias safari='open -a safari'
-alias firefox='open -a firefox'
-alias chrome='open -a google\ chrome'
-alias vlc='open -a vlc'
-alias excel='open -a microsoft\ excel'
+# Applications, probably only useful on macOS
+if [[ $OSTYPE == darwin* ]]; then
+    #ls | open -f # pipe ls, open in default application (probably texteditor)
+    alias reveal='open -R'
+    alias preview='open -a preview'
+    alias finder='open -a Finder'
+    alias textedit='open -a TextEdit'
+    alias te='textedit '
+    alias safari='open -a safari'
+    alias firefox='open -a firefox'
+    alias chrome='open -a google\ chrome'
+    alias vlc='open -a vlc'
+    alias numbers='open -a numbers'
+fi
 
 # Macports
 if [[ -n "$PORT_INSTALLED" ]]; then
