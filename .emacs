@@ -922,6 +922,7 @@ backups." t)
 ;;       recentf-menu-title "recentF"
 ;;       )
 ;; (add-to-list 'recentf-arrange-rules (quote (("Perl files (%d)" ".\\.pl\\'"))))
+;; (add-to-list 'recentf-arrange-rules (quote (("Perl files (%d)" ".\\.t\\'"))))
 ;; (add-to-list 'recentf-arrange-rules (quote (("CGI files (%d)" ".\\.cgi\\'"))))
 
 
@@ -1039,7 +1040,7 @@ current buffer" t)
   '(progn
      (defvar hashbang-env "#!/usr/bin/env")
      ;; Perl
-     (define-auto-insert '("\\.pl\\'" . "Perl skeleton")
+     (define-auto-insert '("\\(\\.pl\\|\\.t\\)\\'" . "Perl skeleton")
        '(nil (concat hashbang-env " perl") \n
 	     "# " (file-name-base) " by " user-full-name \n
 	     "# " _ \n
