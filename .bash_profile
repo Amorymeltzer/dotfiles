@@ -177,7 +177,8 @@ fi
 # Add $HOME's node_modules, if present
 # Globally installed modules should already be on the path
 if [[ $(command -v npm) ]]; then
-    npm_bin=$(npm bin)
+    # Skip the warnings
+    npm_bin=$(npm bin 2>/dev/null)
     if [[ -d "$npm_bin" ]]; then
 	new_path="$new_path:$(npm bin)"
     fi
