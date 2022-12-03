@@ -14,7 +14,7 @@ b="$(wc -l < ~/.z.bk | tr -d ' ')"
 if [ "$z" -lt "$b" ]; then
     date="$(date)"
     # Hellow darkness my old friend...
-    /opt/local/bin/terminal-notifier -message "As of $date
+    /opt/homebrew/bin/terminal-notifier -message "As of $date
 Restore from ~/.z.bk" -title "ISSUE WITH .z DATABASE"
 else
     # Party hard
