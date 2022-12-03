@@ -1,7 +1,7 @@
 verbose = 9
 
-# Sigh.  Perl::Critic::Community is nice, but the alias with Freenode just means
-# there's a fair bit if duplication.  Annoying.
+# Perl::Critic::Community is nice, but contains the old name Freenode, which
+# just means there's a fair bit of duplication.  Annoying.
 exclude = Freenode
 
 #safari = 1
@@ -114,4 +114,15 @@ severity = 1
 # somtimes I just want something short and $_ is *very* Perlish.
 # Lower severity to 3 from 4
 [Community::WhileDiamondDefaultAssignment]
+severity = 3
+
+## Perl::Critic::TooMuchCode https://metacpan.org/pod/Perl::Critic::TooMuchCode
+# All are set to severity 1, which is fine, but let's bump some up a bit
+[TooMuchCode::ProhibitUnusedInclude]
+severity = 2
+[TooMuchCode::ProhibitUnusedImport]
+severity = 3
+[TooMuchCode::ProhibitDuplicateSub]
+severity = 3
+[TooMuchCode::ProhibitUnusedConstant]
 severity = 3
