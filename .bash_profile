@@ -47,8 +47,6 @@ if [[ -d "$macports_prefix/sbin" ]]; then
 fi
 if [[ -n "$macports_pathstring" ]]; then
     new_path="$macports_pathstring"
-
-    export PORT_INSTALLED=1  # Largely used to confirm installation for sourcing
 fi
 
 
@@ -73,13 +71,20 @@ if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
 fi
 if [[ -n "$homebrew_pathstring" ]]; then
     new_path="${new_path:+${new_path}:}$homebrew_pathstring"
-
-    export BREW_INSTALLED=1  # Largely used to confirm installation for sourcing
 fi
 
 # Intermediate pathing to get the right perl/python versions/paths
 # favor brewperl over macports over homebrew
 PATH="$new_path:$PATH"
+# Can also now confirm whether certain things (e.g. homebrew) are definitely
+# installed.  brew isn't necessarily installed somewhere already on the default
+# path, and in fact it isn't on Apple Silicon, so this is necessary.
+if [[ -n "$macports_pathstring" && $(command -v port) ]]; then
+    export PORT_INSTALLED=1  # Largely used to confirm installation for sourcing
+fi
+if [[ -n "$homebrew_pathstring" && $(command -v brew) ]]; then
+    export BREW_INSTALLED=1  # Largely used to confirm installation for sourcing
+fi
 
 # Yay perlbrew.  The default, but again, make explicit
 export PERLBREW_ROOT="$PERL5_DIR/perlbrew"
