@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ordieERRNO
+# key: ode
+# --
+ or die $ERRNO;

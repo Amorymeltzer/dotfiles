@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: Data::Printer
+# name: Data::Printer-ddp
 # key: ddp
 # --
 use DDP;
