@@ -5,11 +5,12 @@
 
 ## TODO:
 ## More sudo deescalation (macports, gem)
+## Logging?  less verbose anyway...
 ## Detect errors
 
 function help {
     cat <<END_HELP
-Usage: $(basename "$0") [-uUS] [-bBmMeEkKWcCaAnNgrRpPLhH]
+Usage: $(basename "$0") [-uUS] [-bBmMeEkKWaAcCnNgrRpPLhH]
 
   -u		Check for updates but don't actually update anything.  Implies -bmekcangrpL
   -U		Turn off the -u option, such as if it was provided via .updaterc
@@ -24,10 +25,10 @@ Usage: $(basename "$0") [-uUS] [-bBmMeEkKWcCaAnNgrRpPLhH]
   -k		check for homebrew-cask updates but don't upgrade
   -K		skip all homebrew-cask actions
   -W		skip all homebrew and homebrew-cask updates
-  -c		check for cpan updates but don't upgrade
-  -C		skip all cpan actions
   -a		check for macOS App store updates but don't upgrade
   -A		skip all macOS App store updates
+  -c		check for cpan updates but don't upgrade
+  -C		skip all cpan actions
   -n		check for npm nodejs updates (global) but don't upgrade
   -N		skip all npm nodejs actions
   -g		skip updating gem itself
@@ -70,10 +71,10 @@ while getopts 'SuUaAbBcCeEgkKWLmMnNpPrRhH' opt; do
 	k) brewcask_flag='1';;
 	K) brewcask_all_flag='2';;
 	W) homebrew_all_flag='2';;
-	c) cpan_flag='1';;
-	C) cpan_all_flag='2';;
 	a) mas_flag='1';;
 	A) mas_all_flag='2';;
+	c) cpan_flag='1';;
+	C) cpan_all_flag='2';;
 	n) npm_flag='1';;
 	N) npm_all_flag='2';;
 	g) gem_flag='1';;
@@ -93,8 +94,8 @@ done
 # Probably a better way to do this
 [ ! -f "$(command -v port)" ] && macports_all_flag=2
 [ ! -f "$(command -v brew)" ] && homebrew_all_flag=2
-[ ! -f "$(command -v cpan)" ] && cpan_all_flag=2 # Unlikely!
 [ ! -f "$(command -v mas)" ] && mas_all_flag=2
+[ ! -f "$(command -v cpan)" ] && cpan_all_flag=2 # Unlikely!
 [ ! -f "$(command -v npm)" ] && npm_all_flag=2
 [ ! -f "$(command -v gem)" ] && ruby_all_flag=2
 # Should maybe allow for python/python3 stuff?
@@ -231,46 +232,6 @@ if [[ -z $nosudo && -z $ruby_all_flag ]]; then
     fi
 fi
 
-# Requires cpan-outdated https://metacpan.org/pod/cpan-outdated
-if [[ -z $cpan_all_flag ]]; then
-    if [[ -f $(command -v cpan-outdated) ]]; then
-	checking 'CPAN modules'
-	cpan_todo=$(cpan-outdated -p --exclude-core)
-	if [[ -n $cpan_todo ]]; then
-	    echo "$cpan_todo"
-
-	    if [[ -f $(command -v cpan-listchanges) ]]; then
-		whatsnew 'CPAN modules'
-		# shellcheck disable=SC2086
-		cpan-listchanges $cpan_todo
-	    fi
-
-	    if [[ -z $cpan_flag && -z $noupdate ]]; then
-		updating 'CPAN modules'
-
-		if [[ -f $(command -v cpanm) ]]; then
-		    echo "$cpan_todo" | cpanm
-
-		    # Manually submit tests via cpanm-reporter, as it's not fully
-		    # integrated to cpanm, as opposed to cpan (when configured)
-		    if [[ -f $(command -v cpanm-reporter) ]]; then
-			cpanm-reporter
-		    fi
-		else
-		    echo "$cpan_todo" | xargs cpan -i
-		    # Unnecessary with cpanm
-		    cleaning 'CPAN directories'
-		    cpanclean;
-		fi
-	    fi
-	else
-	    uptodate 'CPAN modules'
-	fi
-    else
-	error 'Updating Perl CPAN modules requires cpan-outdated aka App::cpanoutdated'
-    fi
-fi
-
 ## Should probably make this verbose or something
 if [[ -z $homebrew_all_flag ]]; then
 
@@ -328,6 +289,46 @@ if [[ -z $mas_all_flag ]]; then
 	fi
     else
 	uptodate 'macOS App store updates'
+    fi
+fi
+
+# Requires cpan-outdated https://metacpan.org/pod/cpan-outdated
+if [[ -z $cpan_all_flag ]]; then
+    if [[ -f $(command -v cpan-outdated) ]]; then
+	checking 'CPAN modules'
+	cpan_todo=$(cpan-outdated -p --exclude-core)
+	if [[ -n $cpan_todo ]]; then
+	    echo "$cpan_todo"
+
+	    if [[ -f $(command -v cpan-listchanges) ]]; then
+		whatsnew 'CPAN modules'
+		# shellcheck disable=SC2086
+		cpan-listchanges $cpan_todo
+	    fi
+
+	    if [[ -z $cpan_flag && -z $noupdate ]]; then
+		updating 'CPAN modules'
+
+		if [[ -f $(command -v cpanm) ]]; then
+		    echo "$cpan_todo" | cpanm
+
+		    # Manually submit tests via cpanm-reporter, as it's not fully
+		    # integrated to cpanm, as opposed to cpan (when configured)
+		    if [[ -f $(command -v cpanm-reporter) ]]; then
+			cpanm-reporter
+		    fi
+		else
+		    echo "$cpan_todo" | xargs cpan -i
+		    # Unnecessary with cpanm
+		    cleaning 'CPAN directories'
+		    cpanclean;
+		fi
+	    fi
+	else
+	    uptodate 'CPAN modules'
+	fi
+    else
+	error 'Updating Perl CPAN modules requires cpan-outdated aka App::cpanoutdated'
     fi
 fi
 
