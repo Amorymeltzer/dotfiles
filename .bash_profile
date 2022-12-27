@@ -93,6 +93,7 @@ PERLBREW_INSTALLED=''
 if [[ -d "$PERLBREW_ROOT" ]]; then
     # This will put perlbrew first in line of the path, so now we have:
     # perlbrew:macports:homebrew:system
+    # shellcheck source=/dev/null
     source "$PERLBREW_ROOT/etc/bashrc"
 
     # `perlbrew list` plenty effective much slower
@@ -177,7 +178,8 @@ fi
 # Add $HOME's node_modules, if present
 # Globally installed modules should already be on the path
 if [[ $(command -v npm) ]]; then
-    # Skip the warnings
+    # Skip the warnings.  Should probably do something with prefix or root
+    # instead FIXME TODO
     npm_bin=$(npm bin 2>/dev/null)
     if [[ -d "$npm_bin" ]]; then
 	new_path="$new_path:$(npm bin)"
@@ -231,6 +233,7 @@ PATH="$(printf "%s" "$new_path" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf R
 
 # Ensure perlbrew is on top, but only if it's useful
 if [[ -n "$PERLBREW_INSTALLED" ]]; then
+    # shellcheck source=/dev/null
     source "$PERLBREW_ROOT/etc/bashrc"
 fi
 # Add ~/bin ahead of everybody
