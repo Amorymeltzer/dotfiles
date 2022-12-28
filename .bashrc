@@ -278,6 +278,22 @@ else
     # makes at least a modicum of effort.  Not perfect but at least there's
     # *some* delineation
     export PERLDOC_PAGER="sh -c 'col -bx | bat -l man -p'"
+
+    # Should probably be set in the config file, but this is fine enough.  This
+    # is necessary because bat (intelligently(?)), as of 0.22 (See
+    # <https://github.com/sharkdp/bat/pull/2197>), adjusts its default behavior
+    # on macOS to be dependent on light/dark mode.  However, it's making the
+    # assumption that there is a correspondence with light/dark mode in the
+    # terminal, which doesn't happen automatically.  iTerm2's beta of 3.5
+    # supposedly handles this, and there are some little hacks to do so in
+    # Apple's terminal, but until I do one of those or decide it's not worth
+    # it/desirable, setting a specific theme keeps things from adjusting.  I
+    # kind of like how the Coldark themes look, although the defaults (Monokai
+    # Extended (Light)) are fine.  That would of course imply that I'd need to
+    # specify a method for switching between Coldark-Cold and Coldark-Dark
+    # depending on the status of light/dark mode (See
+    # <https://github.com/sharkdp/bat/issues/1746>).  Sigh. FIXME TODO
+    export BAT_THEME='Coldark-Cold'
 fi
 
 
