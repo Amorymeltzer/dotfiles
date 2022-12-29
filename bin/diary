@@ -14,16 +14,16 @@ Usage: $(basename "$0") [-h] [new|note|notes|last|showlast|show|rand|random|sear
 
   Other options:
 
-  new			Create a new file, without opening
-  note, notes		Edit the notes file
-  last, showlast	Display the last diary entry
-  show [YYYY-MM-DD]	Show a given entry, or the last entry if no date provided
-  rand, random		Display a random diary entry
-  search, ss		Case insensitive search diary entries, with (rip)grep
-  log			Commit today's file, only if the directory is managed by git
-  remove, rm, delete	Remove today's entry, if present
-  YYYY-MM-DD		Display the diary entry from a specific day
-  stats			Display some basic statistics
+  new				Create a new file, without opening
+  note, notes			Edit the notes file
+  last, showlast		Display the last diary entry
+  show [YYYY-MM-DD]		Show a given entry, or the last entry if no date provided
+  rand, random [YYYY[-DD]]	Display a random diary entry, optionally within the given year or year-month
+  search, ss			Case insensitive search diary entries, with (rip)grep
+  log				Commit today's file, only if the directory is managed by git
+  remove, rm, delete		Remove today's entry, if present
+  YYYY-MM-DD			Display the diary entry from a specific day
+  stats				Display some basic statistics
 END_HELP
 }
 
@@ -100,6 +100,7 @@ else
 	}
 
 	case "$1" in
+	    "help"|"h") help;;
 	    "new") newDay;;
 	    "note"|"notes") moveDir && $VISUAL notes;;
 	    "last"|"showlast")
@@ -122,7 +123,12 @@ else
 			perl -MList::Util=shuffle -e 'print shuffle(<>);';
 		    }
 		fi
-		cat "$(find . -maxdepth 1 -name '*.md' | shuf | head -n 1)";;
+
+		filere='*.md'
+		if [[ "$2" ]]; then
+		    filere="$2$filere"
+		fi
+		cat "$(find . -maxdepth 1 -name "$filere" | shuf | head -n 1)";;
 	    "remove"|"rm"|"delete")
 		checkDir
 		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
