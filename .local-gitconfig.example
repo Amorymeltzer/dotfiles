@@ -22,12 +22,9 @@ features = inline-line-styles
 [delta "inline-line-styles"]
 light = true # Default is dark, would be nice to be able to tweak based on terminal
 
-minus-style = syntax 52
 minus-emph-style = syntax auto
 minus-non-emph-style = syntax normal
-plus-style = syntax auto
-plus-emph-style = syntax auto
-plus-non-emph-style = auto normal
+plus-non-emph-style = syntax normal
 
 #keep-plus-minus-markers = true
 max-line-distance = 0.8 	# Default 0.6, was 0.7
