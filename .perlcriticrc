@@ -58,6 +58,8 @@ severity = 4
 severity = 2
 [CodeLayout::ProhibitParensWithBuiltins]
 severity = 2
+[BuiltinFunctions::ProhibitReverseSortBlock]
+severity = 2
 # Lower from level 2 to level 1
 [Modules::RequireVersionVar]
 severity = 1
