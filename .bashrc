@@ -294,6 +294,9 @@ else
     # depending on the status of light/dark mode (See
     # <https://github.com/sharkdp/bat/issues/1746>).  Sigh. FIXME TODO
     export BAT_THEME='Coldark-Cold'
+
+    # Preserve default behavior for cat but use bat
+    alias cat='bat --paging=never '
 fi
 
 
