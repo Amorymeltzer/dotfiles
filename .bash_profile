@@ -249,12 +249,17 @@ export VISUAL="$EDITOR "
 
 # Ignore sequential duplicates in history
 export HISTCONTROL=erasedups:ignoreboth
-# Up history size
-export HISTSIZE=5000000
-export HISTFILESIZE=$HISTSIZE
+# Eternal bash history fuck yeah https://stackoverflow.com/q/9457233/2521092
+# Use -1 to be explicit, only in bash 4.3+
+export HISTFILESIZE=-1
+export HISTSIZE=-1
 # Display timestamp
 # export HISTTIMEFORMAT='[%D %H:%M] '
 export HISTTIMEFORMAT='[%F %T] '
+# Apparently certain bash sessions truncate .bash_history on close
+# https://superuser.com/a/753158/240421
+export HISTFILE=~/.bash_eternal_history
+# Ignore some things, not sure if I actually want this though FIXME TODO
 export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cdl:pwd:clear:exit:logout:pg'
 
 
