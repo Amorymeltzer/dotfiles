@@ -161,6 +161,16 @@ Record that in `paradox--backups', but do nothing if
 (paradox-enable)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (load-theme 'kaolin-galaxy)
+(require 'auto-dark)
+(setq
+ ;; ns-do-applescript not available?  Could also just set
+ ;; auto-dark-detection-method to osascript I think
+ auto-dark-allow-osascript t
+ ;; The default faces are fine I think, although this throws an error.
+ ;; Maybe I should just define a face with the default behavior?
+ auto-dark-light-theme nil)
+(auto-dark-mode t)
+
 
 ;; When I was a child, I spake as a child,
 ;; I understood as a child, I thought as a child:
