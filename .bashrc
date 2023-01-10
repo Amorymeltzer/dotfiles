@@ -254,11 +254,13 @@ export MANPAGER="less -FXiRgMw";
 export LESS="-FXiRgMw";
 
 # Use lesspipe.sh (look inside archives) just in case
+# Exports $LESSOPEN
 if [[ -f $(command -v lesspipe.sh) ]]; then
-    export LESSOPEN="|${HOMEBREW_PREFIX}/bin/lesspipe.sh %s"
+    eval "$(lesspipe.sh)"
 fi
 
 # Give man pages some color.  Can't use color names?
+# I actually think this is better than using batman
 export LESS_TERMCAP_mb=$'\033[0;37m' # section titles
 export LESS_TERMCAP_md=$'\033[0;34m' # bold header
 export LESS_TERMCAP_me=$'\033[0m'    # end bold
@@ -276,7 +278,9 @@ if [[ ! -f $(command -v bat) ]]; then
 else
     # I think the manpager above is fine (less -FXiRgMw) but for perldoc bat
     # makes at least a modicum of effort.  Not perfect but at least there's
-    # *some* delineation
+    # *some* delineation.  Actually, here is a place where using batman shines,
+    # as it automatically colors things appropriately.  I bet I can be smarter
+    # about all this, at least in terms of column width FIXME TODO
     export PERLDOC_PAGER="sh -c 'col -bx | bat -l man -p'"
 
     # Should probably be set in the config file, but this is fine enough.  This
