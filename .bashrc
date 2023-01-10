@@ -954,6 +954,12 @@ if [[ -f $(command -v rg) ]]; then
 	    rg --json "$1" | delta
 	}
     fi
+
+    # Some paging for long results
+    function rgp() {
+	rg -p "$1" | more
+    }
+
 fi
 
 # Applications, probably only useful on macOS
