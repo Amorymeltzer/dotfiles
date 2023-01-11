@@ -431,7 +431,7 @@ function prompt_command {
     fi
 
     # PS1... ASSEMBLE!
-    PS1="\[$Color_Black\]"'$fill'"\n\[$Color_Cyan\]┌─"
+    PS1="\[$Color_zOff\]"'$fill'"\n\[$Color_Cyan\]┌─"
 
     psuser="$(_uid)$(_cnx)"
     if [[ -n "$psuser" ]]; then
