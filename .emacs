@@ -105,15 +105,15 @@
 
 ;; use-package https://github.com/jwiegley/use-package
 ;; install (if not already present) and require, must be around for everyone else
-;; Should actually use this...
-(dolist (package '(use-package))
-  (unless (package-installed-p package)
-    (package-install package)
-    (require 'use-package)
-    (setq use-package-always-ensure t
-	  use-package-verbose t
-	  ;; In theory, calling `use-package-report' would display some info
-	  use-package-compute-statistics t)))
+;; Should actually use this... FIXME TODO
+;; (dolist (package '(use-package))
+;;   (unless (package-installed-p package)
+;;     (package-install package)
+;;     (require 'use-package)
+;;     (setq use-package-always-ensure t
+;; 	  use-package-verbose t
+;; 	  ;; In theory, calling `use-package-report' would display some info
+;; 	  use-package-compute-statistics t)))
 
 
 ;; paradox https://github.com/Malabarba/paradox
