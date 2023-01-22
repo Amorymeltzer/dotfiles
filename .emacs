@@ -289,29 +289,6 @@ Argument APPEARANCE should be light or dark."
 (setq ac-auto-start 5)
 ;; Turn auto menu off
 ;; (setq ac-auto-start nil)
-
-;; Change colors
-;; (set-face-attribute 'ac-candidate-face nil
-;;		    :background "lightgray" :underline "darkgray")
-;; (set-face-attribute 'ac-selection-face nil
-;;		    :background "steelblue")
-;;
-;;
-;; ac-html mode, from https://github.com/cheunghy/ac-html
-;; Deprecated maybe replace?
-(defun setup-ac-for-html ()
-  "Basic structure and setup for HTML auto-completion (ac-html)."
-  (require 'ac-html)
-  ;; I guess?
-  (require 'ac-html-default-data-provider)
-  (ac-html-enable-data-provider 'ac-html-default-data-provider)
-  (ac-html-setup)
-  (setq ac-sources '(ac-source-html-tag
-		     ac-source-html-attr
-		     ac-source-html-attrv))
-  (auto-complete-mode))
-(add-hook 'html-mode-hook 'setup-ac-for-html)
-(add-hook 'mhtml-mode-hook 'setup-ac-for-html)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; yasnippet, loaded here to allow in hippie-expand
