@@ -286,7 +286,7 @@ Argument APPEARANCE should be light or dark."
 (ac-config-default)
 
 ;; Characters entered before started, up=efficient, down=slower
-(setq ac-auto-start 5)
+;; (setq ac-auto-start 5)			;Default 2
 ;; Turn auto menu off
 ;; (setq ac-auto-start nil)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
