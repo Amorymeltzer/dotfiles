@@ -1882,20 +1882,11 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; 2305843009213693951
 ;; (setq message-log-max most-positive-fixnum)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Customize hl-line, etc. colors
-(with-eval-after-load "hl-line"
-  (set-face-attribute 'hl-line nil :background "black" :foreground "white")
-  ;; Doesn't perfectly hidge the fringe lines, but sobeit
-  (set-face-attribute 'vertical-border
-		      nil :background "black" :foreground "black"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Point out changes
 ;; I hate this
 ;; (highlight-changes-mode 1)
-
 
 ;; Magit stuff
 ;; Manual: https://magit.vc/manual/magit.html
