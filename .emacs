@@ -1283,7 +1283,7 @@ current buffer" t)
 ;; (global-set-key (kbd "C-c q") 'vr/query-replace)
 
 ;; Display number of matches in modeline for isearch.  Use anzu instead of
-;; visual regexp since it does much the same thing??? ;;;;;;; ##### FIXME TODO
+;; visual regexp since it does much the same thing??? FIXME TODO
 ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
 ;; (global-set-key (kbd "C-x M-%") 'anzu-query-replace-at-cursor)
 ;; (global-set-key (kbd "C-x %") 'anzu-replace-at-cursor-thing)
@@ -1293,9 +1293,8 @@ current buffer" t)
 (setq anzu-deactivate-region t
       anzu-search-threshold 1000
       anzu-replace-to-string-separator " => ")
-
-;; Debold
 (set-face-attribute 'anzu-mode-line nil :weight 'normal)
+
 ;; Black text is more readable
 (set-face-attribute 'isearch nil :foreground "black")
 (set-face-attribute 'lazy-highlight nil :foreground "black")
@@ -2408,9 +2407,9 @@ using `ido-completing-read'."
 (add-hook 'term-mode-hook 'goto-address-mode)
 
 ;; Add some coloring to manpages, not much tbh
-(require 'man)
-(set-face-attribute 'Man-overstrike nil :inherit font-lock-builtin-face :bold t)
-(set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t)
+(with-eval-after-load "man"
+  (set-face-attribute 'Man-overstrike nil :inherit font-lock-builtin-face :bold t)
+  (set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t))
 
 ;; Convert DOS/Mac `^M' end of lines to Unix end of lines.  See also
 ;; set-buffer-file-coding-system (C-x RET f) with unix.
@@ -2737,6 +2736,7 @@ in the buffer." t)
 ;; and I'd prefer not to muck about with gitconfig just for that.  git-link
 ;; (http://github.com/sshaw/git-link) does so successfully, as well as the
 ;; kill-ring bit, so let's keep them separated, at least until it gets annoying.
+(require 'git-link)
 (setq git-link-default-remote 'origin)
 (global-set-key (kbd "C-c C-g") 'git-link)
 
@@ -3381,21 +3381,27 @@ This checks in turn:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Manipulate lines and comments, move around
-;; ;;;;;; ##### FIXME TODO
+;; FIXME TODO
 (require 'amory-manipulate)
-;;;;;;;;;;; FIXME TODO ###########
 ;; A bunch of reference functions, mainly from:
 ;; http://svn.red-bean.com/repos/kfogel/trunk/.emacs
 ;; Includes genetic code stuff that needs to be fixed like whoa
+;; FIXME TODO
 (require 'amory-reference-functions)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; Not sure these really need to be separate, but maybe it's better
 (defun fixme-insert ()
   "Signal something that needs to be dealt with."
   (interactive)
-  (insert "FIX" "ME" " " "TO" "DO"))
+  (insert "FIX" "ME"))
 (defalias 'insert-fixme 'fixme-insert)
+(defun todo-insert ()
+  "Signal something that needs to be dealt with."
+  (interactive)
+  (insert "TO" "DO"))
+(defalias 'insert-todo 'todo-insert)
 
 (defun lorem ()
   "Insert a lorem ipsum."
