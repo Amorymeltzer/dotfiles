@@ -521,7 +521,8 @@ Argument APPEARANCE should be light or dark."
 ;;; https://github.com/flycheck/flycheck and https://www.flycheck.org
 ;;; FIXME TODO:
 ;;; Consider turning margin on?  Big change for everybody but maybe worth it long-term?
-;;; Possible additional extensions: flycheck-inline, flycheck-elsa/elsa, flycheck-grammarly
+;;; Possible additional extensions: flycheck-inline, flycheck-elsa/elsa,
+;;; flycheck-grammarly FIXME TODO
 ;;; Consider flycheck-color-mode-line if/when tweaking mode-line
 (require 'flycheck)
 ;; Turn on for everybody
@@ -1924,7 +1925,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (add-hook 'git-commit-mode-hook 'markdown-mode)
 ;; But turn off flycheck since markdownlint is awful in `git-commit-mode'
 (add-hook 'git-commit-mode-hook
-	  '(lambda () (flycheck-mode 0)) t)
+	  #'(lambda () (flycheck-mode 0)) t)
 
 (setq magit-log-section-commit-count 25 ; default 10
       ;; Display buffers in same buffer, except for diffs
@@ -2444,7 +2445,7 @@ using `ido-completing-read'."
 
 ;; Might remember this better
 (defalias 'reload-buffer 'revert-buffer)
-(global-set-key (kbd "C-x M-r") '(lambda ()
+(global-set-key (kbd "C-x M-r") #'(lambda ()
 				   "Revert buffer without asking"
 				   (interactive)
 				   (reload-buffer 0 1)
