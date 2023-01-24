@@ -68,6 +68,13 @@
  ;; Treat all themes as safe
  custom-safe-themes t)
 
+
+;; Some polyfills for older emacs
+(unless (fboundp 'seq-remove)
+  (defalias 'seq-remove 'gnus-remove-if))
+(unless (fboundp 'seq-filter)
+  (defalias 'seq-filter 'gnus-remove-if-not))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package
 (require 'package)
