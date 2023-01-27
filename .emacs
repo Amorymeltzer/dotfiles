@@ -2942,22 +2942,21 @@ This checks in turn:
 ;; to the same results as echo.
 (which-key-mode)
 ;; There are a lot of these, all have merits
-;; https://github.com/justbur/emacs-which-key#other-options
-(setq which-key-sort-order 'which-key-local-then-key-order
-      which-key-side-window-max-height 0.5 ; default 0.25
+;; https://github.com/justbur/emacs-which-key#sorting-options
+(setq which-key-sort-order 'which-key-key-order-alpha
       which-key-idle-delay 0.25		   ; default 1.0
-      which-key-prefix-prefix "=>"	   ; default +
+      which-key-side-window-max-height 0.5 ; default 0.25
+      ;; which-key-prefix-prefix "=>"	   ; default +
+      ;; which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL") ; default nil
       which-key-show-remaining-keys t
       which-key-lighter nil  ; Don't rely on diminish, which doesn't work anyway
       which-key-compute-remaps t
       which-key-is-verbose t)
 ;; https://github.com/justbur/emacs-which-key#face-customization-options
-;; (set-face-attribute 'which-key-key-face nil :foreground "magenta")
-(set-face-attribute 'which-key-separator-face nil :foreground "magenta")
-(set-face-attribute 'which-key-note-face nil :foreground "black")
-;; (set-face-attribute 'which-key-special-key-face nil :foreground "red")
-;; color of prefix command
-(set-face-attribute 'which-key-group-description-face nil :foreground "blue" :bold nil)
+(set-face-attribute 'which-key-separator-face nil :inherit 'font-lock-keyword-face)
+;; font-lock-preprocessor-face and which-key-key-face also good options
+(set-face-attribute 'which-key-note-face nil :inherit 'font-lock-comment-face)
+(set-face-attribute 'which-key-group-description-face nil :inherit 'which-key-key-face)
 (set-face-attribute 'which-key-command-description-face nil :inherit nil)
 
 
@@ -2988,8 +2987,6 @@ This checks in turn:
 ;; Which line, probably not hugely useful, C-x l more useful
 ;; (global-set-key (kbd "C-x w") 'what-line)
 
-
-;; Face stuff
 
 ;; Print face at point
 ;; M-x describe-face to get list of properties
