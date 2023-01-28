@@ -1249,8 +1249,14 @@ function profileme {
     history | awk '{print $4}' | awk 'BEGIN{FS="|"}{print $1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr
 }
 
-# Lack of space important!
+# Better which.  Lack of space important!
 alias which='type -a 2>/dev/null'
+
+# Find a function definition, via https://superuser.com/a/229038/240421
+# Would be nice to autocomplete a la which/type
+function wherefunction() (
+    shopt -s extdebug; declare -F "$1";
+)
 
 # Pretty-print PATH
 alias path='echo -e ${PATH//:/\\n}'
