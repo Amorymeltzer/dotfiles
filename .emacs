@@ -2848,6 +2848,11 @@ This checks in turn:
 ;; cperl-electric-linefeed, cperl-electric-keywords, cperl-lazy-help-time
 ;; cperl-info-on-command-no-prompt, cperl-clobber-lisp-bindings
 (setq cperl-hairy t)
+;; cperl-hairy overrides cperl-electric-parens, although the latter sadly stays
+;; stuck on nil.  electric-parens, however, takes care of things, so certain
+;; characters like ( and { can end up doubling their mate.  Setting this
+;; explicitly to null takes care of things
+(setq cperl-electric-parens 'null)
 ;; Help in cperl, default is 5s, must be integer.  Can do C-h v (when not
 ;; clobbering lisp) for immediate help.  See also `cperl-mode-map' for more
 ;; along that line
