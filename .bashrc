@@ -1042,7 +1042,7 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     alias bs='bsearch '
     alias bout='brew outdated --greedy-auto-updates'
     alias bupdate='brew update'
-    alias bupgrade='brew upgrade  --greedy-auto-updates'
+    alias bupgrade='brew upgrade --greedy-auto-updates'
     alias binfo='brew info'
     alias bhome='brew home'
     alias blist='brew list'
@@ -1066,14 +1066,14 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # which defaults to ~/.brew_livecheck_watchlist
     function livecheck-formula() {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
-	    brew update --preinstall && brew livecheck --formula --newer-only -q
+	    brew update --auto-update && brew livecheck --formula --newer-only -q
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
     }
     function livecheck-cask() {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
-	    brew update --preinstall && brew livecheck --cask --newer-only -q
+	    brew update --auto-update && brew livecheck --cask --newer-only -q
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
