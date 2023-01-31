@@ -1357,22 +1357,42 @@ alias ipz='dig +short myip.opendns.com @resolver1.opendns.com'
 alias ipaddr="ifconfig -a | grep 'inet' | grep 'broadcast' | awk '{ print $2 }'"
 alias ipinfo='http -b ipinfo.io/json'
 
-# $OSTYPE == darwin* FIXME TODO
-# Should include fallback for no network, etc.
-function ssid() {
-    local ssid
-    ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | sed "s/.*: //")
+if [[ $OSTYPE == darwin* ]]; then
+    # Should include fallback for no network, etc.
+    function ssid() {
+	local ssid
+	ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | sed "s/.*: //")
 
-    if [ "$1" ]; then
-	if echo "$ssid" | grep -qw "$1"; then
-	    echo :
+	if [ "$1" ]; then
+	    if echo "$ssid" | grep -qw "$1"; then
+		echo :
+	    fi
+	else
+	    echo "$ssid"
 	fi
-    else
-	echo "$ssid"
-    fi
-}
-# Should probably export more/all of these... FIXME TODO
-export -f ssid
+    }
+    # Should probably export more/all of these... FIXME TODO
+    export -f ssid
+
+    # Toggle wifi status, via <http://apple.stackexchange.com/a/36897/53735>
+    # Could try and handle determining the interface, but meh
+    function togglewifi {
+	local interface=$1
+	if [[ -z $interface ]]; then
+	    interface=en0
+	fi
+	[[ "$(networksetup -getairportpower "$interface")" == *On ]] && v=off || v=on
+	networksetup -setairportpower "$interface" "$v"
+    }
+
+    # Change mac address https://jezenthomas.com/free-internet-on-trains/
+    function remac {
+	sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -z
+	sudo ifconfig en0 ether "$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')"
+	sudo networksetup -detectnewhardware
+	ifconfig en0 | grep ether
+    }
+fi
 
 # View HTTP traffic
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
@@ -1380,14 +1400,6 @@ alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 # Which processes are listening on ports
 function eaves {
     lsof -iTCP -sTCP:LISTEN -P "$@"
-}
-
-# Change mac address https://jezenthomas.com/free-internet-on-trains/
-function remac {
-    sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -z
-    sudo ifconfig en0 ether "$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')"
-    sudo networksetup -detectnewhardware
-    ifconfig en0 | grep ether
 }
 
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do

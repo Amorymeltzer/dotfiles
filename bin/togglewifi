@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-# togglewifi by Amory Meltzer
-# Toggle wifi status
-# http://apple.stackexchange.com/a/36897/53735
-
-[[ "$(networksetup -getairportpower en1)" == *On ]] && v=off || v=on
-networksetup -setairportpower en1 $v
