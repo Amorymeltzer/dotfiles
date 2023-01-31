@@ -1066,14 +1066,14 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # which defaults to ~/.brew_livecheck_watchlist
     function livecheck-formula() {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
-	    brew update --auto-update && brew livecheck --formula --newer-only -q
+	    brew update && brew livecheck --formula --newer-only -q
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
     }
     function livecheck-cask() {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
-	    brew update --auto-update && brew livecheck --cask --newer-only -q
+	    brew update && brew livecheck --cask --newer-only -q
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
