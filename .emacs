@@ -173,6 +173,10 @@ Record that in `paradox--backups', but do nothing if
  ;; ns-do-applescript not available?  Could also just set
  ;; auto-dark-detection-method to osascript I think
  auto-dark-allow-osascript t
+ ;; The default of 5 seems like it should be fine, but it seems to have a quite
+ ;; noticable slowdown.  Setting it higher isn't a big deal, so it's a
+ ;; no-brainer.  Could definitely go higher!
+ auto-dark-polling-interval-seconds 10
  ;; The default faces are fine I think, although this throws an error.
  ;; Maybe I should just define a face with the default behavior?
  auto-dark-light-theme nil)
