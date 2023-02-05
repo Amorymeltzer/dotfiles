@@ -1618,7 +1618,6 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (global-set-key (kbd "C-c C-b") 'ido-switch-buffer-other-window)
 ;; Open buffer in another window, don't select it
 (global-set-key (kbd "C-c b") 'ido-display-buffer)
-(global-set-key (kbd "C-M-f") 'ido-display-buffer)
 
 ;; Set some faces for ido
 (set-face-attribute 'ido-only-match nil :foreground "green")
