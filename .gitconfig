@@ -503,6 +503,7 @@ showPatch = true
 [status]
 showStash = true
 
+# diffFilter set in local-config
 [interactive]
 # Mainly for add -p, but don't require pressing enter to proceed
 singleKey = true

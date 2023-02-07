@@ -8,20 +8,29 @@ editor = emacsclient -cqu
 # pager = diff-so-fancy | less --tabs=4 -RFX
 # Fuck yeah delta is awesome
 # https://github.com/dandavison/delta
-pager = delta
+# pager = delta
 
-[interactive]
-diffFilter = delta --color-only
+# Default is dark, this adjusts it based on macOS' status, just like the
+# terminal profile itself is.  In theory, the defaults adapt well enough, and
+# don't become illegible when changing modes, but this is more fun?  Duplicated
+# below for the si alias for side-styles a la icdiff
+pager = delta --features "$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
 
-[gpg]
-program = /usr/local/bin/gpg
+[delta "light-mode"]
+light = true
+# syntax-theme = Coldark-Cold
+
+[delta "dark-mode"]
+light = false
+# syntax-theme = Coldark-Dark
 
 [delta]
 features = inline-line-styles
+hyperlinks = true
+# Clobbers the native search forward/backward in the pager
+navigate = true
 
 [delta "inline-line-styles"]
-light = true # Default is dark, would be nice to be able to tweak based on terminal
-
 minus-emph-style = syntax auto
 minus-non-emph-style = syntax normal
 plus-non-emph-style = syntax normal
@@ -34,6 +43,15 @@ side-by-side = true
 # Tighter from default of 4 spaces
 line-numbers-left-format = │{nm:^2}│
 line-numbers-right-format= │{np:^2}│
+
+[interactive]
+# Interactive stuff, such as add -p, needs to be very limited, so annoyingly
+# needs to have this thing duplicated once again.  Same issue as below, required
+# to use DELTA_FEATURES
+diffFilter = DELTA_FEATURES='+inline-line-styles' delta  --color-only --features "$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
+
+[gpg]
+program = /usr/local/bin/gpg
 
 [alias]
 lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local
@@ -58,9 +76,11 @@ ics = "!git icdiff $(git split-from)"
 icsc = "!git icdiff --cached $(git split-from)"
 
 
-# delta side-by-side, might eventually replace icdiff
+# delta side-by-side, largely replaces icdiff.  An obnoxious level of work
+# required to get delta on the commandline to access dark-mode or light-mode.
+# Seriously, don't recommend.  Now triplicated!
 # $@ passes parameters to diff, not delta; trailing # ensure flags, non-replacements, etc.
-si = "!git diff --no-color $@ | delta --features 'side-styles inline-line-styles' #"
+si = "!sigh=$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode) && git diff --no-color $@ | DELTA_FEATURES='+side-styles' delta --features \"$sigh\" #"
 sid = si
 sic = si --cached
 sidc = sic
