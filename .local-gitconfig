@@ -18,6 +18,9 @@ program = /usr/local/bin/gpg
 
 [delta]
 features = inline-line-styles
+hyperlinks = true
+# Clobbers the native search forward/backward in the pager
+navigate = true
 
 [delta "inline-line-styles"]
 light = true # Default is dark, would be nice to be able to tweak based on terminal
