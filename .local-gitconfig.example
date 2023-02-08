@@ -14,7 +14,7 @@ editor = emacsclient -cqu
 # terminal profile itself is.  In theory, the defaults adapt well enough, and
 # don't become illegible when changing modes, but this is more fun?  Duplicated
 # below for the si alias for side-styles a la icdiff
-pager = delta --features "$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
+pager = delta --features "inline-line-styles $(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
 
 [delta "light-mode"]
 light = true
@@ -80,7 +80,7 @@ icsc = "!git icdiff --cached $(git split-from)"
 # required to get delta on the commandline to access dark-mode or light-mode.
 # Seriously, don't recommend.  Now triplicated!
 # $@ passes parameters to diff, not delta; trailing # ensure flags, non-replacements, etc.
-si = "!sigh=$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode) && git diff --no-color $@ | DELTA_FEATURES='+side-styles' delta --features \"$sigh\" #"
+si = "!sigh=$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode) && git diff --no-color $@ | DELTA_FEATURES='+side-styles inline-line-styles' delta --features \"$sigh\" #"
 sid = si
 sic = si --cached
 sidc = sic
