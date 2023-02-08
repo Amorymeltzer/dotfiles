@@ -14,7 +14,7 @@ editor = emacsclient -cqu
 # terminal profile itself is.  In theory, the defaults adapt well enough, and
 # don't become illegible when changing modes, but this is more fun?  Duplicated
 # below for the si alias for side-styles a la icdiff
-pager = delta --features "inline-line-styles $(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
+pager = delta --features "$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
 
 [delta "light-mode"]
 light = true
@@ -25,12 +25,10 @@ light = false
 # syntax-theme = Coldark-Dark
 
 [delta]
-features = inline-line-styles
 hyperlinks = true
 # Clobbers the native search forward/backward in the pager
 navigate = true
 
-[delta "inline-line-styles"]
 minus-emph-style = syntax auto
 minus-non-emph-style = syntax normal
 plus-non-emph-style = syntax normal
@@ -48,7 +46,7 @@ line-numbers-right-format= │{np:^2}│
 # Interactive stuff, such as add -p, needs to be very limited, so annoyingly
 # needs to have this thing duplicated once again.  Same issue as below, required
 # to use DELTA_FEATURES
-diffFilter = DELTA_FEATURES='+inline-line-styles' delta  --color-only --features "$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
+diffFilter = delta --color-only --features "$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
 
 [gpg]
 program = /usr/local/bin/gpg
@@ -80,7 +78,7 @@ icsc = "!git icdiff --cached $(git split-from)"
 # required to get delta on the commandline to access dark-mode or light-mode.
 # Seriously, don't recommend.  Now triplicated!
 # $@ passes parameters to diff, not delta; trailing # ensure flags, non-replacements, etc.
-si = "!sigh=$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode) && git diff --no-color $@ | DELTA_FEATURES='+side-styles inline-line-styles' delta --features \"$sigh\" #"
+si = "!git diff --no-color $@ | delta --features \"$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode) side-styles\" #"
 sid = si
 sic = si --cached
 sidc = sic
