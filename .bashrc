@@ -301,6 +301,9 @@ else
 
     # Preserve default behavior for cat but use bat
     alias cat='bat --paging=never '
+
+    # Let me view my .emacs how I want, dammit!
+    export BAT_OPTS='--map-syntax .emacs:Lisp'
 fi
 
 
