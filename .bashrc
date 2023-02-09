@@ -927,18 +927,13 @@ alias diffw='wcolordiff'
 # Use -3 option to only show changes
 alias dwdiff='dwdiff -sc'
 
-# Delta just better than diff.  Config is in .gitconfig (well,
-# .local-gitconfig), but the basic gist is that I like icdiff, so let's emulate
-# it's features, namely side-by-side.  The problem remains, however, how to get
-# it to adapt to light/dark-mode on macOS, so we once again repeat ourselves.
-# This will set it, but won't update automatically when the mode is changed.  My
-# solution macOS Terminal profile (the npm package auto-terminal-profile) does
-# that on its own, so this needs its own process.  That's a reason to do
-# something different!  Until then, sufficient to just reload this file when
-# necessary.  Besides, I don't really use the CLI for delta often, and since git
-# reads the config each time, that's already thoroughly dealt with.
+# Delta just better than diff.  The full config is in .gitconfig (well,
+# .local-gitconfig), but the basic gist is that I like icdiff and want to
+# emulate it's features, namely by the side-by-side style.  Setting this up as
+# an alias as opposed to hardcoding $DELTA_FEATURES also means that it can adapt
+# to light/dark-mode on macOS (we once again repeat ourselves).
 if [[ -f $(command -v delta) ]]; then
-    export DELTA_FEATURES="+side-styles $(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
+    alias delta='DELTA_FEATURES="+side-styles $(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)" delta '
 fi
 
 # grep prints line number if piped, kinda sorta breaks other things
