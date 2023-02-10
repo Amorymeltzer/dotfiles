@@ -522,9 +522,17 @@ fi
 if [[ -n "$BREW_INSTALLED" ]]; then
     sources+=("${HOMEBREW_PREFIX}"/etc/profile.d/*)
 
-    # fzf via homebrew doesn't install its completion in the same way.  Stupid.
+    # fzf via homebrew doesn't install everything, instead there's an install
+    # script that homebrew offers as a means by which to source files, including
+    # auto-completion.  Let's just do them individually!
     if [[ -f $(command -v fzf) ]]; then
+	# Bash auto-completion
 	sources+=("${HOMEBREW_PREFIX}"/opt/fzf/shell/completion.bash)
+	# Add fzf keybindings:
+	# C-r (history search)
+	# C-t (copy path)
+	# M-c (cd to directory)
+	sources+=("${HOMEBREW_PREFIX}"/opt/fzf/shell/key-bindings.bash)
     fi
 
     # z, the awesome helper for moving around to popular directories
