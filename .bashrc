@@ -567,7 +567,16 @@ alias more='less'
 # https://github.com/sharkdp/bat
 if [[ ! -f $(command -v bat) ]]; then
     alias bat='more'
+
+    # http://linux.die.net/man/1/pygmentize
+    # Colorized cat, but slow, so don't make it the default
+    if [[ -f $(command -v pygmentize) ]]; then
+	alias cot='pygmentize -O bg=light -g | more'
+    fi
 else
+    # Just in case
+    alias cot='bat '
+
     # I think the manpager above is fine (less -FXiRgMw) but for perldoc bat
     # makes at least a modicum of effort.  Not perfect but at least there's
     # *some* delineation.  Actually, here is a place where using batman shines,
@@ -774,11 +783,6 @@ alias cls='clear'
 alias count='wc -l'
 alias linecount='count'
 
-# http://linux.die.net/man/1/pygmentize
-# Colorized cat, but, you know, just use bat
-if [[ -f $(command -v pygmentize) ]]; then
-    alias cot='pygmentize -O bg=light -g'
-fi
 
 # Get equivalent of open on non-macOS systems
 if [[ ! -f $(command -v open) ]]; then
