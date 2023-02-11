@@ -8,7 +8,7 @@
 export LC_ALL=C
 # export LC_ALL=en_US.UTF-8
 
-# Colors ----------------------------------------------------------
+### Colors ---------------------------------------------------------
 export TERM=xterm-256color
 # Change for different colors, to magenta
 #  export GREP_OPTIONS='--color=auto' GREP_COLOR='0;35'
@@ -29,103 +29,6 @@ elif [[ $OSTYPE == linux* ]]; then
     # export LSCOLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:';
 fi
 
-alias l='ls'
-alias ll='ls -l'
-alias la='ls -A'
-alias lal='ls -lA'
-alias lla='lal'
-alias l1='ls -1'
-alias lt='ls -lt'
-alias lr='ll -R'
-alias ltr='ls -ltr'
-alias latr='ltr -A'
-alias lat='lt -A'
-alias lss='ls -lS'
-alias lsr='ls -lrS'
-alias lasr='lsr -A'
-alias las='lss -A'
-alias lass='las'
-alias l.='ls -dAFh .[^.]*'	# Dotfiles only
-# Note: flags get passed to grep, not ls
-alias ld='ls -l | grep "^d" --color=never'
-alias lad='ls -Al | grep "^d" --color=never'
-alias lda='lad'
-
-if [[ -f $(command -v tree) ]]; then
-    # Colorized, recursive ls-like tree
-    function treed {
-	tree -aC -I ".git" --dirsfirst "$@" | less -FRNX
-    }
-    alias tree='tree -Csh'
-fi
-
-# Preserve environment
-alias sudo='sudo -E '
-
-# Too much node repl
-alias .exit='exit'
-
-### Git stuff
-# Should fix git signing when ssh'd, no issues locally?
-GPG_TTY=$(tty)
-export GPG_TTY
-# Alias hub as git for github https://github.com/github/hub
-if [[ -f $(command -v hub) ]] ; then
-    alias git='hub'
-fi
-# Quick
-function g {
-    local ref
-    ref=$(git rev-parse --is-inside-work-tree 2> /dev/null)
-    if [[ $ref ]]; then
-	if [[ $# -gt 0 ]]; then
-	    git "$@"
-	else
-	    git lr5
-	    git status --short --branch
-	fi
-    else
-	case "$1" in
-	    scan|'help'|h|browse|grab|config|cfg|version|notifications) git "$@";;
-	    *) echo "Not a git repository or other fatal issue"
-	esac
-    fi
-}
-
-alias gb='g branch'
-alias gcb='g copy-branch-name'
-alias gco='g co'
-alias gg='g go'
-alias gs='g s'
-alias s='g s'
-alias ga='g add'
-alias gaa='g aa'
-alias gaas='g aas'
-alias gas='g aas'
-alias gac='g aac'
-alias gd='g d'
-alias gdc='g dc'
-alias gicd='g icd'
-alias gicdc='g icdc'
-alias gsi='g si'
-alias gis='g si'
-alias gsic='g sic'
-alias gisc='g sic'
-alias gdn='g dn'
-alias gds='g ds'
-alias gdsc='g dsc'
-alias gdcs='g dsc'
-alias gcm='g cm'
-alias gl='g l5'
-alias gl1='g l'
-alias gfu='g lf1'
-alias gld='g ld5'
-alias glr='g lr5'
-alias glg='g lg'
-alias glm='g lm'
-alias gllm='g llm'
-alias gls='g ls'
-alias greh='g reh'
 
 # Setup some colors to use later in interactive shell or scripts
 # ~/bin/colordump and termcolors give some clues about these
@@ -231,7 +134,6 @@ export Color_White_Bold_Intense="\033[1;97m"      # White
 # export Color_Cyan_zBackground_Intense="\033[0;106m"    # Cyan
 # export Color_White_zBackground_Intense="\033[0;107m"   # White
 
-
 # See also 256-colors, colordump, colors_and_formatting, & tput_colors
 # Really need to sort all this color crap out, maybe time for iterm 2 FIXME TODO
 alias colorslist="set | egrep '^Color_\w*' | sort"
@@ -239,91 +141,8 @@ alias colorslist="set | egrep '^Color_\w*' | sort"
 alias colors="echo -e \`colorslist | sed 's/\(.*\)=\(.*\)/\2 \1/'\`"
 
 
-# Set less as default manpager, screen won't clear after quitting man
-# -F, quit-if-one-screen, if it fits then print it and quit it
-# -X, no-init, don't clear screen first
-# -i, ignore-case
-# -R, RAW-CONTROL-CHARS, show ANSI color escapes but not other escapes
-# -g, highlight search, slightly faster?
-# -M, display currently viewed lines
-# -w, highlight first new unread line
-# -N, display line numbers.  Not used.
-# -z[n], page scroll n lines instead of one page.  Not used.
-
-# Doesn't display percentage until whole document has gone through.  Type Gg
-# once there to jump to bottom then to the top.  Ill-advised for large files
-export MANPAGER="less -FXiRgMw";
-export LESS="-FXiRgMw";
-
-# Use lesspipe.sh (look inside archives) just in case
-# Exports $LESSOPEN
-if [[ -f $(command -v lesspipe.sh) ]]; then
-    eval "$(lesspipe.sh)"
-fi
-
-# Give man pages some color.  Can't use color names?
-# I actually think this is better than using batman
-export LESS_TERMCAP_mb=$'\033[0;37m' # section titles
-export LESS_TERMCAP_md=$'\033[0;34m' # bold header
-export LESS_TERMCAP_me=$'\033[0m'    # end bold
-export LESS_TERMCAP_so=$'\033[0;31m' # begin standout-mode - info box
-export LESS_TERMCAP_se=$'\033[0m'    # end standout-mode
-export LESS_TERMCAP_ue=$'\033[0m'    # end underline
-export LESS_TERMCAP_us=$'\033[4;35m' # begin underline
-
-# more is less
-alias more='less'
-# bat is even more, and at this point, the muscle memory is engrained
-# https://github.com/sharkdp/bat
-if [[ ! -f $(command -v bat) ]]; then
-    alias bat='more'
-else
-    # I think the manpager above is fine (less -FXiRgMw) but for perldoc bat
-    # makes at least a modicum of effort.  Not perfect but at least there's
-    # *some* delineation.  Actually, here is a place where using batman shines,
-    # as it automatically colors things appropriately.  I bet I can be smarter
-    # about all this, at least in terms of column width FIXME TODO
-    export PERLDOC_PAGER="sh -c 'col -bx | bat -l man -p'"
-
-    # Should probably be set in the config file, but this is fine enough.  This
-    # is necessary because bat (intelligently(?)), as of 0.22 (See
-    # <https://github.com/sharkdp/bat/pull/2197>), adjusts its default behavior
-    # on macOS to be dependent on light/dark mode.  However, it's making the
-    # assumption that there is a correspondence with light/dark mode in the
-    # terminal, which doesn't happen automatically.  iTerm2's beta of 3.5
-    # supposedly handles this, and there are some little hacks to do so in
-    # Apple's terminal, but until I do one of those or decide it's not worth
-    # it/desirable, setting a specific theme keeps things from adjusting.  I
-    # kind of like how the Coldark themes look, although the defaults (Monokai
-    # Extended (Light)) are fine.  That would of course imply that I'd need to
-    # specify a method for switching between Coldark-Cold and Coldark-Dark
-    # depending on the status of light/dark mode (See
-    # <https://github.com/sharkdp/bat/issues/1746>).  Sigh. FIXME TODO
-    export BAT_THEME='Coldark-Cold'
-
-    # Preserve default behavior for cat but use bat
-    alias cat='bat --paging=never '
-
-    # Let me view my configs how I want, dammit!
-    export BAT_OPTS="--map-syntax .emacs:Lisp --map-syntax='.local-gitconfig*:Git Config'"
-fi
-
-
-# Open the manual page for the last command you executed.
-function lastman {
-    set -- $(fc -nl -1);
-    while [ $# -gt 0 -a '(' "sudo" = "$1" -o "-" = "${1:0:1}" ')' ]; do
-	shift;
-    done;
-    local cmd
-    cmd="$(basename "$1")";
-    man "$cmd" || help "$cmd";
-}
-alias lman='lastman'
-
-# Misc -------------------------------------------------------------
-# bash readline settings
-# note: bind used instead of sticking these in .inputrc
+### Bash readline settings -----------------------------------------
+## note: bind used instead of sticking these in .inputrc
 # ignore case
 bind "set completion-ignore-case on"
 # show list automatically, without double tab
@@ -353,7 +172,8 @@ bind "set history-preserve-point on"
 # Treat hyphens and underscores as equivalent
 bind "set completion-map-case on"
 
-### Prompts ----------------------------------------------------------
+
+### Prompts --------------------------------------------------------
 #export PS1="${Color_Cyan}\u${Color_White_Bold_Intense}@${Color_Cyan}\h${Color_White_Bold_Intense}>${Color_Green}\w${Color_White_Bold_Intense}\$ ${Color_zOff}"
 # Smiley (cat?) face prompts, three kinds
 #export PS1="\`if [ \$? = 0 ]; then echo \e[33\;40m\\\^\\\_\\\^\e[0m; else echo \e[36\;40m\\\-\e[0m\\\_\e[36\;40m\\\-\e[0m; fi\` \u \w:\h)"
@@ -363,7 +183,6 @@ bind "set completion-map-case on"
 # Reset color for command output, invoked every time before command is executed
 # Seems unnecessary right now
 #    trap 'echo -ne "\033[00m"' DEBUG
-
 
 ### Prompt functions
 # Return a color indicating system load
@@ -504,10 +323,12 @@ function _exit() {
 trap _exit EXIT
 
 
-## Sourcin'
+### Sourcin' -------------------------------------------------------
 ## Throw all potential sources into an array, check, then source
-# Some personal/private stuff, used in various places, both bash and lisp
+# Some other work done along the way
 # Consider loading in .bash_profile, with GIT_PERS_DIR and GIT_EXTL_DIR??
+
+# Some personal/private stuff, used in various places, both bash and lisp.
 # USER_NAME, NAME, EMAIL
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
 # DIARY_DIR, TIL_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
@@ -580,19 +401,201 @@ for file in "${sources[@]}"; do
 done;
 unset file;
 
+#  alias reload="exec $SHELL -l"
+alias reload='. ~/.bashrc'
+
 # Half-assedly replicate ssh, etc. completion for whois
+# Honestly, should just use fzf
 if [[ -e ~/.ssh/known_hosts ]]; then
     complete -o default -W "$(sed 's/[, ].*//' < ~/.ssh/known_hosts | sort | uniq | grep -v '[0-9]')" whois
 fi
+# macOS networksetup completion
+if [[ $OSTYPE == darwin* ]]; then
+    complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
+fi
 
 
+alias l='ls'
+alias ll='ls -l'
+alias la='ls -A'
+alias lal='ls -lA'
+alias lla='lal'
+alias l1='ls -1'
+alias lt='ls -lt'
+alias lr='ll -R'
+alias ltr='ls -ltr'
+alias latr='ltr -A'
+alias lat='lt -A'
+alias lss='ls -lS'
+alias lsr='ls -lrS'
+alias lasr='lsr -A'
+alias las='lss -A'
+alias lass='las'
+alias l.='ls -dAFh .[^.]*'	# Dotfiles only
+# Note: flags get passed to grep, not ls
+alias ld='ls -l | grep "^d" --color=never'
+alias lad='ls -Al | grep "^d" --color=never'
+alias lda='lad'
+
+if [[ -f $(command -v tree) ]]; then
+    # Colorized, recursive ls-like tree
+    function treed {
+	tree -aC -I ".git" --dirsfirst "$@" | less -FRNX
+    }
+    alias tree='tree -Csh'
+fi
+
+# Preserve environment
+alias sudo='sudo -E '
+
+### Git stuff
+# Should fix git signing when ssh'd, no issues locally?
+GPG_TTY=$(tty)
+export GPG_TTY
+# Alias hub as git for github https://github.com/github/hub
+if [[ -f $(command -v hub) ]] ; then
+    alias git='hub'
+fi
+# Quick
+function g {
+    local ref
+    ref=$(git rev-parse --is-inside-work-tree 2> /dev/null)
+    if [[ $ref ]]; then
+	if [[ $# -gt 0 ]]; then
+	    git "$@"
+	else
+	    git lr5
+	    git status --short --branch
+	fi
+    else
+	case "$1" in
+	    scan|'help'|h|browse|grab|config|cfg|version|notifications) git "$@";;
+	    *) echo "Not a git repository or other fatal issue"
+	esac
+    fi
+}
 # Completion for g alias
 if type __git_complete &> /dev/null; then
     __git_complete g __git_main
 fi
-# networksetup completion
-if [[ $OSTYPE == darwin* ]]; then
-    complete -o default -W "$(networksetup -printcommands | grep -Ee "-.+?\b" -o | grep -v delete | grep -v rofile)" networksetup;
+
+
+alias gb='g branch'
+alias gcb='g copy-branch-name'
+alias gco='g co'
+alias gg='g go'
+alias gs='g s'
+alias s='g s'
+alias ga='g add'
+alias gaa='g aa'
+alias gaas='g aas'
+alias gas='g aas'
+alias gac='g aac'
+alias gd='g d'
+alias gdc='g dc'
+alias gicd='g icd'
+alias gicdc='g icdc'
+alias gsi='g si'
+alias gis='g si'
+alias gsic='g sic'
+alias gisc='g sic'
+alias gdn='g dn'
+alias gds='g ds'
+alias gdsc='g dsc'
+alias gdcs='g dsc'
+alias gcm='g cm'
+alias gl='g l5'
+alias gl1='g l'
+alias gfu='g lf1'
+alias gld='g ld5'
+alias glr='g lr5'
+alias glg='g lg'
+alias glm='g lm'
+alias gllm='g llm'
+alias gls='g ls'
+alias greh='g reh'
+
+# Set less as default manpager, screen won't clear after quitting man
+# -F, quit-if-one-screen, if it fits then print it and quit it
+# -X, no-init, don't clear screen first
+# -i, ignore-case
+# -R, RAW-CONTROL-CHARS, show ANSI color escapes but not other escapes
+# -g, highlight search, slightly faster?
+# -M, display currently viewed lines
+# -w, highlight first new unread line
+# -N, display line numbers.  Not used.
+# -z[n], page scroll n lines instead of one page.  Not used.
+
+# Doesn't display percentage until whole document has gone through.  Type Gg
+# once there to jump to bottom then to the top.  Ill-advised for large files
+export MANPAGER="less -FXiRgMw";
+export LESS="-FXiRgMw";
+
+# Open the manual page for the last command you executed.
+function lastman {
+    set -- $(fc -nl -1);
+    while [ $# -gt 0 -a '(' "sudo" = "$1" -o "-" = "${1:0:1}" ')' ]; do
+	shift;
+    done;
+    local cmd
+    cmd="$(basename "$1")";
+    man "$cmd" || help "$cmd";
+}
+alias lman='lastman'
+
+
+# Use lesspipe.sh (look inside archives) just in case
+# Exports $LESSOPEN
+if [[ -f $(command -v lesspipe.sh) ]]; then
+    eval "$(lesspipe.sh)"
+fi
+
+# Give man pages some color.  Can't use color names?
+# I actually think this is better than using batman
+export LESS_TERMCAP_mb=$'\033[0;37m' # section titles
+export LESS_TERMCAP_md=$'\033[0;34m' # bold header
+export LESS_TERMCAP_me=$'\033[0m'    # end bold
+export LESS_TERMCAP_so=$'\033[0;31m' # begin standout-mode - info box
+export LESS_TERMCAP_se=$'\033[0m'    # end standout-mode
+export LESS_TERMCAP_ue=$'\033[0m'    # end underline
+export LESS_TERMCAP_us=$'\033[4;35m' # begin underline
+
+# more is less
+alias more='less'
+
+# bat is even more, and at this point, the muscle memory is ingrained
+# https://github.com/sharkdp/bat
+if [[ ! -f $(command -v bat) ]]; then
+    alias bat='more'
+else
+    # I think the manpager above is fine (less -FXiRgMw) but for perldoc bat
+    # makes at least a modicum of effort.  Not perfect but at least there's
+    # *some* delineation.  Actually, here is a place where using batman shines,
+    # as it automatically colors things appropriately.  I bet I can be smarter
+    # about all this, at least in terms of column width FIXME TODO
+    export PERLDOC_PAGER="sh -c 'col -bx | bat -l man -p'"
+
+    # Should probably be set in the config file, but this is fine enough.  This
+    # is necessary because bat (intelligently(?)), as of 0.22 (See
+    # <https://github.com/sharkdp/bat/pull/2197>), adjusts its default behavior
+    # on macOS to be dependent on light/dark mode.  However, it's making the
+    # assumption that there is a correspondence with light/dark mode in the
+    # terminal, which doesn't happen automatically.  iTerm2's beta of 3.5
+    # supposedly handles this, and there are some little hacks to do so in
+    # Apple's terminal, but until I do one of those or decide it's not worth
+    # it/desirable, setting a specific theme keeps things from adjusting.  I
+    # kind of like how the Coldark themes look, although the defaults (Monokai
+    # Extended (Light)) are fine.  That would of course imply that I'd need to
+    # specify a method for switching between Coldark-Cold and Coldark-Dark
+    # depending on the status of light/dark mode (See
+    # <https://github.com/sharkdp/bat/issues/1746>).  Sigh. FIXME TODO
+    export BAT_THEME='Coldark-Cold'
+
+    # Preserve default behavior for cat but use bat
+    alias cat='bat --paging=never '
+
+    # Let me view my configs how I want, dammit!
+    export BAT_OPTS="--map-syntax .emacs:Lisp --map-syntax='.local-gitconfig*:Git Config'"
 fi
 
 if [[ -f $(command -v pip) ]]; then
@@ -730,9 +733,8 @@ function gitignore() {
 
 # Javascript alias, can also just use node
 alias jsc='/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc '
-
-#  alias reload="exec $SHELL -l"
-alias reload='. ~/.bashrc'
+# Too much node repl
+alias .exit='exit'
 
 # Navigation -------------------------------------------------------
 alias ..='cd ..'
@@ -773,8 +775,10 @@ alias count='wc -l'
 alias linecount='count'
 
 # http://linux.die.net/man/1/pygmentize
-# Colorized cat
-alias cot='pygmentize -O bg=light -g'
+# Colorized cat, but, you know, just use bat
+if [[ -f $(command -v pygmentize) ]]; then
+    alias cot='pygmentize -O bg=light -g'
+fi
 
 # Get equivalent of open on non-macOS systems
 if [[ ! -f $(command -v open) ]]; then
