@@ -606,6 +606,45 @@ else
     export BAT_OPTS="--map-syntax .emacs:Lisp --map-syntax='.local-gitconfig*:Git Config'"
 fi
 
+
+## Sundry fzf options, mostly taken from the readme
+## https://github.com/junegunn/fzf
+# Default to multi-select mode (TAB or Shift-TAB to mark multiple items), not
+# taking up the whole screen, and a sweet border
+export FZF_DEFAULT_OPTS='-m --height 70% --border'
+# Use ~~ as the trigger sequence instead of the default **
+export FZF_COMPLETION_TRIGGER='~~'
+# Extra options for fuzzy completing via ~~, less sure about this one
+export FZF_COMPLETION_OPTS='--border --info=inline'
+# Expand fuzzy completion to more functions and aliases
+# usage: _fzf_setup_completion path|dir|var|alias|host COMMANDS...
+# Could consider expanding this to some of my custom completions?
+# TODO https://github.com/junegunn/fzf#custom-fuzzy-completion
+_fzf_setup_completion path g e bat icdiff prove
+_fzf_setup_completion dir tree
+# Some options for the bash bindings
+# C-t to snag a file
+if [[ -f $(command -v bat) ]]; then
+    export FZF_CTRL_T_OPTS="
+    --preview 'bat -n --color=always {}'
+    --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+fi
+# C-r to search history, dunno how valuable the preview is, but the C-y to copy
+# the command is nice
+export FZF_CTRL_R_OPTS="
+  --preview 'echo {}' --preview-window up:3:hidden:wrap
+  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --color header:italic
+  --header 'Press CTRL-Y to copy command into clipboard'"
+# Print tree structure in the preview window
+if [[ -f $(command -v tree) ]]; then
+    export FZF_ALT_C_OPTS="--preview 'tree -Csh {}'"
+else
+    export FZF_ALT_C_OPTS="--preview 'du -hca {}'"
+fi
+
+
 if [[ -f $(command -v pip) ]]; then
     # https://snarky.ca/why-you-should-use-python-m-pip/
     alias pip='python -m pip '
