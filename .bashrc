@@ -1386,7 +1386,7 @@ function ip() {
     iplist=$(ifconfig -a | perl -nle'/inet (?:addr:)?(\d+\.\d+\.\d+\.\d+)/ && print $1')
 
     if [ "$1" ]; then
-	if [ "$(echo "$iplist" | grep -w "$1")" ]; then
+	if "$(echo "$iplist" | grep -wq "$1")"; then
 	    echo "$1"
 	fi
     else
@@ -1582,7 +1582,7 @@ function cdfinder() {
 alias cdf='cdfinder'
 
 
-## Couple of functions jacked from bash-it
+## Couple of functions jacked from bash-it, lightly tweaked
 ## https://github.com/revans/bash-it
 # Pick random line from a file
 pickfrom () {
@@ -1596,19 +1596,18 @@ pickfrom () {
 # Passed number gives length
 pass () {
     local i pass length=${1:-4}
-    pass="$(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done)"
-    echo "With spaces (easier to memorize): $pass"
-    echo "Without (use this as the pass): $(echo $pass | tr -d ' ')"
+    readarray -t pass < <(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done)
+    echo "With spaces (easier to memorize): ${pass[*]}"
+    echo "Without (use this as the pass): $(echo "${pass[*]}" | tr -d ' ')"
 }
 # Same, but from /dev/urandom
 randpass () {
-    local length=$1
-    if [[ -z $length ]]; then
-	length=8
-    fi
-    alnum=$(env LC_CTYPE=C tr -cd '[:alnum:]' < /dev/urandom | head -c $length)
+    local length=${1:-8}
+    alpha=$(env LC_CTYPE=C tr -cd '[:alpha:]' < /dev/urandom | head -c "$length")
+    echo "$alpha"
+    alnum=$(env LC_CTYPE=C tr -cd '[:alnum:]' < /dev/urandom | head -c "$length")
     echo "$alnum"
-    graph=$(env LC_CTYPE=C tr -cd '[:graph:]' < /dev/urandom | head -c $length)
+    graph=$(env LC_CTYPE=C tr -cd '[:graph:]' < /dev/urandom | head -c "$length")
     echo "$graph"
 }
 #############
@@ -2036,8 +2035,8 @@ acronym () { curl dict://dict.org/d:"${1}":vera; }
 jargon () { curl dict://dict.org/d:"${1}":jargon; }
 # foldoc, free-online dictionary of computing
 foldoc () { curl dict://dict.org/d:"${1}":foldoc; }
-# urbandict
-urban() { word=$(echo "$*" | sed 's/ /%20/g'); curl -s http://api.urbandictionary.com/v0/define?term="$word" | jq -reM .list[0].definition; }
+# urbandictionary
+urban() { word="$*"; curl -s https://api.urbandictionary.com/v0/define?term="${word// /%20}" | jq -reM .list[0].definition; }
 
 # Add note to Notes.app (OS X 10.8+)
 # Usage: `note 'title' 'body'` or `echo 'body' | note`
