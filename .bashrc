@@ -51,11 +51,13 @@ alias ld='ls -l | grep "^d" --color=never'
 alias lad='ls -Al | grep "^d" --color=never'
 alias lda='lad'
 
-# Colorized, recursive ls-like tree
-function treed {
-    tree -aC -I ".git" --dirsfirst "$@" | less -FRNX
-}
-alias tree='tree -Csuh'
+if [[ -f $(command -v tree) ]]; then
+    # Colorized, recursive ls-like tree
+    function treed {
+	tree -aC -I ".git" --dirsfirst "$@" | less -FRNX
+    }
+    alias tree='tree -Csh'
+fi
 
 # Preserve environment
 alias sudo='sudo -E '
