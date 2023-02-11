@@ -533,6 +533,24 @@ if [[ -n "$BREW_INSTALLED" ]]; then
 	# C-t (copy path)
 	# M-c (cd to directory)
 	sources+=("${HOMEBREW_PREFIX}"/opt/fzf/shell/key-bindings.bash)
+
+	# Bash keybindings for git and fzf https://github.com/junegunn/fzf-git.sh
+	# Might as well put here as long as we're sourcing fzf-related things,
+	# and I suppose, yeah, don't want to source this if I don't have fzf!
+	# Bindings (all begin with C-g):
+	## C-g C-f: files, with diff
+	## C-g C-b: branches, with log of commits
+	## C-g C-t: tags, with commit message
+	## C-g C-h: commits, with diff and commit message
+	## C-g C-r: remotes, with url
+	## C-g C-s: stashes, with commit message
+	## C-g C-e: each-ref
+	# Also can do C-_ to toggle preview options (technically C-/, but that's
+	# not normal and is technically undo, like C-_)
+	fzfgit_file="${GIT_EXTL_DIR}"/fzf-git.sh@junegunn/fzf-git.sh
+	if [[ -f "$fzfgit_file" ]]; then
+	    sources+=("${fzfgit_file}")
+	fi
     fi
 
     # z, the awesome helper for moving around to popular directories
@@ -553,6 +571,7 @@ fi
 # Supplement the above with some missing items, at this point just some
 # mac-specific peccadilloes (defaults, eject)
 sources+=(~/.completions.d/*)
+
 # Source all the (readable) things (files)!
 for file in "${sources[@]}"; do
     [ -f "$file" ] && [ -r "$file" ] && source "$file";
