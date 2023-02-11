@@ -2038,49 +2038,6 @@ foldoc () { curl dict://dict.org/d:"${1}":foldoc; }
 # urbandictionary
 urban() { word="$*"; curl -s https://api.urbandictionary.com/v0/define?term="${word// /%20}" | jq -reM .list[0].definition; }
 
-# Add note to Notes.app (OS X 10.8+)
-# Usage: `note 'title' 'body'` or `echo 'body' | note`
-# Title is optional
-# FIXME TODO
-function note() {
-    local title
-    local body
-    if [ -t 0 ]; then
-	title="$1"
-	body="$2"
-    else
-	title=$(cat)
-    fi
-    #    osascript -e 'tell app "iTunes" to '"$*"
-    osascript>/dev/null \<\<END
-    tell application "Notes"
-    tell account "iCloud"
-    tell folder "Notes"
-    make new note with properties {name:"$title", body:"$title" & "<br><br>" & "$body"}
-    end tell
-    end tell
-    end tell
-    END
-}
-
-# Add reminder to Reminders.app (OS X 10.8+)
-# Usage: `remind 'foo'` or `echo 'foo' | remind`
-# FIXME TODO
-function remind() {
-    local text
-    if [ -t 0 ]; then
-	text="$1" # argument
-    else
-	text=$(cat) # pipe
-    fi
-    osascript >/dev/null \<\<END
-    tell application "Reminders"
-    tell the default list
-    make new reminder with properties {name:"$text"}
-    end tell
-    end tell
-    END
-}
 
 
 function bashtips() {
