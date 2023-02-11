@@ -269,13 +269,12 @@ function prompt_command {
 	PS1+="-[\[$Color_Yellow\]$gitprompt\[$Color_Cyan\]]"
     fi
 
-    if command -v holiday_greeting.sh > /dev/null; then
-	holiday_greeting="$(holiday_greeting.sh)"
-	if [[ -n "$holiday_greeting" ]]; then
-	    holiday_greeting="\n$holiday_greeting"
-	fi
+    holiday_greeting="$(holiday_greeting.sh)"
+    if [[ -n "$holiday_greeting" ]]; then
+	PS1+="\n$holiday_greeting"
     fi
-    PS1+="$holiday_greeting\n\[$Color_Cyan\]└─["
+
+    PS1+="\n\[$Color_Cyan\]└─["
 
     if ((ERRORS > 0)); then
 	PS1+="\[$Color_Red_Intense\]\$"
