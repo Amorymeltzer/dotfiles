@@ -1165,6 +1165,19 @@ if [[ -n "$BREW_INSTALLED" ]]; then
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
     }
+    # Quicker livecheck-cask, will aim to open pull requests for any cask that
+    # needs it without manual action.  Will output a ton of error messages for
+    # all the formulae, but whatever https://stackoverflow.com/a/1521498/2521092
+    function livecheck-cask-bump {
+	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
+	    brew update
+	    while read cask; do
+		brew bump --cask --open-pr --quiet --full-name "$cask"
+	    done <"$HOME/.brew_livecheck_watchlist"
+	else
+	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
+	fi
+    }
 fi
 
 # bundle exec alias
