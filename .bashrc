@@ -380,6 +380,8 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     if [[ -f "$z_file" ]]; then
 	sources+=("$z_file")
 
+	# These need to be *before* z is sourced, but of course, z isn't sourced
+	# now but later, when this whole array is dealt with.  Yay!
 	export _Z_MAX_SCORE=13000	# Up from 9000, entries persist longer
 	export _Z_OWNER="$USER"		# Maybe this should be $USER_NAME?
     fi
@@ -643,7 +645,18 @@ if [[ -f $(command -v tree) ]]; then
 else
     export FZF_ALT_C_OPTS="--preview 'du -hca {}'"
 fi
+# fd is so much faster https://github.com/sharkdp/fd
+if [[ -f $(command -v fd) ]]; then
+    export FZF_DEFAULT_COMMAND='fd --type f'
 
+    # Also use fd for fuzzy completion of paths and directories
+    _fzf_compgen_path() {
+	fd --hidden --follow --exclude ".git" . "$1"
+    }
+    _fzf_compgen_dir() {
+	fd --type d --hidden --follow --exclude ".git" . "$1"
+    }
+fi
 
 if [[ -f $(command -v pip) ]]; then
     # https://snarky.ca/why-you-should-use-python-m-pip/
