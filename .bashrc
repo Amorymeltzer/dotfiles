@@ -1227,13 +1227,6 @@ function newscript() {
 	$VISUAL "$1"
     fi
 }
-# Deprecated
-function newperl() {
-    echo "Use newscript instead!"
-    sleep 1
-    newscript "$1"
-}
-alias newbash="newperl "
 
 alias d="diary "
 
