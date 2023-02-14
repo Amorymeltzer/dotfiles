@@ -1178,15 +1178,29 @@ if [[ -n "$BREW_INSTALLED" ]]; then
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
     }
-    # Quicker livecheck-cask, will aim to open pull requests for any cask that
-    # needs it without manual action.  Will output a ton of error messages for
-    # all the formulae, but whatever https://stackoverflow.com/a/1521498/2521092
+
+    # livecheck-cask, but open pull requests for any cask that needs it without
+    # manual action.  brew bump is also slow and, I dunno, the whole repology
+    # thing is a drag, so maybe this is better?
+    # https://stackoverflow.com/a/1521498/2521092
     function livecheck-cask-bump {
 	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
 	    brew update
-	    while read cask; do
-		brew bump --cask --open-pr --quiet --full-name "$cask"
+	    while read -r cask; do
+		# Stop once we're done with the casks
+		if [[ -z "$cask" ]]; then
+		    break
+		fi
+
+		mapfile -t results < <(brew livecheck --quiet --newer-only "$cask" --json|jq .[].version.outdated,.[].version.latest)
+		if [[ "${results[0]}" = 'true' ]]; then
+		    version="${results[1]//\"/}"
+		    cmd="brew bump-cask-pr --no-browse $cask --version $version"
+		    echo "$cask outdated, attempting with $version: $cmd"
+		    $cmd
+		fi
 	    done <"$HOME/.brew_livecheck_watchlist"
+
 	else
 	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
 	fi
