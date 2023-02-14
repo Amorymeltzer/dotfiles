@@ -398,6 +398,7 @@ sources+=(~/.completions.d/*)
 
 # Source all the (readable) things (files)!
 for file in "${sources[@]}"; do
+    # shellcheck source=/dev/null
     [ -f "$file" ] && [ -r "$file" ] && source "$file";
 done;
 unset file;
@@ -535,7 +536,7 @@ export LESS="-FXiRgMw";
 # Open the manual page for the last command you executed.
 function lastman {
     set -- $(fc -nl -1);
-    while [ $# -gt 0 -a '(' "sudo" = "$1" -o "-" = "${1:0:1}" ')' ]; do
+    while [ $# -gt 0 ] && [ "sudo" = "$1" ] || [ "-" = "${1:0:1}" ]; do
 	shift;
     done;
     local cmd
@@ -695,7 +696,7 @@ if [[ -f $(command -v perlcritic) ]]; then
 
 	# local list of Perl::Critic policies
 	if [[ $cword -eq 1 ]]; then
-	    COMPREPLY=($(compgen -W "$(find "${PERLBREW_MANPATH}/man3" -maxdepth 1 -path '*Perl::Critic::Policy::*'|sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3$//g')" -- "$cur"))
+	    mapfile -t COMPREPLY < <(compgen -W "$(find "${PERLBREW_MANPATH}/man3" -maxdepth 1 -path '*Perl::Critic::Policy::*'|sed 's/^.*man3\/Perl::Critic::Policy:://g' | sed 's/\.3$//g')" -- "$cur")
 	    # https://stackoverflow.com/a/12495480/2521092
 	    __ltrim_colon_completions "$cur"
 	    return 0
@@ -1753,7 +1754,7 @@ function center {
     local str="$*";
     local len=${#str};
     [ "$len" -ge "$width" ] && echo "$str" && return;
-    for ((i = 0; i < $((((width - len)) / 2)); i++)); do
+    for ((i = 0; i < $(((width - len) / 2)); i++)); do
 	echo -n " ";
     done;
     echo "$str";
@@ -1847,7 +1848,7 @@ function unquarantine() {
 
 # Monitor file live with tail
 function monitor() {
-    tail -f "$1" | while read -r line; do printf "$(date '+%F %T')\t$line\n"; done;
+    tail -f "$1" | while read -r line; do printf "$(date '+%F %T')\t%s\n" "$line"; done;
 }
 
 # /. headlines, turn into shell script to option output?
