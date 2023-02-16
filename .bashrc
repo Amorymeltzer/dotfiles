@@ -1112,19 +1112,19 @@ fi
 
 # Homebrew/Cask
 if [[ -n "$BREW_INSTALLED" ]]; then
+    export HOMEBREW_DISPLAY_INSTALL_TIMES=1
+
     # Make homebrew verbose by default
     # export HOMEBREW_VERBOSE=1
+
+    # Disable analytics
+    # export HOMEBREW_NO_ANALYTICS=1
+    # Or just GA
+    # export HOMEBREW_NO_GOOGLE_ANALYTICS=1
 
     # Use bat for brew cat. As of v3.3.6, homebrew will attempt to automatically
     # install bat if this is set and it's not installed (by homebrew!)
     export HOMEBREW_BAT=1
-
-    # Use the API rather than the (possibly?) slower checkout.  Requires
-    # homebrew's developer mode to be off (use latest release, not latest).
-    # More of a pain than anything else
-    # export HOMEBREW_INSTALL_FROM_API=1
-
-    export HOMEBREW_DISPLAY_INSTALL_TIMES=1
 
     # See also brew shellenv
     HOMEBREW_REPOSITORY=$(brew --repo)
