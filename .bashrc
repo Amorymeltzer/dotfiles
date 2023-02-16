@@ -613,7 +613,8 @@ fi
 ## Sundry fzf options, mostly taken from the readme
 ## https://github.com/junegunn/fzf
 # Default to multi-select mode (TAB or Shift-TAB to mark multiple items), not
-# taking up the whole screen, and a sweet border
+# taking up the whole screen, and a sweet border.  Want preview, but it ruins
+# piping to fzf, and besides, with all the below, most of the time I've got it.
 export FZF_DEFAULT_OPTS='-m --height 70% --border'
 # Use ~~ as the trigger sequence instead of the default **
 export FZF_COMPLETION_TRIGGER='~~'
@@ -648,7 +649,10 @@ else
 fi
 # fd is so much faster https://github.com/sharkdp/fd
 if [[ -f $(command -v fd) ]]; then
-    export FZF_DEFAULT_COMMAND='fd --type f'
+    # Show hidden files, including those hidden by .gitignore, but *don't*
+    # follow symlinked directories (do, however, include the links themselves)
+    export FZF_DEFAULT_COMMAND='fd --type f --type l --strip-cwd-prefix --hidden --exclude .git --no-ignore'
+
 
     # Also use fd for fuzzy completion of paths and directories
     _fzf_compgen_path() {
