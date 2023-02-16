@@ -734,7 +734,7 @@ alias perlsecret='man perlsecret'
 alias perlcheat='man perlcheat'
 # https://metacpan.org/dist/perl/view/Porting/epigraphs.pod
 perlepigraphs_file=${PERLBREW_ROOT}/build/${PERLBREW_PERL}/${PERLBREW_PERL}/Porting/epigraphs.pod
-if [[ -r "$perlepigraphs_file" ]] ;then
+if [[ -r "$perlepigraphs_file" ]]; then
    alias perlepigraphs='perldoc "$perlepigraphs_file"'
 fi
 
