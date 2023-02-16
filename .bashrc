@@ -612,59 +612,103 @@ fi
 
 ## Sundry fzf options, mostly taken from the readme
 ## https://github.com/junegunn/fzf
-# Default to multi-select mode (TAB or Shift-TAB to mark multiple items), not
-# taking up the whole screen, and a sweet border.  Want preview, but it ruins
-# piping to fzf, and besides, with all the below, most of the time I've got it.
-export FZF_DEFAULT_OPTS='-m --height 70% --border'
-# Use ~~ as the trigger sequence instead of the default **
-export FZF_COMPLETION_TRIGGER='~~'
-# Extra options for fuzzy completing via ~~, less sure about this one
-export FZF_COMPLETION_OPTS='--border --info=inline'
-# Expand fuzzy completion to more functions and aliases
-# usage: _fzf_setup_completion path|dir|var|alias|host COMMANDS...
-# Could consider expanding this to some of my custom completions?
-# TODO https://github.com/junegunn/fzf#custom-fuzzy-completion
-_fzf_setup_completion path g e bat icdiff prove
-_fzf_setup_completion dir tree
-# Some options for the bash bindings
-# C-t to snag a file
-if [[ -f $(command -v bat) ]]; then
-    export FZF_CTRL_T_OPTS="
-    --preview 'bat -n --color=always {}'
-    --bind 'ctrl-/:change-preview-window(down|hidden|)'"
-fi
-# C-r to search history, dunno how valuable the preview is, but the C-y to copy
-# the command is nice
-export FZF_CTRL_R_OPTS="
-  --preview 'echo {}' --preview-window up:3:hidden:wrap
-  --bind 'ctrl-/:toggle-preview'
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
-  --color header:italic
-  --header 'Press CTRL-Y to copy command into clipboard'"
-# Print tree structure in the preview window
-if [[ -f $(command -v tree) ]]; then
-    export FZF_ALT_C_OPTS="--preview 'tree -Csh {}'"
-else
-    export FZF_ALT_C_OPTS="--preview 'du -hca {}'"
-fi
-# fd is so much faster https://github.com/sharkdp/fd
-if [[ -f $(command -v fd) ]]; then
-    # Show hidden files, including those hidden by .gitignore, but *don't*
-    # follow symlinked directories (do, however, include the links themselves)
-    export FZF_DEFAULT_COMMAND='fd --type f --type l --strip-cwd-prefix --hidden --exclude .git --no-ignore'
+if [[ -f $(command -v fzf) ]]; then
+    # fd is so much faster than find https://github.com/sharkdp/fd
+    if [[ -f $(command -v fd) ]]; then
+	# Show hidden files, including those hidden by .gitignore, but *don't*
+	# follow symlinked directories (do, however, include the links themselves)
+	export FZF_DEFAULT_COMMAND='fd --type f --type l --strip-cwd-prefix --hidden --exclude .git --no-ignore'
 
+	# Also use fd for fuzzy completion of paths and directories
+	_fzf_compgen_path() {
+	    fd --hidden --follow --exclude ".git" . "$1"
+	}
+	_fzf_compgen_dir() {
+	    fd --type d --hidden --follow --exclude ".git" . "$1"
+	}
+    fi
 
-    # Also use fd for fuzzy completion of paths and directories
-    _fzf_compgen_path() {
-	fd --hidden --follow --exclude ".git" . "$1"
+    # Default to multi-select mode (TAB or Shift-TAB to mark multiple items), not
+    # taking up the whole screen, and a sweet border.  Want preview, but it ruins
+    # piping to fzf, and besides, with all the below, most of the time I've got it.
+    export FZF_DEFAULT_OPTS='-m --height 70% --border'
+
+    # Use ~~ as the trigger sequence instead of the default **
+    export FZF_COMPLETION_TRIGGER='~~'
+    # Extra options for fuzzy completing via ~~, less sure about this one
+    export FZF_COMPLETION_OPTS='--border --info=inline'
+
+    # Expand fuzzy completion to more functions and aliases
+    # usage: _fzf_setup_completion path|dir|var|alias|host COMMANDS...
+    # Could consider expanding this to some of my custom completions?
+    # TODO https://github.com/junegunn/fzf#custom-fuzzy-completion
+    _fzf_setup_completion path g e bat icdiff prove
+    _fzf_setup_completion dir tree
+
+    # Some options for the bash bindings
+    # C-t to snag a file
+    if [[ -f $(command -v bat) ]]; then
+	export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}' --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+    fi
+    # C-r to search history, dunno how valuable the preview is, but the C-y to copy
+    # the command is nice
+    export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window up:3:hidden:wrap --bind 'ctrl-/:toggle-preview' --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' --color header:italic --header 'Press CTRL-Y to copy command into clipboard'"
+    # Print tree structure in the preview window
+    if [[ $(type -a tree 2>/dev/null) ]]; then
+	export FZF_ALT_C_OPTS="--preview 'tree -Csh {}'"
+    else
+	export FZF_ALT_C_OPTS="--preview 'du -hca {}'"
+    fi
+
+    # Advanced customization of fzf options via _fzf_comprun function
+    # - The first argument to the function is the name of the command.
+    # - You should make sure to pass the rest of the arguments to fzf.
+    # Mostly for fancy shit with bat and tree
+    _fzf_comprun() {
+	local command=$1
+	shift
+
+	case "$command" in
+	    cd)           if [[ $(type -a tree 2>/dev/null) ]]; then fzf --preview 'tree -Csh {} | head -200' "$@"; else fzf --preview 'du -hca {} | head -200' "$@"; fi ;;
+	    export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+	    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+	    *)            if [[ -f $(command -v bat) ]]; then fzf --preview 'bat --color=always --line-range :500 {}' --preview-window "~3" "$@"; else fzf --preview 'file {}' --preview-window up,1,border-horizontal "$@"; fi ;;
+	esac
     }
-    _fzf_compgen_dir() {
-	fd --type d --hidden --follow --exclude ".git" . "$1"
-    }
+
+
+    # Kill processes, but only list the ones you can kill.  The if is in case
+    # of, e.g., https://github.com/sindresorhus/fkill and its cli.  Via
+    # https://github.com/junegunn/fzf/wiki/examples#processes
+    if [[ ! -f $(command -v fkill) ]]; then
+	fkill() {
+	    local pid
+	    if [ "$UID" != "0" ]; then
+		pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+	    else
+		pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+	    fi
+
+	    if [ "x$pid" != "x" ]; then
+		echo "$pid" | xargs kill -"${1:-9}"
+	    fi
+	}
+    fi
+
+    # Redefine z so that, if nothing is provided, use fzf to pick through the
+    # list.  Via https://github.com/junegunn/fzf/wiki/examples#z
+    if [[ $(type -t z) == "alias" ]]; then
+	unalias z 2> /dev/null
+	function z() {
+	    [ $# -gt 0 ] && _z "$*" && return
+	    cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')" || return
+	}
+    fi
 fi
 
+
+# https://snarky.ca/why-you-should-use-python-m-pip/
 if [[ -f $(command -v pip) ]]; then
-    # https://snarky.ca/why-you-should-use-python-m-pip/
     alias pip='python -m pip '
 
     # Only run pip if virtualenv activated
