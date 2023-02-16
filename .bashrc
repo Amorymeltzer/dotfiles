@@ -1048,9 +1048,10 @@ alias grepiC='grepC -i'
 
 # Same for ripgrep
 if [[ -f $(command -v rg) ]]; then
+    # Includes --smart-case, --hidden, --glob=!.git
     export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
-    # -i largely meaningless with -S/--smart-case in the ripgreprc
+    # -i largely meaningless with -S/--smart-case but whatever
     alias rgi='rg -i'
     alias rgc='rg -C 3'
     alias rgic='rgc -i'
@@ -1058,7 +1059,7 @@ if [[ -f $(command -v rg) ]]; then
     alias rgiC='rgC -i'
 
     # If delta exists, additional function to pipe output there
-    if [[ -f $(command -v delta) ]]; then
+    if [[ $(type -a delta 2>/dev/null) ]]; then
 	function rg-delta() {
 	    rg --json "$1" | delta
 	}

@@ -1,3 +1,7 @@
 # Seems useful, hopefully won't go crazy
 # -s, --case-sensitive to turn off
 --smart-case
+# Show hidden files, including those hidden by .gitignore
+--hidden
+# Don't search within .git directories
+--glob=!.git
