@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# From https://github.com/junegunn/fzf/blob/master/ADVANCED.md#using-fzf-as-interactive-ripgrep-launcher
+# Relies on become in 0.38
+
+# 1. Search for text in files using Ripgrep (respects .ripgreprc but might as
+# well (largely) replicate settings here)
+# 2. Interactively restart Ripgrep with reload action
+# 3. Open the file in editor (note that vim and emacs use opposite positional
+# parameters for opening a file to a particular line; this (now) assumes emacs)
+RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden "
+INITIAL_QUERY="${*:-}"
+FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
+		   fzf --ansi \
+		   --disabled --query "$INITIAL_QUERY" \
+		   --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+		   --delimiter : \
+		   --preview 'bat --color=always {1} --highlight-line {2}' \
+		   --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+		   --bind 'enter:become($VISUAL +{2} {1})'
