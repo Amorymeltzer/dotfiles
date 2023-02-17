@@ -333,7 +333,7 @@ b=${b##refs/heads/}
 
 if [[ "$b" != "master" ]] && [[ "$b" != "main" ]]; then
     if [[ "$detached" = 'yes' ]]; then
-	b=$(__wrap_color "$b" "Red")
+	b=$(__wrap_color "Detached: $b" "Red")
     else
 	b=$(__wrap_color "$b" "White")
     fi
