@@ -47,6 +47,7 @@ Color_Blue="\033[0;34m"         # Blue
 Color_Magenta="\033[0;35m"      # Magenta
 Color_Cyan="\033[0;36m"         # Cyan
 Color_White="\033[0;37m"        # White
+Color_zOff="\033[0m"            # No color
 
 # Wrap colors around a variable
 # There has got to be a smarter way to do this FIXME TODO
@@ -61,6 +62,7 @@ __wrap_color () {
 	Magenta) color=${Color_Magenta};;
 	Cyan) color=${Color_Cyan};;
 	White) color=${Color_White};;
+	Clear) color=${Color_zOff};;
 
 	*) color=${Color_Yellow} # default
     esac
@@ -355,7 +357,7 @@ fi
 if [[ -n "$s" ]]; then
     at="$s"
 else
-    at=$(__wrap_color "@" "Black")
+    at=$(__wrap_color "@" "Clear")
 fi
 
 ######## ###########
