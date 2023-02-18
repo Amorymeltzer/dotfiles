@@ -275,8 +275,10 @@ Argument APPEARANCE should be light or dark."
 ;; Indent if possible but complete otherwise
 (setq-default tab-always-indent 'complete)
 
-;; Split nicer (still want???)
-(setq split-window-keep-point nil)
+;; Start a split-below window at the same point.  Setting to nil shows more
+;; information, and is what I've used for a while, but for someone reason this
+;; feels more intuitive now, and I find I've been wanting it for a while.
+(setq split-window-keep-point t)
 
 ;; Resize windows when splitting; annoying if want certain size, but let's be
 ;; honest, I usually want some balance.  Besides, on a small screen, it's not
