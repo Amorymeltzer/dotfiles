@@ -2,7 +2,8 @@
 # newprompt.sh by Amory Meltzer
 # Inspired by/heavily borrows from git-prompt.sh
 # https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
-### [ "true" = asd ] convert to [[ ]]
+# Last checked February 2023
+
 
 # Exit early but get all the info desired if present
 repo_info="$(git rev-parse --git-dir --is-inside-git-dir --is-bare-repository --is-inside-work-tree --short HEAD 2>/dev/null)"
@@ -102,7 +103,7 @@ __git_sequencer_status () {
 
 
 ### REBASE NOTES ###
-# If there's a conflcit, presence of .git/MERGE_MSG should do it?
+# If there's a conflict, presence of .git/MERGE_MSG should do it?
 # stopped-sha = edit or conflict
 # Investigate amend?  Presence indicates e (versus r)
 
@@ -229,9 +230,16 @@ if [[ -n "$r" ]]; then
     r="$r${a:+$z$a}"
 fi
 
+# Possibly redundant?? FIXME
+conflict="" # state indicator for unresolved conflicts
+if [[ $(git ls-files --unmerged 2>/dev/null) ]]; then
+    conflict="(conflict)"
+fi
+
 w=""
 i=""
 u=""
+h=""
 t=""
 m=""
 d=""
@@ -243,14 +251,14 @@ s=""
 c=""
 p=""
 
-if [ "true" = "$inside_gitdir" ]; then
+if [[ "$inside_gitdir" == "true" ]]; then
     # Not sure I care about this?
-    if [ "true" = "$bare_repo" ]; then
+    if [[ "$bare_repo" == "true" ]]; then
 	c="BARE:"
     else
 	b="GIT_DIR!"
     fi
-elif [ "true" = "$inside_worktree" ]; then
+elif [[ "$inside_worktree" == "true" ]]; then
 
     ##### GIT STATUS KEY #####
     # X          Y     Meaning
@@ -323,6 +331,10 @@ elif [ "true" = "$inside_worktree" ]; then
 	s=$(__wrap_color "$" "Green")
     fi
 
+    # Include text for sparse checkout
+    if [ "$(git config --bool core.sparseCheckout)" = "true" ]; then
+	h="(sparse)"
+    fi
 fi
 
 # Remove refs/heads/ from string, a good example of where git status would be simpler
@@ -384,11 +396,13 @@ esac
 # z=separator, just a space
 # ${f:+$z$f}: if empty, nothing; if present, then separator then f itself
 # r=rebasing/bisecting/cherry/reverting/etc.  ACTION: Should customize more, put first
+# h=(sparse) if sparseCheckout
+# conflict=(conflict) if there are files in conflict.  Possible just duplicates $x/$y/$a
 # p=differential from upstream, expand
 
 f="$u$w$i$t$m$d$n$x$y$e"
 # ${f:-=}: above dirty state, = if not
-gitstring="${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
+gitstring="${h:+$h$z}${conflict:+$conflict$z}${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
 # Ensure gitstring is string, etc.
 printf -v gitstring '%s' "$gitstring"
 out="$gitstring"
