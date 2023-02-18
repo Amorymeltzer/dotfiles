@@ -26,11 +26,6 @@ define max(x,y) {
     return y
 }
 
-define abs(x) {
-    if (x<0) return -x
-    return x
-}
-
 /* take integer part */
 define int(x) {
     auto old_scale   /* variables global by default */
