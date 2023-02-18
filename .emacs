@@ -2025,7 +2025,7 @@ when in source code modes such as python-mode or perl-mode" t)
 
 
 ;; Ability to mark commits in magit; not hugely used, but neat
-;; https://gitlab.com/ideasman42/emacs-magit-commit-mark
+;; https://codeberg.org/ideasman42/emacs-magit-commit-mark
 ;; Should maybe consider adjusting faces? FIXME TODO
 (with-eval-after-load 'magit
   (add-hook 'magit-mode-hook 'magit-commit-mark-mode))
@@ -2648,6 +2648,8 @@ idle for SECS seconds." t)
 ;; Prefer define-wap over define-word
 (defalias 'lookup-word 'define-word-at-point)
 (global-set-key (kbd "C-c d") 'define-word-at-point)
+;; Might as well help out with builtin dictionary stuff, more detailed
+(global-set-key (kbd "C-c C-d") 'dictionary-search)
 
 ;; writegood-mode https://github.com/bnbeckwith/writegood-mode
 (autoload 'writegood-mode "writegood-mode" "Colorize issues with the writing
@@ -2934,7 +2936,7 @@ This checks in turn:
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
 (global-set-key (kbd "C-h k") #'helpful-key)
-(global-set-key (kbd "C-c C-d") #'helpful-at-point)
+(global-set-key (kbd "C-c h") #'helpful-at-point)
 (global-set-key (kbd "C-h F") #'helpful-function)
 (global-set-key (kbd "C-h C") #'helpful-command)
 ;; Maybe add helpful regex to clean-buffer-list-kill-regexps ??
