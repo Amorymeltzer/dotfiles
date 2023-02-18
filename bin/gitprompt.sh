@@ -348,8 +348,10 @@ b=${b##refs/heads/}
 if [[ "$b" != "master" ]] && [[ "$b" != "main" ]]; then
     if [[ "$detached" = 'yes' ]]; then
 	b=$(__wrap_color "Detached: $b" "Red")
+    elif [[ "$b" = 'GIT_DIR!' ]]; then
+	b=$(__wrap_color "$b" "Red")
     else
-	b=$(__wrap_color "$b" "White")
+	b=$(__wrap_color "$b" "Cyan")
     fi
 fi
 
