@@ -645,20 +645,27 @@ if [[ -f $(command -v fzf) ]]; then
     _fzf_setup_completion path g e bat icdiff prove
     _fzf_setup_completion dir tree
 
-    # Some options for the bash bindings
+    # Some options for the bash bindings.  Some variables defined here to
+    # keep preview window stuff aligned.  Plus, they're pretty sweet.
     # C-t to snag a file
     if [[ -f $(command -v bat) ]]; then
-	export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}' --bind 'ctrl-/:change-preview-window(down|hidden|)'"
-    fi
-    # C-r to search history, dunno how valuable the preview is, but the C-y to copy
-    # the command is nice
-    export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window up:3:hidden:wrap --bind 'ctrl-/:toggle-preview' --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' --color header:italic --header 'Press CTRL-Y to copy command into clipboard'"
-    # Print tree structure in the preview window
-    if [[ $(type -a tree 2>/dev/null) ]]; then
-	export FZF_ALT_C_OPTS="--preview 'tree -Csh {}'"
+	FZF_PREVIEW_FILES="'bat --color=always --line-range :500 {}' --preview-window '~3'"
     else
-	export FZF_ALT_C_OPTS="--preview 'du -hca {}'"
+	FZF_PREVIEW_FILES="'file {}' --preview-window up,1,border-horizontal"
     fi
+    FZF_PREVIEW_FILES="--preview $FZF_PREVIEW_FILES --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+    export FZF_CTRL_T_OPTS="$FZF_PREVIEW_FILES"
+    # M-c to cd, print tree structure in the preview window
+    FZF_PREVIEW_DIR_LIMIT=200
+    if [[ $(type -a tree 2>/dev/null) ]]; then
+	FZF_PREVIEW_DIR="'tree -Csh {} | head -$FZF_PREVIEW_DIR_LIMIT'"
+    else
+	FZF_PREVIEW_DIR="'du -hca {} | head -$FZF_PREVIEW_DIR_LIMIT'"
+    fi
+    export FZF_ALT_C_OPTS="--preview $FZF_PREVIEW_DIR"
+    # C-r to search history.  Dunno how valuable the preview is, but the C-y to
+    # copy the command is nice
+    export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window up:3:hidden:wrap --bind 'ctrl-/:toggle-preview' --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' --color header:italic --header 'Press CTRL-Y to copy command into clipboard'"
 
     # Advanced customization of fzf options via _fzf_comprun function
     # - The first argument to the function is the name of the command.
@@ -669,10 +676,10 @@ if [[ -f $(command -v fzf) ]]; then
 	shift
 
 	case "$command" in
-	    cd)           if [[ $(type -a tree 2>/dev/null) ]]; then fzf --preview 'tree -Csh {} | head -200' "$@"; else fzf --preview 'du -hca {} | head -200' "$@"; fi ;;
+	    cd)           fzf --preview "'$FZF_PREVIEW_DIR'" "$@" ;;
 	    export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
 	    ssh)          fzf --preview 'dig {}'                   "$@" ;;
-	    *)            if [[ -f $(command -v bat) ]]; then fzf --preview 'bat --color=always --line-range :500 {}' --preview-window "~3" "$@"; else fzf --preview 'file {}' --preview-window up,1,border-horizontal "$@"; fi ;;
+	    *)            FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS $FZF_PREVIEW_FILES" fzf "$@" ;;
 	esac
     }
 
