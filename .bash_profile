@@ -259,8 +259,8 @@ export HISTTIMEFORMAT='[%F %T] '
 # Apparently certain bash sessions truncate .bash_history on close
 # https://superuser.com/a/753158/240421
 export HISTFILE=~/.bash_eternal_history
-# Ignore some things, not sure if I actually want this though FIXME TODO
-export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cdl:pwd:clear:exit:logout:pg'
+# Ignore some things
+# export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cdl:pwd:clear:exit:logout:pg'
 
 
 # Append all history to same file, don't overwrite
