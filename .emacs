@@ -176,26 +176,7 @@ Record that in `paradox--backups', but do nothing if
  ;; The default of 5 seems like it should be fine, but it seems to have a quite
  ;; noticable slowdown.  Setting it higher isn't a big deal, so it's a
  ;; no-brainer.  Could definitely go higher!
- auto-dark-polling-interval-seconds 10
- ;; The default faces are fine I think, although this throws an error.
- ;; Maybe I should just define a face with the default behavior?
- auto-dark-light-theme nil)
-;; Fix the above by redefining the function itself to just not set anything when
-;; switching to light mode.  This is dumb.
-(defun auto-dark--set-theme (appearance)
-  "Set light/dark theme using emacs-plus ns-system-appearance.
-Argument APPEARANCE should be light or dark."
-  (mapc #'disable-theme custom-enabled-themes)
-  (setq auto-dark--last-dark-mode-state appearance)
-  (pcase appearance
-    ('dark
-     ;; (disable-theme auto-dark-light-theme)
-     (load-theme auto-dark-dark-theme t)
-     (run-hooks 'auto-dark-dark-mode-hook))
-    ('light
-     (disable-theme auto-dark-dark-theme)
-     ;; (load-theme auto-dark-light-theme t)
-     (run-hooks 'auto-dark-light-mode-hook))))
+ auto-dark-polling-interval-seconds 10)
 (auto-dark-mode t)
 
 
