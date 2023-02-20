@@ -74,7 +74,9 @@ if [[ -n "$homebrew_pathstring" ]]; then
 fi
 
 # Intermediate pathing to get the right perl/python versions/paths
-# favor brewperl over macports over homebrew
+# favor brewperl over macports over homebrew.  This also starts to get the
+# manpath set up properly, since manpath uses the actual path, although I'm not
+# sure *when* it gets run.
 PATH="$new_path:$PATH"
 # Can also now confirm whether certain things (e.g. homebrew) are definitely
 # installed.  brew isn't necessarily installed somewhere already on the default
@@ -109,7 +111,6 @@ fi
 PERL5_V=$(perl -e'print substr($^V, 1, -2)'); export PERL5_V # trim leading v
 # and trailing subversion
 
-# See `brew shellenv` for manpath, infopath, etc FIXME TODO
 # Perlbrew doesn't exist or we don't have any perls installed with it, so let's
 # set the perl environment ourselves.  Perlbrew doesn't like these, see
 # <https://github.com/gugod/App-perlbrew/issues/513> and
@@ -158,7 +159,6 @@ if [[ -z "$PERLBREW_INSTALLED" ]]; then
     fi
 
 fi
-
 
 # Differentiate between home machine and ssh.  Toolforge tool account isn't
 # SSH_TTY, but does have the same env variable
