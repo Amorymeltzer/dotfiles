@@ -1249,11 +1249,12 @@ if [[ -n "$BREW_INSTALLED" ]]; then
 		    break
 		fi
 
-		mapfile -t results < <(brew livecheck --quiet --newer-only "$cask" --json|jq .[].version.outdated,.[].version.latest)
+		mapfile -t results < <(brew livecheck --quiet --newer-only "$cask" --json|jq .[].version.outdated,.[].version.latest,.[].version.current)
 		if [[ "${results[0]}" = 'true' ]]; then
 		    version="${results[1]//\"/}"
+		    older="${results[2]//\"/}"
 		    cmd="brew bump-cask-pr --no-browse $cask --version $version"
-		    echo "$cask outdated, attempting with $version: $cmd"
+		    echo "$cask outdated, $older to $version: $cmd"
 		    $cmd
 		fi
 	    done <"$HOME/.brew_livecheck_watchlist"
