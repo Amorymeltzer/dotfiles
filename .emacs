@@ -2182,7 +2182,9 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Easily switch to specific window using numbers (if >2)
 ;; https://github.com/abo-abo/ace-window
-;; (require 'ace-window)
+;; Can also delete (x), swap (m), move (M), copy (c), select (j), select
+;; previous (n), select other (u), split fairly (c), split vertical (v), split
+;; horizontal (b), maximize current (o)
 (autoload 'ace-window "ace-window" "Quickly switch windows" t)
 (global-set-key (kbd "C-x o") 'ace-window)
 (eval-after-load 'ace-window
@@ -2198,6 +2200,12 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key (kbd "C-c <left>") 'windmove-left)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (setq windmove-wrap-around t)
+
+;; ace-link: use o to quickly jump in help(ful) and info modes
+;; https://github.com/abo-abo/ace-link
+(require 'ace-link)
+(ace-link-setup-default)
+
 
 ;; https://github.com/nflath/hungry-delete
 ;; Delete all white space chars at once
