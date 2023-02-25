@@ -2153,13 +2153,19 @@ dictionary () { curl dict://dict.org/d:"${1}":wn; }
 alias define='dictionary'
 alias dict='dictionary'
 # Moby thesaurus
-thesaurus () { curl dict://dict.org/d:"${1}":moby-thes; }
+thesaurus () { curl dict://dict.org/d:"${1}":moby-thesaurus; }
 alias synonym='thesaurus'
 # vera acronyms
 acronym () { curl dict://dict.org/d:"${1}":vera; }
+# elements lookup
+elements () { curl dict://dict.org/d:"${1}":elements; }
 # jargon files
 jargon () { curl dict://dict.org/d:"${1}":jargon; }
 # foldoc, free-online dictionary of computing
 foldoc () { curl dict://dict.org/d:"${1}":foldoc; }
+# CIA World Factbook 2002
+cia-world-factbook () { curl dict://dict.org/d:"${1}":world02; }
+# Ambrose Bierce's classic Devil's Dictionary
+devils-dictionary () { curl dict://dict.org/d:"${1}":devil; }
 # urbandictionary
 urban() { word="$*"; curl -s https://api.urbandictionary.com/v0/define?term="${word// /%20}" | jq -reM .list[0].definition; }
