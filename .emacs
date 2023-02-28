@@ -3463,6 +3463,8 @@ This checks in turn:
 ;; (diminish 'font-lock-mode "Fn") ;; Unused
 (diminish 'visual-line-mode "vl")
 (diminish 'fic-mode)
+(diminish 'hungry-delete-mode)
+(diminish 'auto-revert-mode)
 (diminish 'whole-line-or-region-local-mode)
 (diminish 'highlight-parentheses-mode)
 (diminish 'undo-tree-mode)
