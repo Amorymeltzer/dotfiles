@@ -382,7 +382,7 @@ if [[ -n "$BREW_INSTALLED" ]]; then
 
 	# These need to be *before* z is sourced, but of course, z isn't sourced
 	# now but later, when this whole array is dealt with.  Yay!
-	export _Z_MAX_SCORE=13000	# Up from 9000, entries persist longer
+	export _Z_MAX_SCORE=26000	# Up from 9000, entries persist longer
 	export _Z_OWNER="$USER"		# Maybe this should be $USER_NAME?
     fi
 
