@@ -1524,6 +1524,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (add-hook 'ido-make-dir-list-hook 'ido-sort-mtime)
 
 ;; ~ in ido returns to home directory
+;; http://whattheemacsd.com/setup-ido.el-02.html
 (add-hook 'ido-setup-hook
 	  (lambda ()
 	    ;; Go straight home
@@ -3116,7 +3117,7 @@ This checks in turn:
 
 
 ;; Some potentially useful stuff from Magnars https://github.com/magnars/.emacs.d
-;; Rename file and buffer
+;; Rename file and buffer http://whattheemacsd.com/file-defuns.el-01.html
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
@@ -3136,6 +3137,7 @@ This checks in turn:
 ;; Don't use ido for this, would defeat the purpose
 (put 'rename-current-buffer-file 'ido 'ignore)
 
+;; http://whattheemacsd.com/file-defuns.el-02.html
 (defun delete-current-buffer-file ()
   "Remove file connected to current buffer and kill buffer."
   (interactive)
@@ -3187,6 +3189,8 @@ This checks in turn:
     (when (and (stringp name) (> (length name) 0))
       (insert name))))
 
+
+;; Maybe put in amory-manipulate?  Or *gasp* use? TODO
 (defun join-following-line (n)
   (interactive "p")
   (if (>= n 0)
@@ -3473,6 +3477,7 @@ This checks in turn:
 (setq eldoc-minor-mode-string nil)
 
 ;; Function to shorten major modes in modeline
+;; http://whattheemacsd.com/appearance.el-01.html
 (defmacro rename-modeline (package-name mode new-name)
   "Rename the modeline lighter of PACKAGE-NAME to NEW-NAME"
   `(eval-after-load ,package-name

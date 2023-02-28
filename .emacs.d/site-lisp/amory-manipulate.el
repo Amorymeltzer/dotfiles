@@ -78,6 +78,7 @@
 
 
 ;; FIXME TODO
+;; http://whattheemacsd.com/buffer-defuns.el-03.html
 (defun window-swap-split ()
   "Vertical split shows more of each line, horizontal split shows more
 lines. This code toggles between them. It only works for frames with exactly
