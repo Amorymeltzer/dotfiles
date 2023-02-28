@@ -928,8 +928,9 @@ function peek() {
 alias getquote='defaults read /Library/Preferences/com.apple.loginwindow.plist LoginwindowText'
 
 # thefuck https://github.com/nvbn/thefuck
-if which thefuck > /dev/null; then
+if [[ -f $(command -v thefuck) ]]; then
     eval "$(thefuck --alias)"
+    eval "$(thefuck --alias fuck)"
 fi
 
 # Prompt before overwrite, be vocal about it
