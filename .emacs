@@ -2182,6 +2182,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; https://github.com/nschum/window-numbering.el
 (require 'window-numbering)
 (window-numbering-mode t)
+(set-face-attribute 'window-numbering-face nil :inherit 'mode-line-buffer-id)
 
 ;; Easily switch to specific window using numbers (if >2)
 ;; https://github.com/abo-abo/ace-window
