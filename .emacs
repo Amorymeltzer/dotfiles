@@ -1118,6 +1118,7 @@ current buffer" t)
       desktop-not-loaded-hook '(desktop-save-mode-off) ; Pointless with the above for emacsclient
       desktop-path (list user-emacs-directory "~")) ; Just in case
 (add-to-list 'desktop-modes-not-to-save 'helpful-mode)
+(add-to-list 'desktop-modes-not-to-save 'Info-mode)
 ;; Save a bunch of variables to the desktop file.  For lists specify the len
 ;; of the maximal saved data also
 (setq desktop-globals-to-save
