@@ -1037,10 +1037,10 @@ current buffer" t)
 ;; auto-insert mode skeletons
 (eval-after-load 'autoinsert
   '(progn
-     (defvar hashbang-env "#!/usr/bin/env")
+     (defvar hashbang-env "#!/usr/bin/env ")
      ;; Perl
      (define-auto-insert '("\\(\\.pl\\|\\.t\\)\\'" . "Perl skeleton")
-       '(nil (concat hashbang-env " perl") \n
+       '(nil (concat hashbang-env "perl") \n
 	     "# " (file-name-base) " by " user-full-name \n
 	     "# " _ \n
 	     \n "use strict;" \n
@@ -1050,17 +1050,17 @@ current buffer" t)
 
      ;; shell script
      (define-auto-insert '("\\.\\(ba\\)?sh\\'" . "Bash skeleton")
-       '(nil (concat hashbang-env " bash") \n
+       '(nil (concat hashbang-env "bash") \n
 	     "# " (file-name-base) " by " user-full-name \n
 	     "# " _ ))
 
      ;; Python
      (define-auto-insert '("\\.py\\'" . "Python skeleton")
-       '(nil (concat hashbang-env " python") \n _ ))
+       '(nil (concat hashbang-env "python") \n _ ))
 
      ;; Ruby
      (define-auto-insert '("\\.rb\\'" . "Ruby skeleton")
-       '(nil (concat hashbang-env " ruby") \n _ ))))
+       '(nil (concat hashbang-env "ruby") \n _ ))))
 ;;; Can also define file, ie
 ;; (setq auto-insert-directory "~/.mytemplates/") ;; Note: trailing slash important
 ;; (define-auto-insert "\.py" "my-python-template.py")
