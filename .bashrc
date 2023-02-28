@@ -1242,7 +1242,20 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # thing is a drag, so maybe this is better?
     # https://stackoverflow.com/a/1521498/2521092
     function livecheck-cask-bump {
-	if [ -f "$HOMEBREW_LIVECHECK_WATCHLIST" ] || [ -f "$HOME/.brew_livecheck_watchlist" ]; then
+	__livecheck-cask-bump "$HOME/.brew_livecheck_watchlist"
+    }
+    function livecheck-cask-bump-bulk {
+	echo "Warning: This will probably take a while!"
+	__livecheck-cask-bump "$HOME/.brew_livecheck_watchlist_casks_bulk"
+    }
+    # The helper function upon which the above rely
+    function __livecheck-cask-bump {
+	local watchlist
+	watchlist="$1"
+	if [ -z "$1" ] || [ ! -f "$watchlist" ]; then
+	    echo "No livecheck file found, it should probably be at $watchlist"
+	else
+	    export HOMEBREW_NO_INSTALL_FROM_API=1 # Just in case
 	    brew update
 	    while read -r cask; do
 		# Stop once we're done with the casks
@@ -1257,11 +1270,9 @@ if [[ -n "$BREW_INSTALLED" ]]; then
 		    cmd="brew bump-cask-pr --no-browse $cask --version $version"
 		    echo "$cask outdated, $older to $version: $cmd"
 		    $cmd
+		    echo
 		fi
-	    done <"$HOME/.brew_livecheck_watchlist"
-
-	else
-	    echo "No livecheck file found, it should probably be at $HOME/.brew_livecheck_watchlist"
+	    done <"$watchlist"
 	fi
     }
 fi
