@@ -707,7 +707,15 @@ if [[ -f $(command -v fzf) ]]; then
     if [[ $(type -t z) == "alias" ]]; then
 	unalias z 2> /dev/null
 	function z() {
-	    [ $# -gt 0 ] && _z "$*" && return
+	    if [ $# -gt 0 ]; then
+		_z "$*"
+		# This overwrought nonsense is just to get around the fact that
+		# z -l exits as an error, and sometimes I just want to z -l
+		zerr=$?
+		if [ "$1" = "-l" ] || [ $zerr = 0 ]; then
+		    return
+		fi
+	    fi
 	    cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')" || return
 	}
     fi
