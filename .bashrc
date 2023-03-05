@@ -517,6 +517,7 @@ alias gllm='g llm'
 alias gls='g ls'
 alias greh='g reh'
 
+
 # Set less as default manpager, screen won't clear after quitting man
 # -F, quit-if-one-screen, if it fits then print it and quit it
 # -X, no-init, don't clear screen first
@@ -789,9 +790,13 @@ function pv() {
 	perldoc -v "$@"
     fi
 }
-# search perlfaq
+# perlfaq
 function pq() {
-    perldoc -q "$@"
+    if [ $# -eq 0 ]; then
+	perldoc perlfaq
+    else
+	perldoc -q "$@"
+    fi
 }
 alias perlsecret='man perlsecret'
 alias perlcheat='man perlcheat'
