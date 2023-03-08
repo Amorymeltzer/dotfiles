@@ -597,11 +597,11 @@ else
     # Apple's terminal, but until I do one of those or decide it's not worth
     # it/desirable, setting a specific theme keeps things from adjusting.  I
     # kind of like how the Coldark themes look, although the defaults (Monokai
-    # Extended (Light)) are fine.  That would of course imply that I'd need to
-    # specify a method for switching between Coldark-Cold and Coldark-Dark
-    # depending on the status of light/dark mode (See
-    # <https://github.com/sharkdp/bat/issues/1746>).  Sigh. FIXME TODO
-    export BAT_THEME='Coldark-Cold'
+    # Extended (Light)) are fine and probably better for comments.  That would
+    # of course imply that I'd need to specify a method for switching between
+    # Coldark-Cold and Coldark-Dark depending on the status of light/dark mode
+    # (See <https://github.com/sharkdp/bat/issues/1746>).  Sigh.
+    # export BAT_THEME='Coldark-Cold'
 
     # Preserve default behavior for cat but use bat
     alias cat='bat --paging=never '
