@@ -97,7 +97,7 @@ else
     else
 	function showLast {
 	    moveDir
-	    cat "$(find -s . -maxdepth 1 -name '*.md' | tail -n 2 | grep -v "$today" | tail -n 1)"
+	    cat "$(find -s . -maxdepth 1 -name '*.md' | tail -n 3 | grep -v "$today" | grep -v "$notesfile" | tail -n 1)"
 	}
 
 	case "$1" in
@@ -125,6 +125,7 @@ else
 		    }
 		fi
 
+		# Should account for notes.md FIXME
 		filere='*.md'
 		if [[ "$2" ]]; then
 		    filere="$2$filere"
@@ -157,6 +158,7 @@ else
 		fi;;
 	    "search"|"ss")
 		moveDir
+		# Should account for notes.md FIXME
 		# * instead of @ since assigning array to string to concatenate
 		if [[ -f $(command -v rg) ]]; then
 		    # smart-case, not not just case-insensitive
