@@ -18,7 +18,7 @@ Usage: $(basename "$0") [-h] [new|note|notes|last|showlast|show|rand|random|sear
   note, notes			Edit the notes file
   last, showlast		Display the last diary entry
   show [YYYY-MM-DD]		Show a given entry, or the last entry if no date provided
-  rand, random [YYYY[-DD]]	Display a random diary entry, optionally within the given year or year-month
+  rand, random [YYYY[-MM]]	Display a random diary entry, optionally within the given year or year-month
   search, ss			Case insensitive search diary entries, with (rip)grep
   log				Commit today's file, only if the directory is managed by git
   remove, rm, delete		Remove today's entry, if present
@@ -125,12 +125,11 @@ else
 		    }
 		fi
 
-		# Should account for notes.md FIXME
 		filere='*.md'
 		if [[ "$2" ]]; then
 		    filere="$2$filere"
 		fi
-		cat "$(find . -maxdepth 1 -name "$filere" | shuf | head -n 1)";;
+		cat "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)";;
 	    "remove"|"rm"|"delete")
 		checkDir
 		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
@@ -158,15 +157,16 @@ else
 		fi;;
 	    "search"|"ss")
 		moveDir
-		# Should account for notes.md FIXME
 		# * instead of @ since assigning array to string to concatenate
 		if [[ -f $(command -v rg) ]]; then
-		    # smart-case, not not just case-insensitive
-		    # sort by filename, which is just the date.  Default in
+		    # smart-case, not just case-insensitive.
+		    # Sort by filename, which is just the date.  Default in
 		    # regular grep with multiple files?
-		    rg -S --sort path "${*:2}" -- *.md
+		    # Couldn't get ripgrep to ignore notes.md without using a
+		    # glob for the files themselves, weird.
+		    rg -S --sort path "${*:2}" -g '*.md' -g "!$notesfile"
 		else
-		    grep -i "${*:2}" -- *.md
+		    grep -i "${*:2}" --exclude "$notesfile" -- *.md
 		fi;;
 	    "stats")
 		moveDir
