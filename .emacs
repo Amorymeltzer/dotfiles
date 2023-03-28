@@ -3307,6 +3307,8 @@ This checks in turn:
 (key-chord-define-global "zz" 'er/contract-region)
 (key-chord-define-global "uu" 'undo-tree-undo)
 (key-chord-define prog-mode-map "--" 'undo-tree-redo) ; not in text or conf mode?
+(key-chord-define js2-mode-map ";;" "\C-e;")
+(key-chord-define cperl-mode-map ";;" "\C-e;")
 
 ;; Avoid reaching for shift for common symbols
 ;; http://endlessparentheses.com/banishing-the-shift-key-with-key-chord-in-emacs.html
