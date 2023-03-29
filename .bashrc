@@ -1796,6 +1796,42 @@ function weather() {
     fi
 }
 
+
+# Open AI/ChatGPT stuff from https://kadekillary.work/posts/1000x-eng/
+if [[ -n "$OPENAI_API_KEY" && -f $(command -v jq) ]]; then
+    function gpt() {
+	local prompt=$*
+	# Seems to help
+	prompt=$(echo "$prompt"|tr -d '\n')
+
+	# JSON in bash... sucks?
+	curl https://api.openai.com/v1/chat/completions -s \
+	     -H "Content-Type: application/json" \
+	     -H "Authorization: Bearer $OPENAI_API_KEY" \
+	     -d "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"$prompt\"}], \"temperature\": 0.7 }" \
+	    | jq -r '.choices[0].message.content'
+    }
+    function gpt-data {
+	local prompt=$1
+	local prompt_data=$2
+	prompt_data=$(cat "$prompt_data")
+
+	gpt "$prompt: $(echo "$prompt_data"|tr -d '\n')"
+    }
+    function gpt-image {
+	local prompt=$*
+
+	url=$(curl https://api.openai.com/v1/images/generations -s \
+		   -H "Content-Type: application/json" \
+		   -H "Authorization: Bearer $OPENAI_API_KEY" \
+		   -d "{\"prompt\": \"$prompt\", \"n\": 1, \"size\": \"1024x1024\" }" \
+		  | jq -r '.data[0].url')
+	curl -s "$url" -o "$prompt".png
+	open "$prompt.png"
+    }
+fi
+
+
 # From https://gist.github.com/komasaru/9635884
 # Busted, replace with https://www.aviationweather.gov/metar FIXME TODO
 function metar() {
