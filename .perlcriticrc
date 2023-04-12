@@ -51,7 +51,7 @@ terminal_funcs = LOGDIE LOGEXIT
 [TestingAndDebugging::ProhibitNoWarnings]
 allow = experimental::signatures
 [Subroutines::ProhibitSubroutinePrototypes]
-severity = 4
+severity = 1
 
 # Bump these up from level 1 to level 2
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
