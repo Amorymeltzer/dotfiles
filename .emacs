@@ -1442,6 +1442,11 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 	    (unless (file-remote-p default-directory)
 	      (auto-revert-mode))))
 
+;; dired-gitignore https://github.com/johannes-mueller/dired-gitignore.el
+(define-key dired-mode-map (kbd "H") #'dired-gitignore-mode)
+(add-hook 'dired-mode-hook 'dired-gitignore-mode)
+
+
 ;;;;;;;;;;;;;;;;;;;
 ;; IDO, Interactively Do Things
 ;; interactively do things makes better buffer/find-file menus
