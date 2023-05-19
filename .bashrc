@@ -735,15 +735,15 @@ fi
 # Make perl -d automatically use NYTProf.  See also dprofpp
 export PERL5DB='use Devel::NYTProf'
 
-# Easier Devel::Cover testing by setting the harness.  Should probably make this
-# a function so as to better send parameters to the right place, whatever that
-# is.  Note that it doesn't include the -l flag for the local lib.  Right now
-# it's the directory for prove FIXME TODO
+alias provel='prove -l'
+# Easier Devel::Cover testing by setting the harness.
 alias provecover='HARNESS_PERL_SWITCHES=-MDevel::Cover prove '
-alias proveharness='provecover '
+alias provecoverl='provecover -l'
 # Often useful
 alias proverelease='RELEASE_TESTING=1 prove '
+alias provereleasel='proverelease -l'
 alias provecoverrelease='RELEASE_TESTING=1 provecover '
+alias provecoverreleasel='provecoverrelease -l'
 
 # Access Perl::Critic documentation
 if [[ -f $(command -v perlcritic) ]]; then
