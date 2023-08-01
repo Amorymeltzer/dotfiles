@@ -1801,7 +1801,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (setq smex-history-length 512)
 
 ;; Cleaner, more meaningful narrow-to-region
-;; https://github.com/Bruce-Connor/fancy-narrow
+;; https://github.com/Malabarba/fancy-narrow
 ;; (require 'fancy-narrow)
 
 ;; Autowrap comments but only comments (longlines-mode for all)
