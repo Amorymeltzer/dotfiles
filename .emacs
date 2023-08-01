@@ -2257,6 +2257,18 @@ when in source code modes such as python-mode or perl-mode" t)
       undo-limit 32000000	 ;; 160000
       undo-outer-limit 24000000) ;; 24000000
 
+;; Keep region when undoing in region http://whattheemacsd.com/my-misc.el-02.html
+(defadvice undo-tree-undo (around keep-region activate)
+  (if (use-region-p)
+      (let ((m (set-marker (make-marker) (mark)))
+	    (p (set-marker (make-marker) (point))))
+	ad-do-it
+	(goto-char p)
+	(set-mark m)
+	(set-marker p nil)
+	(set-marker m nil))
+    ad-do-it))
+
 ;; Way more likely to remember
 (defalias 'uppercase-region 'upcase-region)
 
