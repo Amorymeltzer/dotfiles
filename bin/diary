@@ -21,6 +21,7 @@ Usage: $(basename "$0") [-h] [new|note|notes|last|showlast|show|rand|random|sear
   rand, random [YYYY[-MM]]	Display a random diary entry, optionally within the given year or year-month
   search, ss			Case insensitive search diary entries, with (rip)grep
   log				Commit today's file, only if the directory is managed by git
+  list [YYYY[-MM]]		List entries from this month, optionally within the given year or year-month.
   remove, rm, delete		Remove today's entry, if present
   YYYY-MM-DD			Display the diary entry from a specific day
   stats				Display some basic statistics
@@ -114,22 +115,28 @@ else
 		else
 		    showLast
 		fi;;
-	    "rand"|"random")
+	    "list"|"rand"|"random")
 		moveDir
-		# Display a random entry
-		# OSX doesn't have shuf, approximate it via perl
-		# https://stackoverflow.com/a/6511327/2521092
-		if [[ ! $(command -v 2>/dev/null shuf) ]]; then
-		    function shuf() {
-			perl -MList::Util=shuffle -e 'print shuffle(<>);';
-		    }
-		fi
-
 		filere='*.md'
 		if [[ "$2" ]]; then
 		    filere="$2$filere"
 		fi
-		cat "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)";;
+
+		if [[ "$1" == "list" ]]; then
+		    # Remove the leading ./ ? FIXME TODO
+		    echo "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | sort)"
+		else
+		    # Display a random entry
+		    # OSX doesn't have shuf, approximate it via perl
+		    # https://stackoverflow.com/a/6511327/2521092
+		    if [[ ! $(command -v 2>/dev/null shuf) ]]; then
+			function shuf() {
+			    perl -MList::Util=shuffle -e 'print shuffle(<>);';
+			}
+		    fi
+
+		    cat "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)"
+		fi;;
 	    "remove"|"rm"|"delete")
 		checkDir
 		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
