@@ -24,6 +24,16 @@ lines = 20
 [ValuesAndExpressions::ProhibitMagicNumbers]
 allowed_values = all_integers
 
+## Complexity stuff
+# Main script body complexity, default 20.  Not a bad number to shoot for
+# [Modules::ProhibitExcessMainComplexity]
+# max_mccabe = 25
+# Just for subroutines.  The default is 20, which seems kind of high?  I think
+# maybe 10 is something good to shoot for, so for now let's be generous but
+# slightly more strict.
+[Subroutines::ProhibitExcessComplexity]
+max_mccabe = 15
+
 # Turn off warning, since the penalty is on perls less than 5.18, which is not
 # super common in my life
 [-Modules::RequireNoMatchVarsWithUseEnglish]
@@ -43,11 +53,11 @@ terminal_funcs = LOGDIE LOGEXIT
 
 # Subroutine signatures are... fine?  They have been experimental for the better
 # part of a decade now but I think they're generally okay, if unused (see
-# https://github.com/Perl/perl5/issues/18537).  Perl::Critic takes umbrage with
-# 'em, even beyond their "experimental" status, so let's do this.  Turn off the
-# "zOMG you turned off warnings!" for experimental::signatures, and then ease up
-# a bit on disallowing signatures at all, lowering from severity 5 to 4, which
-# is what ProhibitNoWarnings ranks as.
+# <https://github.com/Perl/perl5/issues/18537>).  Perl::Critic takes umbrage
+# with 'em, even beyond their "experimental" status, so let's do this.  Turn off
+# the "zOMG you turned off warnings!" for experimental::signatures, and then
+# ease up a bit on disallowing signatures at all, lowering from severity 5 to 4,
+# which is what ProhibitNoWarnings ranks as.
 [TestingAndDebugging::ProhibitNoWarnings]
 allow = experimental::signatures
 [Subroutines::ProhibitSubroutinePrototypes]
@@ -98,6 +108,12 @@ exclude_functions = print say
 severity = 4
 [Bangs::ProhibitVagueNames]
 severity = 4
+# Add diagnostics to debugging modules.  Here instead of
+# Modules::ProhibitEvilModules, since that's severity 5 and can overwrite some
+# good defaults, and I don't really want to mess with that, and it obviously
+# fits here!
+[Bangs::ProhibitDebuggingModules]
+debugging_modules = diagnostics
 
 ## Perl::Critic::Pulp https://metacpan.org/pod/Perl::Critic::Pulp
 # This feels like it should be much higher!  Annoying duplication in flycheck?
