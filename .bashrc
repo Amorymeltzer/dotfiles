@@ -736,14 +736,22 @@ fi
 export PERL5DB='use Devel::NYTProf'
 
 alias provel='prove -l'
+alias proveq='prove -Q'
+alias provelq='prove -lQ'
 # Easier Devel::Cover testing by setting the harness.
 alias provecover='HARNESS_PERL_SWITCHES=-MDevel::Cover prove '
 alias provecoverl='provecover -l'
+alias provecoverq='provecover -Q'
+alias provecoverlq='provecover -lQ'
 # Often useful
 alias proverelease='RELEASE_TESTING=1 prove '
 alias provereleasel='proverelease -l'
+alias provereleaseq='proverelease -Q'
+alias provereleaselQ='proverelease -lQ'
 alias provecoverrelease='RELEASE_TESTING=1 provecover '
 alias provecoverreleasel='provecoverrelease -l'
+alias provecoverreleaseq='provecoverrelease -Q'
+alias provecoverreleaselq='provecoverrelease -lQ'
 
 # Access Perl::Critic documentation
 if [[ -f $(command -v perlcritic) ]]; then
