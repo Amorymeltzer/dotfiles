@@ -119,10 +119,19 @@ debugging_modules = diagnostics
 # This feels like it should be much higher!  Annoying duplication in flycheck?
 [ValuesAndExpressions::ProhibitArrayAssignAref]
 severity = 5
-# Lower to 1 from 2, a bit much for personal stuff.  Only turned on if
-# Perl::MinimumVersion is available
-[Compatibility::PerlMinimumVersionAndWhy]
-severity = 1
+
+# This is a little much for personal stuff, and historically I reduced it down
+# to 1, but honestly it's a good idea if only to just remind me to use the newer
+# features.  Only turned on if Perl::MinimumVersion is available.
+# [Compatibility::PerlMinimumVersionAndWhy]
+# severity = 1
+# I think Perl::Critic::More has Modules::RequirePerlVersion, which allows one
+# to set a minimum required version in a .perlcriticrc file.  That feels a bit
+# much since I don't really want the rest of Perl::Critic::More.  Still, would
+# be nice: 5.012 enables each @array, which is nice, and 5.020 for signatures,
+# although you need 5.036 to do so without turning experimental warnings off and
+# that's still too uncommon.  Toolforge is on 5.028_001 as of late 2023.
+
 # Yes, easier to maintain, but unnecessary, and I prefer the visual difference
 # for the last item, just as with JavaScript
 [-CodeLayout::RequireTrailingCommaAtNewline]
