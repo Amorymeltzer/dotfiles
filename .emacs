@@ -3321,7 +3321,7 @@ This checks in turn:
 (key-chord-define-global "ii" 'byte-compile-init-dir)
 (key-chord-define-global "yy" 'browse-kill-ring)
 (key-chord-define-global "xx" 'er/expand-region)
-(key-chord-define-global "zz" 'er/contract-region)
+(key-chord-define-global "qq" 'er/contract-region)
 (key-chord-define-global "uu" 'undo-tree-undo)
 (key-chord-define prog-mode-map "--" 'undo-tree-redo) ; not in text or conf mode?
 (key-chord-define js2-mode-map ";;" "\C-e;")
