@@ -732,7 +732,7 @@ if [[ -f $(command -v pip) ]]; then
 fi
 
 
-# Make perl -d automatically use NYTProf.  See also dprofpp
+# Make perl -d automatically use NYTProf
 export PERL5DB='use Devel::NYTProf'
 
 alias provel='prove -l'
