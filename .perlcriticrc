@@ -77,10 +77,15 @@ severity = 1
 # [ErrorHandling::RequireCarping]
 # severity = 2
 
-# Haha no
+# Oh boy gotta tweak this.  Good but let's leave some simple ones alone, but
+# also bump things up a bit
 [InputOutput::RequireCheckedSyscalls]
 functions = :builtins
 exclude_functions = print say
+severity = 2
+# Match [InputOutput::RequireCheckedOpen]
+[InputOutput::RequireCheckedClose]
+severity = 3
 
 ## I do not agree with these, so never load them
 # [-CodeLayout::ProhibitHardTabs]
