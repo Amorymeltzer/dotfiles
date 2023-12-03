@@ -1783,8 +1783,10 @@ alias mu='marketupdate'
 alias stockmarket='ticker'
 alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 
-# Easy access to toolforge
-alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
+# Easy access to toolforge, but only if not on toolforge
+if [[ ! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools" ]]; then
+   alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
+fi
 
 # Get the weather
 function weather() {
