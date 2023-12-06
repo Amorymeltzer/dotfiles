@@ -113,9 +113,9 @@ acc = "!git add -A; git diff --staged --name-only --quiet || git commit --amend 
 ap  = add -p
 ai  = add -p
 
-# Create and/or go to a branch
-# With git 2.23, uses switch -c; can do the same with checkout -b
-go = "!f() { git switch -c \"$1\" 2> /dev/null || git switch \"$1\"; }; f"
+# Create and/or go to a branch.  Potentially overridden in local-config to use
+# switch -c after 2.23; toolforge annoyingly is still on 2.20.1
+go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
 
 # Intentionally missing -b to avoid erroneous checkouts of wrong default branch
 co = checkout
