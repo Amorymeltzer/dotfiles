@@ -1043,7 +1043,8 @@ current buffer" t)
        '(nil (concat hashbang-env "perl") \n
 	     "# " (file-name-base) " by " user-full-name \n
 	     "# " _ \n
-	     \n "use strict;" \n
+	     \n "use 5.006;" \n		; just default there
+	     "use strict;" \n
 	     "use warnings;" \n
 	     "use English;" \n \n
 	     "use diagnostics; # Remove after development TODO" \n))
