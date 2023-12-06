@@ -2012,6 +2012,9 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; git modes for gitignore, gitconfig, and gitattributes
 ;; https://github.com/magit/git-modes
 (autoload 'gitconfig-mode "gitconfig-mode" "A major mode for editing .gitconfig files." t)
+;; Add my specific extra files, see [include] in .gitconfig
+(add-to-list 'auto-mode-alist '("\\.?local-gitconfig\\'" . gitconfig-mode))
+(add-to-list 'auto-mode-alist '("\\.?priv-gitconfig\\'" . gitconfig-mode))
 (autoload 'gitignore-mode "gitignore-mode" "A major mode for editing .gitignore files." t)
 (autoload 'gitattributes-mode "gitattributes-mode" "A major mode for editing .gitattributes files." t)
 
