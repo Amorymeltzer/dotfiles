@@ -1,6 +1,7 @@
 {
   "default": true, // https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
   "MD013": false,  // Line length
+  "MD024": { "siblings_only": true },
   "MD026": { "punctuation": ".,;:" } // Trailing punctuation in heading, default is ".,;:!。，；：！"
   // "MD028": false,  // Blank line inside blockquote
   // "MD034": false   // Bare URL used
