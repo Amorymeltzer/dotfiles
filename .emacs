@@ -541,7 +541,7 @@ Record that in `paradox--backups', but do nothing if
       ;; '(flycheck-highlighting-mode 'lines
       ;; Slow in python mode, but neat regardless
       flycheck-highlighting-mode 'sexps
-      flycheck-mode-line-prefix "FlyC"
+      flycheck-mode-line-prefix "Fly"	; default FlyC
 
       ;; Tell flycheck that sometimes Perl modules are in ./lib, or ../lib if
       ;; you're in a testing directory /t.  Used with perl -I
