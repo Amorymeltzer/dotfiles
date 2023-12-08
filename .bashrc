@@ -196,7 +196,8 @@ function _load_color() {
 	SYSLOAD=$(sysctl -n vm.loadavg | cut -f 2 -d ' ')
     else
 	NCPU=$(nproc)
-	SYSLOAD=$(uptime | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " ")
+	# Toolforge k8s webservice has no uptime, blah
+	SYSLOAD=$(uptime 2>/dev/null | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " ")
     fi
     # Remove decimal, essentially treating it as a percentage (40 instead of
     # 0.40) since bash can't do math with floating points
@@ -227,7 +228,8 @@ function _uid() {
 	local color
 	case $USER in
 	    root) color="${Color_Red}";; # User is root
-	    "$(logname)") color="${Color_Green}";; # User is normal (mostly)
+	    # Toolforge k8s webservice has no logname, blah
+	    "$(logname 2>/dev/null)") color="${Color_Green}";; # User is normal (mostly)
 	    *) color="${Color_Red_zBackground}";; # User is not login user
 	esac
 	echo -en "$color\u"
