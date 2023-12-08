@@ -1786,7 +1786,7 @@ alias stockmarket='ticker'
 alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 
 # Easy access to toolforge, but only if not on toolforge or k8s
-if [[ (! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools") || ! $KUBERNETES_PORT ]]; then
+if [[ (! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools") && ! $KUBERNETES_PORT ]]; then
    alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
 fi
 
