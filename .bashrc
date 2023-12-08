@@ -203,11 +203,11 @@ function _load_color() {
     # 0.40) since bash can't do math with floating points
     SYSLOAD=$(tr -d '.' <<< "$SYSLOAD")
 
-    if [ "${SYSLOAD}" -lt $((100*NCPU)) ]; then
+    if [[ "${SYSLOAD}" -lt $((100*NCPU)) ]]; then
 	echo -en "${Color_Yellow}" # Normal load
-    elif [ "${SYSLOAD}" -lt $((200*NCPU)) ]; then
+    elif [[ "${SYSLOAD}" -lt $((200*NCPU)) ]]; then
 	echo -en "${Color_Magenta_Intense}" # Small load
-    elif [ "${SYSLOAD}" -lt $((400*NCPU)) ]; then
+    elif [[ "${SYSLOAD}" -lt $((400*NCPU)) ]]; then
 	echo -en "${Color_Red_Bold_Intense}" # Medium load
     else
 	echo -en "${Color_Red_zBackground}${Color_Red_Bold_Intense}" # Large load
