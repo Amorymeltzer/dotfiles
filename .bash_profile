@@ -161,8 +161,8 @@ if [[ -z "$PERLBREW_INSTALLED" ]]; then
 fi
 
 # Differentiate between home machine and ssh.  Toolforge tool account isn't
-# SSH_TTY, but does have the same env variable
-if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
+# SSH_TTY, but does have the same env variable.  And k8s doesn't have anything.
+if [[ $SSH_TTY || $INSTANCEPROJECT || $KUBERNETES_PORT ]]; then
     # Get ripgrep https://wikitech.wikimedia.org/wiki/Tool:Rustup
     rustup="/data/project/rustup/rustup/.cargo/bin"
     if [[ -d "$rustup" ]]; then
@@ -309,7 +309,7 @@ if [[ $(command -v fortune) && $UID != '0' && $- == *i* && $TERM != 'dumb' ]]; t
     echo -ne "${Color_White}"; fortune -s; echo -ne "${Color_zOff}" # only short ones
 fi
 echo -ne "${Color_Magenta}$(uname -sr) up" ; uptime | awk -F'(  |up)' '{print $2$3$4}'
-# if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && $(which weather) ]]; then
+# if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && !$KUBERNETES_PORT && $(which weather) ]]; then
 #     weather ?Qn0		# Uses wttr.in
 # fi
 

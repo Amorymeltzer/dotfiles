@@ -216,7 +216,7 @@ function _load_color() {
 
 # Hostname when connected via SSH
 function _cnx() {
-    if [[ $SSH_TTY || $INSTANCEPROJECT ]]; then
+    if [[ $SSH_TTY || $INSTANCEPROJECT || $KUBERNETES_PORT ]]; then
 	echo -en "${Color_Blue_Intense}@${Color_Red}\h"
     fi
 }
@@ -290,7 +290,7 @@ function prompt_command {
     # create a $fill of all screen width minus the time string and a space:
     ((fillsize=COLUMNS))	# fullscreen
     # room for battery charge plus the color control codes, not if sshing
-    if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && $(which battery) ]]; then
+    if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && ! $KUBERNETES_PORT && $(which battery) ]]; then
 	battery=$(battery -a 2>/dev/null | tr -d ' ')
 	((fillsize=fillsize-${#battery}+12))
     fi
@@ -1785,8 +1785,8 @@ alias mu='marketupdate'
 alias stockmarket='ticker'
 alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 
-# Easy access to toolforge, but only if not on toolforge
-if [[ ! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools" ]]; then
+# Easy access to toolforge, but only if not on toolforge or k8s
+if [[ ! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools" || ! $KUBERNETES_PORT ]]; then
    alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
 fi
 
