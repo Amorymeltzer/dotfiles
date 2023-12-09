@@ -425,24 +425,24 @@ Record that in `paradox--backups', but do nothing if
 ;; Define jest, qunit, and mocha externals as with node.  Taken from
 ;; <https://github.com/sindresorhus/globals>, which is what eslint uses
 (when js2-include-node-externs
-(defvar js2-qunit-externs
-  (mapcar 'symbol-name
-	  '(asyncTest deepEqual equal expect module notDeepEqual notEqual notOk
-		      notPropEqual notStrictEqual ok propEqual QUnit raises
-		      start stop strictEqual test throws))
-  "QUnit externs.")
-(defvar js2-jest-externs
-  (mapcar 'symbol-name '(afterAll afterEach beforeAll beforeEach describe expect
-				  fdescribe fit it jest pit require test
-				  xdescribe xit xtest))
-  "Jest externs.")
-(defvar js2-mocha-externs
-  (mapcar 'symbol-name
-	  '(after afterEach before beforeEach context describe it mocha run
-		  setup specify suite suiteSetup suiteTeardown teardown test
-		  xcontext xdescribe xit xspecify))
-  "Mocha externs.")
-(setq js2-global-externs (append js2-qunit-externs js2-jest-externs js2-mocha-externs)))
+  (defvar js2-qunit-externs
+    (mapcar 'symbol-name
+	    '(asyncTest deepEqual equal expect module notDeepEqual notEqual notOk
+			notPropEqual notStrictEqual ok propEqual QUnit raises
+			start stop strictEqual test throws))
+    "QUnit externs.")
+  (defvar js2-jest-externs
+    (mapcar 'symbol-name '(afterAll afterEach beforeAll beforeEach describe expect
+				    fdescribe fit it jest pit require test
+				    xdescribe xit xtest))
+    "Jest externs.")
+  (defvar js2-mocha-externs
+    (mapcar 'symbol-name
+	    '(after afterEach before beforeEach context describe it mocha run
+		    setup specify suite suiteSetup suiteTeardown teardown test
+		    xcontext xdescribe xit xspecify))
+    "Mocha externs.")
+  (setq js2-global-externs (append js2-qunit-externs js2-jest-externs js2-mocha-externs)))
 
 
 ;; Part of js2-mode package
