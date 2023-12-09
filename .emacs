@@ -1745,19 +1745,19 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; (setq
 ;;  ibuffer-fontification-alist
 ;;  '(;; read-only buffers
-;;    (10 buffer-read-only eshell-ls-readonly-face)
+;;    (10 buffer-read-only eshell-ls-readonly)
 ;;    ;; emacs' "special" buffers
-;;    (15 (string-match "^*" (buffer-name)) eshell-ls-special-face)
+;;    (15 (string-match "^*" (buffer-name)) eshell-ls-special)
 ;;    ;; hidden buffers
 ;;    (20 (and (string-match "^ " (buffer-name)) (null buffer-file-name))
-;;        eshell-ls-symlink-face)
+;;        eshell-ls-symlink)
 ;;    ;; help buffers
 ;;    (25 (memq major-mode ibuffer-help-buffer-modes)
-;;        eshell-ls-archive-face)
+;;        eshell-ls-archive)
 ;;    ;; IRC buffers
 ;;    (30 (eq major-mode 'erc-mode) erc-notice-face)
 ;;    ;; dired buffers
-;;    (35 (eq major-mode 'dired-mode) eshell-ls-directory-face)))
+;;    (35 (eq major-mode 'dired-mode) eshell-ls-directory)))
 
 
 ;; Kill current buffer
