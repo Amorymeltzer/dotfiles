@@ -1801,16 +1801,34 @@ alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 # envvars, since id -un matches the toolforge bot account.
 if [[ "$LOGNAME" != "tools.amorybot.k8s" ]]; then
     if [[ ! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools" ]]; then
+	# shellcheck disable=SC2262 # Doesn't like the function tf below
 	alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
 	# This won't get confusing at all!
-	alias tf='toolforge'
+	alias tf='toolforge '
     else
 	# If we're *on* the toolforge (but not the kubernetes webservice), alias
-	# some things for ease of use!
-	# Add completion? FIXME TODO
-	alias tf='toolforge '
-	alias tfj='toolforge jobs '
-	alias tfe='toolforge envvars '
+	# some things for ease of use!  Okay, function, to make the completion
+	# work better.  Oh, yeah, completion too!
+	function tf() {
+	    toolforge "$@"
+	}
+	complete -F _toolforge tf
+	function tfj {
+	    toolforge-jobs "$@"
+	}
+	complete -F _toolforge_jobs tfj
+	function tfe {
+	    toolforge-envvars "$@"
+	}
+	# No completion for toolforge-envvars.  Could rewrite toolforge-jobs
+	# completion, currently in /usr/share/bash-completion/completions/.  Far
+	# from perfect, doesn't like pieces
+	_toolforge_envvars_completion() {
+	    mapfile -t COMPREPLY < <( compgen -W 'create delete list quota show' -- "$cur" )
+	    return 0
+	}
+	complete -F _toolforge_envvars_completion toolforge-envvars
+	complete -F _toolforge_envvars_completion tfe
     fi
 fi
 
