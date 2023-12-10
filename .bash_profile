@@ -223,7 +223,9 @@ if [[ -d "$GIT_EXTL_DIR/tiny-scripts@vitorgalvao" ]]; then
     new_path="$new_path:$GIT_EXTL_DIR/tiny-scripts@vitorgalvao"
 fi
 # Personal lockquote script
-new_path="$new_path:$GIT_PERS_DIR/lockquote"
+if [[ -d "$GIT_PERS_DIR/lockquote" ]]; then
+    new_path="$new_path:$GIT_PERS_DIR/lockquote"
+fi
 # CKAN?  CKAN
 if [[ -d /Applications/CKAN.app/Contents/MacOS/ ]]; then
     new_path="$new_path:/Applications/CKAN.app/Contents/MacOS/"
