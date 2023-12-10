@@ -161,12 +161,15 @@ if [[ -z "$PERLBREW_INSTALLED" ]]; then
 fi
 
 # Differentiate between home machine and ssh.  Toolforge tool account isn't
-# SSH_TTY, but does have the same env variable.  And k8s doesn't have anything.
+# SSH_TTY, but does have the same $INSTANCEPROJECT and $INSTANCENAME.  And k8s
+# doesn't have anything!
 if [[ $SSH_TTY || $INSTANCEPROJECT || $KUBERNETES_PORT ]]; then
-    # Get ripgrep https://wikitech.wikimedia.org/wiki/Tool:Rustup
-    rustup="/data/project/rustup/rustup/.cargo/bin"
-    if [[ -d "$rustup" ]]; then
-	new_path="${new_path:+${new_path}:}$rustup"
+    # Get ripgrep on toolforge https://wikitech.wikimedia.org/wiki/Tool:Rustup
+    if [[ $INSTANCEPROJECT || $KUBERNETES_PORT ]]; then
+	rustup="/data/project/rustup/rustup/.cargo/bin"
+	if [[ -d "$rustup" ]]; then
+	    new_path="${new_path:+${new_path}:}$rustup"
+	fi
     fi
 else
     # Some personal, local directories

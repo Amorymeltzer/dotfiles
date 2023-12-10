@@ -239,6 +239,8 @@ function _uid() {
 	    esac
 	fi
 
+	# In theory, on the tf k8s webservice, would be nice to use the custom
+	# $LOGNAME I have it rather than \u, but that's dumb.  Right?
 	echo -en "$color\u"
     fi
 }
@@ -1792,10 +1794,26 @@ alias mu='marketupdate'
 alias stockmarket='ticker'
 alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 
-# Easy access to toolforge, but only if not on toolforge or k8s
-if [[ (! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools") && ! $KUBERNETES_PORT ]]; then
-   alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
+
+# Easy access to toolforge, but only if not on toolforge or k8s; if we're on the
+# toolforge (but not k8s) then easy access to toolforge commands.  Checking the
+# kubernetes webservice relies on the manual adding of $LOGNAME via toolforge
+# envvars, since id -un matches the toolforge bot account.
+if [[ "$LOGNAME" != "tools.amorybot.k8s" ]]; then
+    if [[ ! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools" ]]; then
+	alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
+	# This won't get confusing at all!
+	alias tf='toolforge'
+    else
+	# If we're *on* the toolforge (but not the kubernetes webservice), alias
+	# some things for ease of use!
+	# Add completion? FIXME TODO
+	alias tf='toolforge '
+	alias tfj='toolforge jobs '
+	alias tfe='toolforge envvars '
+    fi
 fi
+
 
 # Get the weather
 function weather() {
