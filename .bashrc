@@ -196,7 +196,8 @@ function _load_color() {
 	SYSLOAD=$(sysctl -n vm.loadavg | cut -f 2 -d ' ')
     else
 	NCPU=$(nproc)
-	# Toolforge k8s webservice has no uptime, blah
+	# Anything without `uptime` (e.g. Toolforge k8s webservice) will always
+	# appear as normal load
 	SYSLOAD=$(uptime 2>/dev/null | cut -d ":" -f 4- | sed s/,//g | cut -f 2 -d " ")
     fi
     # Remove decimal, essentially treating it as a percentage (40 instead of
@@ -221,17 +222,23 @@ function _cnx() {
     fi
 }
 
-# Test user
-# id -un, logname, $USER: not necessarily the same!
+# Test user: id -un, logname, $LOGNAME, $USER: not necessarily the same!
 function _uid() {
     if [[ $USER != "$USER_NAME" ]]; then # Only if not meeeee
-	local color
-	case $USER in
-	    root) color="${Color_Red}";; # User is root
-	    # Toolforge k8s webservice has no logname, blah
-	    "$(logname 2>/dev/null)") color="${Color_Green}";; # User is normal (mostly)
-	    *) color="${Color_Red_zBackground}";; # User is not login user
-	esac
+	# Backup just in case there's no $USER
+	local color="${Color_Red_zBackground}"
+
+	# We actually *have* a user.  The toolforge kubernetes (webservice) is a
+	# bit annoying: has no logname (but I gave it one!), has no $USER or
+	# $USERNAME, but `id -un` and thus \u exist.
+	if [[ -n "$USER" ]]; then
+	    case $USER in
+		root) color="${Color_Red}";; # User is root
+		"$(logname)") color="${Color_Green}";; # User is normal (mostly)
+		*) color="${Color_Red_zBackground}";; # User is not login user
+	    esac
+	fi
+
 	echo -en "$color\u"
     fi
 }
