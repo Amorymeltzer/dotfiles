@@ -1816,19 +1816,22 @@ if [[ "$LOGNAME" != "tools.amorybot.k8s" ]]; then
 	function tfj {
 	    toolforge-jobs "$@"
 	}
+	# Only exists once we've tried to complete on `toolforge jobs`
 	complete -F _toolforge_jobs tfj
+	alias tfjl='tfj list '
 	function tfe {
 	    toolforge-envvars "$@"
 	}
 	# No completion for toolforge-envvars.  Could rewrite toolforge-jobs
 	# completion, currently in /usr/share/bash-completion/completions/.  Far
-	# from perfect, doesn't like pieces
+	# from perfect, doesn't like pieces and won't actually complete FIXME
 	_toolforge_envvars_completion() {
 	    mapfile -t COMPREPLY < <( compgen -W 'create delete list quota show' -- "$cur" )
 	    return 0
 	}
 	complete -F _toolforge_envvars_completion toolforge-envvars
 	complete -F _toolforge_envvars_completion tfe
+	alias tfel='tfe list'
     fi
 fi
 
