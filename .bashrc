@@ -1800,15 +1800,15 @@ alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 # kubernetes webservice relies on the manual adding of $LOGNAME via toolforge
 # envvars, since id -un matches the toolforge bot account.
 if [[ "$LOGNAME" != "tools.amorybot.k8s" ]]; then
-    if [[ ! "$INSTANCEPROJECT" || "$INSTANCEPROJECT" != "tools" ]]; then
+    if [[ ! "$INSTANCEPROJECT" ]]; then
 	# shellcheck disable=SC2262 # Doesn't like the function tf below
 	alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
 	# This won't get confusing at all!
 	alias tf='toolforge '
-    else
-	# If we're *on* the toolforge (but not the kubernetes webservice), alias
-	# some things for ease of use!  Okay, function, to make the completion
-	# work better.  Oh, yeah, completion too!
+    elif [[ "$LOGNAME" == "tools.amorybot" ]]; then
+	# If we're the toolforge **bot account** (but not the kubernetes
+	# webservice), alias some things for ease of use!  Okay, function, to
+	# make the completion work better.  Oh, yeah, completion too!
 	function tf() {
 	    toolforge "$@"
 	}
@@ -1832,6 +1832,9 @@ if [[ "$LOGNAME" != "tools.amorybot.k8s" ]]; then
 	complete -F _toolforge_envvars_completion toolforge-envvars
 	complete -F _toolforge_envvars_completion tfe
 	alias tfel='tfe list'
+    else
+	# Alias for toolforge non-bot-account
+	alias ba='become amorybot'
     fi
 fi
 
