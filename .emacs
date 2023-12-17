@@ -1987,6 +1987,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (require 'magit-todos)
 ;; ;; Could adjust section so not last via `magit-status-sections-hook'
 ;; ;; See also https://github.com/alphapapa/magit-todos/issues/8
+;; ;; Hmm: https://github.com/alphapapa/magit-todos/commit/9a8e1f584cef577cd77ce3aa623e2d850f7a4f86
 ;; (let ((inhibit-message t))
 ;;   (setq
 ;;    ;; Include hidden files like .emacs
@@ -1997,6 +1998,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;;    magit-todos-exclude-globs '(".git/" ".emacs.d/")
 ;;    ;; hl-todo defines XXX+, a regex, which doesn't work
 ;;    ;; https://github.com/alphapapa/magit-todos/issues/101
+;;    ;; See also https://github.com/alphapapa/magit-todos/commit/34b2a3df3d1056489c237f0ee92e004587600e92
 ;;    ;; But this doesn't either for some reason? FIXME TODO
 ;;    magit-todos-keywords (append '("XXX") (map-keys hl-todo-keyword-faces)))
 ;;   ;; Quiet message about *not* binding jT
