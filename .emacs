@@ -697,21 +697,20 @@ POS defaults to `point'."
 ;; https://github.com/textlint/textlint
 (flycheck-add-next-checker 'markdown-markdownlint-cli 'proselint)
 
-;; Make flycheck faces pop a bit more.  Keeps the underlining from
-;; flycheck, but snags colors from the theme's js2-mode colors.  Using
-;; kaolin-themes, these (respectively) come out to: spring-green3, capri3, crimson3
-(set-face-attribute 'flycheck-info nil
-		    :inherit 'js2-jsdoc-value)
-(set-face-attribute 'flycheck-warning nil
-		    :inherit 'js2-object-property)
-(set-face-attribute 'flycheck-error nil
-		    :inherit 'js2-external-variable)
+;; Make flycheck faces pop a bit more in kaolin-galaxy.  Keeps the underlining from
+;; flycheck, but snags colors from the theme's js2-mode colors. FIXME TODO
+;; (set-face-attribute 'flycheck-info nil :inherit 'js2-jsdoc-value)
+;; (set-face-attribute 'flycheck-warning nil :inherit 'js2-object-property)
+;; (set-face-attribute 'flycheck-error nil :inherit 'js2-external-variable)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;; relint: Check elisp regexes https://elpa.gnu.org/packages/relint.html
 ;; `relint-buffer' is a better name than `relint-current-buffer', but that's taken
 (defalias 'relint-buffer-current 'relint-current-buffer)
+;; Good place to note pcre2el, mainly via rxt-mode then C-c /
+;; Maybe add hook to elisp and perl modes? TODO
+;; https://github.com/joddie/pcre2el
 
 ;; editorconfig https://editorconfig.org/
 ;; https://github.com/editorconfig/editorconfig-emacs
