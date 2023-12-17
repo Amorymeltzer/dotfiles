@@ -168,6 +168,11 @@ Record that in `paradox--backups', but do nothing if
 (paradox-enable)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (load-theme 'kaolin-galaxy)
+;; Move this up? FIXME TODO
+;; If using timu, make flycheck-info, etc. take from fringe TODO
+;; The highlight crap, make it readable
+;; What to do about timu-macos-mode-line-border ?
+
 (require 'auto-dark)
 (setq
  ;; ns-do-applescript not available?  Could also just set
@@ -176,7 +181,13 @@ Record that in `paradox--backups', but do nothing if
  ;; The default of 5 seems like it should be fine, but it seems to have a quite
  ;; noticable slowdown.  Setting it higher isn't a big deal, so it's a
  ;; no-brainer.  Could definitely go higher!
- auto-dark-polling-interval-seconds 10)
+ auto-dark-polling-interval-seconds 10
+ ;; The timu-macos theme is weird, just one theme but uses a function to toggle
+ ;; between dark and light mode.  Thankfully, auto-dark offers hooks!
+ auto-dark-dark-theme 'timu-macos
+ auto-dark-light-theme 'timu-macos)
+(add-hook 'auto-dark-dark-mode-hook #'timu-macos-toggle-dark-light)
+(add-hook 'auto-dark-light-mode-hook #'timu-macos-toggle-dark-light)
 (auto-dark-mode t)
 
 
