@@ -1656,14 +1656,19 @@ if [[ -f $(command -v playball) ]]; then
     alias watch-mlb='playball';
 fi
 
-# OS X has no md5sum, so use md5 as a fallback
+
+# macOS doesn't have some by default, so alias if not available
 command -v md5sum > /dev/null || alias md5sum="md5"
-# OS X has no sha1sum, so use shasum as a fallback
 command -v sha1sum > /dev/null || alias sha1sum="shasum"
-# OS X has no sha256sum, so use shasum as a fallback
 command -v sha256sum > /dev/null || alias sha256sum="shasum -a 256"
-# OS X has no sha512sum, so use shasum as a fallback
 command -v sha512sum > /dev/null || alias sha512sum="shasum -a 512"
+if [[ -f $(command -v sha3sum) ]]; then
+    for sum in 256 512; do
+	command="sha3-$sum""sum"
+	command -v "$command" > /dev/null || alias "$command"="sha3sum -a $sum"
+    done
+fi
+
 
 # Canonical hex dump; some systems have this symlinked
 command -v hd > /dev/null || alias hd="hexdump -C"
