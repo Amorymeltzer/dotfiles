@@ -1,7 +1,7 @@
 ## .perltidyrc --- configuration for perltidy
 ## From perltidy.el, man page: http://perltidy.sourceforge.net/perltidy.html
-# Max line width is 78 cols
--l=78
+# No max line width
+-l=0
 # Indent level is 4 cols
 -i=4
 # Continuation indent is 4 cols
