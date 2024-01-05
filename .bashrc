@@ -326,6 +326,9 @@ export PS4='+ '				      # Quaternary prompt, ???
 
 PROMPT_COMMAND=prompt_command
 
+# Trim directory (\w) to just three, bash >=4
+export PROMPT_DIRTRIM=3
+
 # Function to run upon exit of shell
 function _exit() {
     echo -e "${Color_Red_Bold_Intense}Thanks for playing${Color_zOff}"
