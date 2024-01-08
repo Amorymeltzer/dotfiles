@@ -20,6 +20,10 @@
 -nsfs
 # Don't require blank lines before comments
 -nbbc
+# But do require a blank line before, but not after, at least 2 similar items
+-kgbs=2
+-kgbb=2
+-kgba=1
 # Maximum blank lines
 -mbl=3
 # Don't outdent long quoted strings
