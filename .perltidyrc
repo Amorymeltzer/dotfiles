@@ -25,4 +25,7 @@
 # Don't outdent long quoted strings
 -nolq
 # Break before all operators
+# Maybe change this?  Default okay? FIXME
 -wbb="% + - * / x != == >= <= =~ !~ < > | & >= < = **= += *= &= = &&= -= /= |= = ||= .= %= ^= x="
+# Preserve line endings
+-ple
