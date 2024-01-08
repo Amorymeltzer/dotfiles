@@ -18,6 +18,10 @@
 -act=2
 # No space before semicolons
 -nsfs
+# Don't require blank lines before comments
+-nbbc
+# Maximum blank lines
+-mbl=3
 # Don't outdent long quoted strings
 -nolq
 # Break before all operators
