@@ -24,6 +24,8 @@
 -nsfs
 # Don't require blank lines before comments
 -nbbc
+# Weld two opening containers, e.g. ({
+-wn
 # But do require a blank line before, but not after, at least 2 similar items
 -kgbs=2
 -kgbb=2
