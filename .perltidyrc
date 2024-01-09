@@ -2,10 +2,14 @@
 ## From perltidy.el, man page: http://perltidy.sourceforge.net/perltidy.html
 # No max line width
 -l=0
-# Indent level is 4 cols
--i=4
-# Continuation indent is 4 cols
--ci=4
+# Indent level is 2 cols
+-i=2
+# Continuation indent also 2 cols
+-ci=2
+# Indent via tabs, 1 tab=8 spaces
+-et=8
+# Line up list indentation
+-xlp
 # Output to STDOUT
 -st
 # Errors to STDERR
