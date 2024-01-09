@@ -20,6 +20,8 @@
 -cti=1
 # All containers tight (parentheses, braces, square brackets, block braces)
 -act=2
+# Keep else on same line as closing brace, can add others via -cbl
+-ce
 # No space before semicolons in for loops
 -nsfs
 # Don't require blank lines before comments
