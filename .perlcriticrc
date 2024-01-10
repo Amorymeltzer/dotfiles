@@ -88,7 +88,7 @@ severity = 2
 severity = 3
 
 ## I do not agree with these, so never load them
-# [-CodeLayout::ProhibitHardTabs]
+[-CodeLayout::ProhibitHardTabs]
 # Requires /m flag on regex (^ and $ match line not just string)
 [-RegularExpressions::RequireLineBoundaryMatching]
 # Require /s flag on regex (. matches \n)
