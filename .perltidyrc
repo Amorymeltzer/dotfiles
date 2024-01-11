@@ -40,3 +40,6 @@
 -wbb="% + - * / x != == >= <= =~ !~ < > | & = **= += *= &= <<= &&= -= /= |= >>= ||= //= .= %= ^= x="
 # Preserve line endings
 -ple
+
+# Have -dbs report all blocks, regardless of size/LOC.  Annoying if -dbt not sub
+-dbl=1
