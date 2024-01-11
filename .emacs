@@ -1006,6 +1006,7 @@ buffer or region to mardown and display it in a separate window."
     (insert "<a href=\"\">" str "</a>")))
 
 ;; Tidy mode to judge your html
+;; Maybe just in html-mode?  Rename?  FIXME TODO
 ;; http://www.emacswiki.org/emacs/tidy.el
 ;; Should get update elisp and tidy binary
 (autoload 'tidy-buffer "tidy" "Run Tidy HTML parser on current buffer" t)
@@ -1013,6 +1014,7 @@ buffer or region to mardown and display it in a separate window."
 (autoload 'tidy-save-settings "tidy" "Save settings to `tidy-config-file'" t)
 (autoload 'tidy-build-menu  "tidy" "Install an options menu for HTML Tidy." t)
 
+;; Should rename to html-tidy? FIXME TODO
 (defun tidy-then-indent ()
   "`tidy' a buffer's HTML, then indent it, since `tidy' leaves a buffer looking flat."
   (interactive)
@@ -1356,7 +1358,7 @@ current buffer" t)
 (substitute-key-definition 'whole-line-or-region-comment-dwim-2 'comment-dwim whole-line-or-region-local-mode-map)
 (global-set-key (kbd "C-x ;") 'whole-line-or-region-comment-dwim-2)
 
-;; Related, neat
+;; Related, neat: kill first comment on line
 (global-set-key (kbd "M-k") 'comment-kill)
 ;; Will add a comment if no comment, could just take over M-; FIXME TODO
 (global-set-key (kbd "M-i") 'comment-indent)
@@ -2272,7 +2274,17 @@ when in source code modes such as python-mode or perl-mode" t)
     ad-do-it))
 
 ;; Way more likely to remember
+(defalias 'uppercase-dwim 'upcase-dwim)
+(defalias 'uppercase-word 'upcase-word)
 (defalias 'uppercase-region 'upcase-region)
+(defalias 'lowercase-dwim 'downcase-dwim)
+(defalias 'lowercase-word 'downcase-word)
+(defalias 'lowercase-region 'downcase-region)
+;; More useful
+(global-set-key "\M-c" 'capitalize-dwim)
+(global-set-key "\M-u" 'uppercase-dwim)
+(global-set-key "\M-l" 'lowercase-dwim)
+
 
 ;; Highlight region undo, yanked, etc., is awesome
 ;; https://github.com/k-talo/volatile-highlights.el
