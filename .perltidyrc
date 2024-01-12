@@ -38,8 +38,9 @@
 -mbl=3
 # Don't outdent long quoted strings
 -nolq
-# Break before all operators, -pbp
--wbb="% + - * / x != == >= <= =~ !~ < > | & = **= += *= &= <<= &&= -= /= |= >>= ||= //= .= %= ^= x="
+# Break before and after all operators
+-bbao
+-baao
 # Preserve line endings
 -ple
 
