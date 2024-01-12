@@ -36,6 +36,9 @@
 -kgbi
 # Maximum blank lines
 -mbl=3
+# No whitespace around .
+-nwls="."
+-nwrs="."
 # Don't outdent long quoted strings
 -nolq
 # Break before and after all operators
