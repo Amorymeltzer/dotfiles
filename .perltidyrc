@@ -28,10 +28,12 @@
 -nbbc
 # Weld two opening containers, e.g. ({
 -wn
-# But do require a blank line before, but not after, at least 2 similar items
--kgbs=2
+# But do require a blank line before, but not after, at least 3 similar items
+-kgbs=3
 -kgbb=2
 -kgba=1
+# Add a blank when switching items?
+-kgbi
 # Maximum blank lines
 -mbl=3
 # Don't outdent long quoted strings
