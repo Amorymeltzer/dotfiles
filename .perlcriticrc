@@ -43,9 +43,11 @@ max_mccabe = 15
 [InputOutput::ProhibitBacktickOperators]
 only_in_void_context = 1
 
-# Allow me to skip unpacking @_ for very short subroutines
+# Allow me to skip unpacking @_ for short subroutines, and allow accessing
+# individual elements like $_[0] or array slices
 [Subroutines::RequireArgUnpacking]
 short_subroutine_statements = 1
+allow_subscripts = 1
 
 # Allow terminal Log::Log4perl functions
 [Subroutines::RequireFinalReturn]
@@ -143,7 +145,7 @@ severity = 5
 
 ## Perl::Critic::Community https://metacpan.org/pod/Perl::Critic::Community
 # Require while <> to do while my $line <>.  I *do* agree it's better, but
-# somtimes I just want something short and $_ is *very* Perlish.
+# somtimes I just want something short and $_ is *quite* Perlish.
 # Lower severity to 3 from 4
 [Community::WhileDiamondDefaultAssignment]
 severity = 3
