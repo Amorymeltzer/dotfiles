@@ -346,6 +346,7 @@ trap _exit EXIT
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
 # DIARY_DIR, TIL_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME
 # STOCK_TICKERS OPENAI_API_KEY
+# BotPasswords for k8s
 sources=("$HOME/.config/bash/priv-env.bash")
 # Advanced bash completion https://github.com/scop/bash-completion
 # Installed from either Macports or Homebrew, preferably the latter
