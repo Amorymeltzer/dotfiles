@@ -32,6 +32,10 @@ allowed_values = all_integers
 [Subroutines::ProhibitExcessComplexity]
 max_mccabe = 15
 
+# Deeply nested ifs, etc.  Default 5
+[ControlStructures::ProhibitDeepNests]
+max_nests = 3
+
 # Turn off warning, since the penalty is on perls less than 5.18, which is not
 # super common in my life
 [-Modules::RequireNoMatchVarsWithUseEnglish]
