@@ -1,5 +1,6 @@
 ## .perltidyrc --- configuration for perltidy
-## From perltidy.el, man page: http://perltidy.sourceforge.net/perltidy.html
+## https://perltidy.sourceforge.net/perltidy.html
+
 # No max line width
 -l=0
 # Output to STDOUT
@@ -8,6 +9,8 @@
 -se
 # Maximal vertical tightness
 -vt=2
+# Align postfix unless with postfix if
+-viu
 # Indent level is 2 cols
 -i=2
 # Continuation indent also 2 cols
