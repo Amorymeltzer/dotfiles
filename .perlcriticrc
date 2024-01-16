@@ -15,10 +15,9 @@ minimum_regex_length_to_complain_about = 45
 # until when unless when while also available
 [ControlStructures::ProhibitPostfixControls]
 allow = for if
-# Allow more space before closing filehandles
-# Presumably should use more subroutines.  Default is 5.
+# Allow more space before closing filehandles, default is 9
 [InputOutput::RequireBriefOpen]
-lines = 20
+lines = 25
 # Don't whine for numbers above 0, 1, and 2
 [ValuesAndExpressions::ProhibitMagicNumbers]
 allowed_values = all_integers
