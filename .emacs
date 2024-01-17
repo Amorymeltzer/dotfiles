@@ -3174,6 +3174,26 @@ This checks in turn:
 ;; Don't use ido for this, would defeat the purpose
 (put 'rename-current-buffer-file 'ido 'ignore)
 
+
+;; Inspired by the above
+(defun copy-current-buffer-file ()
+  "Creates a copy of the current buffer's file, then opens it."
+  (interactive)
+  (let ((name (buffer-name))
+	(filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+	(error "Buffer '%s' is not visiting a file!" name)
+      (let ((new-name (read-file-name "Copy to: " nil nil nil (file-name-nondirectory filename))))
+	(if (get-buffer new-name)
+	    (error "A buffer named '%s' already exists!" new-name)
+	  (copy-file filename new-name 1)
+	  (find-file new-name)
+	  (message "File '%s' successfully copied to '%s' and opened"
+		   (file-name-nondirectory filename) (file-name-nondirectory new-name)))))))
+;; As above
+(put 'copy-current-buffer-file 'ido 'ignore)
+
+
 ;; http://whattheemacsd.com/file-defuns.el-02.html
 (defun delete-current-buffer-file ()
   "Remove file connected to current buffer and kill buffer."
