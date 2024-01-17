@@ -1366,6 +1366,9 @@ current buffer" t)
 ;; C-x i was ido-insert-file, which I *don't* need a command for
 (global-set-key (kbd "C-x i") 'tab-to-tab-stop)
 
+;; zap-to-char kills the character, zap-up-to-char is more intuitive
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+
 
 ;;;;;;;;;;;;;;;;;;;
 ;; Dired, file browser and then some
