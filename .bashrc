@@ -822,15 +822,21 @@ function pq() {
 	perldoc -q "$@"
     fi
 }
-alias perlsecret='man perlsecret'
 alias perlcheat='man perlcheat'
-# https://metacpan.org/dist/perl/view/Porting/epigraphs.pod
 if [[ -n "$PERLBREW_INSTALLED" ]]; then
+    # <https://metacpan.org/dist/perl/view/Porting/epigraphs.pod>
     perlepigraphs_file=${PERLBREW_ROOT}/build/${PERLBREW_PERL}/${PERLBREW_PERL}/Porting/epigraphs.pod
     if [[ -r "$perlepigraphs_file" ]]; then
 	alias perlepigraphs='perldoc "$perlepigraphs_file"'
     fi
+
+    # <https://metacpan.org/pod/perlsecret> Man in
+    # $PERLBREW_MANPATH/man3/perlsecret.3
+    if [[ $(perldoc -l perlsecret 2>/dev/null) ]]; then
+	alias perlsecret='man perlsecret'
+    fi
 fi
+
 
 # Tell tidy to use a config file if it's there
 if [[ -f $(command -v tidy) ]]; then
