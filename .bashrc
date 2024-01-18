@@ -769,7 +769,7 @@ alias provecoverreleaseq='provecoverrelease -Q'
 alias provecoverreleaselq='provecoverrelease -lQ'
 
 # Access Perl::Critic documentation
-if [[ -f $(command -v perlcritic) ]]; then
+if [[ -f $(command -v perlcritic) && -n "$PERLBREW_INSTALLED" ]]; then
     function explain_perlcritic() {
 	perldoc Perl::Critic::Policy::"$1"
     }
@@ -824,9 +824,11 @@ function pq() {
 alias perlsecret='man perlsecret'
 alias perlcheat='man perlcheat'
 # https://metacpan.org/dist/perl/view/Porting/epigraphs.pod
-perlepigraphs_file=${PERLBREW_ROOT}/build/${PERLBREW_PERL}/${PERLBREW_PERL}/Porting/epigraphs.pod
-if [[ -r "$perlepigraphs_file" ]]; then
-   alias perlepigraphs='perldoc "$perlepigraphs_file"'
+if [[ -n "$PERLBREW_INSTALLED" ]]; then
+    perlepigraphs_file=${PERLBREW_ROOT}/build/${PERLBREW_PERL}/${PERLBREW_PERL}/Porting/epigraphs.pod
+    if [[ -r "$perlepigraphs_file" ]]; then
+	alias perlepigraphs='perldoc "$perlepigraphs_file"'
+    fi
 fi
 
 # Tell tidy to use a config file if it's there
