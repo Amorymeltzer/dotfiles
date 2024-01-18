@@ -797,6 +797,7 @@ if [[ -f $(command -v perlcritic) && -n "$PERLBREW_INSTALLED" ]]; then
 fi
 
 # perldoc shorthands
+alias pd='pd '
 # perlfunc
 function pf() {
     if [ $# -eq 0 ]; then
