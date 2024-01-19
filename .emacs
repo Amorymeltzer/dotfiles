@@ -554,11 +554,11 @@ Record that in `paradox--backups', but do nothing if
       flycheck-highlighting-mode 'sexps
       flycheck-mode-line-prefix "Fly"	; default FlyC
 
+      flycheck-markdown-markdownlint-cli-config ".markdownlintrc"
+
       ;; Tell flycheck that sometimes Perl modules are in ./lib, or ../lib if
       ;; you're in a testing directory /t.  Used with perl -I
       flycheck-perl-include-path (list "./lib/" "../lib")
-
-      flycheck-markdown-markdownlint-cli-config ".markdownlintrc"
       flycheck-perlcritic-severity 2)
 
 ;; Some additional checkers; could probably just run these straight-up
@@ -2925,6 +2925,46 @@ This checks in turn:
 
 ;; Perldoc in emacs
 (defalias 'perldoc 'cperl-perldoc)
+
+;; Used by the below functions, far from perfect
+(defun cperl--get-current-subroutine-name ()
+  "Get the name of the current subroutine in cperl-mode."
+  (when (derived-mode-p 'cperl-mode)
+    (save-excursion
+      (re-search-backward "^sub[[:space:]]+\\([[:word:]]+\\)" nil t)
+      (match-string 1))))
+
+(defun cperl-get-current-subroutine ()
+  "Display the current subroutine name from cperl-mode.
+Uses `cperl--get-current-subroutine-name'."
+  (interactive)
+  (let ((current-subroutine (cperl--get-current-subroutine-name)))
+    (when current-subroutine
+      (message "Current subroutine: %s" current-subroutine))))
+(define-key cperl-mode-map (kbd "C-c C-s") 'cperl-get-current-subroutine)
+
+;; This is a monstrosity mostly to ensure the file is created in the right
+;; place.  Vaguely useful!
+(defun cperl-create-testfile-for-subroutine ()
+  "Create a new test file in the t/ directory named after the current subroutine."
+  (interactive)
+  (let ((subroutine-name (cperl--get-current-subroutine-name)))
+    (when subroutine-name
+      (let* ((current-directory (file-name-directory buffer-file-name))
+	     (lib-directory (locate-dominating-file current-directory "lib/"))
+	     (base-directory (if lib-directory
+				 (file-name-as-directory (expand-file-name lib-directory))
+			       current-directory))
+	     (test-file-directory (concat base-directory "t/"))
+	     (test-file-name (format "%s/%s.t" test-file-directory subroutine-name)))
+	(unless (file-exists-p test-file-directory)
+	  (make-directory test-file-directory t))
+	(find-file test-file-name)
+	;; (insert (format "# Test for subroutine: %s\n\n" subroutine-name))
+	(save-buffer)
+	(message (format "Test file %s created." test-file-name))))))
+(define-key cperl-mode-map (kbd "C-c C-t") 'cperl-create-testfile-for-subroutine)
+
 
 
 ;; Perltidy: https://github.com/emacsmirror/emacswiki.org/blob/master/perltidy.el
