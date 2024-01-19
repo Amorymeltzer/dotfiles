@@ -74,9 +74,13 @@ severity = 2
 severity = 2
 [BuiltinFunctions::ProhibitReverseSortBlock]
 severity = 2
+
 # Lower from level 2 to level 1
 [Modules::RequireVersionVar]
 severity = 1
+[Documentation::RequirePodSections]
+severity = 1
+
 # Lower from level 3 to level 2
 # [ErrorHandling::RequireCarping]
 # severity = 2
@@ -115,17 +119,20 @@ severity = 3
 ## Perl::Critic::Bangs https://metacpan.org/pod/Perl::Critic::Bangs
 # Allow TODOs, etc.
 [-Bangs::ProhibitFlagComments]
-# Raise to severity 4 from 3, despite being largely cosmetic
-[Bangs::ProhibitNumberedNames]
-severity = 4
-[Bangs::ProhibitVagueNames]
-severity = 4
 # Add diagnostics to debugging modules.  Here instead of
 # Modules::ProhibitEvilModules, since that's severity 5 and can overwrite some
 # good defaults, and I don't really want to mess with that, and it obviously
 # fits here!
 [Bangs::ProhibitDebuggingModules]
 debugging_modules = diagnostics
+
+# Raise to severity 4 from 3, despite being largely cosmetic
+[Bangs::ProhibitNumberedNames]
+severity = 4
+[Bangs::ProhibitVagueNames]
+severity = 4
+
+
 
 ## Perl::Critic::Pulp https://metacpan.org/pod/Perl::Critic::Pulp
 # This feels like it should be much higher!  Annoying duplication in flycheck?
@@ -148,12 +155,14 @@ severity = 5
 # for the last item, just as with JavaScript
 [-CodeLayout::RequireTrailingCommaAtNewline]
 
+
 ## Perl::Critic::Community https://metacpan.org/pod/Perl::Critic::Community
 # Require while <> to do while my $line <>.  I *do* agree it's better, but
 # somtimes I just want something short and $_ is *quite* Perlish.
 # Lower severity to 3 from 4
 [Community::WhileDiamondDefaultAssignment]
 severity = 3
+
 
 ## Perl::Critic::TooMuchCode https://metacpan.org/pod/Perl::Critic::TooMuchCode
 # All are set to severity 1, which is fine, but let's bump some up a bit
