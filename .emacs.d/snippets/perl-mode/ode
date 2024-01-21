@@ -2,4 +2,4 @@
 # name: ordieERRNO
 # key: ode
 # --
- or die $ERRNO;
+or die $ERRNO;
