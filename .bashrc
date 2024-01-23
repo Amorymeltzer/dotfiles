@@ -751,20 +751,24 @@ fi
 export PERL5DB='use Devel::NYTProf'
 
 alias provel='prove -l'
+alias provelv='provel -v'
 alias proveq='prove -Q'
 alias provelq='prove -lQ'
 # Easier Devel::Cover testing by setting the harness.
 alias provecover='HARNESS_PERL_SWITCHES=-MDevel::Cover prove '
 alias provecoverl='provecover -l'
+alias provecoverlv='provecoverl -v'
 alias provecoverq='provecover -Q'
 alias provecoverlq='provecover -lQ'
 # Often useful
 alias proverelease='RELEASE_TESTING=1 prove '
 alias provereleasel='proverelease -l'
+alias provereleaselv='provereleasel -v'
 alias provereleaseq='proverelease -Q'
 alias provereleaselq='proverelease -lQ'
 alias provecoverrelease='RELEASE_TESTING=1 provecover '
 alias provecoverreleasel='provecoverrelease -l'
+alias provecoverreleaselv='provecoverreleasel -v'
 alias provecoverreleaseq='provecoverrelease -Q'
 alias provecoverreleaselq='provecoverrelease -lQ'
 
