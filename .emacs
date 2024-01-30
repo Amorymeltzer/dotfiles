@@ -3343,8 +3343,10 @@ Uses `cperl--get-current-subroutine-name'."
 ;; Moore's Law.
 ;; (setq large-file-warning-threshold 50000000)
 
-;; Don't be so stingy on the memory, we have lots now. It's the distant future.
-(setq gc-cons-threshold (* 8 1024 1024)
+;; Don't be stingy on the memory, we have lots now. It's the distant future.
+;; 1GB, see also https://akrl.sdf.org and most-positive-fixnum.  Should just do
+;; GCMH.el FIXME TODO
+(setq gc-cons-threshold (* 1 1024 1024 1024)
       gc-cons-percentage 0.2)
 
 ;; Just in case
