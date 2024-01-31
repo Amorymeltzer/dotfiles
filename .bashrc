@@ -595,11 +595,12 @@ else
     # Just in case
     alias cot='bat '
 
-    # I think the manpager above is fine (less -FXiRgMw) but for perldoc bat
-    # makes at least a modicum of effort.  Not perfect but at least there's
-    # *some* delineation.  Actually, here is a place where using batman shines,
-    # as it automatically colors things appropriately.  I bet I can be smarter
-    # about all this, at least in terms of column width FIXME TODO
+    # The manpager above is fine (less -FXiRgMw) but for perldoc bat can at
+    # least make an iota of effort.  It's far from perfect--pretty miserable
+    # actually--but at least there's *some* delineation.  Using batman from
+    # bat-extras does much the same thing, as it automatically colors things
+    # appropriately, albeit with the same pitiable support for pod.  I bet I can
+    # be smarter about all this, at least in terms of column width FIXME TODO
     export PERLDOC_PAGER="sh -c 'col -bx | bat -l man -p'"
 
     # Should probably be set in the config file, but this is fine enough.  This
