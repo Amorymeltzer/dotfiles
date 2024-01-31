@@ -39,6 +39,9 @@
 -kgbi
 # Maximum blank lines
 -mbl=3
+# Don't add whitespace, but delete it?  Basically, don't do the aligning = space
+# thing.  Let's give it a try!
+# -naws
 # No whitespace around .
 -nwls="."
 -nwrs="."
