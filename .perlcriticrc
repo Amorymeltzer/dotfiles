@@ -172,6 +172,7 @@ severity = 4
 severity = 4
 [TooMuchCode::ProhibitDuplicateSub]
 severity = 4
-# This is unreliable for constants defined in modules?  I guess that makes sense
+# This is unreliable for constants that get used in regex, via ${/CONST} or
+# @{[CONST]}, so may need to be turned off for the whole block.
 [TooMuchCode::ProhibitUnusedConstant]
 severity = 4
