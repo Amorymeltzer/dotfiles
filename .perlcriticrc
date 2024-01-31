@@ -167,10 +167,11 @@ severity = 3
 ## Perl::Critic::TooMuchCode https://metacpan.org/pod/Perl::Critic::TooMuchCode
 # All are set to severity 1, which is fine, but let's bump some up a bit
 [TooMuchCode::ProhibitUnusedInclude]
-severity = 2
+severity = 4
 [TooMuchCode::ProhibitUnusedImport]
-severity = 3
+severity = 4
 [TooMuchCode::ProhibitDuplicateSub]
-severity = 3
+severity = 4
+# This is unreliable for constants defined in modules?  I guess that makes sense
 [TooMuchCode::ProhibitUnusedConstant]
-severity = 3
+severity = 4
