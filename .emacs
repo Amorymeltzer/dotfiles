@@ -2973,6 +2973,8 @@ Uses `cperl--get-current-subroutine-name'."
 (require 'tramp)
 ;; Required?  Hook into cperl mode or something? FIXME TODO
 (require 'perltidy)
+;; Possibly perltidy-buffer better for this, but we'll see
+(define-key cperl-mode-map (kbd "C-c t") 'perltidy-dwim)
 ;;;;;;;;;;;;;;;;;;;;
 
 
