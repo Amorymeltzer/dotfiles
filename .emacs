@@ -1038,7 +1038,7 @@ current buffer" t)
   '(progn
      (defvar hashbang-env "#!/usr/bin/env ")
      ;; Perl
-     (define-auto-insert '("\\(\\.pl\\|\\.t\\)\\'" . "Perl skeleton")
+     (define-auto-insert '("\\.pl\\'" . "Perl skeleton")
        '(nil (concat hashbang-env "perl") \n
 	     "# " (file-name-base) " by " user-full-name \n
 	     "# " _ \n
@@ -1047,7 +1047,14 @@ current buffer" t)
 	     ;; "use warnings;" \n
 	     ;; "use English;" \n
 	     \n "use diagnostics; # Remove after development TODO" \n))
-
+     ;; Perl tests
+     (define-auto-insert '("\\.t\\'" . "Perl test skeleton")
+       '(nil (concat hashbang-env "perl") \n
+	     ;; "# " (file-name-base) " by " user-full-name \n
+	     ;; "# " _ \n
+	     \n "use 5.036;" \n		; just default there
+	     ;; "use English;" \n
+	     \n "use Test::More;" \n))
      ;; shell script
      (define-auto-insert '("\\.\\(ba\\)?sh\\'" . "Bash skeleton")
        '(nil (concat hashbang-env "bash") \n
