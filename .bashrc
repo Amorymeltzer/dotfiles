@@ -1445,10 +1445,14 @@ function ejectall() {
 }
 
 # Control iTunes ---------------------------------------------------
-alias next='itunes next'
-alias previous='itunes prev'
-alias play='itunes play'
-alias pause='itunes pause'
+# https://github.com/illusori/bash-itunes
+if [[ -f $(command -v itunes) ]]; then
+    alias i='itunes '
+    alias next='itunes next'
+    alias previous='itunes prev'
+    alias play='itunes play'
+    alias pause='itunes pause'
+fi
 
 # Volume control, potentially using osxutils
 # https://github.com/specious/osxutils

@@ -212,7 +212,7 @@ unalias python
 # Tack on original path
 new_path="$new_path:$orig_path"
 
-# Latecomers
+# Latecomers from the external world
 if [[ -d "$GIT_EXTL_DIR/git-extra-commands@unixorn" ]]; then
     # Add git-extra-commands https://github.com/unixorn/git-extra-commands
     new_path="$new_path:$GIT_EXTL_DIR/git-extra-commands@unixorn/bin"
@@ -221,6 +221,10 @@ if [[ -d "$GIT_EXTL_DIR/tiny-scripts@vitorgalvao" ]]; then
     # Add tiny-scripts stuff https://github.com/vitorgalvao/tiny-scripts
     # Don't need 'em all but better than alias/function-ing just a handful
     new_path="$new_path:$GIT_EXTL_DIR/tiny-scripts@vitorgalvao"
+fi
+if [[ -d "$GIT_EXTL_DIR/bash-itunes@illusori" ]]; then
+    # Add bash-itunes https://github.com/illusori/bash-itunes
+    new_path="$new_path:$GIT_EXTL_DIR/bash-itunes@illusori"
 fi
 # Personal lockquote script
 if [[ -d "$GIT_PERS_DIR/lockquote" ]]; then
