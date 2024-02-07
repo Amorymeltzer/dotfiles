@@ -111,8 +111,8 @@ severity = 3
 [-NamingConventions::Capitalization]
 # Similar to Pulp's newline below; technically easier, but nah
 [-CodeLayout::RequireTrailingCommas]
-# Constant fine, Readonly not core, etc.
-[-ValuesAndExpressions::ProhibitConstantPragma]
+# Constant fine enough, Readonly not core, etc.
+#[-ValuesAndExpressions::ProhibitConstantPragma]
 
 
 
