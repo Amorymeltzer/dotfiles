@@ -19,6 +19,9 @@
 -et=8
 # Line up list indentation
 -xlp
+# No trailing commas in lists, just in case
+-wtc=0
+-dtc
 # Indent closing braces/brackets to match opener
 -cti=1
 # All containers tight (parentheses, braces, square brackets, block braces)
