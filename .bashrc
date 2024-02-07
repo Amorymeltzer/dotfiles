@@ -1845,6 +1845,7 @@ if [[ "$LOGNAME" != "tools.amorybot.k8s" ]]; then
 	function tfe {
 	    toolforge-envvars "$@"
 	}
+	alias tfjq='tfj quota '
 	# No completion for toolforge-envvars.  Could rewrite toolforge-jobs
 	# completion, currently in /usr/share/bash-completion/completions/.  Far
 	# from perfect, doesn't like pieces and won't actually complete FIXME
