@@ -829,6 +829,9 @@ function pq() {
 }
 alias perlcheat='man perlcheat'
 if [[ -n "$PERLBREW_INSTALLED" ]]; then
+    # I can never remember
+    alias brewperl='perlbrew '
+
     # <https://metacpan.org/dist/perl/view/Porting/epigraphs.pod>
     perlepigraphs_file=${PERLBREW_ROOT}/build/${PERLBREW_PERL}/${PERLBREW_PERL}/Porting/epigraphs.pod
     if [[ -r "$perlepigraphs_file" ]]; then
