@@ -451,7 +451,7 @@ timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --for
 doc = !git --html-path
 
 [push]
-default = upstream
+default = current
 # autoSetupRemote true added in 2.37, makes push assume -u/--set-upstream
 # Make `git push` push relevant annotated tags when pushing branches out.
 followTags = true
