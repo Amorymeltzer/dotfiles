@@ -124,15 +124,15 @@ export Color_Magenta_Bold_Intense="\033[1;95m"    # Magenta
 export Color_Cyan_Bold_Intense="\033[1;96m"       # Cyan
 export Color_White_Bold_Intense="\033[1;97m"      # White
 
-# # High Intensty backgrounds
-# export Color_Black_zBackground_Intense="\033[0;100m"   # Black
-# export Color_Red_zBackground_Intense="\033[0;101m"     # Red
-# export Color_Green_zBackground_Intense="\033[0;102m"   # Green
-# export Color_Yellow_zBackground_Intense="\033[0;103m"  # Yellow
-# export Color_Blue_zBackground_Intense="\033[0;104m"    # Blue
-# export Color_Magenta_zBackground_Intense="\033[0;105m" # Magenta
-# export Color_Cyan_zBackground_Intense="\033[0;106m"    # Cyan
-# export Color_White_zBackground_Intense="\033[0;107m"   # White
+# High Intensty backgrounds
+export Color_Black_zBackground_Intense="\033[0;100m"   # Black
+export Color_Red_zBackground_Intense="\033[0;101m"     # Red
+export Color_Green_zBackground_Intense="\033[0;102m"   # Green
+export Color_Yellow_zBackground_Intense="\033[0;103m"  # Yellow
+export Color_Blue_zBackground_Intense="\033[0;104m"    # Blue
+export Color_Magenta_zBackground_Intense="\033[0;105m" # Magenta
+export Color_Cyan_zBackground_Intense="\033[0;106m"    # Cyan
+export Color_White_zBackground_Intense="\033[0;107m"   # White
 
 # See also 256-colors, colordump, colors_and_formatting, & tput_colors
 # Really need to sort all this color crap out, maybe time for iterm 2 FIXME TODO
@@ -235,7 +235,7 @@ function _uid() {
 	    case $USER in
 		root) color="${Color_Red}";; # User is root
 		"$(logname)") color="${Color_Green}";; # User is normal (mostly)
-		*) color="${Color_Red_zBackground}";; # User is not login user
+		*) color="${Color_Red_zBackground_Intense}";; # User is not login user
 	    esac
 	fi
 
