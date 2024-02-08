@@ -241,7 +241,7 @@ function _uid() {
 
 	# In theory, on the tf k8s webservice, would be nice to use the custom
 	# $LOGNAME I have it rather than \u, but that's dumb.  Right?
-	echo -en "$color\u"
+	echo -en "$color\u${Color_zOff}"
     fi
 }
 
