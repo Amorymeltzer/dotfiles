@@ -34,13 +34,19 @@ fi
 # ~/bin/colordump and termcolors give some clues about these
 # 0; = regular
 # 1; = bold
+# 2; = faint
+# 3; = italic
 # 4; = underline
 # 5; = blinking
+# 6; = ???
 # 7; = highlighted
+# 8; = invisible
 
-export Color_zOff="\033[0m"	  # No color, stupid stupid hax for sorting
-export Color_zBold="\033[1m"	  # Bold text
-export Color_zInvisible="\033[8m" # Invisible text
+export Color_zOff="\033[0m"	  # Reset all attributes, stupid stupid hax for sorting
+export Color_zBold="\033[1m"	  # Bold
+export Color_zFaint="\033[2m"	  # Faint
+export Color_zItalic="\033[3m"    # Italic
+export Color_zInvisible="\033[8m" # Invisible
 
 # Regular Colors
 export Color_Black="\033[0;30m"        # Black
@@ -52,6 +58,16 @@ export Color_Magenta="\033[0;35m"      # Magenta
 export Color_Cyan="\033[0;36m"         # Cyan
 export Color_White="\033[0;37m"        # White
 
+# Intense
+export Color_Black_Intense="\033[0;90m"       # Black
+export Color_Red_Intense="\033[0;91m"         # Red
+export Color_Green_Intense="\033[0;92m"       # Green
+export Color_Yellow_Intense="\033[0;93m"      # Yellow
+export Color_Blue_Intense="\033[0;94m"        # Blue
+export Color_Magenta_Intense="\033[0;95m"     # Magenta
+export Color_Cyan_Intense="\033[0;96m"        # Cyan
+export Color_White_Intense="\033[0;97m"       # White
+
 # Bold
 export Color_Black_Bold="\033[1;30m"       # Black
 export Color_Red_Bold="\033[1;31m"         # Red
@@ -61,6 +77,56 @@ export Color_Blue_Bold="\033[1;34m"        # Blue
 export Color_Magenta_Bold="\033[1;35m"     # Magenta
 export Color_Cyan_Bold="\033[1;36m"        # Cyan
 export Color_White_Bold="\033[1;37m"       # White
+
+# Bold Intense
+export Color_Black_Bold_Intense="\033[1;90m"      # Black
+export Color_Red_Bold_Intense="\033[1;91m"        # Red
+export Color_Green_Bold_Intense="\033[1;92m"      # Green
+export Color_Yellow_Bold_Intense="\033[1;93m"     # Yellow
+export Color_Blue_Bold_Intense="\033[1;94m"       # Blue
+export Color_Magenta_Bold_Intense="\033[1;95m"    # Magenta
+export Color_Cyan_Bold_Intense="\033[1;96m"       # Cyan
+export Color_White_Bold_Intense="\033[1;97m"      # White
+
+# Faint
+export Color_Black_Faint="\033[2;30m"       # Black
+export Color_Red_Faint="\033[2;31m"         # Red
+export Color_Green_Faint="\033[2;32m"       # Green
+export Color_Yellow_Faint="\033[2;33m"      # Yellow
+export Color_Blue_Faint="\033[2;34m"        # Blue
+export Color_Magenta_Faint="\033[2;35m"     # Magenta
+export Color_Cyan_Faint="\033[2;36m"        # Cyan
+export Color_White_Faint="\033[2;37m"       # White
+
+# Faint Intense
+export Color_Black_Faint_Intense="\033[2;90m"       # Black
+export Color_Red_Faint_Intense="\033[2;91m"         # Red
+export Color_Green_Faint_Intense="\033[2;92m"       # Green
+export Color_Yellow_Faint_Intense="\033[2;93m"      # Yellow
+export Color_Blue_Faint_Intense="\033[2;94m"        # Blue
+export Color_Magenta_Faint_Intense="\033[2;95m"     # Magenta
+export Color_Cyan_Faint_Intense="\033[2;96m"        # Cyan
+export Color_White_Faint_Intense="\033[2;97m"       # White
+
+# Italic
+export Color_Black_Italic="\033[3;30m"       # Black
+export Color_Red_Italic="\033[3;31m"         # Red
+export Color_Green_Italic="\033[3;32m"       # Green
+export Color_Yellow_Italic="\033[3;33m"      # Yellow
+export Color_Blue_Italic="\033[3;34m"        # Blue
+export Color_Magenta_Italic="\033[3;35m"     # Magenta
+export Color_Cyan_Italic="\033[3;36m"        # Cyan
+export Color_White_Italic="\033[3;37m"       # White
+
+# Italic Intense
+export Color_Black_Italic_Intense="\033[3;90m"       # Black
+export Color_Red_Italic_Intense="\033[3;91m"         # Red
+export Color_Green_Italic_Intense="\033[3;92m"       # Green
+export Color_Yellow_Italic_Intense="\033[3;93m"      # Yellow
+export Color_Blue_Italic_Intense="\033[3;94m"        # Blue
+export Color_Magenta_Italic_Intense="\033[3;95m"     # Magenta
+export Color_Cyan_Italic_Intense="\033[3;96m"        # Cyan
+export Color_White_Italic_Intense="\033[3;97m"       # White
 
 # # Underline
 # export Color_Black_Underline="\033[4;30m"       # Black
@@ -72,6 +138,16 @@ export Color_White_Bold="\033[1;37m"       # White
 # export Color_Cyan_Underline="\033[4;36m"        # Cyan
 # export Color_White_Underline="\033[4;37m"       # White
 
+# # Underline Intense
+# export Color_Black_Underline_Intense="\033[4;90m"       # Black
+# export Color_Red_Underline_Intense="\033[4;91m"         # Red
+# export Color_Green_Underline_Intense="\033[4;92m"       # Green
+# export Color_Yellow_Underline_Intense="\033[4;93m"      # Yellow
+# export Color_Blue_Underline_Intense="\033[4;94m"        # Blue
+# export Color_Magenta_Underline_Intense="\033[4;95m"     # Magenta
+# export Color_Cyan_Underline_Intense="\033[4;96m"        # Cyan
+# export Color_White_Underline_Intense="\033[4;97m"       # White
+
 # # Blinking
 # export Color_Black_Blink="\033[5;30m"       # Black
 # export Color_Red_Blink="\033[5;31m"         # Red
@@ -82,6 +158,16 @@ export Color_White_Bold="\033[1;37m"       # White
 # export Color_Cyan_Blink="\033[5;36m"        # Cyan
 # export Color_White_Blink="\033[5;37m"       # White
 
+# # Blinking Intense
+# export Color_Black_Blink_Intense="\033[5;90m"       # Black
+# export Color_Red_Blink_Intense="\033[5;91m"         # Red
+# export Color_Green_Blink_Intense="\033[5;92m"       # Green
+# export Color_Yellow_Blink_Intense="\033[5;93m"      # Yellow
+# export Color_Blue_Blink_Intense="\033[5;94m"        # Blue
+# export Color_Magenta_Blink_Intense="\033[5;95m"     # Magenta
+# export Color_Cyan_Blink_Intense="\033[5;96m"        # Cyan
+# export Color_White_Blink_Intense="\033[5;97m"       # White
+
 # # Reverse
 # export Color_Black_Reverse="\033[7;30m"       # Black
 # export Color_Red_Reverse="\033[7;31m"         # Red
@@ -91,6 +177,16 @@ export Color_White_Bold="\033[1;37m"       # White
 # export Color_Magenta_Reverse="\033[7;35m"     # Magenta
 # export Color_Cyan_Reverse="\033[7;36m"        # Cyan
 # export Color_White_Reverse="\033[7;37m"       # White
+
+# # Reverse Intense
+# export Color_Black_Reverse_Intense="\033[7;90m"       # Black
+# export Color_Red_Reverse_Intense="\033[7;91m"         # Red
+# export Color_Green_Reverse_Intense="\033[7;92m"       # Green
+# export Color_Yellow_Reverse_Intense="\033[7;93m"      # Yellow
+# export Color_Blue_Reverse_Intense="\033[7;94m"        # Blue
+# export Color_Magenta_Reverse_Intense="\033[7;95m"     # Magenta
+# export Color_Cyan_Reverse_Intense="\033[7;96m"        # Cyan
+# export Color_White_Reverse_Intense="\033[7;97m"       # White
 
 # Background
 # 'z' prefix merely for sorting
@@ -103,28 +199,7 @@ export Color_Magenta_zBackground="\033[45m"     # Magenta
 export Color_Cyan_zBackground="\033[46m"        # Cyan
 export Color_White_zBackground="\033[47m"       # White
 
-# High Intensty
-export Color_Black_Intense="\033[0;90m"       # Black
-export Color_Red_Intense="\033[0;91m"         # Red
-export Color_Green_Intense="\033[0;92m"       # Green
-export Color_Yellow_Intense="\033[0;93m"      # Yellow
-export Color_Blue_Intense="\033[0;94m"        # Blue
-export Color_Magenta_Intense="\033[0;95m"     # Magenta
-export Color_Cyan_Intense="\033[0;96m"        # Cyan
-export Color_White_Intense="\033[0;97m"       # White
-
-# Bold High Intensty
-# No difference to bold if bright colors used for bold in Terminal settings
-export Color_Black_Bold_Intense="\033[1;90m"      # Black
-export Color_Red_Bold_Intense="\033[1;91m"        # Red
-export Color_Green_Bold_Intense="\033[1;92m"      # Green
-export Color_Yellow_Bold_Intense="\033[1;93m"     # Yellow
-export Color_Blue_Bold_Intense="\033[1;94m"       # Blue
-export Color_Magenta_Bold_Intense="\033[1;95m"    # Magenta
-export Color_Cyan_Bold_Intense="\033[1;96m"       # Cyan
-export Color_White_Bold_Intense="\033[1;97m"      # White
-
-# High Intensty backgrounds
+# Background Intense
 export Color_Black_zBackground_Intense="\033[0;100m"   # Black
 export Color_Red_zBackground_Intense="\033[0;101m"     # Red
 export Color_Green_zBackground_Intense="\033[0;102m"   # Green
@@ -134,10 +209,12 @@ export Color_Magenta_zBackground_Intense="\033[0;105m" # Magenta
 export Color_Cyan_zBackground_Intense="\033[0;106m"    # Cyan
 export Color_White_zBackground_Intense="\033[0;107m"   # White
 
+# Used in prompt: Reset color, but faint and italic
+zColor_Prompt="$Color_zOff$Color_zFaint$Color_zItalic"
+
 # See also 256-colors, colordump, colors_and_formatting, & tput_colors
-# Really need to sort all this color crap out, maybe time for iterm 2 FIXME TODO
 alias colorslist="set | egrep '^Color_\w*' | sort"
-# Lists colors in their actual color, on one line
+# Lists colors in their actual color, on one line; not ideal
 alias colors="echo -e \`colorslist | sed 's/\(.*\)=\(.*\)/\2 \1/'\`"
 
 
@@ -205,7 +282,7 @@ function _load_color() {
     SYSLOAD=$(tr -d '.' <<< "$SYSLOAD")
 
     if [[ "${SYSLOAD}" -lt $((100*NCPU)) ]]; then
-	echo -en "${Color_Yellow}" # Normal load
+	echo -en "${zColor_Prompt}" # Normal load
     elif [[ "${SYSLOAD}" -lt $((200*NCPU)) ]]; then
 	echo -en "${Color_Magenta_Intense}" # Small load
     elif [[ "${SYSLOAD}" -lt $((400*NCPU)) ]]; then
@@ -273,11 +350,11 @@ function prompt_command {
 	PS1+="[$psuser\[$Color_Cyan\]]-"
     fi
 
-    PS1+="[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$Color_Yellow\]\w\[$Color_Cyan\]]"
+    PS1+="[\[$(_load_color)\]\t $(date +'%a %d %b')\[$Color_Cyan\]]-[\[$zColor_Prompt\]\w\[$Color_Cyan\]]"
 
     gitprompt="$(gitprompt.sh)"
     if [[ -n "$gitprompt" ]]; then
-	PS1+="-[\[$Color_Yellow\]$gitprompt\[$Color_Cyan\]]"
+	PS1+="-[$gitprompt\[$Color_Cyan\]]"
     fi
 
     holiday_greeting="$(holiday_greeting.sh)"

@@ -48,6 +48,8 @@ Color_Magenta="\033[0;35m"      # Magenta
 Color_Cyan="\033[0;36m"         # Cyan
 Color_White="\033[0;37m"        # White
 Color_zOff="\033[0m"            # No color
+Color_zFaint="\033[2m"          # Faint
+Color_zItalic="\033[3m"         # Italic
 
 # Wrap colors around a variable
 # There has got to be a smarter way to do this FIXME TODO
@@ -63,10 +65,11 @@ __wrap_color () {
 	Cyan) color=${Color_Cyan};;
 	White) color=${Color_White};;
 	Clear) color=${Color_zOff};;
+	Faint) color=${Color_zFaint};;
 
-	*) color=${Color_Yellow} # default
+	*) color=$Color_zOff$Color_zFaint$Color_zItalic # default, matches PS1
     esac
-    echo -ne "$color$1${Color_Yellow}"
+    echo -ne "$color$1${Color_zOff}"
 }
 
 # See if a cherry-pick or revert is in progress, if the user has committed a
@@ -326,6 +329,8 @@ elif [[ "$inside_worktree" == "true" ]]; then
     # Not entirely sure what this does yet...
     if [ -z "$short_sha" ] && [ -z "$i" ]; then
 	i=$(__wrap_color "#" "Red")
+    else
+	short_sha=$(__wrap_color "$short_sha")
     fi
     # Stash
     if git rev-parse --verify --quiet refs/stash >/dev/null
@@ -353,13 +358,15 @@ if [[ "$b" != "master" ]] && [[ "$b" != "main" ]]; then
     else
 	b=$(__wrap_color "$b" "Cyan")
     fi
+else
+    b=$(__wrap_color "$b")
 fi
 
 # @ separator, but resort to stash ($s, in green) if present
 if [[ -n "$s" ]]; then
     at="$s"
 else
-    at=$(__wrap_color "@" "Clear")
+    at=$(__wrap_color "@" "Faint")
 fi
 
 ######## ###########
@@ -381,6 +388,7 @@ case "$count" in
 	# p="$z${count#*	}⇵$z${count%	*}";;
 	p="$z↓${count#*	}↑${count%	*}";;
 esac
+p=$(__wrap_color "$p" "Faint")
 
 # KEY:
 # u=symbol (?) for untracked
@@ -405,8 +413,10 @@ esac
 # p=differential from upstream, expand
 
 f="$u$w$i$t$m$d$n$x$y$e"
-# ${f:-=}: above dirty state, = if not
-gitstring="${h:+$h$z}${conflict:+$conflict$z}${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z${f:-=}$p"
+# ${f:-=}: as above if dirty state, = if not
+# This also won't override any other colors already present
+f=$(__wrap_color "${f:-=}" "Faint")
+gitstring="${h:+$h$z}${conflict:+$conflict$z}${r:+$r$z}$c$b$at$short_sha${o:+$z$o}$z$f$p"
 # Ensure gitstring is string, etc.
 printf -v gitstring '%s' "$gitstring"
 out="$gitstring"
