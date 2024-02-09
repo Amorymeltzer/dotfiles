@@ -56,11 +56,12 @@ program = /usr/local/bin/gpg
 # do the same with checkout -b
 go = "!f() { git switch -c \"$1\" 2> /dev/null || git switch \"$1\"; }; f"
 
-lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=human-local
-lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %Cgreen(A: %cr, C: %ar)%C(blue) [%an]%Creset' --abbrev-commit --date=human-local
-recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(color:red)%(objectname:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:human-local)%(color:reset)) %(contents:subject) %(color:blue)[%(authorname)]%(color:reset)'
+lr = log --pretty=format:"%C(blue)%h\\ %C(reset)%C(dim)%C(italic)%ad%C(auto)%d\\ %s%C(dim)%C(magenta)\\ [%an]" --decorate --date=human-local
+lg = log --color --graph --pretty=format:"%C(blue)%h%C(auto)%d%C(reset)\\ %s\\ %C(dim)%C(italic)(A:\\ %cr,\\ C:\\ %ar)%C(dim)%C(magenta)\\ [%an]" --abbrev-commit --date=human-local
 
-# Only learned these flags in 2.23
+recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format="%(color:blue)%(objectname:short)%(color:reset)\\ %(color:bold)%(color:cyan)%(refname:short)%(color:reset)\\ (%(color:italic)%(color:dim)%(color:normal)%(committerdate:human-local)%(color:reset))\\ %(contents:subject)\\ %(color:dim)%(color:magenta)[%(authorname)]%(color:reset)"
+
+# Git only learned these flags in 2.23
 cps = cherry-pick --skip
 mgq = merge --quit
 

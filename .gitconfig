@@ -157,19 +157,20 @@ stb = stash branch
 # Various log shorthands and improvements, some accessed via .bashrc aliases
 # that (mostly) align with these
 l = log --oneline
-l5 = log --oneline -5
+l5 = l -5
 l1 = log -1
-lstat = log --stat --oneline
-logstat = log --oneline
+logstat = l --stat
+lstat = logstat
 
 full = log --pretty=fuller --notes
 lf1 = log --pretty=fuller --notes -1
 
-# All commits, and all important/labeled commits
-la = log --graph --decorate --oneline --all
-las = log --graph --decorate --oneline --all --simplify-by-decoration
+# All commits, and all important/labeled commits.  The formatting here just to
+# mimic what it gives by default
+la = l --graph --decorate --all --pretty=format:"%C(blue)%h%C(auto)%d\\ %s"
+las = l --graph --decorate --all --simplify-by-decoration --pretty=format:"%C(blue)%h%C(auto)%d\\ %s"
 
-ld = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
+ld = log --pretty=format:"%C(blue)%h\\ %C(reset)%C(dim)%C(italic)%ad%C(auto)%d\\ %s%C(dim)%C(magenta)\\ [%an]" --decorate --date=short
 ld5 = ld -5
 ldm = "!git ld $(git default-branch)..HEAD"
 lmd = ldm
@@ -177,8 +178,9 @@ ldm5 = "!git ld5 $(git default-branch)..HEAD"
 ld5m = ldm5
 
 # Potentially overridden in local-config to use date=human after 2.21, see also recent-branches-by-commit and [log]
-lr = log --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
-lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %Cgreen(A: %cr, C: %ar)%C(blue) [%an]%Creset' --abbrev-commit --date=relative
+# Double quotes require escaping the spaces?
+lr = log --pretty=format:"%C(blue)%h\\ %C(reset)%C(dim)%C(italic)%ad%C(auto)%d\\ %s%C(dim)%C(magenta)\\ [%an]" --decorate --date=relative
+lg = log --color --graph --pretty=format:"%C(blue)%h%C(auto)%d%C(reset)\\ %s\\ %C(dim)%C(italic)(A:\\ %cr,\\ C:\\ %ar)%C(dim)%C(magenta)\\ [%an]" --abbrev-commit --date=relative
 
 lr5 = lr -5
 lrm = "!git lr $(git default-branch)..HEAD"
@@ -191,21 +193,21 @@ when-added = log --pretty=format:"%ad" --date=short --diff-filter=A
 
 graph = lg
 
-lm = "!git log --oneline --decorate $(git default-branch)..HEAD"
+lm = "!git l --decorate $(git default-branch)..HEAD"
 llm = "!git log --notes --decorate $(git default-branch)..HEAD"
 
-loh = log --oneline --decorate origin/HEAD..HEAD
+loh = l --decorate origin/HEAD..HEAD
 lloh = log --notes --decorate origin/HEAD..HEAD
-luh = log --oneline --decorate @{upstream}..HEAD
+luh = l --decorate @{upstream}..HEAD
 lluh = log --notes --decorate @{upstream}..HEAD
 # Probably not that useful, but technically possible...
-lho = log --oneline --decorate HEAD..origin/HEAD
+lho = l --decorate HEAD..origin/HEAD
 llho = log --notes --decorate HEAD..origin/HEAD
-lhu = log --oneline --decorate HEAD..@{upstream}
+lhu = l --decorate HEAD..@{upstream}
 llhu = log --notes --decorate HEAD..@{upstream}
 
 # Relies on split-from alias, log of commits since splitting this branch
-ls = "!git log --oneline $(git split-from)..head"
+ls = "!git l $(git split-from)..head"
 lls = "!git log $(git split-from)..head"
 
 # Show new commits, most useful if done right after a pull or fetch
@@ -246,7 +248,7 @@ whodid = "!git log -i -1 --pretty='format:%an <%ae>'"
 difflog = log -u
 
 # Include date
-rl = reflog --pretty=format:"%C(yellow)%h\\ %ad%C(auto)%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short
+rl = reflog --pretty=format:"%C(blue)%h\\ %C(reset)%C(dim)%C(italic)%ad%C(auto)%d\\ %s%C(dim)%C(magenta)\\ [%an]" --decorate --date=short
 
 cl = clone
 
@@ -276,8 +278,8 @@ branch-contains = branch --contains
 recently-checkedout-branches = "!git reflog -n 100 | egrep -io \"moving from ([^[:space:]]+)\" | awk '{ print $3 }' | awk ' !x[$0]++' | egrep -v '^[a-f0-9]{40}$' | head -n 10"
 # https://stackoverflow.com/a/5188364/2521092
 # Only show most recent 15, could also use branch --sort=-committerdate as of 2.7
-# Potentially overridden in local-config to use date=human after 2.21, see also lor and [log]
-recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format='%(color:red)%(objectname:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset)) %(contents:subject) %(color:blue)[%(authorname)]%(color:reset)'
+# Potentially overridden in local-config to use date=human after 2.21, see also lr and [log]
+recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format="%(color:blue)%(objectname:short)%(color:reset)\\ %(color:bold)%(color:cyan)%(refname:short)%(color:reset)\\ (%(color:italic)%(color:dim)%(color:normal)%(committerdate:relative)%(color:reset))\\ %(contents:subject)\\ %(color:dim)%(color:magenta)[%(authorname)]%(color:reset)"
 
 # More easily rememberable external commands, may or may not exist
 remove-merged-branches = delete-merged-branches # git-extras
@@ -312,7 +314,7 @@ rebim = "!git rebase -i $(git default-branch)"
 rebis = "!git rebase -i $(git split-from)"
 # Use fzf to pick the interactive rebase, via graton <https://news.ycombinator.com/item?id=32955969>
 # Could build on this with some other fzf stuff, see unixorn examples like preview or formatted logs
-fzrebi = "!f() { git rebase -i $(git log --pretty=oneline --color=always | fzf --ansi | cut -d ' ' -f1)^ ; }; f"
+fzrebi = "!f() { git rebase -i $(git l --color=always | fzf --ansi | cut -d ' ' -f1)^ ; }; f"
 
 
 # Aww yeah.  Autoplace fixes where needed in interactive rebase with --autosquash or rebase.autoSquash
@@ -374,7 +376,7 @@ hash = "!r() { h=${1:-HEAD}; rev=$(git rev-parse $h); echo $rev; echo $rev | tr 
 sha = "!r() { h=${1:-HEAD}; rev=$(git rev-parse --short $h); echo $rev; echo $rev | tr -d '\n' | pbcopy 2>/dev/null; }; r"
 short = sha
 # Find collisions from a given prefix
-collisions = "!r() { git rev-list --all | grep ^$1 | while read commit; do git --no-pager log -n1 --pretty=format:'%H %ci %an %s%n' $commit; done; }; r"
+collisions = "!r() { git rev-list --all | grep ^$1 | while read commit; do git --no-pager log -n1 --pretty=format:'%C(blue)%H %C(reset)%C(dim)%C(italic)%ci %C(dim)%C(magenta)%an %C(auto)%s%n' $commit; done; }; r"
 
 unstage = reset HEAD --
 re = reset
@@ -431,9 +433,9 @@ fb = "!f() { git branch -a --contains $1; }; f"
 # Find tags containing commit
 ft = "!f() { git describe --always --contains $1; }; f"
 # Find commits by source code
-fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%an] %Cred%d' --decorate --date=short -S$1; }; f"
+fc = "!f() { git log --pretty=format:'%C(blue)%h %C(reset)%C(dim)%C(italic)%ad%C(auto)%d %s%C(dim)%C(magenta) [%an]' --decorate --date=short -S$1; }; f"
 # Find commits by commit message
-fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%an] %Cred%d' --decorate --date=short --grep=$1; }; f"
+fm = "!f() { git log --pretty=format:'%C(blue)%h %C(reset)%C(dim)%C(italic)%ad%C(auto)%d %s%C(dim)%C(magenta) [%an]' --decorate --date=short --grep=$1; }; f"
 
 # Show number of commits by minimum length
 # Josh Stone @cuviper https://blog.cuviper.com/2013/11/10/how-short-can-git-abbreviate/
@@ -445,7 +447,7 @@ uniq-abbrev=!git rev-list --all --abbrev=0 --abbrev-commit | awk '{ a[length] +=
 # FORMAT: defaults to %mm%dd
 # uses `ddiff` from the `dateutils` package
 # available via: brew install dateutils, apt-get install dateutils, etc
-timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --format=%ai ${2:-HEAD}); ddiff -f ${3:-%mm-%dd-%Hh-%Mm} \"$one\" \"$two\"; }; f"
+timespan = "!f() { one=$(git log -n 1 --format=%ai $1); two=$(git log -n 1 --format=%ai ${2:-HEAD}); ddiff -f ${3:-%yy-%mm-%dd-%Hh-%Mm} \"$one\" \"$two\"; }; f"
 
 # Just for the sake of it
 doc = !git --html-path
@@ -558,26 +560,52 @@ date = local
 [color]
 # Use colors in Git commands that are capable of colored output when output is
 # to the terminal, not pipes or files (use --color when appropriate)
-ui = true
+ui = auto
+
+[color "blame"]
+highlightRecent = dim red, 5 years ago, yellow, 2 years ago, blue, 6 months ago, green, 1 month ago, cyan, 1 week ago, normal
 
 [color "branch"]
 current = cyan
 local = normal
 remote = green
+# Unlikely?
+upstream = red
 
 [color "diff"]
-meta = white
 frag = magenta
 old = red
 new = green
-commit = yellow
 whitespace = red reverse
+commit = blue
+# Plenty of these, get overriden by bat, and may not even be shown; meta and
+# func for sure
+meta = dim
+func = cyan
+
+# These are the current defaults for log's `--decorate`, no need to change?  I
+# don't think there's a way to change the defaults for things like the author or
+# time or whatever, which is a drag
+[color "decorate"]
+branch = bold green
+remoteBranch = bold red
+tag = bold yellow
+stash = green
+HEAD = bold cyan
+# Except maybe this
+grafted = bold red
+
+[color "interactive"]
+# prompt = blue #bold
+header = magenta bold		# Not sure what this applies to...
+help = yellow
+error = red bold # Takes the help color unless otherwise specificed, default is red bold
 
 [color "status"]
 # header = normal
 branch = cyan
-added = magenta
 changed = green
+added = magenta
 untracked = cyan
 unmerged = red
 
@@ -587,15 +615,6 @@ oldNormal = red# bold
 oldHighlight = red bold 52
 newNormal = green# bold
 newHighlight = green bold 22
-
-[color "blame"]
-highlightRecent = yellow, 36 months ago, blue, 6 months ago, cyan, 1 months ago, brightwhite
-
-[color "interactive"]
-# prompt = blue #bold
-header = magenta bold		# Not sure what this applies to...
-help = yellow
-error = red bold # Takes the help color unless otherwise specificed, default is red bold
 
 [gc]
 reflogExpire = 365		# Default 90 days
