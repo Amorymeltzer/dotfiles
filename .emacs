@@ -3108,15 +3108,15 @@ Uses `cperl--get-current-subroutine-name'."
 ;;;;;;;;;;;;;;;;;;;;
 ;; Spelling stuff
 ;;;;;;;;;;;;;;;;;;;;
-;; Custom SCOWL dictionary: size 70, variants 2, diacritics both
-;; http://app.aspell.net/create
-;; Disabled because it's a drag to symlink my custom dictionary into homebrew's
-;; versioned aspell directory, even with multi dictionaries FIXME TODO
-(setq ;; ispell-dictionary "en-custom"
-      ;; This should be the default for aspell, but just in case...
-      ;; See also:
-      ;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
-      ;; http://aspell.net/man-html/Format-of-the-Personal-and-Replacement-Dictionaries.html
+;; Custom SCOWL dictionary: size 70, variants 2, diacritics both.  See:
+;;; http://app.aspell.net/create
+;;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
+;;; http://aspell.net/man-html/Format-of-the-Personal-and-Replacement-Dictionaries.html
+;; Test: 60: autobiographic 70: biltongs  80: cellulolytic personal: xkcd
+;; Things like ispell-dictionary and ispell-personal dictionary should be
+;; handled by default and by .aspell.conf, assuming the dictionary is installed
+;; properly.  I've also put sug-mode in there too, but again, you never know.
+(setq ispell-dictionary "en-custom"
       ispell-personal-dictionary "~/.aspell.en.pws"
       ;; --camel-case is neat, but since I'm using flyspell-prog-mode - only
       ;; strings and comments - it's unlikely to be necessary
