@@ -2292,6 +2292,10 @@ when in source code modes such as python-mode or perl-mode" t)
 (defalias 'lowercase-dwim 'downcase-dwim)
 (defalias 'lowercase-word 'downcase-word)
 (defalias 'lowercase-region 'downcase-region)
+;; Don't warn
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'capitalize-region 'disabled nil)
 ;; More useful
 (global-set-key "\M-c" 'capitalize-dwim)
 (global-set-key "\M-u" 'uppercase-dwim)
