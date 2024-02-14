@@ -2216,6 +2216,11 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-set-key "\M-l" 'lowercase-dwim)
 
 
+;; Caser: convert to camelCase, snake_case, or dash-case
+;; https://hg.sr.ht/~zck/caser.el
+(require 'caser)
+
+
 ;; Highlight region undo, yanked, etc., is awesome
 ;; https://github.com/k-talo/volatile-highlights.el
 (require 'volatile-highlights)
