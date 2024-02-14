@@ -289,6 +289,8 @@ Record that in `paradox--backups', but do nothing if
 ;; http://cx4a.org/software/auto-complete/manual.html#Configuration
 (require 'auto-complete-config)
 (ac-config-default)
+;; start automatically after 3, not 2 characters
+(setq ac-auto-start 3)
 
 ;; Characters entered before started, up=efficient, down=slower
 ;; (setq ac-auto-start 5)			;Default 2
