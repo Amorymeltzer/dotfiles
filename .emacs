@@ -621,6 +621,15 @@ POS defaults to `point'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; flycheck-hl-todo: Show fixmes and todos in flycheck
+;; https://github.com/alvarogonzalezsotillo/flycheck-hl-todo
+;; Should really figure out hl-todo below before turning this on, the two are
+;; connected TODO
+;; (require 'flycheck-hl-todo)
+;; Should create a toggle function to disable via variable
+;; `flycheck-hl-todo-enabled' rather than using flycheck-disable-checker
+
+
 ;; relint: Check elisp regexes https://elpa.gnu.org/packages/relint.html
 ;; `relint-buffer' is a better name than `relint-current-buffer', but that's taken
 (defalias 'relint-buffer-current 'relint-current-buffer)
