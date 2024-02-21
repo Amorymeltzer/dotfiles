@@ -36,6 +36,12 @@ max_mccabe = 15
 [ControlStructures::ProhibitDeepNests]
 max_nests = 3
 
+# Unfortunately, entering *any* value overwrites the defaults, so I have to
+# include the defaults here.  I wish Community::DiscouragedModules or
+# Community::PreferredAlternatives had options to add modules to their lists
+[Modules::ProhibitEvilModules]
+modules = Class::ISA Pod::Plainer Shell Switch Test::Exception {Found use of Test::Exception, use Test::Fatal instead}
+
 # Turn off warning, since the penalty is on perls less than 5.18, which is not
 # super common in my life
 [-Modules::RequireNoMatchVarsWithUseEnglish]
@@ -119,10 +125,7 @@ severity = 3
 ## Perl::Critic::Bangs https://metacpan.org/pod/Perl::Critic::Bangs
 # Allow TODOs, etc.
 [-Bangs::ProhibitFlagComments]
-# Add diagnostics to debugging modules.  Here instead of
-# Modules::ProhibitEvilModules, since that's severity 5 and can overwrite some
-# good defaults, and I don't really want to mess with that, and it obviously
-# fits here!
+# Add diagnostics to debugging modules
 [Bangs::ProhibitDebuggingModules]
 debugging_modules = diagnostics
 
