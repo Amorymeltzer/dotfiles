@@ -271,7 +271,7 @@ C-c b, C-M-f          Open buffer in other window, don't select"
        | 16 DLE| 17 DC1| 18 DC2| 19 DC3| 20 DC4| 21 NAK| 22 SYN| 23 ETB|
        | 24 CAN| 25 EM | 26 SUB| 27 ESC| 28 FS | 29 GS | 30 RS | 31 US |
        | 32 SP | 33  ! | 34  \" | 35  # | 36  $ | 37  % | 38  & | 39  ' |
-       | 40  \( | 41  \) | 42  * | 43  + | 44  , | 45  - | 46  . | 47  / |
+       | 40  ( | 41  ) | 42  * | 43  + | 44  , | 45  - | 46  . | 47  / |
        | 48  0 | 49  1 | 50  2 | 51  3 | 52  4 | 53  5 | 54  6 | 55  7 |
        | 56  8 | 57  9 | 58  : | 59  ; | 60  < | 61  = | 62  > | 63  ? |
        | 64  @ | 65  A | 66  B | 67  C | 68  D | 69  E | 70  F | 71  G |
@@ -290,7 +290,7 @@ C-c b, C-M-f          Open buffer in other window, don't select"
        | 10 DLE| 11 DC1| 12 DC2| 13 DC3| 14 DC4| 15 NAK| 16 SYN| 17 ETB|
        | 18 CAN| 19 EM | 1A SUB| 1B ESC| 1C FS | 1D GS | 1E RS | 1F US |
        | 20 SP | 21  ! | 22  \" | 23  # | 24  $ | 25  % | 26  & | 27  ' |
-       | 28  \( | 29  \) | 2A  * | 2B  + | 2C  , | 2D  - | 2E  . | 2F  / |
+       | 28  ( | 29  ) | 2A  * | 2B  + | 2C  , | 2D  - | 2E  . | 2F  / |
        | 30  0 | 31  1 | 32  2 | 33  3 | 34  4 | 35  5 | 36  6 | 37  7 |
        | 38  8 | 39  9 | 3A  : | 3B  ; | 3C  < | 3D  = | 3E  > | 3F  ? |
        | 40  @ | 41  A | 42  B | 43  C | 44  D | 45  E | 46  F | 47  G |
@@ -309,7 +309,7 @@ C-c b, C-M-f          Open buffer in other window, don't select"
        |020 DLE|021 DC1|022 DC2|023 DC3|024 DC4|025 NAK|026 SYN|027 ETB|
        |030 CAN|031 EM |032 SUB|033 ESC|034 FS |035 GS |036 RS |037 US |
        |040 SP |041  ! |042  \" |043  # |044  $ |045  % |046  & |047  ' |
-       |050  \( |051  \) |052  * |053  + |054  , |055  - |056  . |057  / |
+       |050  ( |051  ) |052  * |053  + |054  , |055  - |056  . |057  / |
        |060  0 |061  1 |062  2 |063  3 |064  4 |065  5 |066  6 |067  7 |
        |070  8 |071  9 |072  : |073  ; |074  < |075  = |076  > |077  ? |
        |100  @ |101  A |102  B |103  C |104  D |105  E |106  F |107  G |
@@ -535,8 +535,8 @@ in a buffer named BUF-NAME using `display-buffer'."
   "*Solar System*")
 
 (amory-gen-displayer amory-latin-abbreviation-help
-    "No other language is so rich in expressions for clarifying what has been previously said."
-  "*It's what they speak in Latin America.*")
+    "Display some common lation abbreviations."
+  "*Latin*")
 
 (amory-gen-displayer amory-genetic-code
     "Display the genetic code in its own buffer."

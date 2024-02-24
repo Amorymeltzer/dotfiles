@@ -3438,6 +3438,7 @@ Uses `cperl--get-current-subroutine-name'."
 ;; http://svn.red-bean.com/repos/kfogel/trunk/.emacs
 ;; Includes genetic code stuff that needs to be fixed like whoa
 ;; FIXME TODO
+;; Also, other things need cleaning up.  Not all docstrings work? FIXME TODO
 (require 'amory-reference-functions)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
