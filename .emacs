@@ -2253,29 +2253,6 @@ when in source code modes such as python-mode or perl-mode" t)
 	   (insert (current-kill 0)))))
 
 
-(defun replace-next-underscore-with-camel (arg)
-  "Convert a snakecase variable to camelCase."
-  (interactive "p")
-  (if (> arg 0)
-      (setq arg (1+ arg))) ; 1-based index to get eternal loop with 0
-  (let ((case-fold-search nil))
-    (while (not (= arg 1))
-      (search-forward-regexp "\\b_[a-z]")
-      (forward-char -2)
-      (delete-char 1)
-      (capitalize-word 1)
-      (setq arg (1- arg)))))
-
-(defun camelize-buffer ()
-  "Convert all snakecase variables in a buffer to camelCase,
-using `replace-next-underscore-with-camel'."
-  (interactive)
-  (goto-char 0)
-  (ignore-errors
-    (replace-next-underscore-with-camel 0))
-  (goto-char 0))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use ido to select which window based off window name
 (defun rotate-list (list count)
