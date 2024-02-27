@@ -2930,6 +2930,7 @@ Uses `cperl--get-current-subroutine-name'."
 ;; Redundant and broken? ;;;;;; ##### FIXME TODO
 ;; https://github.com/ankurdave/color-identifiers-mode
 (autoload 'color-identifiers-mode "color-identifiers-mode" "Color identifiers uniquely" t)
+;; Note rainbow-mode here?  Nothing to do... TODO
 
 ;; Get perldoc after C-h via P
 (define-key 'help-command "P" 'perldoc)
