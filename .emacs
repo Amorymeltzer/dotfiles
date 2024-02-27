@@ -787,7 +787,7 @@ backups." t)
 ;; avoid duplication of strings and mistakes like d1134df2
 (defvar my/recentf-file "recentf")
 (defvar my/ido-file "ido.last")
-(defvar my/smex-file "smex-items")
+(defvar my/amx-file "amx-items")
 (defvar my/desktop-file "emacs.desktop") ;; Rename to just desktop(.lock)???
 (defvar my/saveplace-file "saved-places")
 
@@ -812,7 +812,7 @@ backups." t)
 ;; Is there a variable for the directory emacs' files come in?
 (add-to-list 'recentf-exclude ".*\\/opt.*\\/share\\/emacs.*\\'")
 (add-to-list 'recentf-exclude (concat my/ido-file "\\'"))
-(add-to-list 'recentf-exclude (concat my/smex-file "\\'"))
+(add-to-list 'recentf-exclude (concat my/amx-file "\\'"))
 (add-to-list 'recentf-exclude (concat my/recentf-file "\\'"))
 (add-to-list 'recentf-exclude "\\node_modules\\'")
 ;; Exclude symlinks
@@ -1709,31 +1709,26 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 
 
 ;;;;;;;;;;;;;;;;;;;
-;; Smex stuff, better M-x using ido
-;; Maybe migrate to amx? Try it out? https://github.com/DarwinAwardWinner/amx
-;; Should put this closer to the end since (smex-initialize) so early will
-;; miss functions loaded via autoload
-;; While smex is active...
-;; C-h f gets describe function on selected command
-;; M-. goes to definition of selected command
-;; C-h w shows key bindings
-;; smex-show-unbound-commands for frequently used commands with not key binding
-;; https://github.com/nonsequitur/smex/
-(require 'smex)
-;; Specify save file in ~/.emacs.d/ folder, MUST be before initializing
-(setq smex-save-file (expand-file-name my/smex-file user-emacs-directory))
-(smex-initialize)
+;; Amx stuff, better M-x (using ido or anything)
+;; https://github.com/DarwinAwardWinner/amx
+;; Replaces Smex <https://github.com/nonsequitur/smex/>
+;; Reminder that minibuffer-prompt face set in custom.el
+;; I repeat (amx-initialize) later since having it so early misses functions
+;; loaded via autoload
+;; amx-show-unbound-commands: frequently used commands without a key binding
+(require 'amx)
+;; Specify save file in ~/.emacs.d/, the default but just in case
+(setq amx-save-file (expand-file-name my/amx-file user-emacs-directory))
+;; Do I need both?  I dunno
+(amx-initialize)
+(amx-mode)
+;; `execute-extended-command' is the old M-x
+(global-set-key (kbd "M-x") 'amx)
+;; Should probably use this one all the time? FIXME TODO
+(global-set-key (kbd "M-X") 'amx-major-mode-commands)
+(setq amx-prompt-string "Amx ")
+(setq amx-history-length 512)
 
-;; Only a slight speed enhancement, but let's be honest: I'm not loading tons
-;; of code building new functions all the time here
-(setq smex-auto-update nil)
-
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is the old M-x
-(global-set-key (kbd "C-c M-X") 'execute-extended-command)
-(setq smex-prompt-string "Smx ")
-(setq smex-history-length 512)
 
 ;; Cleaner, more meaningful narrow-to-region
 ;; https://github.com/Malabarba/fancy-narrow
@@ -3267,14 +3262,6 @@ Uses `cperl--get-current-subroutine-name'."
 ;; See how annoying it truly is
 ;; (setq garbage-collection-messages t)
 
-;; TEST FOR EMACS VERSION USE FOR IDO AND SMEX
-;; ;;;;;;;;;;;;;; ############ FIXME TODO
-;; (if (and (>= emacs-major-version 25) (>= emacs-minor-version 2))
-;;     (message "Emacs loaded at %s." (format-time-string "%T %a %d %b %y"))
-;;   (message "Emacs dumb at %s." (format-time-string "%T %a %d %b %y")))
-
-;; (when (> emacs-major-version 23)
-;;   (message "Emacs is >23"))
 
 ;; Send notifications via growl
 ;; https://github.com/jwiegley/alert
@@ -3542,7 +3529,7 @@ Uses `cperl--get-current-subroutine-name'."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(smex-initialize)
+(amx-initialize)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
