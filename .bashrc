@@ -1646,6 +1646,7 @@ alias pg='ping -c 1 google.com'
 # Combine all IP shit to give local and external, only if appropriate
 # ######### ;;;;;;;;;; FIXME TODO
 # Get my local IP
+# ip
 #alias ip="ifconfig | grep -E '(192|10)'"
 #alias ip="ifconfig | grep -E '192'"
 #alias ip='dig +short myip.opendns.com @resolver1.opendns.com'
@@ -1699,7 +1700,7 @@ if [[ $OSTYPE == darwin* ]]; then
 
     # Toggle wifi status, via <http://apple.stackexchange.com/a/36897/53735>
     # Could try and handle determining the interface, but meh
-    function togglewifi {
+    function toggle-wifi {
 	local interface=$1
 	if [[ -z $interface ]]; then
 	    interface=en0
