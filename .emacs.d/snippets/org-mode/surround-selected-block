@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: surround-selected-block
+# key: <r
+# --
+#+begin_src $0
+`yas-selected-text`
+#+end_src
