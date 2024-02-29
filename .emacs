@@ -83,6 +83,7 @@
 ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
 ;; Something to do with a specific GNUTLS version (currently 30615), this exact check is from
 ;; https://github.com/syl20bnr/spacemacs/blob/d46eacd83842815b24afcb2e1fee5c80c38187c5/core/core-emacs-backports.el
+;; Still necessary in 29+? FIXME
 (unless (<= libgnutls-version 30603)
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 ;; In theory it'd be nice to set package-archive-priorities, but in practice
@@ -254,9 +255,9 @@ Record that in `paradox--backups', but do nothing if
 (setq dashboard-items '((recents  . 15)
 			;; (ls-files . 5)
 			;; (ls-directories . 3)
-			(bookmarks . 5)
+			;; (bookmarks . 5)
 			;; (projects . 5)	; Depends on projectile
-			(agenda . 5)
+			;; (agenda . 5)
 			;; (registers . 5)
 			(totd . 1)))
 
