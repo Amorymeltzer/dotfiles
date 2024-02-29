@@ -176,15 +176,16 @@ Record that in `paradox--backups', but do nothing if
 
 (require 'auto-dark)
 (setq
- ;; ns-do-applescript not available?  Could also just set
- ;; auto-dark-detection-method to osascript I think
+ ;; ns-do-applescript not available.  Could also just set
+ ;; auto-dark-detection-method to osascript, but this is the proper way
  auto-dark-allow-osascript t
  ;; The default of 5 seems like it should be fine, but it seems to have a quite
  ;; noticable slowdown.  Setting it higher isn't a big deal, so it's a
  ;; no-brainer.  Could definitely go higher!
  auto-dark-polling-interval-seconds 10
- ;; The timu-macos theme is weird, just one theme but uses a function to toggle
- ;; between dark and light mode.  Thankfully, auto-dark offers hooks!
+ ;; The timu-macos theme is weird, with just one actual theme but a function to
+ ;; toggle between dark and light mode.  Thankfully, auto-dark offers hooks!
+ ;; Can use nil after https://github.com/LionyxML/auto-dark-emacs/issues/41 TODO
  auto-dark-dark-theme 'timu-macos
  auto-dark-light-theme 'timu-macos)
 (add-hook 'auto-dark-dark-mode-hook #'timu-macos-toggle-dark-light)
