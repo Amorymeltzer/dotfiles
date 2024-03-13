@@ -238,7 +238,6 @@ Record that in `paradox--backups', but do nothing if
 ;; Not perfect, should ideally limit self to a modemap or something
 (defun totd()
   "Display a 'Tip of the Day' message with a random command.  Used for insertion into the dashboard."
-  (interactive)
   (let* ((commands (cl-loop for s being the symbols
 			    when (commandp s) collect s))
 	 (command (nth (random (length commands)) commands)))
