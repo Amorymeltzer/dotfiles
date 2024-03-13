@@ -899,7 +899,7 @@ backups." t)
 
 (defun markdown-linkify ()
   "Make region or current word into a link to itself."
-  (interactive)
+  (interactive nil markdown-mode)
   (let* ((bounds
 	  (if (and mark-active transient-mark-mode)
 	      (cons (region-beginning) (region-end))
@@ -926,7 +926,7 @@ buffer or region to mardown and display it in a separate window."
 
 (defun linkify-region-html (start end)
   "Wrap the region in `a href' for an HTML link."
-  (interactive "r")
+  (interactive "r" html-mode)
   (let ((str (buffer-substring-no-properties start end)))
     (delete-region start end)
     (insert "<a href=\"\">" str "</a>")))
@@ -943,7 +943,7 @@ buffer or region to mardown and display it in a separate window."
 ;; Should rename to html-tidy? FIXME TODO
 (defun tidy-then-indent ()
   "`tidy' a buffer's HTML, then indent it, since `tidy' leaves a buffer looking flat."
-  (interactive)
+  (interactive nil html-mode)
   (tidy-buffer)
   (indent-buffer))
 
@@ -1329,7 +1329,7 @@ current buffer" t)
   "Move up one directory without opening yet another Dired buffer.  Mimics
 `dired-find-alternate-file', but uses `find-alternate-file' it its place so as
 to explicitly provide `..' as an argument.  Will be remapped to `^'."
-  (interactive)
+  (interactive nil dired-mode)
   (set-buffer-modified-p nil)
   (find-alternate-file ".."))
 (define-key dired-mode-map (kbd "^") 'my/dired-move-up-directory)
@@ -2735,7 +2735,7 @@ This checks in turn:
 -- for a function name where point is
 -- for a variable name where point is
 -- for a surrounding function call"
-  (interactive)
+  (interactive nil emacs-lisp-mode)
   (let (sym)
     ;; sigh, function-at-point is too clever.  we want only the first
     ;; half.
@@ -2851,7 +2851,7 @@ This checks in turn:
 (defun cperl-get-current-subroutine ()
   "Display the current subroutine name from cperl-mode.
 Uses `cperl--get-current-subroutine-name'."
-  (interactive)
+  (interactive nil cperl-mode)
   (let ((current-subroutine (cperl--get-current-subroutine-name)))
     (when current-subroutine
       (message "Current subroutine: %s" current-subroutine))))
@@ -2861,7 +2861,7 @@ Uses `cperl--get-current-subroutine-name'."
 ;; place.  Vaguely useful!
 (defun cperl-create-testfile-for-subroutine ()
   "Create a new test file in the t/ directory named after the current subroutine."
-  (interactive)
+  (interactive nil cperl-mode)
   (let ((subroutine-name (cperl--get-current-subroutine-name)))
     (when subroutine-name
       (let* ((current-directory (file-name-directory buffer-file-name))
