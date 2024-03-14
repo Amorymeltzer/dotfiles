@@ -16,7 +16,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(cperl-array-face ((t (:foreground unspecified :inherit font-lock-keyword-face :weight bold))))
+ '(cperl-hash-face ((t (:foreground unspecified :inherit font-lock-constant-face :slant italic :weight bold))))
+ '(font-lock-comment-delimiter-face ((t (:foreground unspecified :inherit font-lock-comment-face :slant normal))))
+ '(font-lock-regexp-grouping-backslash ((t (:foreground unspecified :inherit error))))
+ '(font-lock-regexp-grouping-construct ((t (:foreground unspecified :inherit warning))))
+ '(isearch ((t (:background unspecified :foreground unspecified :inherit isearch-group-1 :underline unspecified :weight unspecified))))
+ '(minibuffer-prompt ((t (:foreground unspecified :inherit timu-macos-purple-face :weight normal))))
  '(paradox-download-face ((t (:foreground "cyan"))))
  '(paradox-highlight-face ((t (:inherit font-lock-variable-name-face :weight bold))))
  '(paradox-homepage-button-face ((t (:inherit font-lock-comment-face :underline nil))))
- '(paradox-mode-line-face ((t (:weight normal)))))
+ '(paradox-mode-line-face ((t (:weight normal))))
+ '(show-paren-match ((t (:foreground unspecified :underline unspecified :weight unspecified :inherit unspecified :background "#9b54a3")))))

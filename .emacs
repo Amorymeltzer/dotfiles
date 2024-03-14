@@ -14,6 +14,29 @@
 ;; "Anyone with a 4-line .emacs file is suspicious." -Dino Chiesa             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; HISTORY IDEAS FIXME TODO
+;; history-length
+;; list-command-history-max
+;; savehist-minibuffer-history-variables
+;; dmm/discover-my-mode-history
+;; Man-topic-history
+;; flycheck-read-checker-history
+;; imenu--history-list
+;; regexp-history
+;; read-expression-history
+;; face-name-history
+;; buffer-name-history
+;; read-envvar-name-history
+;; shell-command-history
+;; read-number-history
+;; file-name-history
+;; query-replace-history
+;; minibuffer-history
+;; extended-command-history
+;; ido-file-history
+;; ido-buffer-history
+;; search-ring
+;; regexp-search-ring
 
 ;; Notes
 
@@ -61,19 +84,223 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-;; Themes
+;; Prepare for themes
 (setq
  ;; Custom theme directory, in case
  custom-theme-directory (expand-file-name "themes" user-emacs-directory)
  ;; Treat all themes as safe
  custom-safe-themes t)
 
+;; Define a hook to run after we load a theme, pretty useful!  But for real, I
+;; need to get over my hesitancy to use custom.el and just put faces there
+;; sometimes and not over-use this.
+(defvar after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.
 
-;; Some polyfills for older emacs
+See also `enable-theme-functions' and `disable-theme-functions'")
+;; (defadvice load-theme (after run-after-load-theme-hook activate)
+;;   "Run `after-load-theme-hook'."
+;;   (run-hooks 'after-load-theme-hook))
+(advice-add 'load-theme :after
+	    (lambda (&rest _)
+	      "Run `after-load-theme-hook'."
+	      (run-hooks 'after-load-theme-hook)))
+
+
+
+;; Some polyfills for emacs older than 27.1; toolforge is on 26.1
 (unless (fboundp 'seq-remove)
   (defalias 'seq-remove 'gnus-remove-if))
 (unless (fboundp 'seq-filter)
   (defalias 'seq-filter 'gnus-remove-if-not))
+
+
+;; Modeline customizations
+;; Probably kind of pointless given I'm manually defining the format below?
+;; Time
+;; Lots more to customize FIXME TODO
+(setq display-time-day-and-date t
+      display-time-24hr-format t
+      display-time-default-load-average nil)
+(display-time-mode t)
+
+;; Battery percentage
+(when (not (equal "Battery status not available" (battery)))
+  (require 'battery)
+  (display-battery-mode)
+  (setq battery-update-interval 240 ;; Default 60s
+	battery-mode-line-limit 85  ;; Default 100
+	battery-load-low 25	    ;; Default 25
+	battery-load-critical 10))  ;; Default 10
+
+;; Show column-number, size in the mode line
+(column-number-mode 1) ; performance hit?
+(size-indication-mode t)
+
+
+;; Tighten things up when there's not enough space.  At least, in theory; in
+;; practice, it doesn't like the ending "%-" aka "fill with -"
+;; (setq mode-line-compact 'long)
+
+;; Need to define this ahead of time, so I can apply it to the mode-line section
+;; here, then make use of it later in the flycheck section.
+;; Weird, can I do just the text, not background?  Or, need to customize I
+;; guess, that's a flycheck-color-mode-line thing I think FIXME TODO
+(defface flycheck-mode-line-color
+  '((t))
+  "Face with which to color the Flycheck mode-line status text
+ via flycheck-color-mode-line-mode."
+  :group 'flycheck-faces)
+
+;;; Actual Modeline custom format
+;; CONSIDER: Colors faded when inactive, see emacs se TODO
+;; Consider using timu-macos colors for more variety? TODO
+;; Git:main?  or eh?  See also vc faces in customize
+;;; https://stackoverflow.com/q/28468975/2521092
+;;; https://emacs.stackexchange.com/q/17439/2051
+;;; https://kitchingroup.cheme.cmu.edu/blog/2014/09/19/A-git-status-Emacs-modeline/
+;; Can also do (for the above) global-mode-string
+;; Also: follow-mode.  Check out minor-mode-alist for other ideas
+;; which-function-mode yeah for sure TODO
+;; FOR REFERENCE: https://www.emacswiki.org/emacs/ModeLineConfiguration
+;; Also: https://www.gnu.org/software/emacs/manual/html_node/elisp/_0025_002dConstructs.html
+;; Also: https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Variables.html
+;; Check out moody? TODO
+(setq-default mode-line-format
+      (list
+       ;; Error if memory full?
+       "%e"
+
+       ;; window-numbering-mode will insert itself here, which is fine.  Uses
+       ;; window-numbering-face, which is also fine, but I've set it to
+       ;; mode-line-buffer-id, in order to be bold, which is also fine.  The
+       ;; main point is that by using the various built-in mode-line faces, it
+       ;; dims when inactive, which is ideal.
+
+       ;; Toss in @ if we're editing via emacsclient server, otherwise -, the
+       ;; former borrowed from `mode-line-remote'.  Serves as sort of a spacer
+       ;; that recapitulates `mode-line-client' in the place of
+       ;; `mode-line-front-space'
+       '(:eval (propertize (if
+			       (frame-parameter nil 'client)
+			       ;; This should be subtle since it's technically
+			       ;; unnecessary
+			       "@" "-") 'face 'font-lock-comment-face))
+
+       ;; Buffer name.  Not using mode-line-buffer-identification but doing it
+       ;; manually means that the mode-line-buffer-id face gets separated from
+       ;; this.  Maybe that's not so bad?!  It'd be nice to truncate the buffer
+       ;; name (e.g. `(format-mode-line '(-20 "%b ") font-lock-keyword-face)' or
+       ;; whatever) but it's a drag for helpful mode, etc.  Not sure if there's
+       ;; a good way to have this be mode-specific, or if it's worth it. TODO
+       ;; Additionally, I want different a different face depending on whether
+       ;; we're in light or night mode.
+       '(:eval (if (equal timu-macos-flavour "dark")
+		   (propertize "%b " 'face 'font-lock-function-name-face)
+		 (propertize "%b " 'face 'font-lock-keyword-face)))
+
+
+
+       ;; The below largely amounts to a more concise way of doing
+       ;; `mode-line-position', giving line and column and percent.
+
+       ;; Line and (1-based) column.  Could do '%02' to always do two
+       ;; characters, but it'll change (especially the line counter) at three
+       ;; digits anyway, so I don't think I really care that much.
+       "("
+       (propertize "%l" 'face 'font-lock-keyword-face)
+       ","
+       (propertize "%02C" 'face 'font-lock-keyword-face)
+       ") "
+       ;; Position and file length/size
+       "["
+       ;; %p is percent of buffer above top of window (or Top/Bot/All), and %o
+       ;; is travel?  Automatically accounts for two characters?  Ugh.  %q is
+       ;; neat, does the range
+       (propertize "%o" 'face 'font-lock-constant-face)
+       ;; Total count of lines, formatted nicely
+       '(:eval (concat "/" (propertize (file-size-human-readable (line-number-at-pos (point-max)) 'si) 'face 'font-lock-constant-face)))
+       ;; Size in bytes, abbreviated.  Not particularly useful?
+       ;; (concat "/" (propertize "%I" 'face 'font-lock-constant-face))
+       "] "
+
+
+       "["
+       ;; The current major mode for the buffer; `mode-line-modes' is too much
+       ;; Use builtin-face? FIXME Actually, reassess all the below faces TODO
+       ;; '(:eval (propertize "%m" 'face 'font-lock-string-face))
+       ;; '(:eval (propertize "%m" 'face 'font-lock-builtin-face))
+       '(:eval (propertize "%m" 'face 'font-lock-keyword-face))
+       ;; Should these be turned off for dashboard, paradox?  Weird to see 'em
+       ;; there.... FIXME TODO
+
+       ;; Was this buffer modified since the last save?  Differs from `mode-line-modified'
+       '(:eval (when (buffer-modified-p)
+		 (concat ","  (propertize "Mod" 'face 'font-lock-constant-face))))
+       ;; A few other modes worth noting
+       '(:eval (when defining-kbd-macro
+		 (concat ","  (propertize "Macro" 'face 'font-lock-constant-face))))
+       ;; Is this buffer read-only?
+       '(:eval (when buffer-read-only
+		 (concat ","  (propertize "RO" 'face 'font-lock-type-face))))
+       ;; %n introduces a leading space, so do this instead
+       '(:eval (when (buffer-narrowed-p)
+		 (concat ","  (propertize "Nar" 'face 'font-lock-type-face))))
+       '(:eval (when (bound-and-true-p follow-mode)
+		 (concat ","  (propertize "Fol" 'face 'font-lock-type-face))))
+       "]"
+
+       ;; Flycheck status, manually since not using minor-mode-alist and because
+       ;; it's smort.
+       ;; Can't remove the annoying leading space?  Ugh.
+       ;; What I want: gone when nothing? No leading space. Color.
+       ;; Could put up with major mode?  Eh.  Wrap in <>?  Would have to
+       ;; redefine 'cause of the space, but I might have to anyway... TODO
+       ;; Maybe also include info in modeline?  Otherwise colored but no number,
+       ;; is that weird?  Or expected?
+       '(:eval (when (and
+		      flycheck-mode
+		      ;; Confirm flycheck isn't running but without a valid
+		      ;; checker configuration
+		      (not (string= "no-checker" flycheck-last-status-change))
+		      (not (string= "not-checked" flycheck-last-status-change)))
+		 ;; (flycheck-mode-line-status-text)))
+		 (propertize (flycheck-mode-line-status-text) 'face 'flycheck-mode-line-color)))
+       " "
+
+       ;; Add the time, date, and emacs server uptime (maybe dumb).  The uptime
+       ;; is dependent on server status, and although I like the emacsclient @
+       ;; above (a la mode-line-client), this does the same thing, really, and
+       ;; it's not super necessary.  The date/time/battery largely recapitulates
+       ;; global-mode-string, but with some more sensible spacing and
+       ;; arrangement.
+       '(:eval (propertize (format-time-string "%R %a %h %-d")))
+       '(:eval (when (frame-parameter nil 'client)
+		 (concat ", Up " (emacs-uptime "%D, %z%h:%.2m"))))
+       ;; This format always seems simpler but more opaque.  Spaces included.
+       '(battery-mode-line-string (" " battery-mode-line-string))
+
+       "--"
+
+       ;; List of minor modes.  I don't want them, but maybe it's useful to note them here?
+       ;; Diminish still removes most of them, but maybe it's kind of unnecessary
+       ;; minor-mode-alist
+
+       mode-line-end-spaces ;; fill with '-'
+       ))
+
+
+;; Time.  Pointless given the above?
+;; (setq display-time-day-and-date t
+;;       display-time-24hr-format t
+;;       display-time-default-load-average nil)
+;; (display-time-mode t)
+
+;; Show column-number, size in the mode line.  Both pointless given the above
+;; (column-number-mode 1) ; performance hit?
+;; (size-indication-mode t)
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package
@@ -168,11 +395,35 @@ Record that in `paradox--backups', but do nothing if
 
 (paradox-enable)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;; themes ;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; I love the kaolin themes.  Some thoughts:
+;; - ocean (low contrast, blues and greens; should turn background black)
+;; - galaxy (high contrast, blues and greens; should turn background black)
+;; - aurora (nah)
+;; - bubblegum (eh.  Seems nice but blurs together)
+;; - valley dark (like a better temple?)
+;; - temple (okay?  if turn background black.  lotta pinks)
+;; - dark (okay: low contrast, greens, kind of a low ocean)
+
+;; Would use this were it not for timu-macos.  Still, should find a better
+;; light-mode version of it.  Regardless, themes loaded automatically when using
+;; auto-dark below.
 ;; (load-theme 'kaolin-galaxy)
-;; Move this up? FIXME TODO
-;; If using timu, make flycheck-info, etc. take from fringe TODO
-;; The highlight crap, make it readable
-;; What to do about timu-macos-mode-line-border ?
+(require 'timu-macos-theme)
+(load-theme 'timu-macos)
+;; Want different color highlighting (`region' face) depending on light or night
+;; mode, and at the moment, timu-macos doesn't have a hook (it should!), so
+;; let's define some advice for it.  We could define our own hook and have it
+;; run that, but, you know, six and one half.  `defadvice' still seems easier...
+(advice-add 'timu-macos-toggle-dark-light :after
+	    (lambda ()
+	      "Set face attribute for `region' based on `timu-macos-flavour'."
+	      ;; equal not eq
+	      (if (equal timu-macos-flavour "dark")
+		  (set-face-attribute 'region nil :background "color-237")
+		(set-face-attribute 'region nil :background "color-252"))))
+
 
 (require 'auto-dark)
 (setq
@@ -277,6 +528,7 @@ Record that in `paradox--backups', but do nothing if
 ;; honest, I usually want some balance.  Besides, on a small screen, it's not
 ;; a big difference, and on a big screen, it doesn't matter!
 (setq-default window-combination-resize t)
+
 
 ;; ignore case when completing, including buffers and filenames
 (setq completion-ignore-case t
@@ -528,11 +780,11 @@ Record that in `paradox--backups', but do nothing if
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Flycheck stuff
 ;;; https://github.com/flycheck/flycheck and https://www.flycheck.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; FIXME TODO:
 ;;; Consider turning margin on?  Big change for everybody but maybe worth it long-term?
 ;;; Possible additional extensions: flycheck-inline, flycheck-elsa/elsa,
 ;;; flycheck-grammarly FIXME TODO
-;;; Consider flycheck-color-mode-line if/when tweaking mode-line
 (require 'flycheck)
 ;; Turn on for everybody
 (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -604,7 +856,15 @@ POS defaults to `point'."
   (flycheck-relint-setup)
   ;; flycheck-relint assumes that emacs-lisp-checkdoc is enabled, so we need to
   ;; manually set the checker to follow emacs-lisp
-  (flycheck-add-next-checker 'emacs-lisp 'emacs-lisp-relint))
+  (flycheck-add-next-checker 'emacs-lisp 'emacs-lisp-relint)
+
+  ;; Enable flycheck-color-mode-line, with our custom face
+  ;; https://github.com/flycheck/flycheck-color-mode-line
+  (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+  (with-eval-after-load 'flycheck-color-mode-line
+    (setq flycheck-color-mode-line-face-to-color 'flycheck-mode-line-color
+	  flycheck-color-mode-line-show-running t
+	  )))
 
 ;; Annoyingly, flycheck doesn't automatically include proselint as a
 ;; next-checker for markdown mode (okay, fine, I guess it makes sense), so let's
@@ -614,14 +874,6 @@ POS defaults to `point'."
 ;; https://github.com/textlint/textlint
 (flycheck-add-next-checker 'markdown-markdownlint-cli 'proselint)
 
-;; Make flycheck faces pop a bit more in kaolin-galaxy.  Keeps the underlining from
-;; flycheck, but snags colors from the theme's js2-mode colors. FIXME TODO
-;; (set-face-attribute 'flycheck-info nil :inherit 'js2-jsdoc-value)
-;; (set-face-attribute 'flycheck-warning nil :inherit 'js2-object-property)
-;; (set-face-attribute 'flycheck-error nil :inherit 'js2-external-variable)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
 ;; flycheck-hl-todo: Show fixmes and todos in flycheck
 ;; https://github.com/alvarogonzalezsotillo/flycheck-hl-todo
 ;; Should really figure out hl-todo below before turning this on, the two are
@@ -629,6 +881,8 @@ POS defaults to `point'."
 ;; (require 'flycheck-hl-todo)
 ;; Should create a toggle function to disable via variable
 ;; `flycheck-hl-todo-enabled' rather than using flycheck-disable-checker
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;; relint: Check elisp regexes https://elpa.gnu.org/packages/relint.html
@@ -673,25 +927,26 @@ POS defaults to `point'."
 ;; just use hl-todo, with something like the below:
 ;; (setq hl-todo '(t (:foreground "#e55c7a" :weight normal)))
 ;; (setq hl-todo-wrap-movement t)
-;; (setq hl-todo-keyword-faces
-;;       '(("TODO"  . "pink")
-;;	("FIXME" . "#cc9393")
-;;	("XXX"   . "#1E90FF")))
+(setq hl-todo-keyword-faces		; FIXME TODO unused?
+      '(("TODO"  . "pink")
+	("FIXME" . "#cc9393")
+	("XXX"   . "#1E90FF")))
 (defun my/add-watchwords ()
   "Function to highlight specific watchwords, rather than use `fic-mode' or
 `hl-todo' or something."
   (font-lock-add-keywords
    ;; \\<, \\> are empty string at beginning, end of word
    nil '(("\\<\\(FIXME\\|TODO\\|XXX\\)\\>"
-	  ;; Consider: rebeccapurple, purple, magenta, violet, pink, etc.
-	  ;; These are good candidates for font-lock-function-name-face whenever
-	  ;; I customize my theme...
+	  ;; 1 '((:inherit 'font-lock-keyword-face) (:weight bold)) t))))
+	  ;; 1 '((:foreground (face-foreground 'font-lock-keyword-face)) (:weight bold)) t))))
+	  ;; Want to inherit the foreground from font-lock-keyword-face, but not
+	  ;; sure how to get that!  These don't work FIXME TODO
 	  1 '((:foreground "pink") (:weight bold)) t))))
 (add-hook 'prog-mode-hook 'my/add-watchwords)
 (add-hook 'text-mode-hook 'my/add-watchwords)
 
-(font-lock-add-keywords 'emacs-lisp-mode
-			'(("autoload" . font-lock-keyword-face)))
+;; FIXME
+(font-lock-add-keywords 'emacs-lisp-mode '(("autoload" . font-lock-keyword-face)))
 
 
 ;; https://github.com/dgutov/highlight-escape-sequences
@@ -699,12 +954,11 @@ POS defaults to `point'."
 ;; (setq hes-simple-modes '(emacs-lisp-mode))
 ;; (hes-mode)
 
-;; Really should figure out and group font-lock stuff ;;;;; #### FIXME TODO
-;; Regexp color for backslash, and... escapes?
-(set-face-attribute 'font-lock-regexp-grouping-backslash nil
-		    :foreground "#ff1493")
-(set-face-attribute 'font-lock-regexp-grouping-construct nil
-		    :foreground "#ff8c00")
+
+;; Color for backslash and escapes in lisp regexps,
+;; `font-lock-regexp-grouping-backslash' and
+;; `font-lock-regexp-grouping-construct', set in custom.el.  Wish cperl-mode had
+;; something similar...
 
 
 ;; (require 'applescript-mode)
@@ -1117,29 +1371,13 @@ current buffer" t)
 (require 'smooth-scrolling)
 (setq smooth-scroll-margin 3) ;; default 10
 
-;; Modeline customizations
-;; Time
-(setq display-time-day-and-date t
-      display-time-24hr-format t
-      display-time-default-load-average nil)
-(display-time-mode t)
-
-;; Battery percentage
-(when (not (equal "Battery status not available" (battery)))
-  (display-battery-mode t)
-  (setq battery-update-interval 180 ;; Default 60s
-	battery-mode-line-limit 90  ;; Default 100
-	battery-load-low 20	    ;; Default 25
-	battery-load-critical 10))  ;; Default 10
-
-;; Show column-number, size in the mode line
-(column-number-mode 1) ; performance hit?
-(size-indication-mode t)
-
 ;; case INsensitive search.  Once turned off somehow?
 (setq-default case-fold-search t)
 
-;; Regex search... Always
+;; Regex search... Always.  `isearch' face customized in custom.el to be
+;; different from `lazy-highlight', as it should be.  Annoyingly, `isearch' and
+;; `vr/' (visual-regexp) should be aligned too?  I dunno which to prefer but
+;; it's a little odd they're different? FIXME TODO
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
@@ -1176,12 +1414,11 @@ current buffer" t)
       (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
 
 ;; Visual feedback for regex replace
-;; Should I alias the above to this?  Maybe. ;;;;;; ####### FIXME TODO
+;; https://github.com/benma/visual-regexp.el
 ;; Also setup isearch, isearch regexp for this style?  Probably
 ;; Replace is fast, query asks
 ;; Only works DOWN a buffer
 ;; Sourced by below -steroids
-;; https://github.com/benma/visual-regexp.el
 ;; (require 'visual-regexp)
 ;; Python-style regexp instead of stupid-ass friggin' crazy escapes
 ;; https://github.com/benma/visual-regexp-steroids.el
@@ -1222,9 +1459,6 @@ current buffer" t)
       anzu-replace-to-string-separator " => ")
 (set-face-attribute 'anzu-mode-line nil :weight 'normal)
 
-;; Black text is more readable
-(set-face-attribute 'isearch nil :foreground "black")
-(set-face-attribute 'lazy-highlight nil :foreground "black")
 
 ;; Jump to word (char, line, with C-u, C-u C-u)
 ;; https://github.com/winterTTr/ace-jump-mode
@@ -1307,7 +1541,8 @@ current buffer" t)
 ;; Dired, file browser and then some
 ;; Should really look at dired-mode-map for the full suite of commands
 ;; Like, v and o are dope!
-;; Check out dired-hacks for filter, sort, narrow, colors, etc https://github.com/Fuco1/dired-hacks
+;; Check out dired-hacks for filter, sort, narrow, colors, etc. TODO
+;; https://github.com/Fuco1/dired-hacks
 (require 'dired)
 (setq dired-auto-revert-buffer t
       dired-dwim-target t		; seems useful?
@@ -1373,6 +1608,8 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; (dired-sidebar-stale-buffer-time-idle-delay).  If a buffer doesn't have a
 ;; file associated with it (customize group, help, etc.) uses the file from the
 ;; buffer it was called from.  Can be weird.
+;; Fix? FIXME TODO https://github.com/jojojames/dired-sidebar/commits/master/
+;; and https://github.com/jojojames/dired-sidebar/issues/58
 (add-hook 'dired-sidebar-mode-hook
 	  (lambda ()
 	    (unless (file-remote-p default-directory)
@@ -1402,10 +1639,10 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; Fuzzy-ish matching
 (setq ido-enable-flex-matching t)
 ;; Better fuzzy matching, does the above need to be turned on?
-;; Was slower, but now... just not as good?
+;; Was slower, but now... just not as good? TODO
 ;; (require 'flx-ido)
 ;; (flx-ido-mode 1)
-;; (setq ido-use-faces nil)
+
 
 ;; Not exactly sure but it sounds nice, right?  Use ido-completing-read+
 (setq ido-everywhere t)
@@ -1542,18 +1779,11 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; Open file in another window, don't select it
 (global-set-key (kbd "C-c f") 'ido-display-file)
 ;; Open buffer in another window, select it
+;; Clobbered by `elisp-byte-compile-buffer' in Elisp mode FIXME
 (global-set-key (kbd "C-c C-b") 'ido-switch-buffer-other-window)
 ;; Open buffer in another window, don't select it
 (global-set-key (kbd "C-c b") 'ido-display-buffer)
 
-;; Set some faces for ido
-(set-face-attribute 'ido-only-match nil :foreground "green")
-(set-face-attribute 'ido-first-match nil :foreground "blue" :weight 'normal)
-;; (set-face-attribute 'ido-incomplete-regexp nil
-;; (set-face-attribute 'ido-hacks-flex-match nil
-;; (set-face-attribute 'ido-subdir nil
-;; (set-face-attribute 'ido-indicator nil
-;; (set-face-attribute 'ido-virtual nil
 
 
 ;; buffer-menu is crap, use ibuffer instead
@@ -1677,22 +1907,26 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;;		    (filename . "\.emacs\.d")
 ;;		    (mode     . custom-mode))))))
 
-;; (setq
-;;  ibuffer-fontification-alist
-;;  '(;; read-only buffers
-;;    (10 buffer-read-only eshell-ls-readonly)
-;;    ;; emacs' "special" buffers
-;;    (15 (string-match "^*" (buffer-name)) eshell-ls-special)
-;;    ;; hidden buffers
-;;    (20 (and (string-match "^ " (buffer-name)) (null buffer-file-name))
-;;        eshell-ls-symlink)
-;;    ;; help buffers
-;;    (25 (memq major-mode ibuffer-help-buffer-modes)
-;;        eshell-ls-archive)
-;;    ;; IRC buffers
-;;    (30 (eq major-mode 'erc-mode) erc-notice-face)
-;;    ;; dired buffers
-;;    (35 (eq major-mode 'dired-mode) eshell-ls-directory)))
+
+;; Highest priority for a given buffer is shown
+;; https://stackoverflow.com/questions/35770525/how-to-color-entries-in-emacss-ibuffer-by-buffer-type
+(setq
+ ibuffer-fontification-alist
+ '(;; read-only buffers
+   (10 buffer-read-only font-lock-constant-face)
+   ;; Compressed files
+   (15 (and buffer-file-name (string-match ibuffer-compressed-file-name-regexp buffer-file-name)) font-lock-doc-face)
+   ;; emacs special buffers
+   (20 (string-match "^\\*" (buffer-name)) font-lock-keyword-face)
+   ;; hidden buffers
+   (25 (and (string-match "^ " (buffer-name)) (null buffer-file-name)) italic)
+   ;; help buffers
+   (30 (memq major-mode ibuffer-help-buffer-modes) font-lock-comment-face)
+   ;; dired
+   (35 (derived-mode-p 'dired-mode) font-lock-function-name-face)
+   ;; locked
+   (40 (and (boundp 'emacs-lock-mode) emacs-lock-mode) ibuffer-locked-buffer)
+   ))
 
 
 ;; Kill current buffer
@@ -1710,13 +1944,18 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 
 
 ;;;;;;;;;;;;;;;;;;;
-;; Amx stuff, better M-x (using ido or anything)
-;; https://github.com/DarwinAwardWinner/amx
-;; Replaces Smex <https://github.com/nonsequitur/smex/>
-;; Reminder that minibuffer-prompt face set in custom.el
-;; I repeat (amx-initialize) later since having it so early misses functions
-;; loaded via autoload
-;; amx-show-unbound-commands: frequently used commands without a key binding
+;; Minibuffer stuff
+;;;;;;;;;;;;;;;;;;;
+;; Display depth indicator in minibuffer, kind of weird but may be useful.
+;; `minibuffer-prompt' face set in custom.el to be consistent (hell yeah
+;; purple).
+(setq minibuffer-depth-indicate-mode t)
+
+;; Amx, better M-x (using ido or anything)
+;; <https://github.com/DarwinAwardWinner/amx>.  Replaces Smex
+;; <https://github.com/nonsequitur/smex/>.  I repeat (amx-initialize) later
+;; since having it so early misses functions loaded via autoload.
+;; `amx-show-unbound-commands': frequently used commands without a key binding
 (require 'amx)
 ;; Specify save file in ~/.emacs.d/, the default but just in case
 (setq amx-save-file (expand-file-name my/amx-file user-emacs-directory))
@@ -1767,10 +2006,10 @@ when in source code modes such as python-mode or perl-mode" t)
 
 (global-set-key (kbd "M-Q") 'unfill-region)
 
-;; Comment colors
-(set-face-attribute 'font-lock-comment-face nil :foreground "black")
-;; Comment-starter color
-(set-face-attribute 'font-lock-comment-delimiter-face nil :foreground "red")
+
+;; font-lock-comment-delimiter-face, the comment-start color, typically themed
+;; to be the same as font-lock-comment-face, but adjusted in custom.el to
+;; inherit the foreground only, keeping a normal italicization
 
 
 (defalias 'bash-mode 'sh-mode)
@@ -1965,13 +2204,12 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; git-timemachine https://gitlab.com/pidu/git-timemachine
 ;; Pretty cool!  t to search by commit, b to blame, c to view commit in magit
-(setq git-timemachine-abbreviation-length 8)
-;; Use some magit faces for parallelism
 (with-eval-after-load "git-timemachine"
-  ;; (set-face-attribute 'git-timemachine-commit nil :inherit 'magit-hash)
-  ;; Setting a face to nothing but the inherited is annoying
-  (set-face-attribute 'git-timemachine-minibuffer-author-face nil :foreground nil :inherit 'magit-log-author)
-  (set-face-attribute 'git-timemachine-minibuffer-detail-face nil :foreground nil :inherit 'magit-blame-summary))
+  (setq git-timemachine-abbreviation-length 8)
+  ;; Use some magit faces for parallelism
+  (set-face-attribute 'git-timemachine-commit nil :inherit 'magit-hash)
+  (set-face-attribute 'git-timemachine-minibuffer-author-face nil :foreground 'unspecified :inherit 'magit-log-author)
+  (set-face-attribute 'git-timemachine-minibuffer-detail-face nil :foreground 'unspecified :inherit 'magit-blame-summary))
 
 ;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
@@ -1981,26 +2219,41 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; default prefix is C-c ^, which is a pain
 (setq smerge-command-prefix "\C-ce")
 
-;; Highlight ( and ) Highlight phrase if no matching paren.
+;; Highlight matching/mismatching parens.  Customized `show-paren-match' face in
+;; custom.el.  `region' customized there as well, to be different.  Both could
+;; use some work TODO
 (show-paren-mode t)
 ;; Could used 'mixed here, but highlight-parentheses better?
 (setq show-paren-style 'expression
       show-paren-delay 0.5)
-;; Highlight parens currently between
-;; https://sr.ht/~tsdh/highlight-parentheses.el
-(require 'highlight-parentheses)
-(add-hook 'prog-mode-hook #'highlight-parentheses-mode)
-;; Bold 'em, Color mismatched differently
-;; These two share faces
-(progn
-  (set-face-attribute 'highlight-parentheses-highlight nil :weight 'bold)
-  (set-face-attribute 'show-paren-match nil :background "black"
-		      :foreground nil)
-  (set-face-attribute 'show-paren-mismatch nil :background "red")
-  (setq highlight-parentheses-colors (quote ("red" "white" "green" "cyan"
-					     "red" "white" "green" "cyan"))))
 
-;; Electric-pair parentheses
+
+;; Highlight parens we're currently between
+;; https://sr.ht/~tsdh/highlight-parentheses.el
+;; rainbow-delimiters good but not quite what I want
+(require 'highlight-parentheses)
+;; Max both out to a depth of 12
+(setq highlight-parentheses-attributes (cl-loop repeat 12 collect '(:weight bold)))
+;; Various shades of red?  Ugh.  Take the colors from certain faces and expand
+;; the repertoire.  Should keep pace with whatever theme is used, but need the
+;; colors to be defined first
+(add-hook
+ 'font-lock-mode-hook
+ #'(lambda ()
+     ;; Go 12 deep
+     (setq highlight-parentheses-colors
+	   (cl-loop repeat 3 append
+		    (list (face-attribute 'error :foreground)
+			  (face-attribute 'warning :foreground)
+			  (face-attribute 'success :foreground)
+			  (face-attribute 'link :foreground))))
+
+     ;; Reload, now that they're defined
+     (highlight-parentheses--color-update)))
+(add-hook 'prog-mode-hook #'highlight-parentheses-mode)
+(add-hook 'minibuffer-setup-hook #'highlight-parentheses-minibuffer-setup)
+
+;; Electric-pair parentheses.  Maybe consider paredit or smartparens?  TODO
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 
 
@@ -2014,26 +2267,6 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (highlight-symbol-mode t)
 
 
-;; list-colors-display for basic colors, list-faces-display for color options
-;; See the rest: https://www.gnu.org/software/emacs/manual/html_node/emacs/Standard-Faces.html#Standard-Faces
-(progn
-  ;; modeline colors
-  (set-face-attribute 'mode-line nil :background "white" :foreground "black")
-  ;; minibuffer prompt
-  (set-face-attribute 'minibuffer-prompt
-		      nil :foreground "magenta" :weight 'normal)
-  ;; buffer name
-  (set-face-attribute 'mode-line-buffer-id nil :background "cyan")
-  ;; not sure
-  (set-face-attribute 'mode-line-emphasis nil :background "magenta")
-  ;; highlight on modeline?
-  (set-face-attribute 'mode-line-highlight nil :background "red")
-  ;; other window, fringe lines
-  ;; Should be more clear, need 256 colors FIXME TODO
-  (set-face-attribute 'mode-line-inactive nil :background "black"))
-
-;; Display depth indicator, kind of weird but may be useful
-(setq minibuffer-depth-indicate-mode t)
 
 
 ;; Easily indent line/region according to mode, or move line/region up or down
@@ -2126,17 +2359,17 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; Easily switch to specific window using numbers (if >2)
 ;; https://github.com/abo-abo/ace-window
-;; Can also delete (x), swap (m), move (M), copy (c), select (j), select
-;; previous (n), select other (u), split fairly (c), split vertical (v), split
-;; horizontal (b), maximize current (o)
+;; Semi-redundant with the above, but can also delete (x), swap (m), move (M),
+;; copy (c), select (j), select previous (n), switch buffer other (u), split
+;; fairly (F), split vertical (v), split horizontal (b), maximize current (o)
 (autoload 'ace-window "ace-window" "Quickly switch windows" t)
 (global-set-key (kbd "C-x o") 'ace-window)
 (eval-after-load 'ace-window
   '(progn
      (set-face-attribute 'aw-leading-char-face nil
-			 :foreground "color-207" ; #ff5fff
+			 :foreground 'unspecified
 			 :weight 'bold
-			 :height 3.0)))
+			 :inherit 'font-lock-keyword-face)))
 
 ;; windmove stuff, in case the above simply isn't enough
 (global-set-key (kbd "C-c <up>") 'windmove-up)
@@ -2813,14 +3046,8 @@ This checks in turn:
 ;; Good?
 (setq cperl-highlight-variables-indiscriminately t)
 
-;; Do some color fixin' in cperl-mode, check out cperl-tips-faces
-;; Really need to play around with these when themin' FIXME TODO
-(set-face-attribute 'cperl-array-face nil :background "nil" :foreground
-		    "blue") ; arrays
-(set-face-attribute 'cperl-hash-face nil :background "nil" :foreground
-		    "red") ; hashes
-;; (set-face-attribute 'cperl-nonoverridable-face nil :background "nil"
-;;				 :foreground "nil") ; `print`, etc.
+;; cperl-array-face and cperl-hash-face adjusted in custom.el, to avoid them
+;; flipping back and forth
 
 ;; Was cperl-next-interpolated-REx-1
 (define-key cperl-mode-map (kbd "C-c C-y") nil)
@@ -2896,7 +3123,7 @@ Uses `cperl--get-current-subroutine-name'."
 (setq ruby-insert-encoding-magic-comment nil)
 
 
-;;; Should probably figure out a way to diminish these fuckers
+;;; Should probably figure out a way to diminish these fuckers TODO
 ;; Colors numbers
 ;; https://github.com/Fanael/highlight-numbers
 ;; Should... do elsewhere?  Remove?  prog-mode-map? Customize color??? FIXME TODO
@@ -2921,11 +3148,13 @@ Uses `cperl--get-current-subroutine-name'."
 (require 'helpful)
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
+;; Unrelated but: C-h w shows key binding for command
 (global-set-key (kbd "C-h k") #'helpful-key)
 (global-set-key (kbd "C-c h") #'helpful-at-point)
 (global-set-key (kbd "C-h F") #'helpful-function)
 (global-set-key (kbd "C-h C") #'helpful-command)
 ;; Maybe add helpful regex to clean-buffer-list-kill-regexps ??
+
 
 
 ;; which-key has better sorting than guide-key
@@ -2954,10 +3183,9 @@ Uses `cperl--get-current-subroutine-name'."
 (set-face-attribute 'which-key-command-description-face nil :inherit nil)
 
 
-;; Display what function block if I'm in in certain modes
-;; reenable?  prog-mode-hook?
-;; (set-face-attribute 'which-func nil
-;;                     :foreground "LightPink3" :weight 'bold)
+;; Display what function block if I'm in in certain modes reenable?
+;; prog-mode-hook? FIXME TODO
+(set-face-attribute 'which-func nil :foreground 'unspecified :weight 'bold :inherit 'font-lock-builtin-face)
 ;; (add-hook 'sh-mode-hook 'which-function-mode)
 ;; (add-hook 'emacs-lisp-mode-hook 'which-function-mode)
 
@@ -3442,6 +3670,7 @@ Uses `cperl--get-current-subroutine-name'."
       (dabbrev-expand arg)
     (indent-according-to-mode)))
 
+;; FIXME TODO
 ;; (defun my-tab-fix ()
 ;; (global-set-key "\t" 'indent-or-expand))
 ;; (add-hook 'emacs-lisp-mode-hook 'my-tab-fix)
@@ -3510,106 +3739,6 @@ Uses `cperl--get-current-subroutine-name'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (amx-initialize)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Modeline shit
-;; Maybe check out moody or doom...
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; use setq-default to set it for /all/ modes
-;; (setq mode-line-format
-;;       (list
-;;        ;; the buffer name; the file name as a tool tip
-;;        '(:eval (propertize "%b " 'face 'font-lock-keyword-face
-;; 			   'help-echo (buffer-file-name)))
-
-;;        ;; line and column
-;;        "(" ;; '%02' to set to 2 chars at least; prevents flickering
-;;        (propertize "%02l" 'face 'font-lock-type-face) ","
-;;        (propertize "%02c" 'face 'font-lock-type-face)
-;;        ") "
-
-;;        ;; relative position, size of file
-;;        "["
-;;        (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
-;;        "/"
-;;        (propertize "%I" 'face 'font-lock-constant-face) ;; size
-;;        "/"
-;;        (propertize (number-to-string (line-number-at-pos (point-max))) 'face 'font-lock-constant-face) ;; total lines
-;;        "] "
-
-;;        ;; the current major mode for the buffer.
-;;        "["
-
-;;        '(:eval (propertize "%m" 'face 'font-lock-string-face
-;; 			   'help-echo buffer-file-coding-system))
-;;        "] "
-
-
-;;        "[" ;; insert vs overwrite mode, input-method in a tooltip
-;;        '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
-;; 			   'face 'font-lock-preprocessor-face
-;; 			   'help-echo (concat "Buffer is in "
-;; 					      (if overwrite-mode "overwrite" "insert") " mode")))
-
-;;        ;; was this buffer modified since the last save?
-;;        '(:eval (when (buffer-modified-p)
-;; 		 (concat ","  (propertize "Mod"
-;; 					  'face 'font-lock-warning-face
-;; 					  'help-echo "Buffer has been modified"))))
-
-;;        ;; is this buffer read-only?
-;;        '(:eval (when buffer-read-only
-;; 		 (concat ","  (propertize "RO"
-;; 					  'face 'font-lock-type-face
-;; 					  'help-echo "Buffer is read-only"))))
-;;        "] "
-
-;;        ;; add the time, with the date and the emacs uptime in the tooltip
-;;        '(:eval (propertize (format-time-string "%H:%M")
-;; 			   'help-echo
-;; 			   (concat (format-time-string "%c; ")
-;; 				   (emacs-uptime "Uptime:%"))))
-;;        " --"
-;;        ;; i don't want to see minor-modes; but if you want, uncomment this:
-;;        ;; minor-mode-alist  ;; list of minor modes
-;;        "%-" ;; fill with '-'
-;;        ))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Another modeline thingy
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (defun init-el-setup-mode-line ()
-;;   (setq-default
-;;    mode-line-format
-;;    (list
-;;     " "
-;;     (propertize "%b" 'face 'font-lock-keyword-face)
-;;     " ("
-;;     (propertize "%02l" 'face 'font-lock-type-face)
-;;     ","
-;;     (propertize "%02c" 'face 'font-lock-type-face)
-;;     ") ["
-;;     (propertize "%p" 'face 'font-lock-constant-face)
-;;     "/"
-;;     (propertize "%I" 'face 'font-lock-constant-face)
-;;     "] ["
-;;     (propertize "%m" 'face 'font-lock-string-face)
-;;     "] ["
-;;     `(:eval (,(lambda ()
-;;		(propertize (symbol-name buffer-file-coding-system)
-;;			    'face 'font-lock-builtin-face))))
-;;     "] ["
-;;     `(:eval (,(lambda ()
-;;		(mode-line-status-list
-;;		 ((buffer-modified-p) "Mod" font-lock-warning-face)
-;;		 (buffer-read-only "RO" font-lock-type-face)
-;;		 ((buffer-narrowed-p) "Narrow" font-lock-type-face)
-;;		 (defining-kbd-macro "Macro" font-lock-type-face)))))
-;;     "]")))
-
-
 ;;;;;;; END
 ;; This should probably be in after-init-hook or emacs-startup-hook??
 ;; https://www.emacswiki.org/emacs/BenchmarkInit
