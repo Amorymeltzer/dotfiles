@@ -2463,6 +2463,8 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; https://github.com/k-talo/volatile-highlights.el
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
+(vhl/define-extension 'undo-tree 'undo-tree-yank 'undo-tree-move 'undo-tree-undo)
+(vhl/install-extension 'undo-tree)
 
 
 ;; http://github.com/rejeep/emacs/blob/master/rejeep-defuns.el
