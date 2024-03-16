@@ -1747,6 +1747,15 @@ qsort() {
     P=$1; shift; for i in "$@"; do [ "$i" -lt "$P" ] && L="$L $i" || G="$G $i"; done
     [ -z "$L" ] || L=$(qsort "$L"); [ -z "$G" ] || G=$(qsort "$G"); echo "$L $P $G"
 }
+# Maybe maybe maybe I'll use comm if I do something with it
+# <https://leancrew.com/all-this/2021/08/checking-it-twice/>
+compare-lists() {
+    if [[ ! "$1" || ! "$2" ]]; then
+	echo "Usage: compare-lists <list1> <list2>"
+    else
+	comm -3 <(sort "$1") <(sort -u "$2")
+    fi
+}
 
 # Get rid of pesky .DS_Store files, recursively
 alias dscleanup='find . -type f -name "*.DS_Store" -print0 | xargs -0 rm -v'
