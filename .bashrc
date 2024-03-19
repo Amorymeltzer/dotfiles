@@ -1432,16 +1432,21 @@ function newscript() {
 }
 
 alias d="diary "
-# Completion for diary show
-_diary_show_completion() {
+# Completion for diary
+_diary_completion() {
     local cur prev opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" -exec basename {} + 2>/dev/null)
 
     case "${prev}" in
+	diary|d)
+	    opts="new note notes last show showlast rand random search ss log list remove rm delete stats"
+	    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
+	    return 0
+	    ;;
 	show)
+	    opts=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" -exec basename {} + 2>/dev/null)
 	    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
 	    return 0
 	    ;;
@@ -1449,8 +1454,8 @@ _diary_show_completion() {
 	    ;;
     esac
 }
+complete -F _diary_completion diary d
 
-complete -F _diary_show_completion diary d
 
 
 
