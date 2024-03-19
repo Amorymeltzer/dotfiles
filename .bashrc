@@ -1446,8 +1446,17 @@ _diary_completion() {
 	    return 0
 	    ;;
 	show)
-	    opts=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" -exec basename {} + 2>/dev/null)
+	    opts=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" ! -name "notes.md" -exec basename {} + 2>/dev/null)
 	    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
+	    return 0
+	    ;;
+	rand|random|list)
+	    files=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" ! -name "notes.md" -exec basename {} + 2>/dev/null)
+	    # YYYY-MM
+	    yopts=$(echo "$files" | cut -d'-' -f1-2 | sort -u)
+	    # YYYY
+	    mopts=$(echo "$files" | cut -d'-' -f1 | sort -u)
+	    mapfile -t COMPREPLY < <(compgen -W "${yopts} ${mopts}" -- "${cur}")
 	    return 0
 	    ;;
 	*)
