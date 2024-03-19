@@ -1432,6 +1432,27 @@ function newscript() {
 }
 
 alias d="diary "
+# Completion for diary show
+_diary_show_completion() {
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" -exec basename {} + 2>/dev/null)
+
+    case "${prev}" in
+	show)
+	    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
+	    return 0
+	    ;;
+	*)
+	    ;;
+    esac
+}
+
+complete -F _diary_show_completion diary d
+
+
 
 alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 
