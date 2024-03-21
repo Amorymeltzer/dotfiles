@@ -1255,6 +1255,27 @@ if [[ -f $(command -v rg) ]]; then
 	rg -p "$1" | more
     }
 
+    # Search files for text, open that line in your editor
+    # https://news.ycombinator.com/item?id=38473516
+    if [[ -f $(command -v fzf) ]]; then
+	function frg() {
+	    if [ $# -gt 0 ]; then
+		result=$(rg --ignore-case --color=always --line-number --no-heading "$@" |
+			     fzf --ansi \
+				 --color 'hl:-1:underline,hl+:-1:underline:reverse' \
+				 --delimiter ':' \
+				 --preview 'bat --color=always {1} --highlight-line {2}' \
+				 --preview-window 'up,60%,border-bottom,+{2}+3/3,~3')
+		file="${result%%:*}"
+		linenumber=$(echo "${result}" | cut -d: -f2)
+		if [ -n "$file" ]; then
+		    $VISUAL +"${linenumber}" "$file"
+		fi
+	    else
+		echo "You need to provide text with which to search"
+	    fi
+	}
+    fi
 fi
 
 # Applications, probably only useful on macOS
