@@ -2613,13 +2613,14 @@ using `ido-completing-read'."
 (defalias 'mactounix 'dos-to-unix)
 
 (defun replace-smart-quotes ()
-  "Replace MS smart quotes with normal quotes in this buffer."
+  "Replace smart quotes with normal quotes in this buffer."
   (interactive)
   (save-excursion
     (let ((fixes '((342396 . "\"") (342392 . "'") (342387 . "--")
+		   (8220 . "\"") (8221 . "\"")
 		   (342397 . "\"") (342393 . "'"))))
       (goto-char (point-min))
-      (while (/= (point) (point-max))
+      (while (not (eobp))
 	(let* ((this (char-after (point)))
 	       (match (assq this fixes)))
 	  (when match
