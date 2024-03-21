@@ -113,6 +113,12 @@ acc = "!git add -A; git diff --staged --name-only --quiet || git commit --amend 
 ap  = add -p
 ai  = add -p
 
+# Add files via fzf.  Would be nice to have a side-style/si option for delta,
+# but getting the preview window to adjust it's width isn't possible?  The issue
+# actually lies with delta, something with width? FIXME TODO
+fza = "!git ls-files -m -o --exclude-standard | fzf -m --print0  --preview 'git diff --color=always -- {1}' --preview-window 'down,border-top,75%' | xargs -0 git add"
+
+
 # Create and/or go to a branch.  Potentially overridden in local-config to use
 # switch -c after 2.23; toolforge annoyingly is still on 2.20.1
 go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
