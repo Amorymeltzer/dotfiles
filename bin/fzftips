@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# fzftips by Amory Meltzer
+# Show some helpful fzf tips and reminders for my set up
+# Formulated as one long string, that's gotta be a bad idea
+
+echo "
+BASH
+-----------
+C-r          search history (C-y to copy command into CLIPBOARD)
+C-t          grab/copy path
+M-c          cd to directory
+(command) ~~ Fuzzy find with fzf, replacing ~~
+
+GIT
+--------------------
+C-g C-f      files, with diff
+C-g C-b      branches, with log of commits
+C-g C-t      tags, with commit message
+C-g C-h      commits, with diff and commit message
+C-g C-r      remotes, with url
+C-g C-s      stashes, with commit message
+C-g C-e      each-ref
+
+C-_ to toggle preview options"
