@@ -458,8 +458,6 @@ Record that in `paradox--backups', but do nothing if
 
 ;; But use a neat dashboard https://github.com/emacs-dashboard/emacs-dashboard
 (require 'dashboard)
-(setq dashboard-set-navigator t
-      dashboard-set-init-info t)
 ;; Required for emacsclient
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
@@ -488,7 +486,8 @@ Record that in `paradox--backups', but do nothing if
 ;; https://gist.github.com/saintaardvark/375aa054c15f02c42f45
 ;; Not perfect, should ideally limit self to a modemap or something
 (defun totd()
-  "Display a 'Tip of the Day' message with a random command.  Used for insertion into the dashboard."
+  "Display a 'Tip of the Day' message with a random command.
+Used for insertion into the dashboard."
   (let* ((commands (cl-loop for s being the symbols
 			    when (commandp s) collect s))
 	 (command (nth (random (length commands)) commands)))
