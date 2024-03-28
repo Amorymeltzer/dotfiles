@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: libnewsub
+# key: lsub
+# --
+
+=head2 ${1:subName}
+
+=cut
+
+sub $1 {
+    $0
+}
