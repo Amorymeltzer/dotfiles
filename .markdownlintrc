@@ -1,5 +1,6 @@
 {
   "default": true, // https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+  "MD010": { "code_blocks": false }, // Hard tabs, ignore in code blocks
   "MD013": false,  // Line length
   "MD024": { "siblings_only": true },
   "MD026": { "punctuation": ".,;:" } // Trailing punctuation in heading, default is ".,;:!。，；：！"
