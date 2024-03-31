@@ -1400,11 +1400,7 @@ current buffer" t)
 (define-key isearch-mode-map (kbd "M-n") 'isearch-ring-advance)
 
 ;; Grab the full word for searching
-(defun isearch-yank-symbol ()
-  "Grab the word at point to expand an ongoing search."
-  (interactive)
-  (isearch-yank-internal (lambda () (forward-symbol 1) (point))))
-(define-key isearch-mode-map (kbd "C-M-w") 'isearch-yank-symbol)
+(define-key isearch-mode-map (kbd "C-M-w") 'isearch-forward-symbol-at-point)
 
 ;; Activate occur easily inside isearch
 (define-key isearch-mode-map (kbd "C-o")
