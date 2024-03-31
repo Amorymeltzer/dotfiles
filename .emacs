@@ -1411,6 +1411,20 @@ current buffer" t)
   (lambda () (interactive)
     (let ((case-fold-search isearch-case-fold-search))
       (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
+;; Search the project for isearch's current search term
+;; <https://blog.chmouel.com/posts/emacs-isearch/#do-a-project-search-from-a-search-term>
+(defun project-search-from-isearch ()
+  (interactive)
+  (let ((query (if isearch-regexp
+		   isearch-string
+		 (regexp-quote isearch-string))))
+    (isearch-update-ring isearch-string isearch-regexp)
+    (let (search-nonincremental-instead)
+      (ignore-errors (isearch-done t t)))
+    (project-find-regexp query)))
+(define-key isearch-mode-map (kbd "C-f") 'my-project-search-from-isearch)
+
+
 
 ;; Visual feedback for regex replace
 ;; https://github.com/benma/visual-regexp.el
