@@ -2089,6 +2089,8 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; vc-follow-symlinks does the trick?
 ;; https://github.com/magit/magit/issues/2250#issuecomment-138906601
 (setq vc-follow-symlinks t)
+;; Unrelated, but I'm just using git, no need for any others
+(setq vc-handled-backends '(Git))
 ;; git-commit-style-convention-checks take overlong-summary-line if want to
 ;; ensure git commit is within guidance (git-commit-summary-max-length)
 ;; git-commit-turn-on-flyspell ???
