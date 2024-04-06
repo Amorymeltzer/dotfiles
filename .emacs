@@ -62,7 +62,8 @@
 
 ;;;;;;;;; BEGIN
 ;; Enter debugger on error
-(setq debug-on-error t)
+(setq debug-on-error t
+      init-file-debug t)
 
 ;; UTF-8 always, always, always
 (set-default-coding-systems 'utf-8)
