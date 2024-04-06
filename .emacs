@@ -1511,9 +1511,10 @@ current buffer" t)
 (setq
  savehist-autosave-interval 60 ; Default 300
  savehist-ignored-variables (quote (ido-cur-list)) ; Not sure what do...
- savehist-additional-variables '(search-ring regexp-search-ring))
+ savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 
-;; Long history, remove dupes
+;; Long history, remove dupes.  Could do `t' for `history-length' to never
+;; truncate, but even though it'd be fine, there's no need?
 (setq history-length 1000
       history-delete-duplicates t)
 
