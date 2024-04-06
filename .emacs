@@ -3072,11 +3072,13 @@ This checks in turn:
 
 ;; cperl always better than perl
 (defalias 'perl-mode 'cperl-mode)
-(add-to-list 'interpreter-mode-alist '("\\(mini\\)?perl5?" . cperl-mode))
 ;; Not complete but pod can be let through
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
+(add-to-list 'auto-mode-alist '("\\.t\\'" . cperl-mode))
 ;; Ensure cgi ends up there too
 (add-to-list 'auto-mode-alist '("\\.[cC][gG][iI]\\'" . cperl-mode))
+;; Really?
+(add-to-list 'interpreter-mode-alist '("\\(mini\\)?perl5?" . cperl-mode))
 
 ;; Perldoc in emacs
 (defalias 'perldoc 'cperl-perldoc)
