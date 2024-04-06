@@ -314,8 +314,10 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 (unless (<= libgnutls-version 30603)
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 ;; In theory it'd be nice to set package-archive-priorities, but in practice
-;; there's no overlap between MELPA and GNU ELPA.  Added in 25.1
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; there's no overlap between MELPA and GNU ELPA.  Added in 25.1.  However, with
+;; the new addition of nongnu, maybe I *should* FIXME TODO
+(unless (assoc-default "melpa" package-archives)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/")))
 ;; Only include releases
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
