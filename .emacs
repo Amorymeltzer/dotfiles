@@ -1504,7 +1504,9 @@ current buffer" t)
 
 ;; minibuffer window expands vertically as necessary to hold the text that you
 ;; put in the minibuffer
-(setq resize-mini-windows t)
+(setq resize-mini-windows t
+      ;; Let it grow a bit even; default 0.25
+      max-mini-window-height 0.33)
 
 ;; Save minibuffer history
 (savehist-mode 1)
