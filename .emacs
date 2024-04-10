@@ -808,7 +808,13 @@ Used for insertion into the dashboard."
       ;; '(flycheck-highlighting-mode 'lines
       ;; Slow in python mode, but neat regardless
       flycheck-highlighting-mode 'sexps
-      flycheck-mode-line-prefix "Fly"	; default FlyC
+
+      flycheck-mode-line-prefix "Fly"	;default FlyC
+      ;; Recently in <https://github.com/flycheck/flycheck/pull/2035> the
+      ;; default behavior of no errors defaulted to showing ":0" so we can undo
+      ;; that, but also maybe a checkmark is nice?  Not like me to use emoji.
+      ;; flycheck-mode-success-indicator ""
+      flycheck-mode-success-indicator "✔︎"
 
       flycheck-markdown-markdownlint-cli-config ".markdownlintrc"
 
@@ -3709,7 +3715,7 @@ Uses `cperl--get-current-subroutine-name'."
 ;; At the end so that nothing throws an error
 (require 'diminish)
 (diminish 'auto-complete-mode "ac")
-(diminish 'flymake-mode "fly")
+(diminish 'flymake-mode "flym")
 (diminish 'flyspell-mode "sp")
 (eval-after-load "emmet-mode" '(diminish 'emmet-mode "emm"))
 (diminish 'isearch-mode)
