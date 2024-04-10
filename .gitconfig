@@ -68,7 +68,7 @@ gpgSign = true
 # "dev" as a third option when main or master are not found.  This is only
 # possible since we're using the -m1 option for grep.
 default-branch = "!git branch --sort=-refname | grep -o -m1 '\\b\\(main\\|master\\|dev\\)\\b'"
-	
+
 
 h = help
 which = help # bash hangover
