@@ -146,7 +146,7 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;; here, then make use of it later in the flycheck section.
 ;; Weird, can I do just the text, not background?  Or, need to customize I
 ;; guess, that's a flycheck-color-mode-line thing I think FIXME TODO
-(defface flycheck-mode-line-color
+(defface flycheck-mode-line-color-face
   '((t))
   "Face with which to color the Flycheck mode-line status text
  via flycheck-color-mode-line-mode."
@@ -265,7 +265,7 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 		      (not (string= "no-checker" flycheck-last-status-change))
 		      (not (string= "not-checked" flycheck-last-status-change)))
 		 ;; (flycheck-mode-line-status-text)))
-		 (propertize (flycheck-mode-line-status-text) 'face 'flycheck-mode-line-color)))
+		 (propertize (flycheck-mode-line-status-text) 'face 'flycheck-mode-line-color-face)))
        " "
 
        ;; Add the time, date, and emacs server uptime (maybe dumb).  The uptime
@@ -863,7 +863,7 @@ POS defaults to `point'."
   ;; https://github.com/flycheck/flycheck-color-mode-line
   (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
   (with-eval-after-load 'flycheck-color-mode-line
-    (setq flycheck-color-mode-line-face-to-color 'flycheck-mode-line-color
+    (setq flycheck-color-mode-line-face-to-color 'flycheck-mode-line-color-face
 	  flycheck-color-mode-line-show-running t
 	  )))
 
