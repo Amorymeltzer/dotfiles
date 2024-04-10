@@ -2489,6 +2489,13 @@ when in source code modes such as python-mode or perl-mode" t)
 (vhl/install-extension 'undo-tree)
 
 
+;; smartscan, go to next/previous symbol at point with M-n/M-p
+;; <https://github.com/mickeynp/smart-scan> Was I really not using M-n/M-p in
+;; prog modes beforehand?  Not great about camelCase?  Maybe remove FIXME TODO
+(require 'smartscan)
+(add-hook 'prog-mode-hook 'smartscan-mode)
+
+
 ;; http://github.com/rejeep/emacs/blob/master/rejeep-defuns.el
 (defun nuke-all-buffers ()
   "Kill all buffers, leaving *scratch* only."
