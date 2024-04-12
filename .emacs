@@ -3372,6 +3372,12 @@ Uses `cperl--get-current-subroutine-name'."
 ;; (require 'pretty-mode)
 
 
+;; I don't use the calendar, but useful?  `calendar-location-name' just breaks
+;; things, and the default uses lat-long anyway.  Defined in priv-env.bash
+(setq calendar-latitude (string-to-number (getenv "LATITUDE")))
+(setq calendar-longitude (string-to-number (getenv "LONGITUDE")))
+
+
 ;; Some potentially useful stuff from Magnars https://github.com/magnars/.emacs.d
 ;; Rename file and buffer http://whattheemacsd.com/file-defuns.el-01.html
 (defun rename-current-buffer-file ()
