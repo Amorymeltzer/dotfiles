@@ -1,7 +1,9 @@
 ;;; amory-reference-functions.el --- Reference functions, mainly from
 ;;; http://svn.red-bean.com/repos/kfogel/trunk/.emacs
 
-;; The genetic code stuff needs to fixed ;;;;;; ##### FIXME TODO
+;; The genetic code stuff needs to fixed FIXME TODO
+;; Add some of John McCarthy units: TODO
+;; <http://www-formal.stanford.edu/jmc/facts.txt> and <https://github.com/armcknight/john-mccarthy-numerical-facts/tree/main>
 
 ;; Reference tables
 (defconst amory-recentf-help
