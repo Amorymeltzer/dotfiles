@@ -3374,8 +3374,15 @@ Uses `cperl--get-current-subroutine-name'."
 
 ;; I don't use the calendar, but useful?  `calendar-location-name' just breaks
 ;; things, and the default uses lat-long anyway.  Defined in priv-env.bash
-(setq calendar-latitude (string-to-number (getenv "LATITUDE")))
-(setq calendar-longitude (string-to-number (getenv "LONGITUDE")))
+(eval-after-load 'solar
+	'(progn
+		 ;; 24-hour time better
+		 (setq calendar-time-display-form '(24-hours ":" minutes am-pm
+	      (if time-zone " (")
+	      time-zone
+	      (if time-zone ")")))
+		 (setq calendar-latitude (string-to-number (getenv "LATITUDE")))
+		 (setq calendar-longitude (string-to-number (getenv "LONGITUDE")))))
 
 
 ;; Some potentially useful stuff from Magnars https://github.com/magnars/.emacs.d
