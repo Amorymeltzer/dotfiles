@@ -301,6 +301,10 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;; (size-indication-mode t)
 
 
+;; Add macOS keychain to auth sources?
+(add-to-list 'auth-sources 'macos-keychain-generic)
+(add-to-list 'auth-sources 'macos-keychain-internet)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package
@@ -998,7 +1002,7 @@ POS defaults to `point'."
     (send-string-to-terminal (concat "\033]2; " (buffer-name) "\007"))))
 (add-hook 'post-command-hook 'xterm-title-update)
 
-
+;;; Autosave and backup
 ;; create a backup file directory
 ;; ` rather than ' needed to selectively evaluate item marked by ,
 ;; https://emacs.stackexchange.com/a/7487/2051
