@@ -317,11 +317,14 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;; Still necessary in 29+? FIXME
 (unless (<= libgnutls-version 30603)
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
-;; In theory it'd be nice to set package-archive-priorities, but in practice
-;; there's no overlap between MELPA and GNU ELPA.  Added in 25.1.  However, with
-;; the new addition of nongnu, maybe I *should* FIXME TODO
+;; I'm setting `package-archive-priorities' just because, and in advance of
+;; adding the new nongnu, but in practice it's not required until then since
+;; there's no overlap between MELPA and GNU ELPA.  Added in 25.1.
 (unless (assoc-default "melpa" package-archives)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/")))
+(setq 'package-archive-priorities
+      '(("melpa" . 9)
+	("gnu" . 6)))
 ;; Only include releases
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
