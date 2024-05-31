@@ -3054,6 +3054,17 @@ This checks in turn:
     (if region (insert region))
     (goto-char (point-max))))
 
+
+;; AI crap
+(require 'gptel)
+(setq gptel-api-key (getenv "OPENAI_API_KEY"))
+(add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+;; Or just run `gptel-end-of-response'
+(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+;; Add a Perl-specific one
+(add-to-list 'gptel-directives '(perl . "You are an expert Senior Perl Developer. You are always correct and helpful. Try to provide brief explanations only, favoring code where appropriate."))
+
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; cperl-mode: Better than perl-mode
 (require 'cperl-mode)
