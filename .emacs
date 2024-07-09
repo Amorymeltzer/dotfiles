@@ -2429,6 +2429,11 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq use-dialog-box nil
       use-file-dialog nil)
 
+;; Don't mess with font size <https://xenodium.com/hey-mouse-dont-mess-with-my-emacs-font-size/>
+(global-set-key (kbd "<pinch>") 'ignore)
+(global-set-key (kbd "<C-wheel-up>") 'ignore)
+(global-set-key (kbd "<C-wheel-down>") 'ignore)
+
 ;; Was exchange-point-and-mark
 (global-set-key (kbd "C-x C-x") 'delete-other-windows)
 ;; aka C-x C-SPC
