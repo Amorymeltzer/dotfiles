@@ -357,6 +357,11 @@ function prompt_command {
 	PS1+="-[$gitprompt\[$Color_Cyan\]]"
     fi
 
+    # Not ideal, but check if emacs server is running
+    if [[ -z "$(pgrep -f 'emacs --daemon')" ]]; then
+	PS1+="-<!e!>"
+    fi
+
     holiday_greeting="$(holiday_greeting.sh)"
     if [[ -n "$holiday_greeting" ]]; then
 	PS1+="\n$holiday_greeting"
