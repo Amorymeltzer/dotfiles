@@ -1,0 +1,21 @@
+#!/usr/bin/env emacs --script
+
+;; https://leancrew.com/all-this/2024/07/happy-2460496/
+
+(require 'calendar)
+
+;; Use current date if no date is given on the command line
+(if (= 3 (length command-line-args-left))
+	(setq my-date (mapcar 'string-to-number command-line-args-left))
+	(setq my-date (calendar-current-date)))
+
+;; Make the conversions and print the results
+(princ
+	(concat
+		"Gregorian:  " (calendar-date-string          my-date)  "\n"
+		"      ISO:  " (calendar-iso-date-string      my-date)  "\n"
+		"    Astro:  " (calendar-astro-date-string    my-date)  "\n"
+		"   Julian:  " (calendar-julian-date-string   my-date)  "\n"
+		"   Hebrew:  " (calendar-hebrew-date-string   my-date)  "\n"
+		"  Islamic:  " (calendar-islamic-date-string  my-date)  "\n"
+		"  Chinese:  " (calendar-chinese-date-string  my-date)  "\n" ))
