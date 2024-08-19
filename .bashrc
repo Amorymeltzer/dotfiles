@@ -1469,7 +1469,7 @@ _diary_completion() {
 
     case "${prev}" in
 	diary|d)
-	    opts="new note notes last show showlast rand random search ss log list remove rm delete stats"
+	    opts="new note notes last show showlast rand random search ss log list onthis memory remove rm delete stats"
 	    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
 	    return 0
 	    ;;

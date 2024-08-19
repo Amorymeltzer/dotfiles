@@ -22,6 +22,7 @@ Usage: $(basename "$0") [-h] [new|note|notes|last|showlast|show|rand|random|sear
   search, ss			Case insensitive search diary entries, with (rip)grep
   log				Commit today's file, only if the directory is managed by git
   list [YYYY[-MM]]		List entries from this month, optionally within the given year or year-month.
+  onthis, memory		Display an entry from this day in another year, if any present
   remove, rm, delete		Remove today's entry, if present
   YYYY-MM-DD			Display the diary entry from a specific day
   stats				Display some basic statistics
@@ -52,7 +53,8 @@ moveDir () {
     cd "$DIARY_DIR" || exit
 }
 
-today=$(date +"%Y-%m-%d").md
+todayDate=$(date +"%Y-%m-%d")
+today="$todayDate.md"
 notesfile='notes.md'
 
 function newDay {
@@ -138,6 +140,15 @@ else
 
 		    cat "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)"
 		fi;;
+			"onthis"|"memory")
+				moveDir
+				pastRe=${todayDate#*-}
+		    pastFile="$(find . -maxdepth 1 -name "*$pastRe.md" -a -not -name "$notesfile" | shuf | head -n 1)"
+				if [[ -n "$pastFile" ]]; then
+					cat "$pastFile"
+				else
+					echo "No memory for this date found"
+				fi;;
 	    "remove"|"rm"|"delete")
 		checkDir
 		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
