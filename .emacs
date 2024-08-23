@@ -2615,6 +2615,12 @@ using `ido-completing-read'."
   (shell-command-on-region (point-min) (point-max) "pbcopy")
   (message "Copied contents of %s" buffer-file-name))
 (global-set-key [(control c) (p)] 'pbcopy-buffer)
+(defun pbcopy-region (start end)
+  "Copy the contents of the selected region to the GUI clipboard."
+  (interactive "r")
+  (shell-command-on-region start end "pbcopy")
+  (message "Copied selected region"))
+
 
 
 ;; Exit in (ansi-)term returns to the emacs buffer
