@@ -358,8 +358,7 @@ function prompt_command {
     fi
 
     # Not ideal, but check if emacs server is running
-    pgrep -qf 'emacs --daemon'
-    if (($? > 0)); then
+    if [[ -z "$(pgrep -f 'emacs --daemon')" ]]; then
 	PS1+="-<!e!>"
     fi
 
