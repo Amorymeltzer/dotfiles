@@ -226,6 +226,14 @@ if [[ -d "$GIT_EXTL_DIR/bash-itunes@illusori" ]]; then
     # Add bash-itunes https://github.com/illusori/bash-itunes
     new_path="$new_path:$GIT_EXTL_DIR/bash-itunes@illusori"
 fi
+if [[ -d "$GIT_EXTL_DIR/video_transcoding@lisamelton/" ]]; then
+    # https://github.com/lisamelton/video_transcoding
+    new_path="$new_path:$GIT_EXTL_DIR/video_transcoding@lisamelton/bin"
+fi
+if [[ -d "$GIT_EXTL_DIR/other_video_transcoding@lisamelton/" ]]; then
+    # https://github.com/lisamelton/other_video_transcoding
+    new_path="$new_path:$GIT_EXTL_DIR/other_video_transcoding@lisamelton"
+fi
 # Personal lockquote script
 if [[ -d "$GIT_PERS_DIR/lockquote" ]]; then
     new_path="$new_path:$GIT_PERS_DIR/lockquote"
