@@ -699,7 +699,9 @@ else
     # Extended (Light)) are fine and probably better for comments.  That would
     # of course imply that I'd need to specify a method for switching between
     # Coldark-Cold and Coldark-Dark depending on the status of light/dark mode
-    # (See <https://github.com/sharkdp/bat/issues/1746>).  Sigh.
+    # (See <https://github.com/sharkdp/bat/issues/1746>).  Sigh.  Maybe things
+    # are different now with <https://github.com/sharkdp/bat/pull/2896>?  Should
+    # investigate FIXME TODO
     # export BAT_THEME='Coldark-Cold'
 
     # Preserve default behavior for cat but use bat
@@ -1671,6 +1673,17 @@ alias tron='lightcycle'
 # Hackers script https://twitter.com/paultag/status/644160355409752065
 # 2>&1 | less -S for chunks
 alias zerocool='nc z.ero.cool 1337'
+# Rebels in the Sky, space pirates playing basketball game
+# <https://github.com/ricott1/rebels-in-the-sky> and
+# <https://rebels.frittura.org>
+function rebels-in-the-sky() {
+	echo "Loading Rebels in the Sky..."
+	echo "Run `mpv https://radio.frittura.org/rebels.ogg` for music"
+	echo "ESC to quit"
+	sleep 1
+	ssh rebels.frittura.org -p 3788
+}
+
 
 # Lock the screen (when going AFK)
 # Busted in monterey FIXME TODO
