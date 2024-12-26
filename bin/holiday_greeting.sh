@@ -16,7 +16,7 @@ case $(date +"%B %d") in
     "August 12") holgreet="Happy Birthday!";;
     "October 31") holgreet="${Color_Red_Bold}Happy Halloween!${Color_zOff}";;
     "December 24") holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve!${Color_zOff}";;
-    "December 25") holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas!${Color_zOff}!";;
+    "December 25") holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas!${Color_zOff}";;
     "December 31") holgreet="Happy New Year's Eve!";;
     *) exit 0;;
 esac
