@@ -246,9 +246,10 @@ else
 			    fi
 			    echo
 			else
-			    echo -n "entry"
+			    echo "entry"
 			fi
 		    done
+				echo
 		    echo "$total total"
 		else
 		    echo "No entries found"
