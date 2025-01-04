@@ -2664,7 +2664,7 @@ using `ido-completing-read'."
   (save-excursion
     (let ((fixes '((342396 . "\"") (342392 . "'") (342387 . "--")
 		   (8220 . "\"") (8221 . "\"")
-		   (342397 . "\"") (342393 . "'"))))
+		   (342397 . "\"") (342393 . "'") (8217 . "'"))))
       (goto-char (point-min))
       (while (not (eobp))
 	(let* ((this (char-after (point)))
