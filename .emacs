@@ -2455,8 +2455,10 @@ when in source code modes such as python-mode or perl-mode" t)
       undo-tree-visualizer-diff t
       ;; Larger size limits for undo, this might get unwieldy now that I'm
       ;; saving the history across sessions
+			;; FIXME TODO Actually understand these
       undo-limit 32000000	 ;; 160000
-      undo-outer-limit 24000000) ;; 24000000
+      undo-outer-limit 24000000 ;; 24000000
+      undo-strong-limit 60000000) ;; 240000
 
 ;; Keep region when undoing in region http://whattheemacsd.com/my-misc.el-02.html
 (defadvice undo-tree-undo (around keep-region activate)
