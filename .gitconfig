@@ -387,6 +387,8 @@ short = sha
 # Find collisions from a given prefix
 collisions = "!r() { git rev-list --all | grep ^$1 | while read commit; do git --no-pager log -n1 --pretty=format:'%C(blue)%H %C(reset)%C(dim)%C(italic)%ci %C(dim)%C(magenta)%an %C(auto)%s%n' $commit; done; }; r"
 
+root = rev-parse --show-toplevel
+
 unstage = reset HEAD --
 re = reset
 reh = reset --hard

@@ -96,7 +96,7 @@ sis = "!git si $(git split-from)"
 sisc = "!git si --cached $(git split-from)"
 
 
-# Depends on hub
+# Depends on hub FIXME TODO
 home = browse
 repo = browse
 pulls = browse -- pulls
