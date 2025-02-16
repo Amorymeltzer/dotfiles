@@ -209,6 +209,11 @@ elif [[ -n "$BREW_INSTALLED" ]]; then
     new_path="$new_path:$(python -c 'import site; print(site.getsitepackages()[0])')"
 fi
 unalias python
+# With pip and python stuff installed and managed via homebrew, any python pip
+# installs that are managed separately/externally are ideally in a virtual
+# environment venv but possibly via pipx, and thus in .local
+new_path="$new_path:$HOME/.local/bin"
+
 # Tack on original path
 new_path="$new_path:$orig_path"
 
