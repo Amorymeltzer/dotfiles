@@ -26,7 +26,7 @@ _ffmpeg()
 	if [ -n "$prev" ] && [ "${prev:0:1}" = "-" ]; then
 		case "$prev" in
 			-i)  # Input file
-				COMPREPLY=( $(compgen -f -- "$cur") ) ;;
+				COMPREPLY=( $(compgen -o filenames -- "$cur") ) ;;
 			-ac|-a:c)
 				COMPREPLY=( $(compgen -W "1 2 3 4 5 6 7 22" -- "$cur") ) ;;
 			-filter|-filter:v|-filter:a)
