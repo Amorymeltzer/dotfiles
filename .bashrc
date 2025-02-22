@@ -956,7 +956,9 @@ function eserver-status() {
 alias killemacs-server="\emacsclient -e '(kill-emacs)'"
 alias kemacs-server='killemacs-server'
 alias ke='kemacs-server'
-alias kef="\emacsclient -e '(server-force-delete)'"
+alias killemacs-server-force="\emacsclient -e '(server-force-delete)'"
+alias kemacs-server-force='killemacs-server-force'
+alias kef='killemacs-server-force'
 alias emacsclient='\emacsclient -tqu '
 alias emacs='emacsclient '
 # Recompile all elisp files, with proper warnings/output
