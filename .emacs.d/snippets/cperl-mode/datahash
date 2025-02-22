@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: datahash
+# key: dh
+# --
+
+{author   => '${1:author}',
+   notes    => q{},
+   title    => '${2:title}',
+   type     => '${3:$$(yas-choose-value '("book" "novella"))}',
+   start    => '${4:start}',
+   end      => '${5:end}',
+   category => '${6:$$(yas-choose-value '("f" "n"))}',
+   gender   => '${7:$$(yas-choose-value '("f" "m" "b" "n"))}',
+   medium   => '${8:$$(yas-choose-value '("p" "e"))}',
+   line     => '`yas-selected-text`'
+   },
+   
