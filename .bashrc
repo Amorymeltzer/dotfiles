@@ -2234,6 +2234,12 @@ function slashdot() {
 function hackernews() {
     curl -s "https://news.ycombinator.com/news" | perl -ne 'print "$1\n" if /class=\"storylink\">(.*)<\/a><span class=\"sitebit comhead\">/;'
 }
+# Five random indieweb links, via <https://news.ycombinator.com/item?id=43148408>
+function indieweb {
+    for _ in {1..5}; do
+	curl -sSw '%header{location}\n' https://indieblog.page/random | sed -e s/.utm_.*$//
+      done
+}
 
 # Test how fast the machine is, 32GB
 function writetest() {
