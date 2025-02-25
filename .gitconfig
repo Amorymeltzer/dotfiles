@@ -541,10 +541,15 @@ autoCorrect = 15
 defaultBranch = main
 
 [diff]
+# Default is myers/default, but maybe minimal would be good?  I really need to dig more into what patience does TODO
+algorithm = histogram
 compactionHeuristic = true
 noprefix = true
 guitool = opendiff
+# Maybe this should be plain? TODO
 colorMoved = default # zebra (for now).  Already the default but set just in case
+# Use (i)ndex, (w)ork tree, (c)ommit, and (o)bject instead of a and b in diffs
+mnemonicPrefix = true
 
 [difftool]
 prompt = false
