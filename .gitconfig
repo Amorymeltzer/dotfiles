@@ -656,6 +656,7 @@ gpgSign = true
 [rerere]
 # Tries to remember resolutions of merge conflicts for the next time, seems useful in theory?
 enabled = true
+autoUpdate = true
 
 [filter "media"]
 required = true
