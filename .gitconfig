@@ -505,6 +505,12 @@ missingCommitsCheck = warn
 [apply]
 whitespace = warn
 
+[column]
+# ui = auto
+
+[branch]
+sort = -committerdate
+
 [log]
 # --date=human added in 2.21, used in local-config, see also lr and recent-branches-by-commit
 date = local
@@ -636,6 +642,8 @@ rerereResolved = 30		# Default is 15
 rerereUnresolved = 30		# Default is 15
 
 [tag]
+# Sort by version, not alphanum
+sort = version:refname
 # Implies annotated, which is good behavior anyway
 gpgSign = true
 # gpg.program set in include
