@@ -719,7 +719,7 @@ if [[ -f $(command -v fzf) ]]; then
     if [[ -f $(command -v fd) ]]; then
 	# Show hidden files, including those hidden by .gitignore, but *don't*
 	# follow symlinked directories (do, however, include the links themselves)
-	export FZF_DEFAULT_COMMAND='fd --type f --type l --strip-cwd-prefix --hidden --exclude .git --no-ignore'
+	export FZF_DEFAULT_COMMAND='fd --type f --type l --strip-cwd-prefix --hidden --exclude .git --exclude node_modules --no-ignore'
 
 	# Also use fd for fuzzy completion of paths and directories
 	_fzf_compgen_path() {
