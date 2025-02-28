@@ -2896,8 +2896,6 @@ idle for SECS seconds." t)
 ;; writegood-mode https://github.com/bnbeckwith/writegood-mode
 (autoload 'writegood-mode "writegood-mode" "Colorize issues with the writing
 in the buffer." t)
-;; eprime-mode https://github.com/AndrewHynes/eprime-mode
-(autoload 'eprime-mode "eprime-mode" "Check text conforms to E', disallowing forms of \"to be\".")
 
 ;; webjump for searching easily
 (require 'webjump)
