@@ -194,7 +194,8 @@ See also `enable-theme-functions' and `disable-theme-functions'")
        ;; whatever) but it's a drag for helpful mode, etc.  Not sure if there's
        ;; a good way to have this be mode-specific, or if it's worth it. TODO
        ;; Additionally, I want different a different face depending on whether
-       ;; we're in light or night mode.
+       ;; we're in light or night mode.  Also, this should really handle the
+       ;; case where timu-macos-theme isn't available FIXME
        '(:eval (if (equal timu-macos-flavour "dark")
 		   (propertize "%b " 'face 'font-lock-function-name-face)
 		 (propertize "%b " 'face 'font-lock-keyword-face)))
@@ -340,6 +341,20 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 
 ;; This must come before configurations of installed packages
 (package-initialize)
+
+;; Get list of available packages
+ (unless package-archive-contents
+   (package-refresh-contents))
+
+;; Then install any missing ones
+(dolist (pkg package-selected-packages)
+  (unless (package-installed-p pkg)
+    (if (assoc pkg package-archive-contents)
+	(progn
+	  ;; If the package is available, install it
+	  (package-install pkg))
+      (message "NOTE: Package %s is not available in the archives." pkg))))
+
 
 ;; Should probably install auto-package-update
 ;; https://github.com/rranelli/auto-package-update.el
