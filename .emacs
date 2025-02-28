@@ -350,9 +350,11 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 (dolist (pkg package-selected-packages)
   (unless (package-installed-p pkg)
     (if (assoc pkg package-archive-contents)
-	(progn
-	  ;; If the package is available, install it
-	  (package-install pkg))
+	(condition-case err
+	    ;; If the package is available, install it
+	    (package-install pkg)
+	  (file-error
+	   (message "Error installing package %s: %s" pkg (error-message-string err))))
       (message "NOTE: Package %s is not available in the archives." pkg))))
 
 
