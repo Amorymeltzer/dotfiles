@@ -140,15 +140,15 @@ else
 
 		    cat "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)"
 		fi;;
-			"onthis"|"memory")
-				moveDir
-				pastRe=${todayDate#*-}
-		    pastFile="$(find . -maxdepth 1 -name "*$pastRe.md" -a -not -name "$notesfile" | shuf | head -n 1)"
-				if [[ -n "$pastFile" ]]; then
-					cat "$pastFile"
-				else
-					echo "No memory for this date found"
-				fi;;
+	    "onthis"|"memory")
+		moveDir
+		pastRe=${todayDate#*-}
+		pastFile="$(find . -maxdepth 1 -name "*$pastRe.md" -a -not -name "$notesfile" | shuf | head -n 1)"
+		if [[ -n "$pastFile" ]]; then
+		    cat "$pastFile"
+		else
+		    echo "No memory for this date found"
+		fi;;
 	    "remove"|"rm"|"delete")
 		checkDir
 		[ -f "$today" ] && rm "$today" || echo "No entry for today found";;
@@ -249,7 +249,7 @@ else
 			    echo "entry"
 			fi
 		    done
-				echo
+		    echo
 		    echo "$total total"
 		else
 		    echo "No entries found"
