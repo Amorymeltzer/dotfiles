@@ -78,6 +78,17 @@ function newDay {
     fi
 }
 
+showFile() {
+    local file="$1"
+
+    if [[ -t 1 ]] && [[ $(wc -l < "$file") -gt "$(tput lines)" ]]; then
+	less "$file"
+    else
+	cat "$file"
+    fi
+}
+
+
 if [[ ! $1 ]]; then
     newDay
     $VISUAL "$today"
@@ -89,7 +100,7 @@ else
     function showDate {
 	moveDir
 	if date="${1/.md}" && validDate "$date" && [[ -f "$date.md" ]]; then
-	    cat "$date.md"
+	    showFile "$date.md"
 	else
 	    dienice "No entry for $date"
 	fi
@@ -101,7 +112,7 @@ else
     else
 	function showLast {
 	    moveDir
-	    cat "$(find -s . -maxdepth 1 -name '*.md' | tail -n 3 | grep -v "$today" | grep -v "$notesfile" | tail -n 1)"
+	    showFile "$(find -s . -maxdepth 1 -name '*.md' | tail -n 3 | grep -v "$today" | grep -v "$notesfile" | tail -n 1)"
 	}
 
 	case "$1" in
@@ -138,14 +149,14 @@ else
 			}
 		    fi
 
-		    cat "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)"
+		    showFile "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)"
 		fi;;
 	    "onthis"|"memory")
 		moveDir
 		pastRe=${todayDate#*-}
 		pastFile="$(find . -maxdepth 1 -name "*$pastRe.md" -a -not -name "$notesfile" | shuf | head -n 1)"
 		if [[ -n "$pastFile" ]]; then
-		    cat "$pastFile"
+		    showFile "$pastFile"
 		else
 		    echo "No memory for this date found"
 		fi;;
