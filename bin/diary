@@ -123,6 +123,11 @@ else
 		perl -MList::Util=shuffle -e 'print shuffle(<>);';
 	    }
 	fi
+	# Get a random file matching the given pattern
+	function getRandom {
+	    local filePattern="$1"
+	    find . -maxdepth 1 -name "$filePattern" -a -not -name "$notesfile" | shuf | head -n 1
+	}
 
 	case "$1" in
 	    "help"|"h") help;;
@@ -149,12 +154,12 @@ else
 		    find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | sed 's|^\./||' | sort | column
 		else
 		    # Display a random entry
-		    showFile "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)"
+		    showFile "$(getRandom "$filere")"
 		fi;;
 	    "onthis"|"memory")
 		moveDir
 		pastRe=${todayDate#*-}
-		pastFile="$(find . -maxdepth 1 -name "*$pastRe.md" -a -not -name "$notesfile" | shuf | head -n 1)"
+		pastFile="$(getRandom "*$pastRe.md")"
 		if [[ -n "$pastFile" ]]; then
 		    showFile "$pastFile"
 		else
