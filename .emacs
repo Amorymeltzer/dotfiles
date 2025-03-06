@@ -98,9 +98,6 @@
   "Hook run after a color theme is loaded using `load-theme'.
 
 See also `enable-theme-functions' and `disable-theme-functions'")
-;; (defadvice load-theme (after run-after-load-theme-hook activate)
-;;   "Run `after-load-theme-hook'."
-;;   (run-hooks 'after-load-theme-hook))
 (advice-add 'load-theme :after
 	    (lambda (&rest _)
 	      "Run `after-load-theme-hook'."
@@ -108,7 +105,7 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 
 
 
-;; Some polyfills for emacs older than 27.1; toolforge is on 26.1
+;; Some polyfills for emacs older than 27.1; toolforge is on 26.1 FIXME TODO
 (unless (fboundp 'seq-remove)
   (defalias 'seq-remove 'gnus-remove-if))
 (unless (fboundp 'seq-filter)
@@ -369,9 +366,9 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;;     (package-install package)
 ;;     (require 'use-package)
 ;;     (setq use-package-always-ensure t
-;; 	  use-package-verbose t
-;; 	  ;; In theory, calling `use-package-report' would display some info
-;; 	  use-package-compute-statistics t)))
+;;	  use-package-verbose t
+;;	  ;; In theory, calling `use-package-report' would display some info
+;;	  use-package-compute-statistics t)))
 
 
 ;; paradox https://github.com/Malabarba/paradox
@@ -438,7 +435,7 @@ Record that in `paradox--backups', but do nothing if
 ;; Want different color highlighting (`region' face) depending on light or night
 ;; mode, and at the moment, timu-macos doesn't have a hook (it should!), so
 ;; let's define some advice for it.  We could define our own hook and have it
-;; run that, but, you know, six and one half.  `defadvice' still seems easier...
+;; run that, but, you know, six and one half.
 (advice-add 'timu-macos-toggle-dark-light :after
 	    (lambda ()
 	      "Set face attribute for `region' based on `timu-macos-flavour'."
@@ -2472,22 +2469,22 @@ when in source code modes such as python-mode or perl-mode" t)
       undo-tree-visualizer-diff t
       ;; Larger size limits for undo, this might get unwieldy now that I'm
       ;; saving the history across sessions
-			;; FIXME TODO Actually understand these
+      ;; FIXME TODO Actually understand these
       undo-limit 32000000	 ;; 160000
       undo-outer-limit 24000000 ;; 24000000
       undo-strong-limit 60000000) ;; 240000
 
 ;; Keep region when undoing in region http://whattheemacsd.com/my-misc.el-02.html
-(defadvice undo-tree-undo (around keep-region activate)
+(define-advice undo-tree-undo (:around (orig-fun &rest args) keep-region)
   (if (use-region-p)
       (let ((m (set-marker (make-marker) (mark)))
 	    (p (set-marker (make-marker) (point))))
-	ad-do-it
+	(apply orig-fun args)
 	(goto-char p)
 	(set-mark m)
 	(set-marker p nil)
 	(set-marker m nil))
-    ad-do-it))
+    (apply orig-fun args)))
 
 ;; Way more likely to remember
 (defalias 'uppercase-dwim 'upcase-dwim)
@@ -2643,17 +2640,17 @@ using `ido-completing-read'."
 
 
 ;; Exit in (ansi-)term returns to the emacs buffer
-(defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
+(define-advice term-sentinel (:around (orig-fun proc msg) my-advice-term-sentinel)
   (if (memq (process-status proc) '(signal exit))
-      (let ((buffer (process-buffer proc))) ad-do-it
-	   (kill-buffer buffer)) ad-do-it))
-(ad-activate 'term-sentinel)
+      (let ((buffer (process-buffer proc)))
+	(funcall orig-fun proc msg)
+	(kill-buffer buffer))
+    (funcall orig-fun proc msg)))
 
 ;; Always use new bash, don't ask
 (defvar my-term-shell shell-file-name)
-(defadvice ansi-term (before force-bash)
+(define-advice ansi-term (:before (&rest _) force-bash)
   (interactive (list my-term-shell)))
-(ad-activate 'ansi-term)
 ;; Make links in man pages, etc., work, in ansi-mode
 (add-hook 'term-mode-hook 'goto-address-mode)
 
@@ -3815,9 +3812,8 @@ Uses `cperl--get-current-subroutine-name'."
 (defmacro rename-modeline (package-name mode new-name)
   "Rename the modeline lighter of PACKAGE-NAME to NEW-NAME"
   `(eval-after-load ,package-name
-     '(defadvice ,mode (after rename-modeline activate)
+     '(define-advice ,mode (:after (&rest _) rename-modeline)
 	(setq mode-name ,new-name))))
-
 (rename-modeline "lisp-mode" emacs-lisp-mode "Elisp")
 (rename-modeline "sh-script" sh-mode "Shell")
 (rename-modeline "js2-mode" js2-mode "Js2")
