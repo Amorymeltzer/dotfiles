@@ -137,8 +137,7 @@ else
 		fi
 
 		if [[ "$1" == "list" ]]; then
-		    # Remove the leading ./ ? FIXME TODO
-		    find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | sort
+		    find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | sed 's|^\./||' | sort | column
 		else
 		    # Display a random entry
 		    # OSX doesn't have shuf, approximate it via perl
