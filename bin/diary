@@ -63,10 +63,9 @@ function newDay {
 	title=$(date +"%A, %B %d, %Y")
 
 	# Try to check ssid, insert a reminder to note location if not at home.
-	# Broken in macOS Sonoma 14.4
-	# if [[ -n $(command -v ssid) ]] && [[ -n $HOME_SSID ]] && [[ $HOME_SSID != "$(ssid)" ]]; then
-	#     away=" (INSERTLOCATION)"
-	# fi
+	if [[ -n $(command -v ssid) ]] && [[ -n $HOME_SSID ]] && [[ $HOME_SSID != "$(ssid)" ]]; then
+	    away=" (INSERTLOCATION)"
+	fi
 
 	printf "# %s%s\n\n" "${title}" "${away}" > "$today"
 	notes=$(cat "$notesfile")

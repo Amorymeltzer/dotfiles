@@ -1763,22 +1763,24 @@ alias ipaddr="ifconfig -a | grep 'inet' | grep 'broadcast' | awk '{ print $2 }'"
 alias ipinfo='http -b ipinfo.io/json'
 
 if [[ $OSTYPE == darwin* ]]; then
-    # Should include fallback for no network, etc.  Broken in macOS Sonoma 14.4
-    # in favor of wdutil, but that requires sudo FIXME TODO
-    # function ssid() {
-    # 	local ssid
-    # 	ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | sed "s/.*: //")
+    # Should include fallback for no network, etc. FIXME TODO
+    function ssid() {
+	local ssid
+	# <https://stackoverflow.com/a/79123269/2521092>
+	# Could probably just default to en0 and skip the `networksetup` call,
+	# but why not be more portable?
+	ssid=$(ipconfig getsummary "$(networksetup -listallhardwareports | awk '/Hardware Port: Wi-Fi/{getline; print $2}')" | awk -F ' SSID : ' '/ SSID : / {print $2}')
 
-    # 	if [ "$1" ]; then
-    # 	    if echo "$ssid" | grep -qw "$1"; then
-    # 		echo :
-    # 	    fi
-    # 	else
-    # 	    echo "$ssid"
-    # 	fi
-    # }
+	if [ "$1" ]; then
+	    if echo "$ssid" | grep -qw "$1"; then
+		echo :
+	    fi
+	else
+	    echo "$ssid"
+	fi
+    }
     # Should probably export more/all of these... FIXME TODO
-    # export -f ssid
+    export -f ssid
 
     # Toggle wifi status, via <http://apple.stackexchange.com/a/36897/53735>
     # Could try and handle determining the interface, but meh
