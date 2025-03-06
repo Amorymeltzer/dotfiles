@@ -78,15 +78,6 @@ function newDay {
     fi
 }
 
-showFile() {
-    local file="$1"
-
-    if [[ -t 1 ]] && [[ $(wc -l < "$file") -gt "$(tput lines)" ]]; then
-	less "$file"
-    else
-	cat "$file"
-    fi
-}
 
 
 if [[ ! $1 ]]; then
@@ -115,6 +106,24 @@ else
 	    showFile "$(find -s . -maxdepth 1 -name '*.md' | tail -n 3 | grep -v "$today" | grep -v "$notesfile" | tail -n 1)"
 	}
 
+	showFile() {
+	    local file="$1"
+
+	    if [[ -t 1 ]] && [[ $(wc -l < "$file") -gt "$(tput lines)" ]]; then
+		less "$file"
+	    else
+		cat "$file"
+	    fi
+	}
+
+	# macOS doesn't have shuf, approximate it via perl
+	# <https://stackoverflow.com/a/6511327/2521092>
+	if [[ ! $(command -v 2>/dev/null shuf) ]]; then
+	    function shuf() {
+		perl -MList::Util=shuffle -e 'print shuffle(<>);';
+	    }
+	fi
+
 	case "$1" in
 	    "help"|"h") help;;
 	    "new") newDay;;
@@ -140,14 +149,6 @@ else
 		    find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | sed 's|^\./||' | sort | column
 		else
 		    # Display a random entry
-		    # OSX doesn't have shuf, approximate it via perl
-		    # https://stackoverflow.com/a/6511327/2521092
-		    if [[ ! $(command -v 2>/dev/null shuf) ]]; then
-			function shuf() {
-			    perl -MList::Util=shuffle -e 'print shuffle(<>);';
-			}
-		    fi
-
 		    showFile "$(find . -maxdepth 1 -name "$filere" -a -not -name "$notesfile" | shuf | head -n 1)"
 		fi;;
 	    "onthis"|"memory")
