@@ -456,9 +456,8 @@ Record that in `paradox--backups', but do nothing if
  auto-dark-polling-interval-seconds 10
  ;; The timu-macos theme is weird, with just one actual theme but a function to
  ;; toggle between dark and light mode.  Thankfully, auto-dark offers hooks!
- ;; Can use nil after https://github.com/LionyxML/auto-dark-emacs/issues/41 TODO
- auto-dark-dark-theme 'timu-macos
- auto-dark-light-theme 'timu-macos)
+ ;; This is just in case?  Prior to 0.13 it was auto-dark-(dark|light)-theme
+ auto-dark-themes '((timu-macos) (timu-macos)))
 (add-hook 'auto-dark-dark-mode-hook #'timu-macos-toggle-dark-light)
 (add-hook 'auto-dark-light-mode-hook #'timu-macos-toggle-dark-light)
 (auto-dark-mode t)
