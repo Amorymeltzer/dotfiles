@@ -104,14 +104,6 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 	      (run-hooks 'after-load-theme-hook)))
 
 
-
-;; Some polyfills for emacs older than 27.1; toolforge is on 26.1 FIXME TODO
-(unless (fboundp 'seq-remove)
-  (defalias 'seq-remove 'gnus-remove-if))
-(unless (fboundp 'seq-filter)
-  (defalias 'seq-filter 'gnus-remove-if-not))
-
-
 ;; Modeline customizations
 ;; Probably kind of pointless given I'm manually defining the format below?
 ;; Time
