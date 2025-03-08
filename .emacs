@@ -304,7 +304,7 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
 ;; Something to do with a specific GNUTLS version (currently 30615), this exact check is from
 ;; https://github.com/syl20bnr/spacemacs/blob/d46eacd83842815b24afcb2e1fee5c80c38187c5/core/core-emacs-backports.el
-;; Still necessary in 29+? FIXME
+;; Still necessary in 28+ or 29+? FIXME
 (unless (<= libgnutls-version 30603)
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 ;; In theory it'd be nice to set `package-archive-priorities', but in practice
@@ -332,8 +332,8 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 (package-initialize)
 
 ;; Get list of available packages
- (unless package-archive-contents
-   (package-refresh-contents))
+(unless package-archive-contents
+  (package-refresh-contents))
 
 ;; Then install any missing ones
 (dolist (pkg package-selected-packages)
@@ -406,6 +406,8 @@ Record that in `paradox--backups', but do nothing if
 
 
 (paradox-enable)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;; themes ;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2421,6 +2423,10 @@ when in source code modes such as python-mode or perl-mode" t)
 (require 'ace-link)
 (ace-link-setup-default)
 
+;; communinfo, provide more url associations for various OSS
+;; <https://codeberg.org/mekeor/communinfo>
+(require 'communinfo)
+(setopt Info-url-alist communinfo-url-alist)
 
 ;; https://github.com/nflath/hungry-delete
 ;; Delete all white space chars at once

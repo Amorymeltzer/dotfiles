@@ -10,26 +10,26 @@
 		  applescript-mode async atom-one-dark-theme auto-complete
 		  auto-dark browse-at-remote browse-kill-ring btc-ticker
 		  buffer-move bug-hunter caroline-theme caser catppuccin-theme
-		  challenger-deep-theme color-identifiers-mode crontab-mode
-		  csv-mode darkokai-theme darktooth-theme dashboard dashboard-ls
-		  define-word diminish dired-gitignore dired-sidebar
-		  discover-my-major dna-mode doom-themes edit-indirect
-		  editorconfig ef-themes eldoc elsa emmet-mode ess expand-region
-		  fancy-narrow feed-discovery fill-column-indicator fillcode
-		  find-file-in-project fireplace flx-ido flycheck
-		  flycheck-checkbashisms flycheck-color-mode-line flycheck-elsa
-		  flycheck-grammarly flycheck-hl-todo flycheck-inline
-		  flycheck-relint flycheck-title flymake git-link git-modes
-		  git-timemachine gitattributes-mode github-dark-vscode-theme
-		  github-explorer gitignore-mode helpful
-		  highlight-escape-sequences highlight-numbers
-		  highlight-parentheses highlight-symbol howdoi html-to-markdown
-		  htmlize hungry-delete ibuffer-sidebar ido-at-point
-		  ido-complete-space-or-hyphen ido-completing-read+ ido-hacks
-		  ido-vertical-mode ido-yes-or-no js-doc js2-mode js2-refactor
-		  json-mode kaolin-themes key-chord know-your-http-well
-		  license-snippets linum-relative lush-theme magit
-		  magit-commit-mark magit-delta magit-todos markdown-mode
+		  challenger-deep-theme color-identifiers-mode communinfo
+		  crontab-mode csv-mode darkokai-theme darktooth-theme dashboard
+		  dashboard-ls define-word diminish dired-gitignore
+		  dired-sidebar discover-my-major dna-mode doom-themes
+		  edit-indirect editorconfig ef-themes eldoc elsa emmet-mode ess
+		  expand-region fancy-narrow feed-discovery
+		  fill-column-indicator fillcode find-file-in-project fireplace
+		  flx-ido flycheck flycheck-checkbashisms
+		  flycheck-color-mode-line flycheck-elsa flycheck-grammarly
+		  flycheck-hl-todo flycheck-inline flycheck-relint
+		  flycheck-title flymake git-link git-modes git-timemachine
+		  gitattributes-mode github-dark-vscode-theme github-explorer
+		  gitignore-mode helpful highlight-escape-sequences
+		  highlight-numbers highlight-parentheses highlight-symbol
+		  howdoi html-to-markdown htmlize hungry-delete ibuffer-sidebar
+		  ido-at-point ido-complete-space-or-hyphen ido-completing-read+
+		  ido-hacks ido-vertical-mode ido-yes-or-no js-doc js2-mode
+		  js2-refactor json-mode kaolin-themes key-chord
+		  know-your-http-well license-snippets linum-relative lush-theme
+		  magit magit-commit-mark magit-delta magit-todos markdown-mode
 		  md-readme moe-theme monokai-pro-theme monokai-theme
 		  nimbus-theme nord-theme nordic-night-theme paradox php-mode
 		  poker pretty-mode rainbow-identifiers rainbow-mode
