@@ -404,6 +404,10 @@ Record that in `paradox--backups', but do nothing if
     (define-key paradox-menu-mode-map "r" nil)))
 (define-key paradox-menu-mode-map "r" #'my/paradox-menu-refresh-data)
 
+;; Lately (since emacs 30+?) paradox has been throwing up an async error when
+;; installing packages.  It's old and creaky but I like it, so this is a
+;; placeholder until something better.  FIXME TODO
+(setq paradox-execute-asynchronously nil)
 
 (paradox-enable)
 
