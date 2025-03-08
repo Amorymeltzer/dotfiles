@@ -1216,7 +1216,7 @@ buffer or region to mardown and display it in a separate window."
 
 ;; Should rename to html-tidy? FIXME TODO
 (defun tidy-then-indent ()
-  "`tidy' a buffer's HTML, then indent it, since `tidy' leaves a buffer looking flat."
+  "`tidy' a buffer's HTML, then indent it, as `tidy' leaves a buffer looking flat."
   (interactive nil html-mode)
   (tidy-buffer)
   (indent-buffer))
@@ -1291,7 +1291,8 @@ current buffer" t)
 
 
 (defun visit-most-recent-file ()
-  "Visits the most recently open file in `recentf-list' that is not already being visited."
+  "Visits the most recently open file in `recentf-list'
+that is not already being visited."
   (interactive)
   (let ((buffer-file-name-list (mapcar 'buffer-file-name (buffer-list)))
 	most-recent-filename)
@@ -2239,7 +2240,7 @@ when in source code modes such as python-mode or perl-mode" t)
   (define-key magit-log-mode-map (kbd "M-'") 'magit-commit-mark-toggle-urgent))
 
 
-;; git-timemachine https://gitlab.com/pidu/git-timemachine
+;; git-timemachine <https://codeberg.org/pidu/git-timemachine>
 ;; Pretty cool!  t to search by commit, b to blame, c to view commit in magit
 (with-eval-after-load "git-timemachine"
   (setq git-timemachine-abbreviation-length 8)
@@ -2805,7 +2806,7 @@ round to ones, tens, etc."
 ;; Maybe tweak to get a list for studying?
 (autoload 'keywiz "keywiz" "Keywiz keybindings guessing game" t)
 ;; Poker
-(autoload 'poker "poker" "Play a game of texas hold 'em poker" t)
+(autoload 'poker "poker" "Play a game of texas hold ='em poker" t)
 ;; Mandelbrot set
 (autoload 'u-mandelbrot "u-mandelbrot" "Make a mandelbrot fractal" t)
 
@@ -3056,7 +3057,8 @@ This checks in turn:
 ;; Clear out the scratch buffer, initialized with whatever major mode we were
 ;; just in and with any selected region
 (defun new-scratch-buffer nil
-  "Initialize the scratch buffer with the highlighted region, setting whatever major mode was active."
+  "Initialize the scratch buffer with the highlighted region,
+setting whatever major mode was active."
   (interactive)
   (let* ((mode major-mode)
 	 (region (with-current-buffer (current-buffer)
