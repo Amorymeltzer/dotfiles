@@ -52,19 +52,6 @@ diffFilter = delta --color-only --features "$(defaults read -globalDomain AppleI
 program = /usr/local/bin/gpg
 
 [alias]
-# Create and/or go to a branch.  git switch added in 2.23, uses switch -c; can
-# do the same with checkout -b
-go = "!f() { git switch -c \"$1\" 2> /dev/null || git switch \"$1\"; }; f"
-
-lr = log --pretty=format:"%C(blue)%h\\ %C(reset)%C(dim)%C(italic)%ad%C(auto)%d\\ %s%C(dim)%C(magenta)\\ [%an]" --decorate --date=human-local
-lg = log --color --graph --pretty=format:"%C(blue)%h%C(auto)%d%C(reset)\\ %s\\ %C(dim)%C(italic)(A:\\ %cr,\\ C:\\ %ar)%C(dim)%C(magenta)\\ [%an]" --abbrev-commit --date=human-local
-
-recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format="%(color:blue)%(objectname:short)%(color:reset)\\ %(color:bold)%(color:cyan)%(refname:short)%(color:reset)\\ (%(color:italic)%(color:dim)%(color:normal)%(committerdate:human-local)%(color:reset))\\ %(contents:subject)\\ %(color:dim)%(color:magenta)[%(authorname)]%(color:reset)"
-
-# Git only learned these flags in 2.23
-cps = cherry-pick --skip
-mgq = merge --quit
-
 # Use icdiff tool https://github.com/jeffkaufman/icdiff
 icd = icdiff
 ic = icdiff
@@ -108,27 +95,6 @@ commits = browse -- commits
 # Divergence = commits we added and commits remote added, similar to llum, etc.
 # FIXME TODO: Colorize
 div = divergence
-
-[push]
-# Added in git 2.37, assumes -u/--set-upstream for first push
-autoSetupRemote = true
-
-[merge]
-# Added in git 2.35
-conflictStyle = zdiff3
-
-[log]
-date = auto:human-local
-
-[help]
-autoCorrect = prompt
-
-[blame]
-date = auto:human-local
-
-[transfer]
-# Added in git 2.37
-credentialsInUrl = warn
 
 [icdiff]
 # options = --color-map='change:magenta_bold,meta:white' --tabs=4

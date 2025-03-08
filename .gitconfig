@@ -122,9 +122,9 @@ ai  = add -p
 fza = "!git ls-files -m -o --exclude-standard | fzf -m --print0  --preview 'git diff --color=always -- {1}' --preview-window 'down,border-top,75%' | xargs -0 git add"
 
 
-# Create and/or go to a branch.  Potentially overridden in local-config to use
-# switch -c after 2.23; toolforge annoyingly is still on 2.20.1
-go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+# Create and/or go to a branch.  git switch added in 2.23, uses switch -c; can
+# do the same with checkout -b
+go = "!f() { git switch -c \"$1\" 2> /dev/null || git switch \"$1\"; }; f"
 
 # Intentionally missing -b to avoid erroneous checkouts of wrong default branch
 co = checkout
@@ -186,10 +186,9 @@ lmd = ldm
 ldm5 = "!git ld5 $(git default-branch)..HEAD"
 ld5m = ldm5
 
-# Potentially overridden in local-config to use date=human after 2.21, see also recent-branches-by-commit and [log]
 # Double quotes require escaping the spaces?
-lr = log --pretty=format:"%C(blue)%h\\ %C(reset)%C(dim)%C(italic)%ad%C(auto)%d\\ %s%C(dim)%C(magenta)\\ [%an]" --decorate --date=relative
-lg = log --color --graph --pretty=format:"%C(blue)%h%C(auto)%d%C(reset)\\ %s\\ %C(dim)%C(italic)(A:\\ %cr,\\ C:\\ %ar)%C(dim)%C(magenta)\\ [%an]" --abbrev-commit --date=relative
+lr = log --pretty=format:"%C(blue)%h\\ %C(reset)%C(dim)%C(italic)%ad%C(auto)%d\\ %s%C(dim)%C(magenta)\\ [%an]" --decorate --date=human-local
+lg = log --color --graph --pretty=format:"%C(blue)%h%C(auto)%d%C(reset)\\ %s\\ %C(dim)%C(italic)(A:\\ %cr,\\ C:\\ %ar)%C(dim)%C(magenta)\\ [%an]" --abbrev-commit --date=human-local
 
 lr5 = lr -5
 lrm = "!git lr $(git default-branch)..HEAD"
@@ -239,6 +238,7 @@ chp = cherry-pick
 chpa = cherry-pick --abort
 chpc = cherry-pick --continue
 chpq = cherry-pick --quit
+chps = cherry-pick --skip
 
 # Like "git show myfile", but uses the last commit that changed "myfile".
 showlast = log -n 1 -p
@@ -287,8 +287,7 @@ branch-contains = branch --contains
 recently-checkedout-branches = "!git reflog -n 100 | egrep -io \"moving from ([^[:space:]]+)\" | awk '{ print $3 }' | awk ' !x[$0]++' | egrep -v '^[a-f0-9]{40}$' | head -n 10"
 # https://stackoverflow.com/a/5188364/2521092
 # Only show most recent 15, could also use branch --sort=-committerdate as of 2.7
-# Potentially overridden in local-config to use date=human after 2.21, see also lr and [log]
-recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format="%(color:blue)%(objectname:short)%(color:reset)\\ %(color:bold)%(color:cyan)%(refname:short)%(color:reset)\\ (%(color:italic)%(color:dim)%(color:normal)%(committerdate:relative)%(color:reset))\\ %(contents:subject)\\ %(color:dim)%(color:magenta)[%(authorname)]%(color:reset)"
+recent-branches-by-commit = for-each-ref --sort=-committerdate --count=15 refs/heads/ --format="%(color:blue)%(objectname:short)%(color:reset)\\ %(color:bold)%(color:cyan)%(refname:short)%(color:reset)\\ (%(color:italic)%(color:dim)%(color:normal)%(committerdate:human-local)%(color:reset))\\ %(contents:subject)\\ %(color:dim)%(color:magenta)[%(authorname)]%(color:reset)"
 
 # More easily rememberable external commands, may or may not exist
 remove-merged-branches = delete-merged-branches # git-extras
@@ -403,6 +402,7 @@ mg = merge
 mgd = merge dev
 mga = merge --abort
 mgc = merge --continue
+mgq = merge --quit
 
 # Merge changes when GitHub suggestions have been merged
 merge-suggestions = merge --ff-only @{push}
@@ -465,7 +465,8 @@ doc = !git --html-path
 
 [push]
 default = current
-# autoSetupRemote true added in 2.37, makes push assume -u/--set-upstream
+# Added in git 2.37, assumes -u/--set-upstream for first push
+autoSetupRemote = true
 # Make `git push` push relevant annotated tags when pushing branches out.
 followTags = true
 # Currently unsupported by GitHub https://github.community/t/push-signed/938/4
@@ -485,8 +486,7 @@ all = true
 # Include summaries of merged commits in newly created merge commit messages
 log = true
 # Display base with ||| between ours and theirs, useful if a bit weird
-# zdiff3 added with git 2.35, done in local-gitconfig
-conflictStyle = diff3
+conflictStyle = zdiff3
 guitool = opendiff
 
 [mergetool]
@@ -505,6 +505,9 @@ missingCommitsCheck = warn
 [apply]
 whitespace = warn
 
+[transfer]
+credentialsInUrl = warn
+
 [column]
 # ui = auto
 
@@ -512,8 +515,7 @@ whitespace = warn
 sort = -committerdate
 
 [log]
-# --date=human added in 2.21, used in local-config, see also lr and recent-branches-by-commit
-date = local
+date = auto:human-local
 abbrevCommit = true
 # Follow file rename/move, only if one file
 follow = true
@@ -525,19 +527,17 @@ showPatch = true
 [status]
 showStash = true
 
-# diffFilter set in local-config
+# diffFilter set in .local-gitconfig
 [interactive]
 # Mainly for add -p, but don't require pressing enter to proceed
 singleKey = true
 
 [help]
-# If there's only suggestion from a typo, automatically call it after 1.5s
-# As of git 2.34, this can be prompt for interactive, and is in local-config
-autoCorrect = 15
+autoCorrect = prompt
 
-# Only added in 2.28, but unlike other config options, doesn't break on older
-# versions of git, so safe for legacy systems (no need for .local-gitconfig)
 [init]
+# Only added in 2.28, but unlike other config options, doesn't break on older
+# versions of git, so safe for legacy systems
 defaultBranch = main
 
 [diff]
@@ -578,8 +578,7 @@ textconv = plutil -p
 
 [blame]
 coloring = highlightRecent
-# human in local-config
-date = local
+date = auto:human-local
 
 [color]
 # Use colors in Git commands that are capable of colored output when output is
