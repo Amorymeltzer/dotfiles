@@ -37,13 +37,12 @@
 		  reveal-in-osx-finder selectric-mode smart-shift smartscan
 		  smooth-scrolling solarized-theme spacemacs-theme
 		  ssh-config-mode standard-themes stock-ticker swift-mode
-		  timu-macos-theme transpose-frame typing-game undo-tree
+		  timu-caribbean-theme timu-macos-theme timu-rouge-theme
+		  timu-spacegrey-theme transpose-frame typing-game undo-tree
 		  unicode-troll-stopper use-package visual-regexp
-		  visual-regexp-steroids volatile-highlights
-		  vscode-dark-plus-theme wc-goal-mode wc-mode which-key
-		  whole-line-or-region window-numbering wrap-region
-		  writegood-mode yaml-mode yasnippet yasnippet-snippets
-		  zenburn-theme))
+		  visual-regexp-steroids vscode-dark-plus-theme wc-goal-mode
+		  wc-mode window-numbering wrap-region writegood-mode yasnippet
+		  yasnippet-classic-snippets yasnippet-snippets))
  '(paradox-column-width-package 24)
  '(paradox-display-download-count t)
  '(paradox-execute-asynchronously t)
