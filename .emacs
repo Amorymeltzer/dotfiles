@@ -462,6 +462,21 @@ Record that in `paradox--backups', but do nothing if
 (auto-dark-mode t)
 
 
+;; Loading a theme is nice and all, but the previously enabled theme lingers,
+;; which is kind of a drag.  This turns it off then enables the new one.
+;; Happily taken from timu:
+;; <https://macowners.club/posts/custom-functions-4-ui/#timu-ui-load-theme>
+(defun swap-theme ()
+  "`load-theme' without confirmation and with completion.
+Disables the `custom-enabled-themes' first to start with a blank canvas."
+  (interactive)
+  (let ((next-theme
+	 (completing-read "Load custom theme: "
+			  (custom-available-themes))))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme (intern next-theme) t)))
+
+
 ;; When I was a child, I spake as a child,
 ;; I understood as a child, I thought as a child:
 ;; but when I became a man, I put away childish things.
