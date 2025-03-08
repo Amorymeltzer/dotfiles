@@ -467,7 +467,9 @@ Record that in `paradox--backups', but do nothing if
 (setq inhibit-startup-echo-area-message user-login-name
       inhibit-startup-screen t)
 
-;; But use a neat dashboard https://github.com/emacs-dashboard/emacs-dashboard
+;; But use a neat dashboard <https://github.com/emacs-dashboard/emacs-dashboard>
+;; Options and functions:
+;; <https://github.com/emacs-dashboard/emacs-dashboard/blob/master/docs/variables-and-functions.org>
 (require 'dashboard)
 ;; Required for emacsclient
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
@@ -494,10 +496,12 @@ Record that in `paradox--backups', but do nothing if
 
 ;; Tip of the day taken from
 ;; https://github.com/emacs-dashboard/emacs-dashboard/issues/26 and
-;; https://gist.github.com/saintaardvark/375aa054c15f02c42f45
-;; Not perfect, should ideally limit self to a modemap or something
+;; https://gist.github.com/saintaardvark/375aa054c15f02c42f45 Not perfect,
+;; should ideally limit self to a modemap or something Would be neat to
+;; customize the header message (`dashboard-banner-logo-title') with something
+;; like fortune or my quotes, see also `dashboard-footer-messages' FIXME TODO
 (defun totd()
-  "Display a 'Tip of the Day' message with a random command.
+  "Display a `Tip of the Day' message with a random command.
 Used for insertion into the dashboard."
   (let* ((commands (cl-loop for s being the symbols
 			    when (commandp s) collect s))
