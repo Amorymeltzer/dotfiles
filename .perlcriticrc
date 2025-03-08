@@ -152,7 +152,7 @@ severity = 5
 # much since I don't really want the rest of Perl::Critic::More.  Still, would
 # be nice: 5.012 enables each @array, which is nice, and 5.020 for signatures,
 # although you need 5.036 to do so without turning experimental warnings off and
-# that's still too uncommon.  Toolforge is on 5.028_001 as of late 2023.
+# that's still too uncommon.  Toolforge is on 5.036_000 as of early 2025.
 
 # Yes, easier to maintain, but unnecessary, and I prefer the visual difference
 # for the last item, just as with JavaScript
