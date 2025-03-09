@@ -45,7 +45,7 @@
 		  yasnippet-classic-snippets yasnippet-snippets))
  '(paradox-column-width-package 24)
  '(paradox-display-download-count t)
- '(paradox-execute-asynchronously t)
+ '(paradox-execute-asynchronously nil)
  '(paradox-use-homepage-buttons nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
