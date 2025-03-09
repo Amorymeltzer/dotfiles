@@ -169,7 +169,7 @@ See also `enable-theme-functions' and `disable-theme-functions'")
        ;; Toss in @ if we're editing via emacsclient server, otherwise -, the
        ;; former borrowed from `mode-line-remote'.  Serves as sort of a spacer
        ;; that recapitulates `mode-line-client' in the place of
-       ;; `mode-line-front-space'
+       ;; `mode-line-front-space'.  See also `(daemonp)'
        '(:eval (propertize (if
 			       (frame-parameter nil 'client)
 			       ;; This should be subtle since it's technically
@@ -3350,11 +3350,15 @@ Uses `cperl--get-current-subroutine-name'."
 ;; Things like ispell-dictionary and ispell-personal dictionary should be
 ;; handled by default and by .aspell.conf, assuming the dictionary is installed
 ;; properly.  I've also put sug-mode in there too, but again, you never know.
+(require 'ispell)
 (setq ispell-dictionary "en-custom"
       ispell-personal-dictionary "~/.aspell.en.pws"
+      ;; Don't ask to save to personal dictionary
+      ispell-silently-savep t
       ;; --camel-case is neat, but since I'm using flyspell-prog-mode - only
       ;; strings and comments - it's unlikely to be necessary
       ispell-extra-args '("--sug-mode=ultra"))
+
 
 ;; Flyspell spell checking
 ;; Turns out that `flyspell-auto-correct-previous-word' is often/always better
