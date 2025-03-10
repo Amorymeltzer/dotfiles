@@ -3242,8 +3242,7 @@ Uses `cperl--get-current-subroutine-name'."
       ;; which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL") ; default nil
       which-key-show-remaining-keys t
       which-key-lighter nil  ; Don't rely on diminish, which doesn't work anyway
-      which-key-compute-remaps t
-      which-key-is-verbose t)
+      which-key-compute-remaps t)
 ;; https://github.com/justbur/emacs-which-key#face-customization-options
 (set-face-attribute 'which-key-separator-face nil :inherit 'font-lock-keyword-face)
 ;; font-lock-preprocessor-face and which-key-key-face also good options
