@@ -2757,15 +2757,12 @@ day of the week.  With two prefix arguments, add day of week and time."
   (interactive)
   (message (format "%d" (- (region-end) (region-beginning)))))
 
-;;; Modeline tickers, require request.el
-;; Stock tickers, https://github.com/hagleitn/stock-ticker
-(autoload 'stock-ticker-global-mode "stock-ticker" "Display stock prives in
-the mode line" t)
-(setq stock-ticker-display-interval 6)
-;; BTC ticker
-(autoload 'btc-ticker-mode "btc-ticker" "Minor mode to display
-the latest BTC price." t)
-(setq btc-ticker-api-poll-interval 60)
+;; Stock tracker <https://github.com/beacoder/stock-tracker/tree/master>
+;; Just do `stock-tracker-start', can customize `stock-tracker-list-of-stocks',
+;; otherwise saved in desktop file
+(setq stock-tracker-refresh-interval 3	;default 1, is N*10 seconds
+      stock-tracker-up-red-down-green nil)
+
 
 (defun loan-payment-calculator (amount rate years)
   "Calculate the payment for a loan of AMOUNT dollars when annual percentage

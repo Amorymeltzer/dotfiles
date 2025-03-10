@@ -8,8 +8,8 @@
  '(package-selected-packages
    '(abridge-diff academic-phrases ace-jump-mode ace-link ace-window alert amx anzu
 		  applescript-mode async atom-one-dark-theme auto-complete
-		  auto-dark browse-at-remote browse-kill-ring btc-ticker
-		  buffer-move bug-hunter caroline-theme caser catppuccin-theme
+		  auto-dark browse-at-remote browse-kill-ring buffer-move
+		  bug-hunter caroline-theme caser catppuccin-theme
 		  challenger-deep-theme color-identifiers-mode communinfo
 		  crontab-mode csv-mode darkokai-theme darktooth-theme dashboard
 		  dashboard-ls define-word diminish dired-gitignore
@@ -36,7 +36,7 @@
 		  rebecca-theme recentf-ext relint restclient
 		  reveal-in-osx-finder selectric-mode smart-shift smartscan
 		  smooth-scrolling solarized-theme spacemacs-theme
-		  ssh-config-mode standard-themes stock-ticker swift-mode
+		  ssh-config-mode standard-themes stock-tracker swift-mode
 		  timu-caribbean-theme timu-macos-theme timu-rouge-theme
 		  timu-spacegrey-theme transpose-frame typing-game undo-tree
 		  unicode-troll-stopper use-package visual-regexp
