@@ -1552,9 +1552,9 @@ that is not already being visited."
 ;; Save minibuffer history
 (add-hook 'after-init-hook #'savehist-mode)
 (setq
- savehist-autosave-interval 60 ; Default 300
+ savehist-autosave-interval 180 ; Default 300
  savehist-ignored-variables (quote (ido-cur-list)) ; Not sure what do...
- savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+ savehist-additional-variables '(kill-ring mark-ring global-mark-ring search-ring regexp-search-ring))
 
 ;; Long history, remove dupes.  Could do `t' for `history-length' to never
 ;; truncate, but even though it'd be fine, there's no need?
