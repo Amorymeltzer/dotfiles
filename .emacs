@@ -3701,8 +3701,6 @@ Uses `cperl--get-current-subroutine-name'."
 
 ;; wc-mode to display chars, words, lines in mode-line
 (autoload 'wc-mode "wc-mode" "Toggle word-count mode." t)
-;; Just total line count
-(eval-after-load "wc-mode" '(setq wc-modeline-format "%tl"))
 ;; wc-goal-mode shows original+added/total words
 ;; https://github.com/bnbeckwith/wc-goal-mode
 ;; wc-goal-word/line/char-goal to set a target
