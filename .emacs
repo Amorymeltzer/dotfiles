@@ -1370,7 +1370,7 @@ that is not already being visited."
 ;; Any overlap with desktop or persistency? Not great with emacsclient?
 ;; Do something like 'recenter in save-place-find-file-hook??
 (require 'saveplace)
-(save-place-mode)
+(add-hook 'after-init-hook #'save-place-mode)
 (setq save-place-file (expand-file-name my/saveplace-file user-emacs-directory))
 
 
@@ -1550,7 +1550,7 @@ that is not already being visited."
       max-mini-window-height 0.33)
 
 ;; Save minibuffer history
-(savehist-mode 1)
+(add-hook 'after-init-hook #'savehist-mode)
 (setq
  savehist-autosave-interval 60 ; Default 300
  savehist-ignored-variables (quote (ido-cur-list)) ; Not sure what do...
