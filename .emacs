@@ -3043,36 +3043,6 @@ in the buffer." t)
   "Major mode for editing comma-separated value files." t)
 
 
-;; Describe whatever I'm on/in
-;; http://www.sugarshark.com/elisp/init/lisp.el.html
-(defun describe-foo-at-point ()
-  "Show the documentation of the Elisp function and variable near point.
-This checks in turn:
-
--- for a function name where point is
--- for a variable name where point is
--- for a surrounding function call"
-  (interactive nil emacs-lisp-mode)
-  (let (sym)
-    ;; sigh, function-at-point is too clever.  we want only the first
-    ;; half.
-    (cond ((setq sym (ignore-errors
-		       (with-syntax-table emacs-lisp-mode-syntax-table
-			 (save-excursion
-			   (or (not (zerop (skip-syntax-backward "_w")))
-			       (eq (char-syntax (char-after (point))) ?w)
-			       (eq (char-syntax (char-after (point))) ?_)
-			       (forward-sexp -1))
-			   (skip-chars-forward "`'")
-			   (let ((obj (read (current-buffer))))
-			     (and (symbolp obj) (fboundp obj) obj))))))
-	   (describe-function sym))
-	  ((setq sym (variable-at-point)) (describe-variable sym))
-	  ;; now let it operate fully -- i.e. also check the surrounding sexp
-	  ;; for a function call.
-	  ((setq sym (function-at-point)) (describe-function sym)))))
-(global-set-key (kbd "C-h h") 'describe-foo-at-point)
-
 ;; Make the scratch buffer blank
 ;; (setq initial-scratch-message "")
 ;; Use haikus instead
@@ -3245,14 +3215,15 @@ Uses `cperl--get-current-subroutine-name'."
 ;; https://github.com/Wilfred/helpful
 (require 'helpful)
 (global-set-key (kbd "C-h f") #'helpful-callable)
+(global-set-key (kbd "C-h F") #'helpful-function)
+(global-set-key (kbd "C-h C") #'helpful-command)
 (global-set-key (kbd "C-h v") #'helpful-variable)
 ;; Unrelated but: C-h w shows key binding for command
 (global-set-key (kbd "C-h k") #'helpful-key)
 (global-set-key (kbd "C-c h") #'helpful-at-point)
-(global-set-key (kbd "C-h F") #'helpful-function)
-(global-set-key (kbd "C-h C") #'helpful-command)
+;; No need for `view-hello-file'
+(global-set-key (kbd "C-h h") #'helpful-at-point)
 ;; Maybe add helpful regex to clean-buffer-list-kill-regexps ??
-
 
 
 ;; which-key has better sorting than guide-key
