@@ -1988,7 +1988,7 @@ randpass () {
 
 # Quick view of the market
 function marketupdate() {
-    local tickers=("^GSPC" "^DJI" "^IXIC")
+    local tickers=(".SPX" ".DJI" ".IXIC")
     # Add any personal tickers
     tickers+=("${STOCK_TICKERS[@]}")
 

@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Grab current price of stock or index
 # Use python to colorize, columnize, etc.
-# Heavily based off xbar yahoo_stock_ticker plugin:
-# https://github.com/matryer/xbar-plugins/blob/f1004a74a0d887b9655c71a1d52ba4e02b37fd77/Finance/yahoo_stock_ticker.10m.py
+# Initially based off xbar yahoo_stock_ticker plugin, but that's dead and now
+# quite a bit to use urllib instead of curl, etc.
 
 __doc__ = 'Print current price of a stock or index, colorizing as appropriate'
 
 import json
-import os
 import sys
-
+import urllib.request
+import urllib.parse
+import urllib.error
+from urllib.error import URLError, HTTPError
 
 # Ensure there's at least one item to lookup
 if len(sys.argv) <= 1:
+    print("Usage: ticker SYMBOL1 [SYMBOL2 SYMBOL3 ...]")
     sys.exit(1)
 
 # List of all tickers
@@ -23,68 +26,111 @@ GREEN = '\033[38;5;71m'
 RED = '\033[38;5;131m'
 ENDC = '\033[0m'
 
-# Bulk curl the yahoo api for data
-# Lots of unused stuff here, in case I feel like expanding
-library = 'curl --silent '
-api = 'https://query1.finance.yahoo.com/v7/finance/quote?'
-fields = ['symbol', 'marketState', 'regularMarketTime', 'regularMarketPrice',
-          'regularMarketChange', 'regularMarketChangePercent',
-          'fullExchangeName', 'currency', 'regularMarketPreviousClose',
-          'regularMarketOpen', 'bid', 'ask', 'regularMarketDayRange',
-          'fiftyTwoWeekRange', 'fiftyDayAverage', 'twoHundredDayAverage',
-          'shortName', 'fiftyDayAverageChangePercent',
-          'twoHundredDayAverageChangePercent']
-fields_string = 'fields=' + ','.join(fields)
-cmd = library + "'" + api + fields_string + '&symbols=' + ','.join(symbols) + "'"
+# CNBC API base URL.  Lots of unused fields (e.g. pe, dividend and yield) if I
+# ever feel like expanding this.
+base_url = "https://quote.cnbc.com/quote-html-webservice/quote.htm"
+symbols_str = "|".join(symbols)
 
-# Popen to run the curl command and retrieve the output
-output = os.popen(cmd).read()
-# JSONify the output from the curl command
-json_output = json.loads(output)
-# Any erroneous tickers not part of result object
-# Consider print note in those cases, or nah?
-stock_data = json_output['quoteResponse']['result']
+query_params = {
+    "partnerId": "2",
+    "requestMethod": "quick",
+    "exthrs": "1",
+    "noform": "1",
+    "fund": "1",
+    "extendedMask": "2",
+    "output": "json",
+    "symbols": symbols_str
+}
 
+url = base_url + "?" + urllib.parse.urlencode(query_params)
 
-# Pretty-print the data
 def two_d(value):
     """Format to two decimal places"""
-    return '{:.2f}'.format(value)
-
-# Assume the state of the market is the same for everyone
-# Could display different messages, but eh
-states = {
-    'PRE' : 'Closed',           # Pre-market but not necessarily early
-    'REGULAR' : 'OPEN',
-    'POST' : 'Closed',          # After-hours
-    'POSTPOST' : 'Closed',      # After after-hours?
-    'CLOSED' : 'Closed'         # When's the changeover?
-}
-print(states[stock_data[0]['marketState']], '\t  Percent\tPrice (G/L)\tYear range')
-
-for index in stock_data:
-    name=index['symbol']
-
-    # Test stand-in for everyone
     try:
-        change = index['regularMarketChangePercent']
-    except KeyError:
-        print('Invalid stock symbol: ' + name)
-        continue
+        return '{:.2f}'.format(float(value))
+    except (ValueError, TypeError):
+        return 'N/A'
 
-    # Set colors for positive and negative values
-    if change > 0:
-        output = GREEN + '↑'
-    elif change < 0:
-        output = RED + '↓'
-    else:
-        output = ' '
+try:
+    request = urllib.request.Request(url)
+    request.add_header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36")
 
-    # Build output
-    output += ' (' + two_d(change) + '%)'
-    if index['quoteType'] != 'INDEX':
-        output += '\t$' + two_d(index['regularMarketPrice']) + ' (' + two_d(index['regularMarketChange']) + ')'
-        output += '\t' + index['fiftyTwoWeekRange']
-    output += ENDC
-    # Print the results
-    print(name, '\t', output)
+    # Make the request
+    with urllib.request.urlopen(request) as response:
+        data = response.read().decode('utf-8')
+        json_output = json.loads(data)
+
+        # Check if we have valid data
+        if "QuickQuoteResult" not in json_output or "QuickQuote" not in json_output["QuickQuoteResult"]:
+            print("Error: Unexpected response format")
+            sys.exit(1)
+
+        # Grab the relevant data
+        stock_data = json_output["QuickQuoteResult"]["QuickQuote"]
+        # Ensure stock_data is a list (sometimes it's not if only one symbol is requested)
+        if not isinstance(stock_data, list):
+            stock_data = [stock_data]
+
+        # Market status mapping
+        states = {
+            "PRE_MKT": "Pre-Market",
+            "REG_MKT": "OPEN",
+            "CLOSED": "Closed",
+            "AFTER_MKT": "After-Hours",
+            "OPEN": "OPEN"
+        }
+
+        # Get market status from the first stock (assume same for all)
+        if stock_data:
+            market_status = stock_data[0].get("curmktstatus", "UNKNOWN")
+            print(states.get(market_status, market_status), '\t  Percent\tPrice (G/L)\tYear range')
+
+        # Process each stock
+        for stock in stock_data:
+            name = stock.get("symbol", "UNKNOWN")
+
+            try:
+                # Extract values (handle potential missing data)
+                change_pct = float(stock.get("change_pct", "0"))
+                price = float(stock.get("last", "0"))
+                change = float(stock.get("change", "0"))
+
+                # Get year range
+                fundamental_data = stock.get("FundamentalData", {})
+                year_high = fundamental_data.get("yrhiprice", "N/A")
+                year_low = fundamental_data.get("yrloprice", "N/A")
+                # Should two_d the low and high? FIXME TODO
+                year_range = f"{year_low}-{year_high}" if year_low != "N/A" and year_high != "N/A" else "N/A"
+
+                # Set colors for positive and negative values
+                if change_pct > 0:
+                    output = GREEN + '↑'
+                elif change_pct < 0:
+                    output = RED + '↓'
+                else:
+                    output = ' '
+
+                # Output string
+                output += ' (' + two_d(change_pct) + '%)'
+                output += '\t$' + two_d(price) + ' (' + two_d(change) + ')'
+                output += '\t' + year_range
+                output += ENDC
+
+                print(name, '\t', output)
+
+            except (ValueError, KeyError) as e:
+                print(f"{name}\tError processing data: {e}")
+                continue
+
+except HTTPError as e:
+    print(f"HTTP Error: {e.code} - {e.reason}")
+    sys.exit(1)
+except URLError as e:
+    print(f"URL Error: {e.reason}")
+    sys.exit(1)
+except json.JSONDecodeError as e:
+    print(f"Error parsing JSON response: {e}")
+    sys.exit(1)
+except Exception as e:
+    print(f"Unexpected error: {e}")
+    sys.exit(1)
