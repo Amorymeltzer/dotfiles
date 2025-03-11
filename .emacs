@@ -80,7 +80,7 @@
 ;; Prefer newer files even if not .elc
 (setq load-prefer-newer t)
 
-;; Customizations from within emacs interface
+;; Customizations from within emacs interface; set to `null-device' to turn off?
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file t)
 
@@ -3821,7 +3821,10 @@ Uses `cperl--get-current-subroutine-name'."
 ;;;;;;; END
 ;; This should probably be in after-init-hook or emacs-startup-hook??
 ;; https://www.emacswiki.org/emacs/BenchmarkInit
-(message "Emacs loaded at %s." (format-time-string "%T %a %d %b %y"))
+(message "Emacs loaded at %s in %s and %d garbage collections."
+	 (format-time-string "%T %a %d %b %y")
+	 (emacs-init-time "%.2f seconds")
+	 gcs-done)
 
 
 ;;;;Package todos
