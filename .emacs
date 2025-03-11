@@ -336,15 +336,26 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; Then install any missing ones
+;; Then install any missing ones, as long as they're compatible
 (dolist (pkg package-selected-packages)
   (unless (package-installed-p pkg)
     (if (assoc pkg package-archive-contents)
-	(condition-case err
-	    ;; If the package is available, install it
-	    (package-install pkg)
-	  (file-error
-	   (message "Error installing package %s: %s" pkg (error-message-string err))))
+	(let* ((pkg-desc (cadr (assoc pkg package-archive-contents)))
+	       (reqs (package-desc-reqs pkg-desc))
+	       (emacs-req (assoc 'emacs reqs))
+	       (min-version (and emacs-req (cadr emacs-req)))
+	       (compatible (or (not min-version)
+			       (version-list-<= min-version
+						(version-to-list emacs-version)))))
+	  (if compatible
+	      (condition-case err
+		  (package-install pkg)
+		(file-error
+		 (message "Error installing package %s: %s" pkg (error-message-string err))))
+	    (message "Package %s requires Emacs %s or newer (you have %s). Skipping."
+		     pkg
+		     (package-version-join min-version)
+		     emacs-version)))
       (message "NOTE: Package %s is not available in the archives." pkg))))
 
 
