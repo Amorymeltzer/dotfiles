@@ -2745,8 +2745,9 @@ day of the week.  With two prefix arguments, add day of week and time."
 ;; On duplicate filenames, show paths not <2>
 ;; Default in 24.4?
 (require 'uniquify)
-(setq uniquify-after-kill-buffer-p t)
-(setq uniquify-buffer-name-style 'post-forward)
+(setq uniquify-after-kill-buffer-p t
+      uniquify-buffer-name-style 'post-forward
+      uniquify-ignore-buffers-re "^\\*")
 
 (defun checksum-region (s e)
   "Print a checksum (currently md5) of the region."
