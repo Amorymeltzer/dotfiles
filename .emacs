@@ -1045,8 +1045,8 @@ POS defaults to `point'."
       ;; Versions
       delete-old-versions t
       backup-by-copying t
-      kept-new-versions 20 ; 6
-      kept-old-versions 4  ;2
+      kept-new-versions 10 ; 6
+      kept-old-versions 10 ; 2
       version-control t)
 
 ;; Allow diff/ediff with specific backup files
@@ -2136,9 +2136,11 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; can muck up magit so it won't follow symlinks?  It seems like just setting
 ;; vc-follow-symlinks does the trick?
 ;; https://github.com/magit/magit/issues/2250#issuecomment-138906601
-(setq vc-follow-symlinks t)
-;; Unrelated, but I'm just using git, no need for any others
-(setq vc-handled-backends '(Git))
+(setq vc-follow-symlinks t
+      ;; I dunno, why not?
+      vc-make-backup-files t
+      ;; Unrelated, but I'm just using git, no need for any others
+      vc-handled-backends '(Git))
 ;; git-commit-style-convention-checks take overlong-summary-line if want to
 ;; ensure git commit is within guidance (git-commit-summary-max-length)
 ;; git-commit-turn-on-flyspell ???
