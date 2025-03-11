@@ -3231,11 +3231,12 @@ Uses `cperl--get-current-subroutine-name'."
 ;; The default behavior of `which-key-setup-side-window-bottom' is just fine.
 ;; In theory, I want top for `which-key-show-prefix', but it appears to devolve
 ;; to the same results as echo.
-(which-key-mode)
+(add-hook 'after-init-hook #'which-key-mode)
 ;; There are a lot of these, all have merits
 ;; https://github.com/justbur/emacs-which-key#sorting-options
 (setq which-key-sort-order 'which-key-key-order-alpha
       which-key-idle-delay 0.25		   ; default 1.0
+      which-key-idle-secondary-delay 0.25  ; default nil, not sure what do
       which-key-side-window-max-height 0.5 ; default 0.25
       ;; which-key-prefix-prefix "=>"	   ; default +
       ;; which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL") ; default nil
