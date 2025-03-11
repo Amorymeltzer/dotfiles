@@ -3558,6 +3558,7 @@ Uses `cperl--get-current-subroutine-name'."
 ;; https://github.com/jwiegley/alert
 ;; Use to give note about startup?  ########## ;;;;;;;;; FIXME TODO
 (autoload 'alert "alert" "Notification system for Emacs similar to Growl")
+(setq alert-default-style 'notifier)
 
 ;; Emacs should just have code that automatically sets this threshold
 ;; according to some function involving a constant, the current date, and
