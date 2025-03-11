@@ -90,12 +90,18 @@ try:
             name = stock.get("symbol", "UNKNOWN")
 
             try:
-                # Check if we have extended market data (pre-market or after-hours)
-                extended_data = stock.get("ExtendedMktQuote", {})
-                is_extended = bool(extended_data) and "last" in extended_data
+                # Get timestamp for regular market data as integer
+                reg_timestamp = int(stock.get("last_time_msec", "0"))
 
-                # Use extended market data if available
-                if is_extended:
+                # Check if we have extended market data
+                extended_data = stock.get("ExtendedMktQuote", {})
+                ext_timestamp = int(extended_data.get("last_time_msec", "0")) if extended_data else 0
+
+                # Compare timestamps to decide which data to use
+                use_extended = ext_timestamp > reg_timestamp and "last" in extended_data
+
+                if use_extended:
+                    # Use extended market data
                     price = float(extended_data.get("last", "0"))
                     change = float(extended_data.get("change", "0"))
                     change_pct = float(extended_data.get("change_pct", "0"))
