@@ -1091,11 +1091,16 @@ backups." t)
 ;; Pointless if saving buffers as below?
 ;; Something busted, nothing saved when restarting server FIXME TODO
 (require 'recentf)
+;; Sometimes there are too many messages on startup
+(advice-add 'recentf-mode :around
+	    (lambda (orig-fun &rest args)
+	      (let ((inhibit-message t))
+		(apply orig-fun args))))
 (recentf-mode 1)
 (setq recentf-save-file (expand-file-name my/recentf-file user-emacs-directory))
 ;; Uses ~ instead of full path
 (setq recentf-filename-handlers (quote abbreviate-file-name))
-;; Same as above?
+;; Same as above? FIXME TODO
 ;; (setq recentf-menu-filter (quote recentf-relative-filter))
 ;; Try not to save remote files
 (setq recentf-keep '(file-remote-p file-readable-p))
@@ -2378,6 +2383,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; (define-key goto-map (kbd "g") 'goto-line)
 (define-key goto-map (kbd "c") 'move-to-column)
 (define-key goto-map (kbd "<up>") 'buf-move-up)
+;; Good way to turn off error message?  Or move to just messaging? FIXME TODO
 (define-key goto-map (kbd "<down>") 'buf-move-down)
 (define-key goto-map (kbd "<left>") 'buf-move-left)
 (define-key goto-map (kbd "<right>") 'buf-move-right)
