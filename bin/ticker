@@ -90,10 +90,23 @@ try:
             name = stock.get("symbol", "UNKNOWN")
 
             try:
-                # Extract values (handle potential missing data)
-                change_pct = float(stock.get("change_pct", "0"))
-                price = float(stock.get("last", "0"))
-                change = float(stock.get("change", "0"))
+                # Check if we have extended market data (pre-market or after-hours)
+                extended_data = stock.get("ExtendedMktQuote", {})
+                is_extended = bool(extended_data) and "last" in extended_data
+
+                # Use extended market data if available
+                if is_extended:
+                    price = float(extended_data.get("last", "0"))
+                    change = float(extended_data.get("change", "0"))
+                    change_pct = float(extended_data.get("change_pct", "0"))
+                    ext_type = extended_data.get("type", "")
+                    display_type = f" ({states.get(ext_type, ext_type)})"
+                else:
+                    # Use regular market data
+                    price = float(stock.get("last", "0"))
+                    change = float(stock.get("change", "0"))
+                    change_pct = float(stock.get("change_pct", "0"))
+                    display_type = ""
 
                 # Get year range
                 fundamental_data = stock.get("FundamentalData", {})
@@ -104,15 +117,16 @@ try:
 
                 # Set colors for positive and negative values
                 if change_pct > 0:
-                    output = GREEN + '↑'
+                    output = GREEN + '▲'
                 elif change_pct < 0:
-                    output = RED + '↓'
+                    output = RED + '▼'
                 else:
                     output = ' '
 
                 # Output string
                 output += ' (' + two_d(change_pct) + '%)'
                 output += '\t$' + two_d(price) + ' (' + two_d(change) + ')'
+                output += display_type if display_type else ""
                 output += '\t' + year_range
                 output += ENDC
 
