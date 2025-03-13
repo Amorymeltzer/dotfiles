@@ -3235,6 +3235,8 @@ Uses `cperl--get-current-subroutine-name'."
 
 ;; Search more than just commands but eh, I never use...
 (define-key 'help-command "a" 'apropos)
+;; Enhance apropos, slowly
+(setq apropos-do-all t)
 
 ;; helpful, a better help buffer
 ;; https://github.com/Wilfred/helpful
@@ -3280,6 +3282,8 @@ Uses `cperl--get-current-subroutine-name'."
 ;; Display what function block if I'm in in certain modes reenable?
 ;; prog-mode-hook? FIXME TODO
 (set-face-attribute 'which-func nil :foreground 'unspecified :weight 'bold :inherit 'font-lock-builtin-face)
+;; Slow it down a bit
+(setq which-func-update-delay 1)
 ;; (add-hook 'sh-mode-hook 'which-function-mode)
 ;; (add-hook 'emacs-lisp-mode-hook 'which-function-mode)
 
@@ -3321,6 +3325,8 @@ Uses `cperl--get-current-subroutine-name'."
 ;; Give info at point in elisp mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (setq eldoc-idle-delay 0.25)		;Default is 0.5
+;; Collect and display all available documentation immediately
+(setq eldoc-documentation-strategy 'eldoc-documentation-compose-eagerly)
 ;; Not really useful, but at least I'll remember this
 (defalias 'elisp-repl 'ielm)
 
@@ -3596,7 +3602,9 @@ Uses `cperl--get-current-subroutine-name'."
 ;; 1GB, see also https://akrl.sdf.org and most-positive-fixnum.  Should just do
 ;; GCMH.el FIXME TODO
 (setq gc-cons-threshold (* 1 1024 1024 1024)
-      gc-cons-percentage 0.2)
+      gc-cons-percentage 0.2
+      ;; Increase?  Changed to 65536 in 30.1
+      read-process-output-max (* 1 1024 1024))
 
 ;; Just in case
 (setq warning-suppress-types nil)
