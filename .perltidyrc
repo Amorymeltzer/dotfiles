@@ -1,5 +1,6 @@
 ## .perltidyrc --- configuration for perltidy
 ## https://perltidy.sourceforge.net/perltidy.html
+## https://github.com/perltidy/perltidy
 
 # No max line width
 -l=0
@@ -17,11 +18,17 @@
 -ci=2
 # Indent via tabs, 1 tab=8 spaces
 -et=8
+# Align wide operators (=>, etc.)
+-vwe
 # Line up list indentation
 -xlp
 # No trailing commas in lists, just in case
 -wtc=0
 -dtc
+-dltc
+-naltc
+# Nicer formatting of qw?
+-qwaf
 # Indent closing braces/brackets to match opener
 -cti=1
 # All containers tight (parentheses, braces, square brackets, block braces)
@@ -58,3 +65,15 @@
 
 # Have -dbs report all blocks, regardless of size/LOC.  Annoying if -dbt not sub
 -dbl=1
+
+# Warn about some things
+# Unusual variable types
+-wvt=1
+# Misspelled hash keys
+-wuk
+# Similar hash keys (probably bad?)
+-wsk
+# Mismatched args
+-wma
+# Mismatched returns
+-wmr
