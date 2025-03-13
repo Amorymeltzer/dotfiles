@@ -3626,7 +3626,7 @@ Uses `cperl--get-current-subroutine-name'."
 
 ;;; Byte-compile everthing in .emacs.d folder
 ;; Required for byte-compilation not to fail???
-(setq compilation-scroll-output t)
+(setq compilation-scroll-output 'first-error)
 ;; In shell: emacs -batch -f batch-byte-compile ~/.emacs.d/**/*.el
 ;; Aliased(ish) to recompile_emacs
 (defun byte-compile-init-dir ()
