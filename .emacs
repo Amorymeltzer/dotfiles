@@ -2485,6 +2485,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Turn off stupid "yes" / "no" full word prompts
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; (defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 
 ;; No mouse
 (setq use-dialog-box nil
