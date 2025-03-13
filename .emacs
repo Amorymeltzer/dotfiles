@@ -1134,6 +1134,8 @@ backups." t)
 ;; run-with-idle-timer.  Wait for init to be loaded though?
 (add-hook 'after-init-hook
 	  (lambda () (run-at-time nil (* 1 60) 'recentf-save-list)))
+;; Cleanup every now and then when running via emacsclient daemon
+(setq recentf-auto-cleanup (if (daemonp) 300 'never))
 
 ;; From http://www.emacswiki.org/emacs/recentf-ext.el:
 ;;; [2009/03/01] (@* "`recentf' as most recently USED files")
