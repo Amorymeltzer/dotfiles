@@ -441,17 +441,23 @@ Record that in `paradox--backups', but do nothing if
 ;; (load-theme 'kaolin-galaxy)
 (require 'timu-macos-theme)
 (load-theme 'timu-macos)
-;; Want different color highlighting (`region' face) depending on light or night
-;; mode, and at the moment, timu-macos doesn't have a hook (it should!), so
-;; let's define some advice for it.  We could define our own hook and have it
-;; run that, but, you know, six and one half.
+;; There are a couple things I want tweaked in the timu theme, but differently
+;; depending on whether we're in light or night mode, and at the moment,
+;; timu-macos doesn't have a hook (it should!), so let's define some advice for
+;; it.  We could define our own hook and have it run that, but, you know, six
+;; and one half.  Right now it's different color highlighting (`region' face)
+;; and not being unable to see orange in the light modeline.
 (advice-add 'timu-macos-toggle-dark-light :after
 	    (lambda ()
 	      "Set face attribute for `region' based on `timu-macos-flavour'."
 	      ;; equal not eq
 	      (if (equal timu-macos-flavour "dark")
-		  (set-face-attribute 'region nil :background "color-237")
-		(set-face-attribute 'region nil :background "color-252"))))
+		  (progn
+		    (set-face-attribute 'region nil :background "color-237")
+		    (set-face-attribute 'flycheck-fringe-warning nil :foreground 'unspecified :inherit 'timu-macos-orange-face))
+		(progn
+		  (set-face-attribute 'region nil :background "color-252")
+		  (set-face-attribute 'flycheck-fringe-warning nil :foreground 'unspecified :inherit 'timu-macos-yellow-face)))))
 
 
 (require 'auto-dark)
