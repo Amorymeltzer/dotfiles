@@ -2307,7 +2307,9 @@ when in source code modes such as python-mode or perl-mode" t)
 (show-paren-mode t)
 ;; Could used 'mixed here, but highlight-parentheses better?
 (setq show-paren-style 'expression
-      show-paren-delay 0.5)
+      show-paren-when-point-inside-paren t
+      show-paren-when-point-in-periphery t
+      show-paren-delay 0.3)
 
 
 ;; Highlight parens we're currently between
