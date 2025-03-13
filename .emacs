@@ -1620,7 +1620,10 @@ that is not already being visited."
 (setq dired-auto-revert-buffer t
       dired-dwim-target t		; seems useful?
       dired-hide-details-hide-symlink-targets nil
+      ;; Don't need disk space info
+      dired-free-space nil
       dired-listing-switches "-Flagoth"
+      dired-clean-confirm-killing-deleted-buffers nil
       ;; https://lmno.lol/alvaro/emacs-git-rename-courtesy-of-dired
       dired-vc-rename-file t)
 (when (eq system-type 'darwin)
@@ -2023,7 +2026,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;;;;;;;;;;;;;;;;;;;
 ;; Display depth indicator in minibuffer, kind of weird but may be useful.
 ;; `minibuffer-prompt' face set in custom.el to be consistent (hell yeah
-;; purple).
+;; purple).  Could set `enable-recursive-minibuffers' but don't want?
 (setq minibuffer-depth-indicate-mode t)
 
 ;; Amx, better M-x (using ido or anything)
@@ -2512,8 +2515,8 @@ when in source code modes such as python-mode or perl-mode" t)
       ;; Larger size limits for undo, this might get unwieldy now that I'm
       ;; saving the history across sessions
       ;; FIXME TODO Actually understand these
-      undo-limit 32000000	 ;; 160000
-      undo-outer-limit 24000000 ;; 24000000
+      undo-limit 32000000	  ;; 160000
+      undo-outer-limit 24000000   ;; 24000000
       undo-strong-limit 60000000) ;; 240000
 
 ;; Keep region when undoing in region http://whattheemacsd.com/my-misc.el-02.html
