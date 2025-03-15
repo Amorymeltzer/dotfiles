@@ -330,7 +330,8 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;; Set by custom rather than by hand to make installation easier
 
 ;; This must come before configurations of installed packages
-(package-initialize)
+(unless package--initialized
+  (package-initialize))
 
 ;; Get list of available packages
 (unless package-archive-contents
@@ -1167,7 +1168,7 @@ backups." t)
 ;; (add-to-list 'recentf-arrange-rules (quote (("CGI files (%d)" ".\\.cgi\\'"))))
 
 
-;; Markdown mode
+;; Markdown mode (also includes `gfm-mode')
 (require 'markdown-mode)
 (add-to-list 'auto-mode-alist
 	     '("\\.\\(markdown\\|mdml\\|mkdn\\|text\\|md\\)\\'" . markdown-mode))
@@ -3260,7 +3261,8 @@ Uses `cperl--get-current-subroutine-name'."
 
 
 ;; which-key has better sorting than guide-key
-;; https://github.com/justbur/emacs-which-key
+;; Originally <https://github.com/justbur/emacs-which-key>
+;; Now in Emacs <https://elpa.gnu.org/packages/which-key.html>
 (require 'which-key)
 ;; The default behavior of `which-key-setup-side-window-bottom' is just fine.
 ;; In theory, I want top for `which-key-show-prefix', but it appears to devolve
