@@ -950,7 +950,7 @@ alias emd='\emacs --daemon '
 # Something like <https://stackoverflow.com/a/10565139/2521092> is neat, i.e.
 # `emacsclient -ca false -e '(delete-frame)'`, but this is much faster
 function eserver-status() {
-    if pgrep -qf 'emacs --daemon'; then
+    if pgrep -qf "emacs(-[0-9]+\.[0-9]+)? --daemon"; then
 	echo "Emacs server running"
     else
 	echo "Emacs server not running"
