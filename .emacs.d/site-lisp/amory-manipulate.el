@@ -41,6 +41,7 @@
 
 (global-set-key (kbd "C-c C-y") 'duplicate-line)
 (global-set-key (kbd "C-c y") 'duplicate-and-comment-line)
+(global-set-key (kbd "C-c j") 'duplicate-dwim)
 
 
 (defun yank-and-down ()
