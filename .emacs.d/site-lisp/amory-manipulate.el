@@ -145,6 +145,9 @@ two windows."
 ;; https://github.com/coldnew/linum-relative
 (autoload 'linum-relative-toggle "linum-relative" "Toggle between
 linum-relative and linum" t)
+;; Use `display-line-numbers-mode' as the backend, rather than the (as of 29.1)
+;; deprecated `linum-mode'
+(setq linum-relative-backend 'display-line-numbers-mode)
 
 ;; Jump to a specific percentage of a buffer
 ;; https://unix.stackexchange.com/a/29398/43935
