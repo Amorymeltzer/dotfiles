@@ -1471,11 +1471,9 @@ that is not already being visited."
 ;; Grab the full word for searching
 (define-key isearch-mode-map (kbd "C-M-w") 'isearch-forward-symbol-at-point)
 
-;; Activate occur easily inside isearch
-(define-key isearch-mode-map (kbd "C-o")
-  (lambda () (interactive)
-    (let ((case-fold-search isearch-case-fold-search))
-      (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
+;; Activate occur easily inside isearch, also M-s o
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+
 ;; Search the project for isearch's current search term
 ;; <https://blog.chmouel.com/posts/emacs-isearch/#do-a-project-search-from-a-search-term>
 (defun project-search-from-isearch ()
@@ -3251,6 +3249,8 @@ Uses `cperl--get-current-subroutine-name'."
 ;; helpful, a better help buffer
 ;; https://github.com/Wilfred/helpful
 (require 'helpful)
+;; See also `find-function-on-key', `find-function', `find-variable', and
+;; `find-library'
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h F") #'helpful-function)
 (global-set-key (kbd "C-h C") #'helpful-command)
