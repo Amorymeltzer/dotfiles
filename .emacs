@@ -142,7 +142,8 @@ See also `enable-theme-functions' and `disable-theme-functions'")
   :group 'flycheck-faces)
 
 ;;; Actual Modeline custom format
-;; CONSIDER: Colors faded when inactive, see emacs se TODO
+;; CONSIDER: Colors faded when inactive, see emacs se but see also
+;; `mode-line-active' and `mode-line-inactive'
 ;; Consider using timu-macos colors for more variety? TODO
 ;; Git:main?  or eh?  See also vc faces in customize
 ;;; https://stackoverflow.com/q/28468975/2521092
@@ -2056,10 +2057,19 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (amx-mode)
 ;; `execute-extended-command' is the old M-x
 (global-set-key (kbd "M-x") 'amx)
-;; Should probably use this one all the time? FIXME TODO
+;; Should probably use this one all the time? FIXME TODO Would be nice to be
+;; able to cycle between them like `execute-extended-command' can in Emacs 29.1
 (global-set-key (kbd "M-X") 'amx-major-mode-commands)
-(setq amx-prompt-string "Amx ")
-(setq amx-history-length 512)
+(setq amx-prompt-string "Amx "
+      amx-history-length 512)
+;; Redefine to use helpful rather `describe-function', nicer
+(defun amx-describe-function ()
+  "Exit the minibuffer and call `helpful-function' on selected item."
+  (interactive)
+  (amx-do-with-selected-item (lambda (chosen)
+			       (helpful-function chosen)
+			       (pop-to-buffer "*Help*"))))
+
 
 
 ;; Cleaner, more meaningful narrow-to-region
@@ -3091,7 +3101,8 @@ in the buffer." t)
 ;; Initialize *scratch* buffer with a random Emacs haiku
 (setq initial-scratch-message (amory-random-emacs-haiku))
 ;; Clear out the scratch buffer, initialized with whatever major mode we were
-;; just in and with any selected region
+;; just in and with any selected region; improved version of
+;; `get-scratch-buffer-create' (sort of))
 (defun new-scratch-buffer nil
   "Initialize the scratch buffer with the highlighted region,
 setting whatever major mode was active."
@@ -3163,7 +3174,8 @@ setting whatever major mode was active."
 ;; Was cperl-find-bad-style
 (define-key cperl-mode-map (kbd "C-c C-b") nil)
 
-;; cperl always better than perl
+;; cperl always better than perl.  As of emacs 29.1 can use
+;; `major-mode-remap-alist', although it's mainly for tree-sitter?
 (defalias 'perl-mode 'cperl-mode)
 ;; Not complete but pod can be let through
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
@@ -3474,8 +3486,10 @@ Uses `cperl--get-current-subroutine-name'."
 		 (setq calendar-longitude (string-to-number (getenv "LONGITUDE")))))
 
 
-;; Some potentially useful stuff from Magnars https://github.com/magnars/.emacs.d
-;; Rename file and buffer http://whattheemacsd.com/file-defuns.el-01.html
+;; Some potentially useful stuff from Magnars
+;; <https://github.com/magnars/.emacs.d> Rename file and buffer.  Maybe
+;; duplicated by `rename-visited-file' in Emacs 29.1, but maybe this is still
+;; better.
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
