@@ -11,18 +11,20 @@
     (kill-ring-save (region-beginning) (region-end)))
   (message "line copied"))
 
-;; Easily duplicate line
-(defun duplicate-line ()
-  "Copy this line under it; put point on copy in current column."
-  (interactive)
-  (let ((start-column (current-column)))
-    (save-excursion
-      (mark-line-and-copy) ; save-excursion restores mark
+;; Easily duplicate line.  Somehow Emacs only added this in 29.1?!  Not an exact
+;; duplicate (hah) of the built-in, but fine.  See also `duplicate-dwim'
+(unless (fboundp 'duplicate-line)
+  (defun duplicate-line ()
+    "Copy this line under it; put point on copy in current column."
+    (interactive)
+    (let ((start-column (current-column)))
+      (save-excursion
+	(mark-line-and-copy) ; save-excursion restores mark
+	(forward-line 1)
+	(yank))
       (forward-line 1)
-      (yank))
-    (forward-line 1)
-    (move-to-column start-column))
-  (message "line dup'ed"))
+      (move-to-column start-column))
+    (message "line dup'ed")))
 
 ;; Duplicate and comment-out
 (defun duplicate-and-comment-line ()
