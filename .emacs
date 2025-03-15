@@ -2680,20 +2680,6 @@ using `ido-completing-read'."
 (global-set-key [(control c) (s)] 'shell-command)
 ;; C-c a to go to a terminal shell (ansi-term)
 (global-set-key [(control c) (a)] 'ansi-term)
-;; Copy current buffer file contents to clipboard
-(defun pbcopy-buffer ()
-  "Copy the contents of the current buffer to the GUI clipboard."
-  (interactive)
-  (shell-command-on-region (point-min) (point-max) "pbcopy")
-  (message "Copied contents of %s" buffer-file-name))
-(global-set-key [(control c) (p)] 'pbcopy-buffer)
-(defun pbcopy-region (start end)
-  "Copy the contents of the selected region to the GUI clipboard."
-  (interactive "r")
-  (shell-command-on-region start end "pbcopy")
-  (message "Copied selected region"))
-
-
 
 ;; Exit in (ansi-)term returns to the emacs buffer
 (define-advice term-sentinel (:around (orig-fun proc msg) my-advice-term-sentinel)
@@ -2714,6 +2700,22 @@ using `ido-completing-read'."
 (with-eval-after-load "man"
   (set-face-attribute 'Man-overstrike nil :inherit font-lock-builtin-face :bold t)
   (set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t))
+
+
+;; Copy current buffer file contents to clipboard
+(defun pbcopy-buffer ()
+  "Copy the contents of the current buffer to the GUI clipboard."
+  (interactive)
+  (shell-command-on-region (point-min) (point-max) "pbcopy")
+  (message "Copied contents of %s" buffer-file-name))
+(global-set-key [(control c) (p)] 'pbcopy-buffer)
+(defun pbcopy-region (start end)
+  "Copy the contents of the selected region to the GUI clipboard."
+  (interactive "r")
+  (shell-command-on-region start end "pbcopy")
+  (message "Copied selected region"))
+(global-set-key [(control c) (control p)] 'pbcopy-region)
+
 
 ;; Convert DOS/Mac `^M' end of lines to Unix end of lines.  See also
 ;; set-buffer-file-coding-system (C-x RET f) with unix.
