@@ -272,8 +272,10 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 
        "--"
 
-       ;; List of minor modes.  I don't want them, but maybe it's useful to note them here?
-       ;; Diminish still removes most of them, but maybe it's kind of unnecessary
+       ;; List of minor modes.  I don't really want them, but maybe it's useful to note them here?
+       ;; Diminish still removes most of them, but maybe it's kind of
+       ;; unnecessary?  In theory, though, would be good to know when certain
+       ;; things are on or off...
        ;; minor-mode-alist
 
        mode-line-end-spaces ;; fill with '-'
@@ -1145,6 +1147,11 @@ backups." t)
 ;; Cleanup every now and then when running via emacsclient daemon
 (setq recentf-auto-cleanup (if (daemonp) 300 'never))
 
+;; See also midnight-mode, which runs `midnight-hook', which defaults to just
+;; `clean-buffer-list', so as to kill old buffers automatically.  Check if weird
+;; with dashboard? FIXME TODO
+(require 'midnight)
+
 ;; From http://www.emacswiki.org/emacs/recentf-ext.el:
 ;;; [2009/03/01] (@* "`recentf' as most recently USED files")
 ;; (defun recentf-push-buffers-in-frame ()
@@ -1636,7 +1643,7 @@ that is not already being visited."
   (setq-default dired-ls-F-marks-symlinks t ; OSX uses @ after symlinks
 		dired-use-ls-dired nil))    ; OSX ls doesn't support --dired
 (add-hook 'dired-mode-hook 'hl-line-mode)
-;; Use a rather than return so as not to open up so many damn windows
+;; Use `a' rather than `return' so as not to open up so many damn windows
 ;; Don't warn/disable/whatever
 (put 'dired-find-alternate-file 'disabled nil)
 ;; Seems neat
@@ -1669,7 +1676,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
   (define-key wdired-mode-map (kbd "C-w") 'wdired-abort-changes)
   (define-key wdired-mode-map (kbd "C-c k") 'wdired-abort-changes))
 
-;; dired-x: ignore uninteresting files
+;; dired-x: ignore uninteresting files, get `dired-jump'
 (require 'dired-x)
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
 ;; Feels weird that dired-jump is part of dired-x...
