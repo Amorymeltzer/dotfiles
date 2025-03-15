@@ -450,17 +450,18 @@ Record that in `paradox--backups', but do nothing if
 ;; it.  We could define our own hook and have it run that, but, you know, six
 ;; and one half.  Right now it's different color highlighting (`region' face)
 ;; and not being unable to see orange in the light modeline.
-(advice-add 'timu-macos-toggle-dark-light :after
-	    (lambda ()
-	      "Set face attribute for `region' based on `timu-macos-flavour'."
-	      ;; equal not eq
-	      (if (equal timu-macos-flavour "dark")
+(with-eval-after-load 'flycheck
+  (advice-add 'timu-macos-toggle-dark-light :after
+	      (lambda ()
+		"Set face attribute for `region' based on `timu-macos-flavour'."
+		;; equal not eq
+		(if (equal timu-macos-flavour "dark")
+		    (progn
+		      (set-face-attribute 'region nil :background "color-237")
+		      (set-face-attribute 'flycheck-fringe-warning nil :foreground 'unspecified :inherit 'timu-macos-orange-face))
 		  (progn
-		    (set-face-attribute 'region nil :background "color-237")
-		    (set-face-attribute 'flycheck-fringe-warning nil :foreground 'unspecified :inherit 'timu-macos-orange-face))
-		(progn
-		  (set-face-attribute 'region nil :background "color-252")
-		  (set-face-attribute 'flycheck-fringe-warning nil :foreground 'unspecified :inherit 'timu-macos-yellow-face)))))
+		    (set-face-attribute 'region nil :background "color-252")
+		    (set-face-attribute 'flycheck-fringe-warning nil :foreground 'unspecified :inherit 'timu-macos-yellow-face))))))
 
 
 (require 'auto-dark)

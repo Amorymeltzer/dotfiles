@@ -54,7 +54,7 @@
  ;; If there is more than one, they won't work right.
  '(cperl-array-face ((t (:foreground unspecified :inherit font-lock-keyword-face :weight bold))))
  '(cperl-hash-face ((t (:foreground unspecified :inherit font-lock-constant-face :slant italic :weight bold))))
- ;; '(flycheck-fringe-warning ((t (:foreground unspecified :inherit timu-macos-yellow-face))))
+ '(flycheck-fringe-warning ((t (:foreground unspecified :inherit timu-macos-yellow-face))))
  '(font-lock-comment-delimiter-face ((t (:foreground unspecified :inherit font-lock-comment-face :slant normal))))
  '(font-lock-regexp-grouping-backslash ((t (:foreground unspecified :inherit error))))
  '(font-lock-regexp-grouping-construct ((t (:foreground unspecified :inherit warning))))
