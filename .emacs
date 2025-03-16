@@ -563,7 +563,7 @@ Used for insertion into the dashboard."
 (setq dashboard-items '((recents  . 15)
 			;; (ls-files . 5)
 			;; (ls-directories . 3)
-			;; (bookmarks . 5)
+			(bookmarks . 5)
 			;; (projects . 5)	; Depends on projectile
 			;; (agenda . 5)
 			;; (registers . 5)
