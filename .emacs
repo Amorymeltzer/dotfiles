@@ -3056,7 +3056,7 @@ in the buffer." t)
 	("^/\\([^:@]+@\\)?\\([^:]+\\):/*" . "ftp://\1\2")
 	("^/+" . "file:/")))
 
-
+(setq browse-url-default-scheme "https")
 (global-set-key (kbd "C-c v") 'browse-url)
 (global-set-key (kbd "C-c C-v") 'browse-url)
 
