@@ -1028,9 +1028,16 @@ POS defaults to `point'."
 ;; (require 'applescript-mode)
 
 
-;; Make life easier, in all lisps
-(define-key lisp-mode-shared-map (kbd "C-x e") 'eval-region)
-(define-key lisp-mode-shared-map (kbd "C-x C-e") 'eval-buffer)
+;; Make life easier, in all lisps.  As of Emacs 29 we can do
+;; `elisp-eval-region-or-buffer', which is bound by default to C-c C-e, so while
+;; I'd rather do C-x e, it's just easier to keep these the same.
+(if (fboundp 'elisp-eval-region-or-buffer)
+    (progn
+      (define-key lisp-mode-shared-map (kbd "C-c e") 'elisp-eval-region-or-buffer)
+      (define-key lisp-mode-shared-map (kbd "C-c C-e") 'elisp-eval-region-or-buffer))
+  (progn
+      (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-region)
+      (define-key lisp-mode-shared-map (kbd "C-c C-e") 'eval-buffer)))
 
 
 ;; Use buffer name as window title for window-system
