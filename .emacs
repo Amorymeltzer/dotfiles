@@ -2327,6 +2327,8 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
 ;; (global-set-key (kbd "C-x f") 'find-file-in-project)
+;; Still, maybe just use all the project stuff?  `C-x p' prefix
+(setq project-kill-buffers-display-buffer-list t)
 
 ;; smerge-mode, for resolving git conflicts/merges
 ;; default prefix is C-c ^, which is a pain
