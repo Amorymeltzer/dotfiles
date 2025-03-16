@@ -2333,6 +2333,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq show-paren-style 'expression
       show-paren-when-point-inside-paren t
       show-paren-when-point-in-periphery t
+      show-paren-context-when-offscreen 'overlay
       show-paren-delay 0.3)
 
 
