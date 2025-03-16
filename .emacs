@@ -1691,7 +1691,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; Feels weird that dired-jump is part of dired-x...
 (global-set-key (kbd "C-x C-d") 'dired-jump) ; C-x d already dired...
 ;; By default excludes ., ., autosave files, and lockfiles(?); add stupid OSX
-;; .DS_Store files
+;; .DS_Store files.  See also `dired-omit-lines'
 (setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|\\`.DS_Store\\'")
 
 ;; dired-sidebar https://github.com/jojojames/dired-sidebar
@@ -1845,6 +1845,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
       (exit-minibuffer))))
 
 
+;; Should really figure all this stuff out better FIXME TODO
 (defun ido-choose-from-recentf ()
   "Use ido to select a recently opened file from the `recentf-list'"
   (interactive)
@@ -1858,6 +1859,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (global-set-key (kbd "C-c r") 'ido-choose-from-recentf)
 (global-set-key (kbd "C-c C-r") 'ido-choose-from-recentf)
 ;; (global-set-key (kbd "C-x f") 'recentf-open-files)
+;; (global-set-key (kbd "C-x f") 'recentf-open)
 (global-set-key (kbd "C-x f") 'ido-choose-from-recentf)
 
 ;; Alt for ido recentf, pretty sweet since shorter names...
@@ -3154,6 +3156,7 @@ setting whatever major mode was active."
 ;; cperl-font-lock, cperl-electric-lbrace-space, cperl-electric-parens
 ;; cperl-electric-linefeed, cperl-electric-keywords, cperl-lazy-help-time
 ;; cperl-info-on-command-no-prompt, cperl-clobber-lisp-bindings
+;; See also `cperl-style-examples' and `cperl-file-style'
 (setq cperl-hairy t)
 ;; cperl-hairy overrides cperl-electric-parens, although the latter sadly stays
 ;; stuck on nil.  electric-parens, however, takes care of things, so certain
@@ -3330,7 +3333,8 @@ Uses `cperl--get-current-subroutine-name'."
 
 
 ;; Jump to a definition in the current file (holy shit this is awesome)
-;; Does this automatically use ido?  Others think it doesn't but I do...
+;; Does this automatically use ido?  Others think it doesn't but I do...  Also
+;; set to M-g i now
 (global-set-key (kbd "C-c i") 'imenu)
 (setq-default
  imenu-auto-rescan t ; Always rescan buffers
@@ -3483,8 +3487,9 @@ Uses `cperl--get-current-subroutine-name'."
 ;; (require 'pretty-mode)
 
 
-;; I don't use the calendar, but useful?  `calendar-location-name' just breaks
-;; things, and the default uses lat-long anyway.  Defined in priv-env.bash
+;; I don't use the calendar, but useful?  `sunrise-sunset' and `lunar-phases'
+;; are neat.  `calendar-location-name' just breaks things, and the default uses
+;; lat-long anyway.  Defined in priv-env.bash
 (eval-after-load 'solar
 	'(progn
 		 ;; 24-hour time better
