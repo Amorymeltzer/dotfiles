@@ -1805,16 +1805,17 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 
 ;; ~ in ido returns to home directory
 ;; http://whattheemacsd.com/setup-ido.el-02.html
-(add-hook 'ido-setup-hook
-	  (lambda ()
-	    ;; Go straight home
-	    (define-key ido-file-completion-map
-	      (kbd "~")
-	      (lambda ()
-		(interactive)
-		(if (looking-back "/")
-		    (insert "~/")
-		  (call-interactively 'self-insert-command))))))
+(add-hook
+ 'ido-setup-hook
+ (lambda ()
+   ;; Go straight home
+   (define-key ido-file-completion-map
+	       (kbd "~")
+	       (lambda ()
+		 (interactive)
+		 (if (eq (char-before) ?/)
+		     (insert "~/")
+		   (call-interactively 'self-insert-command))))))
 
 ;; C-k to kill buffer, C-b to bury it
 ;; http://endlessparentheses.com/Ido-Bury-Buffer.html
