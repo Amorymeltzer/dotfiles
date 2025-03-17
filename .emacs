@@ -1358,12 +1358,14 @@ current buffer" t)
 that is not already being visited."
   (interactive)
   (let ((buffer-file-name-list (mapcar 'buffer-file-name (buffer-list)))
-	most-recent-filename)
-    (dolist (filename recentf-list)
-      (unless (memq filename buffer-file-name-list)
-	(setq most-recent-filename filename)
-	(return)))
-    (find-file most-recent-filename)))
+	(most-recent-filename nil))
+    (catch 'found
+      (dolist (filename recentf-list)
+	(unless (member filename buffer-file-name-list)
+	  (setq most-recent-filename filename)
+	  (throw 'found nil))))
+    (when most-recent-filename
+      (find-file most-recent-filename))))
 (global-set-key (kbd "C-x C-r") 'visit-most-recent-file)
 
 ;; Reveal file or folder in finder
