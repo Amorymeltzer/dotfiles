@@ -2610,11 +2610,11 @@ when in source code modes such as python-mode or perl-mode" t)
 (add-hook 'prog-mode-hook 'smartscan-mode)
 
 
-;; http://github.com/rejeep/emacs/blob/master/rejeep-defuns.el
 (defun nuke-all-buffers ()
   "Kill all buffers, leaving *scratch* only."
   (interactive)
-  (mapcar (lambda (x) (kill-buffer x)) (buffer-list)) (delete-other-windows))
+  (mapc #'kill-buffer (buffer-list))
+  (delete-other-windows))
 
 (defun indent-buffer ()
   "Indent the entire buffer."
