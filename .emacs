@@ -1559,11 +1559,11 @@ that is not already being visited."
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 (setq ace-jump-mode-scope 'frame)	; Only look in current frame, not all windows
 
-;; Reorder so line with one prefix, char with two
+;; Reorder so char with one prefix, line with two
 (setq ace-jump-mode-submode-list
       '(ace-jump-word-mode        ; first one always maps to: C-c SPC
-	ace-jump-line-mode        ; second one always maps to: C-u C-c SPC
-	ace-jump-char-mode))      ; third one always maps to: C-u C-u C-c SPC
+	ace-jump-char-mode        ; second one always maps to: C-u C-c SPC
+	ace-jump-line-mode))      ; third one always maps to: C-u C-u C-c SPC
 
 ;; Jump back with C-x spc
 (autoload 'ace-jump-mode-pop-mark "ace-jump-mode" "Ace jump back:-)" t)
