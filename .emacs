@@ -58,6 +58,8 @@
 
 ;; Should really look into and make use of f, s, dash
 ;; Am I just going to keep improving this until it matches spacemacs?
+
+;; Of note, toolforge is on 28.2 aka `libgnutls-version' 30709
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;; BEGIN
@@ -305,14 +307,6 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package
 (require 'package)
-;; Fix for annoying ELPA failure, supposedly fixed upstream but still an issue
-;; for me on 27.1; see https://github.com/syl20bnr/spacemacs/issues/12535 and
-;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
-;; Something to do with a specific GNUTLS version (currently 30615), this exact check is from
-;; https://github.com/syl20bnr/spacemacs/blob/d46eacd83842815b24afcb2e1fee5c80c38187c5/core/core-emacs-backports.el
-;; Still necessary in 28+ or 29+? FIXME
-(unless (<= libgnutls-version 30603)
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (unless (assoc-default "melpa" package-archives)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/")))
 (setq package-archive-priorities
