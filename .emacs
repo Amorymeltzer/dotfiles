@@ -104,18 +104,20 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 	      (run-hooks 'after-load-theme-hook)))
 
 
-;; Modeline customizations
+;;;;;; Modeline customizations ;;;;;;
 ;; Probably kind of pointless given I'm manually defining the format below?
+
 ;; Time
 ;; Lots more to customize FIXME TODO
+(require 'time)
 (setq display-time-day-and-date t
       display-time-24hr-format t
       display-time-default-load-average nil)
 (display-time-mode t)
 
 ;; Battery percentage
+(require 'battery)
 (when (not (equal "Battery status not available" (battery)))
-  (require 'battery)
   (display-battery-mode)
   (setq battery-update-interval 240 ;; Default 60s
 	battery-mode-line-limit 85  ;; Default 100
@@ -137,8 +139,9 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;; guess, that's a flycheck-color-mode-line thing I think FIXME TODO
 (defface flycheck-mode-line-color-face
   '((t))
-  "Face with which to color the Flycheck mode-line status text
- via flycheck-color-mode-line-mode."
+  "Face with which to color the Flycheck mode-line status text.
+ Makes use of flycheck-color-mode-line-mode and setting
+ `flycheck-color-mode-line-face-to-color'."
   :group 'flycheck-faces)
 
 ;;; Actual Modeline custom format
@@ -912,7 +915,7 @@ POS defaults to `point'."
 
   ;; flycheck-bashisms https://github.com/cuonglm/flycheck-checkbashisms
   ;; Ensure no bashisms in sh code, no shisms in bash code; mostly the former
-  (flycheck-checkbashisms-setup)
+  (add-hook 'flycheck-mode-hook #'flycheck-checkbashisms-setup)
   (setq flycheck-checkbashisms-posix t
 	flycheck-checkbashisms-newline t)
   ;; flycheck-relint https://github.com/purcell/flycheck-relint
@@ -1093,9 +1096,10 @@ backups." t)
 (setq diff-switches "-u -w")
 
 ;; Saner ediff?
-(setq ediff-diff-options "-w")
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(with-eval-after-load 'ediff
+  (setq ediff-diff-options "-w")
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
 
 
 ;; Options to pass to ls, default just -l
@@ -1431,6 +1435,7 @@ that is not already being visited."
 ;; C-x r m to make a new one
 ;; C-x r d to delete
 ;; Fuck I should use these more
+(require 'bookmark)
 (global-set-key "\C-xrd" 'bookmark-delete)
 ;; where to save the bookmarks
 (setq bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
@@ -1592,6 +1597,7 @@ that is not already being visited."
       max-mini-window-height 0.33)
 
 ;; Save minibuffer history
+(require 'savehist)
 (add-hook 'after-init-hook #'savehist-mode)
 (setq
  savehist-autosave-interval 180 ; Default 300
@@ -1679,6 +1685,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 	    (rename-buffer (generate-new-buffer-name (concat "dired: " dired-directory)))))
 
 ;; wdired lets you rename files
+(require 'wdired)
 (setq wdired-allow-to-change-permissions 'advanced)
 ;; Available as C-x C-q, but nice to be able to toggle more easily
 (define-key dired-mode-map (kbd "C-w") 'wdired-change-to-wdired-mode)
@@ -1699,7 +1706,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; dired-sidebar https://github.com/jojojames/dired-sidebar
 ;; Works nicely with ibuffer-sidebar via sidebar-toggle (defined elsewhere)
 (require 'dired-sidebar)
-(setq dired-sidebar-one-instance-p t
+(setq dired-sidebar-use-one-instance t
       dired-sidebar-should-follow-file t
       dired-sidebar-theme 'none
       dired-sidebar-use-magit-integration t)
@@ -1821,11 +1828,11 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 
 ;; C-k to kill buffer, C-b to bury it
 ;; http://endlessparentheses.com/Ido-Bury-Buffer.html
-(add-hook
- 'ido-setup-hook
- (defun endless/define-ido-bury-key ()
-   (define-key ido-completion-map
-     (kbd "C-b") 'endless/ido-bury-buffer-at-head)))
+(defun endless/define-ido-bury-key ()
+  "Define key binding for burying buffer in ido."
+  (define-key ido-completion-map
+    (kbd "C-b") 'endless/ido-bury-buffer-at-head))
+(add-hook 'ido-setup-hook #'endless/define-ido-bury-key)
 
 (defun endless/ido-bury-buffer-at-head ()
   "Bury the buffer at the head of `ido-matches'."
@@ -2678,6 +2685,7 @@ using `ido-completing-read'."
 
 
 ;; bs-cycling is way better
+(require 'bs)
 (global-set-key (kbd "C-x <right>") 'bs-cycle-next)
 (global-set-key (kbd "C-x <left>") 'bs-cycle-previous)
 ;; Which buffers to show
@@ -2829,6 +2837,7 @@ day of the week.  With two prefix arguments, add day of week and time."
 ;; Stock tracker <https://github.com/beacoder/stock-tracker/tree/master>
 ;; Just do `stock-tracker-start', can customize `stock-tracker-list-of-stocks',
 ;; otherwise saved in desktop file
+(require 'stock-tracker)
 (setq stock-tracker-refresh-interval 3	;default 1, is N*10 seconds
       stock-tracker-up-red-down-green nil)
 
@@ -2923,9 +2932,7 @@ trolls" t)
 ;; Idling stuff
 
 ;; Zone out
-(autoload 'zone "zone" "Zone out, completely" t)
-(autoload 'zone-when-idle "zone" "Zone out when Emacs has been
-idle for SECS seconds." t)
+(require 'zone)
 ;; After 3 idle minutes
 ;; (zone-when-idle zone-idle)
 ;; (setq zone-idle (* 60 3))
@@ -3257,6 +3264,7 @@ Uses `cperl--get-current-subroutine-name'."
 
 
 ;; Don't have ruby-mode auto-insert coding utf-8 info on files
+(require 'ruby-mode)
 (setq ruby-insert-encoding-magic-comment nil)
 
 
@@ -3277,6 +3285,7 @@ Uses `cperl--get-current-subroutine-name'."
 ;; Get perldoc after C-h via P
 (define-key 'help-command "P" 'perldoc)
 
+(require 'apropos)
 ;; Search more than just commands but eh, I never use...
 (define-key 'help-command "a" 'apropos)
 ;; Enhance apropos, slowly
@@ -3411,11 +3420,6 @@ Uses `cperl--get-current-subroutine-name'."
 
 
 ;; Flyspell spell checking
-;; Turns out that `flyspell-auto-correct-previous-word' is often/always better
-;; than `flyspell-auto-correct-word'
-;; Can't set C-M-I for `flyspell-auto-correct-word' since somehow that registers
-;; as C-M-i as well?  Awful.
-(setq flyspell-auto-correct-binding (kbd "C-M-i"))
 ;; Lots of ispell process instances being started then killed, especially
 ;; around git/magit?? FIXME TODO
 ;; Faces don't ever seem to take precedence?  FIXME TODO
@@ -3424,6 +3428,12 @@ Uses `cperl--get-current-subroutine-name'."
   (setq flyspell-highlight-properties t
 	flyspell-issue-message-flag nil
 	flyspell-issue-welcome-flag nil
+
+	;; Turns out `flyspell-auto-correct-previous-word' is often/always
+	;; better than `flyspell-auto-correct-word'.  Can't set C-M-I for
+	;; `flyspell-auto-correct-word' since that registers as C-M-i also.
+	flyspell-auto-correct-binding (kbd "C-M-i")
+
 	flyspell-duplicate-distance 100) ;Default is 400000
 
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
@@ -3482,6 +3492,7 @@ Uses `cperl--get-current-subroutine-name'."
 
 
 ;; restclient https://github.com/pashky/restclient.el
+;; Consider hurl-mode, verb, or plz-see
 (setq restclient-same-buffer-response-name "*Restclient Response*")
 
 
@@ -3493,15 +3504,18 @@ Uses `cperl--get-current-subroutine-name'."
 ;; I don't use the calendar, but useful?  `sunrise-sunset' and `lunar-phases'
 ;; are neat.  `calendar-location-name' just breaks things, and the default uses
 ;; lat-long anyway.  Defined in priv-env.bash
-(eval-after-load 'solar
-	'(progn
-		 ;; 24-hour time better
-		 (setq calendar-time-display-form '(24-hours ":" minutes am-pm
-	      (if time-zone " (")
-	      time-zone
-	      (if time-zone ")")))
-		 (setq calendar-latitude (string-to-number (getenv "LATITUDE")))
-		 (setq calendar-longitude (string-to-number (getenv "LONGITUDE")))))
+(require 'solar)
+(eval-after-load
+    'solar
+  '(progn
+     ;; 24-hour time better
+     (setq calendar-time-display-form
+	   '(24-hours ":" minutes am-pm
+		      (if time-zone " (")
+		      time-zone
+		      (if time-zone ")")))
+     (setq calendar-latitude (string-to-number (getenv "LATITUDE")))
+     (setq calendar-longitude (string-to-number (getenv "LONGITUDE")))))
 
 
 ;; Some potentially useful stuff from Magnars
@@ -3662,7 +3676,7 @@ Uses `cperl--get-current-subroutine-name'."
 
 ;; Browse kill ring, set key to auto-complete with ido
 ;; https://github.com/browse-kill-ring/browse-kill-ring
-(autoload 'browse-kill-ring "browse-kill-ring" "Browse kill ring" t)
+(require 'browse-kill-ring)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 (eval-after-load 'browse-kill-ring
   '(progn
