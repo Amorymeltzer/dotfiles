@@ -3488,6 +3488,14 @@ Uses `cperl--get-current-subroutine-name'."
   ;; Is there a way to hook flyspell and flycheck into same key?  Next of either?
   (define-key flyspell-mode-map (kbd "C-c '") 'flyspell-goto-next-error)
   (define-key flyspell-mode-map (kbd "C-c ;") 'flyspell-goto-prev-error))
+
+
+;; abbrev-mode isn't really a spell-checker and doesn't quite belong here, but
+;; with a long-ass list of commonly-misspelled words
+;; (<https://www.masteringemacs.org/article/correcting-typos-misspellings-abbrev>),
+;; it functions much the same.  `edit-abbrevs' to add to the table, and honestly
+;; I could be using it more.
+(abbrev-mode t)
 ;;;;;;;;;;;;;;;;;;;;
 
 
