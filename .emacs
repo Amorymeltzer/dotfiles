@@ -176,11 +176,17 @@ See also `enable-theme-functions' and `disable-theme-functions'")
        ;; former borrowed from `mode-line-remote'.  Serves as sort of a spacer
        ;; that recapitulates `mode-line-client' in the place of
        ;; `mode-line-front-space'.  See also `(daemonp)'
-       '(:eval (propertize (if
-			       (frame-parameter nil 'client)
-			       ;; This should be subtle since it's technically
-			       ;; unnecessary
-			       "@" "-") 'face 'font-lock-comment-face))
+       '(:eval (propertize
+		(if (frame-parameter nil 'client)
+		    ;; This should be subtle since it's technically
+		    ;; unnecessary
+		    "@" "-") 'face 'font-lock-comment-face))
+
+       ;; Might as well?  Make it really clear
+       '(:eval (propertize
+		(if defining-kbd-macro
+		    "-K-" "") 'face 'font-lock-escape-face))
+
 
        ;; Buffer name.  Not using mode-line-buffer-identification but doing it
        ;; manually means that the mode-line-buffer-id face gets separated from
