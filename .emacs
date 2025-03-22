@@ -3728,12 +3728,13 @@ Uses `cperl--get-current-subroutine-name'."
 
 (require 'key-chord)
 (key-chord-mode 1)
-(key-chord-define-global "jj" 'whitespace-cleanup)
-(key-chord-define-global "hh" 'indent-buffer)
-(key-chord-define-global "ii" 'byte-compile-init-dir)
+(key-chord-define-global "xx" 'amx)
+(key-chord-define-global "jj" 'ace-jump-mode)
+(key-chord-define-global "jk" 'ace-jump-char-mode)
+(key-chord-define-global "jl" 'ace-jump-line-mode)
+(key-chord-define-global "ii" 'indent-buffer)
+(key-chord-define-global "ww" 'whitespace-cleanup)
 (key-chord-define-global "yy" 'browse-kill-ring)
-(key-chord-define-global "xx" 'er/expand-region)
-(key-chord-define-global "qq" 'er/contract-region)
 (key-chord-define-global "uu" 'undo-tree-undo)
 (key-chord-define prog-mode-map "--" 'undo-tree-redo) ; not in text or conf mode?
 (key-chord-define js2-mode-map ";;" "\C-e;")
