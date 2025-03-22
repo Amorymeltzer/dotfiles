@@ -989,7 +989,7 @@ POS defaults to `point'."
 ;;; Highlight TODOs, FIXMEs, etc.
 ;; There are a lot of ways to do this.  Previously I used fic-mode
 ;; (<https://github.com/lewang/fic-mode>) which is fairly bare-bones.  It looks
-;; like hl-todo (<hl-todo better? https://github.com/tarsius/hl-todo>) is better
+;; like hl-todo (<https://github.com/tarsius/hl-todo>) is better
 ;; (more customization options, ability to jump to each in turn), as is
 ;; hl-prog-extra, but, honestly, I kind of just like the simple method here.  In
 ;; the end, that means something roughly at the level of fic-mode, but probably
@@ -997,10 +997,10 @@ POS defaults to `point'."
 ;; just use hl-todo, with something like the below:
 ;; (setq hl-todo '(t (:foreground "#e55c7a" :weight normal)))
 ;; (setq hl-todo-wrap-movement t)
-(setq hl-todo-keyword-faces		; FIXME TODO unused?
-      '(("TODO"  . "pink")
-	("FIXME" . "#cc9393")
-	("XXX"   . "#1E90FF")))
+;; (setq hl-todo-keyword-faces
+;;       '(("TODO"  . "pink")
+;;	("FIXME" . "#cc9393")
+;;	("XXX"   . "#1E90FF")))
 (defun my/add-watchwords ()
   "Function to highlight specific watchwords, rather than use `fic-mode' or
 `hl-todo' or something."
