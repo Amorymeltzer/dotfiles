@@ -3323,10 +3323,11 @@ Uses `cperl--get-current-subroutine-name'."
 ;; https://github.com/justbur/emacs-which-key#sorting-options
 (setq which-key-sort-order 'which-key-key-order-alpha
       which-key-idle-delay 0.25		   ; default 1.0
-      which-key-idle-secondary-delay 0.25  ; default nil, not sure what do
+      which-key-idle-secondary-delay 0.05  ; default nil, this is faster
       which-key-side-window-max-height 0.5 ; default 0.25
-      ;; which-key-prefix-prefix "=>"	   ; default +
+      which-key-prefix-prefix "=>+"	   ; default +
       ;; which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL") ; default nil
+      which-key-show-early-on-C-h t
       which-key-show-remaining-keys t
       which-key-lighter nil  ; Don't rely on diminish, which doesn't work anyway
       which-key-compute-remaps t)
