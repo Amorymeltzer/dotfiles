@@ -2630,8 +2630,9 @@ when in source code modes such as python-mode or perl-mode" t)
 
 ;; smartscan, go to next/previous symbol at point with M-n/M-p
 ;; <https://github.com/mickeynp/smart-scan> Was I really not using M-n/M-p in
-;; prog modes beforehand?  Not great about camelCase?  Maybe remove FIXME TODO
+;; prog modes beforehand?  Maybe remove FIXME TODO
 (require 'smartscan)
+(setq smartscan-symbol-selector "symbol")
 (add-hook 'prog-mode-hook 'smartscan-mode)
 
 
