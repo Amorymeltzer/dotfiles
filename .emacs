@@ -2341,6 +2341,7 @@ when in source code modes such as python-mode or perl-mode" t)
   (set-face-attribute 'git-timemachine-commit nil :inherit 'magit-hash)
   (set-face-attribute 'git-timemachine-minibuffer-author-face nil :foreground 'unspecified :inherit 'magit-log-author)
   (set-face-attribute 'git-timemachine-minibuffer-detail-face nil :foreground 'unspecified :inherit 'magit-blame-summary))
+(global-set-key (kbd "C-x v t") 'git-timemachine)
 
 ;; Useful for git related work, although maybe try find-file-in-repo
 ;; (require 'find-file-in-project)
@@ -3088,6 +3089,8 @@ in the buffer." t)
 (require 'git-link)
 (setq git-link-default-remote 'origin)
 (global-set-key (kbd "C-c C-g") 'git-link)
+;; FIXME TODO SEE NOTE ABOVE WITH MAGIT ABOUT C-c g l
+;; FIXME TODO MAYBE USE browse-at-remote NOW?! C-x v w
 
 ;; github-explorer https://github.com/TxGVNN/github-explorer
 ;; Browse files from a repo locally
