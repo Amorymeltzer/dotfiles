@@ -723,6 +723,16 @@ Used for insertion into the dashboard."
 (global-subword-mode 1)
 
 
+;; Get path from the system shell, not super necessary?
+;; <https://github.com/purcell/exec-path-from-shell>
+;; Could do something like
+;; (require 'exec-path-from-shell)
+;; (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
+;;   (add-to-list 'exec-path-from-shell-variables var))
+;; (when (daemonp)
+  ;; (exec-path-from-shell-initialize))
+
+
 ;;;;;;;;;;;;;;;;;;;
 ;; JavaScript stuff
 ;; Use js2-mode instead of js-mode https://github.com/mooz/js2-mode
@@ -2478,6 +2488,7 @@ when in source code modes such as python-mode or perl-mode" t)
     (define-key map (kbd ".") 'highlight-symbol-at-point)
     (define-key map (kbd "?") 'highlight-symbol-remove-all)
     (define-key map (kbd "/") 'highlight-symbol-remove-all)
+    ;; But see also M-{ and M-}, plus M-a and M-e
     (define-key map (kbd "p") 'backward-paragraph)
     (define-key map (kbd "n") 'forward-paragraph)
     ;; Maybe move these to C-t???
@@ -3603,6 +3614,7 @@ Uses `cperl--get-current-subroutine-name'."
 		(window-buffer (minibuffer-selected-window))
 	      (current-buffer))))))
 
+;; See also `file-name-base'
 (defun copy-current-file-path ()
   "Add current file path to kill ring."
   (interactive)
