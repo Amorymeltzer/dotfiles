@@ -471,7 +471,7 @@ Record that in `paradox--backups', but do nothing if
 (require 'auto-dark)
 (setq
  ;; ns-do-applescript not available.  Could also just set
- ;; auto-dark-detection-method to osascript, but this is the proper way
+ ;; `auto-dark-detection-method' to osascript, but this is the proper way
  auto-dark-allow-osascript t
  ;; The default of 5 seems like it should be fine, but it seems to have a quite
  ;; noticable slowdown.  Setting it higher isn't a big deal, so it's a
@@ -483,7 +483,10 @@ Record that in `paradox--backups', but do nothing if
  auto-dark-themes '((timu-macos) (timu-macos)))
 (add-hook 'auto-dark-dark-mode-hook #'timu-macos-toggle-dark-light)
 (add-hook 'auto-dark-light-mode-hook #'timu-macos-toggle-dark-light)
-(auto-dark-mode t)
+;; I mean, whatever, but just in case I ever want to use the macOS application,
+;; although it will need tweaking for emacs-plus or whatever.
+(when (not window-system)
+  (auto-dark-mode t))
 
 
 ;; Loading a theme is nice and all, but the previously enabled theme lingers,
