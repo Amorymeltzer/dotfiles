@@ -67,6 +67,15 @@
 (setq debug-on-error t
       init-file-debug t)
 
+;; Don't be stingy on the memory, we have lots now. It's the distant future.
+;; 1GB, see also https://akrl.sdf.org and most-positive-fixnum.  Has big
+;; speedups for startup, fwiw.  Should just do GCMH.el FIXME TODO
+(setq gc-cons-threshold (* 1 1024 1024 1024)
+      gc-cons-percentage 0.2
+      ;; Increase?  Changed to 65536 in 30.1
+      read-process-output-max (* 1 1024 1024))
+
+
 ;; UTF-8 always, always, always
 (set-default-coding-systems 'utf-8)
 (setq-default locale-coding-system 'utf-8)
@@ -3693,14 +3702,6 @@ Uses `cperl--get-current-subroutine-name'."
 ;; according to some function involving a constant, the current date, and
 ;; Moore's Law.
 ;; (setq large-file-warning-threshold 50000000)
-
-;; Don't be stingy on the memory, we have lots now. It's the distant future.
-;; 1GB, see also https://akrl.sdf.org and most-positive-fixnum.  Should just do
-;; GCMH.el FIXME TODO
-(setq gc-cons-threshold (* 1 1024 1024 1024)
-      gc-cons-percentage 0.2
-      ;; Increase?  Changed to 65536 in 30.1
-      read-process-output-max (* 1 1024 1024))
 
 ;; Just in case
 (setq warning-suppress-types nil)
