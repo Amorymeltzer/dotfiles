@@ -518,7 +518,7 @@ Disables the `custom-enabled-themes' first to start with a blank canvas."
 ;; but when I became a man, I put away childish things.
 ;;   -- 1 Corinthians, 13:11
 ;; No menu bar
-(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
+(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode blink-cursor-mode))
   (when (fboundp mode) (funcall mode -1)))
 
 ;; Prevent the startup message and splash screen
