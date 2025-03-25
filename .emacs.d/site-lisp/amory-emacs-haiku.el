@@ -1,7 +1,7 @@
-;;; amory-emacs-haiku.el --- Emacs haiku
-
+;;; amory-emacs-haiku.el --- Emacs haiku -*- lexical-binding: t; -*-
 ;; Emacs haiku from http://www.emacswiki.org/emacs/EmacsHaiku
-;; Potentially for scratch initialization
+
+;; Used for scratch initialization
 (defvar amory-emacs-haiku
   '("My dot emacs grows
      one day I look inside it
@@ -73,7 +73,9 @@
 
 ;; Function for choosing a random haiku from the above list
 (defun amory-random-emacs-haiku (&optional prefix)
-  "Select and format a random haiku from `amory-emacs-haiku'.  Optional PREFIX to determine what, if any, characters to lead each line with; defaults to lisp `;; `."
+  "Select and format a random haiku from `amory-emacs-haiku'.  Optional
+PREFIX to determine what, if any, characters to lead each line with;
+defaults to lisp `;; `."
   (random t)
   (let* ((prefix (or prefix ";; "))
 	 (n (random (length amory-emacs-haiku)))
@@ -82,7 +84,7 @@
       (insert haiku)
       (goto-char (point-min))
       (while (< (point) (point-max))
-	(goto-char (point-at-bol))
+	(goto-char (line-beginning-position))
 	(delete-horizontal-space)
 	(insert prefix)
 	(when (looking-at "--")

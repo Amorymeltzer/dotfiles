@@ -1,4 +1,4 @@
-;;; amory-manipulate.el --- Manipulate lines and comments, move around
+;;; amory-manipulate.el --- Manipulate lines and comments, move around -*- lexical-binding: t; -*-
 
 ;; Copy to kill ring, exists mainly for the below
 ;; Can use whole-line-or-region-kill-ring-save for interactive
@@ -115,7 +115,10 @@ two windows."
 ;; Toggle between split windows and a single window.  Could just use
 ;; winner-mode but this is probably easier
 (defun toggle-windows-split()
-  "Switch back and forth between one window and whatever split of windows we might have in the frame. The idea is to maximize the current buffer, while being able to go back to the previous split of windows in the frame simply by calling this command again."
+  "Switch between one window and whatever split of windows we might have in
+the frame.  The idea is to maximize the current buffer, while being able
+to go back to the previous split of windows in the frame simply by
+calling this command again."
   (interactive)
   (if (not (window-minibuffer-p (selected-window)))
       (progn
@@ -190,10 +193,10 @@ When there's no active region, act on the buffer."
     (let ((previousline nil))
       (while (and (< (point) end)
 		  (not (eobp)))
-	(let* ((bol (point-at-bol))
-	       (currentline (buffer-substring-no-properties bol (point-at-eol))))
+	(let* ((beg (line-beginning-position))
+	       (currentline (buffer-substring-no-properties beg (line-end-position))))
 	  (if (string-equal previousline currentline)
-	      (delete-region bol (progn (forward-line 1) (point)))
+	      (delete-region beg (progn (forward-line 1) (point)))
 	    (setq previousline currentline)
 	    (forward-line 1)))))))
 

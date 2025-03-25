@@ -1,5 +1,5 @@
-;;; amory-reference-functions.el --- Reference functions, mainly from
-;;; http://svn.red-bean.com/repos/kfogel/trunk/.emacs
+;;; amory-reference-functions.el --- Reference functions -*- lexical-binding: t; -*-
+;;; Mainly from <http://svn.red-bean.com/repos/kfogel/trunk/.emacs>
 
 ;; The genetic code stuff needs to fixed FIXME TODO
 ;; Add some of John McCarthy units: TODO
