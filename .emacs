@@ -530,7 +530,7 @@ Disables the `custom-enabled-themes' first to start with a blank canvas."
 ;; <https://github.com/emacs-dashboard/emacs-dashboard/blob/master/docs/variables-and-functions.org>
 (require 'dashboard)
 ;; Required for emacsclient
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+(setq initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name)))
 
 ;; List files in current directory https://github.com/emacs-dashboard/dashboard-ls
 ;; (require 'dashboard-ls)
