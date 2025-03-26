@@ -1986,6 +1986,19 @@ randpass () {
 }
 #############
 
+# Fill gap between head and tail
+body () {
+    if [ -z "$1" ]; then
+	echo "You must provide a number"
+    elif [ "$1" == 1 ]; then
+	echo "Must be greater than 1"
+    else
+	local line=$1
+	local file=$2
+	head -n "$line" "$file" | tail -n 1
+    fi
+}
+
 # Quick view of the market
 function marketupdate() {
     local tickers=(".SPX" ".DJI" ".IXIC")
