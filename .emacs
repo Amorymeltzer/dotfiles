@@ -1677,7 +1677,9 @@ that is not already being visited."
       dired-hide-details-hide-symlink-targets nil
       ;; Don't need disk space info
       dired-free-space nil
-      dired-listing-switches "-Flagoth"
+      ;; Sorting by size means I can use `dired-sort-toggle-or-edit' (s) in
+      ;; dired to toggle sorting by size or time, which is what I want
+      dired-listing-switches "-FlagoSh"
       dired-clean-confirm-killing-deleted-buffers nil
       ;; https://lmno.lol/alvaro/emacs-git-rename-courtesy-of-dired
       dired-vc-rename-file t)
