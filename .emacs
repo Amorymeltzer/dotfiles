@@ -1326,16 +1326,15 @@ buffer or region to mardown and display it in a separate window."
 (autoload 'tidy-save-settings "tidy" "Save settings to `tidy-config-file'" t)
 (autoload 'tidy-build-menu  "tidy" "Install an options menu for HTML Tidy." t)
 
-;; Should rename to html-tidy? FIXME TODO
-(defun tidy-then-indent ()
+(defun html-tidy-then-indent ()
   "`tidy' a buffer's HTML, then indent it, as `tidy' leaves a buffer looking flat."
   (interactive nil html-mode)
   (tidy-buffer)
   (indent-buffer))
 
-(autoload 'tidy-then-indent "tidy" "Run Tidy HTML parser then indent the
+(autoload 'html-tidy-then-indent "tidy" "Run Tidy HTML parser then indent the
 current buffer" t)
-(defalias 'tidy-indent 'tidy-then-indent)
+(defalias 'html-tidy-indent 'html-tidy-then-indent)
 
 ;; Bug hunter
 ;; https://github.com/Malabarba/elisp-bug-hunter
