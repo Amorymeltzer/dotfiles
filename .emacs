@@ -3604,6 +3604,7 @@ Uses `cperl--get-current-subroutine-name'."
 		   name (file-name-nondirectory new-name)))))))
 ;; Don't use ido for this, would defeat the purpose
 (put 'rename-current-buffer-file 'ido 'ignore)
+(global-set-key (kbd "C-c M-r") 'rename-current-buffer-file)
 
 
 ;; Inspired by the above
@@ -3639,6 +3640,7 @@ Uses `cperl--get-current-subroutine-name'."
 	(message "File '%s' successfully removed" filename)))))
 ;; likewise
 (put 'delete-current-buffer-file 'ido 'ignore)
+(global-set-key (kbd "C-c M-d") 'delete-current-buffer-file)
 
 (defun insert-file-name ()
   "Does what it says on the tin."
