@@ -748,7 +748,8 @@ Used for insertion into the dashboard."
 ;; Set to personal map, so many options
 (defvar my/multiple-cursors-map
   (let* ((map (make-sparse-keymap)))
-    (define-key global-map (kbd "C-c m") map)
+    (define-key global-map (kbd "C-c m") (cons "mc-prefix" map))
+
     (define-key map (kbd "a") 'mc/mark-all-like-this)
     (define-key map (kbd "n") 'mc/mark-next-like-this)
     (define-key map (kbd "p") 'mc/mark-previous-like-this)
@@ -2469,8 +2470,6 @@ when in source code modes such as python-mode or perl-mode" t)
 ;;
 ;; Reclaim C-t as a general transposition map
 ;; Maybe better as C-c t?  M-t?
-;; Why on earth does this not show up in which-key but C-q does??? FIXME TODO
-;; Maybe doing what flycheck-keymap-prefix suggests would work...
 ;; Maybe add transpose-frame stuff? FIXME TODO
 ;; Unset a few scattered here n' there; maybe a 'bind or something would be better?
 (global-unset-key (kbd "C-t"))	   ;; was transpose-chars
@@ -2478,7 +2477,7 @@ when in source code modes such as python-mode or perl-mode" t)
 (global-unset-key (kbd "M-t"))	   ;; was transpose-words
 (defvar my/ctrl-t-transpose-map
   (let* ((map (make-sparse-keymap)))
-    (define-key global-map (kbd "C-t") map)
+    (define-key global-map (kbd "C-t") (cons "ctrl-t-transpose" map))
     (define-key map (kbd "c") 'transpose-chars)
     (define-key map (kbd "w") 'transpose-words)
     (define-key map (kbd "l") 'transpose-lines)
@@ -2508,7 +2507,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; A lot of this might be happy in the original M-s search-map???? FIXME TODO
 (defvar my/ctrl-q-map
   (let* ((map (make-sparse-keymap)))
-    (define-key global-map (kbd "C-q") map)
+    (define-key global-map (kbd "C-q") (cons "ctrl-q" map))
     (define-key map (kbd "C-q") 'quoted-insert)
     (define-key map (kbd "C-c") 'column-highlight-mode)
     (define-key map (kbd "C-a") 'align-regexp)
