@@ -3359,6 +3359,9 @@ Uses `cperl--get-current-subroutine-name'."
 (global-set-key (kbd "C-h h") #'helpful-at-point)
 ;; Maybe add helpful regex to clean-buffer-list-kill-regexps ??
 
+;; Better than `info-goto-emacs-key-command-node'
+(global-set-key (kbd "C-h K") #'describe-keymap)
+
 
 ;; which-key has better sorting than guide-key
 ;; Originally <https://github.com/justbur/emacs-which-key>
