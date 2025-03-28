@@ -742,6 +742,27 @@ Used for insertion into the dashboard."
   ;; (exec-path-from-shell-initialize))
 
 
+
+;; https://github.com/magnars/multiple-cursors.el
+(require 'multiple-cursors)
+;; Set to personal map, so many options
+(defvar my/multiple-cursors-map
+  (let* ((map (make-sparse-keymap)))
+    (define-key global-map (kbd "C-c m") map)
+    (define-key map (kbd "a") 'mc/mark-all-like-this)
+    (define-key map (kbd "n") 'mc/mark-next-like-this)
+    (define-key map (kbd "p") 'mc/mark-previous-like-this)
+    (define-key map (kbd "e") 'mc/edit-lines)
+    (define-key map (kbd "r") 'mc/mark-all-in-region)
+    (define-key map (kbd "d") 'mc/mark-all-dwim)
+    (define-key map (kbd "C-a") 'mc/edit-beginnings-of-lines)
+    (define-key map (kbd "C-e") 'mc/edit-ends-of-lines)
+    (define-key map (kbd "x") 'mc/mark-more-like-this-extended)
+    (define-key map (kbd "#") 'mc/insert-numbers)
+    map)
+  "Personal keymap for multiple cursors.")
+
+
 ;;;;;;;;;;;;;;;;;;;
 ;; JavaScript stuff
 ;; Use js2-mode instead of js-mode https://github.com/mooz/js2-mode
@@ -806,7 +827,6 @@ Used for insertion into the dashboard."
 
 ;; js2-refactor https://github.com/magnars/js2-refactor.el
 ;; Requires yasnippet and multiple-cursors
-;; https://github.com/magnars/multiple-cursors.el (maybe do C-c m or something?)
 ;; Full list at https://github.com/magnars/js2-refactor.el#refactorings
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
@@ -1091,9 +1111,8 @@ POS defaults to `point'."
 (add-hook 'post-command-hook 'xterm-title-update)
 
 ;;; Autosave and backup
-;; create a backup file directory
-;; ` rather than ' needed to selectively evaluate item marked by ,
-;; https://emacs.stackexchange.com/a/7487/2051
+;; create a backup file directory.  ` rather than ' needed to selectively
+;; evaluate item marked by , <https://emacs.stackexchange.com/a/7487/2051>
 (setq backup-directory-alist
       `(("." . ,(expand-file-name "backups" user-emacs-directory))))
 ;; Save every on inputs and idle
