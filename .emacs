@@ -1938,7 +1938,7 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 ;; Open file in another window, don't select it
 (global-set-key (kbd "C-c f") 'ido-display-file)
 ;; Open buffer in another window, select it
-;; Clobbered by `elisp-byte-compile-buffer' in Elisp mode FIXME
+;; Clobbered by `elisp-byte-compile-buffer' in Elisp mode FIXME TODO
 (global-set-key (kbd "C-c C-b") 'ido-switch-buffer-other-window)
 ;; Open buffer in another window, don't select it
 (global-set-key (kbd "C-c b") 'ido-display-buffer)
@@ -2228,11 +2228,12 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Magit stuff
 ;; Manual: https://magit.vc/manual/magit.html
 (require 'magit)
-;; C-x g for status, but C-x M-g for magit-dispatch: trigger command directly
-;; C-c M-g: magit-file-dispatch; super convenient, so let's make it more so
+;; C-x g for `magit-status', but C-x M-g for `magit-dispatch:' trigger command
+;; directly.  C-c M-g: `magit-file-dispatch'; super convenient, so let's make it
+;; more readily available.
 (global-set-key (kbd "C-c g") 'magit-file-dispatch)
 ;; Actually, maybe that'd be better as a prefix, then have C-c g f or something
-;; for this and C-c g l for git-link, etc.  Maybe?
+;; for this and C-c g l for git-link, etc.  Maybe?  FIXME TODO
 
 ;; From within an ido prompt, open that file into magit-status.  Doesn't seem
 ;; like there are other options?
@@ -3196,6 +3197,7 @@ setting whatever major mode was active."
     ;; Insert region, or just advance
     (if region (insert region))
     (goto-char (point-max))))
+(global-set-key (kbd "C-c C-n") 'new-scratch-buffer)
 
 
 ;; AI crap
