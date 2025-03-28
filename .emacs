@@ -559,7 +559,7 @@ Disables the `custom-enabled-themes' first to start with a blank canvas."
 ;; customize the header message (`dashboard-banner-logo-title') with something
 ;; like fortune or my quotes, see also `dashboard-footer-messages' FIXME TODO
 (defun totd()
-  "Display a `Tip of the Day' message with a random command.
+  "Display a Tip of the Day message with a random command.
 Used for insertion into the dashboard."
   (let* ((commands (cl-loop for s being the symbols
 			    when (commandp s) collect s))
@@ -1717,8 +1717,8 @@ that is not already being visited."
 ;; Could probably just use dired-single https://github.com/crocket/dired-single
 (defun my/dired-move-up-directory ()
   "Move up one directory without opening yet another Dired buffer.  Mimics
-`dired-find-alternate-file', but uses `find-alternate-file' it its place so as
-to explicitly provide `..' as an argument.  Will be remapped to `^'."
+`dired-find-alternate-file', but uses `find-alternate-file' it its place
+so as to explicitly provide `..' as an argument."
   (interactive nil dired-mode)
   (set-buffer-modified-p nil)
   (find-alternate-file ".."))
@@ -1808,8 +1808,8 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (ido-ubiquitous-mode t)
 ;; Fix for weird issue https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28774
 (defun ido-name (item)
-  "Return file name for the current item, whether in a normal list or a merged work
-  directory list."
+  "Return file name for the current item, whether in a normal list or a
+merged work directory list."
   (concat (if (consp item) (car item) item)))
 
 ;; Use ido for yes-or-no
@@ -2123,8 +2123,9 @@ to explicitly provide `..' as an argument.  Will be remapped to `^'."
 (amx-mode)
 ;; `execute-extended-command' is the old M-x
 (global-set-key (kbd "M-x") 'amx)
-;; Should probably use this one all the time? FIXME TODO Would be nice to be
-;; able to cycle between them like `execute-extended-command' can in Emacs 29.1
+;; Should probably use this more often, but not all the time; mode-agnostic
+;; commands (e.g. `next-error') aren't available.  Would be nice to be able to
+;; cycle between them like `execute-extended-command' can in Emacs 29.1
 (global-set-key (kbd "M-X") 'amx-major-mode-commands)
 (setq amx-prompt-string "Amx "
       amx-history-length 512)
@@ -2167,7 +2168,7 @@ when in source code modes such as python-mode or perl-mode" t)
     (fill-paragraph nil)))
 
 (defun unfill-region ()
-  "Unfill the selection region."
+  "Unfill the selected region."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
@@ -2841,7 +2842,7 @@ using `ido-completing-read'."
 (defalias 'reload-buffer 'revert-buffer)
 (defun revert-buffer-no-ask ()
   "Revert buffer without asking."
-				   (interactive)
+  (interactive)
   (revert-buffer 0 1)
   (message "Buffer reverted"))
 (global-set-key (kbd "C-x M-r") 'revert-buffer-no-ask)
@@ -2857,7 +2858,7 @@ using `ido-completing-read'."
 
 ;; Prefix means C-u (4) or C-u C-u (16)
 (defun insert-date (prefix)
-  "Insert the current date in ISO format.  With prefix argument, add include the
+  "Insert the current date in ISO format.  With prefix argument, include
 day of the week.  With two prefix arguments, add day of week and time."
   (interactive "P")
   (let ((format (cond ((not prefix) "%Y-%m-%d")
@@ -2893,20 +2894,20 @@ day of the week.  With two prefix arguments, add day of week and time."
 
 
 (defun loan-payment-calculator (amount rate years)
-  "Calculate the payment for a loan of AMOUNT dollars when annual percentage
-rate is RATE and the term of the loan is YEARS years.  The RATE should expressed
-in terms of the percentage \(i.e. \'8.9\' instead of \'.089\'\) and must contain
-a decimal point.  The total amount of interest charged over the life of the loan
-is also given."
+  "Calculate the payment for a loan of AMOUNT dollars given an annual
+percentage rate RATE and a term of the loan in YEARS years.  The RATE
+should be expressed in terms of a percentage \(i.e. \'8.9\' instead of
+\'.089\'\) and must contain a decimal point.  The total amount of
+interest charged over the life of the loan is also given."
   (interactive "nLoan Amount: \nnAPR (per): \nnTerm (years): ")
   (let ((payment (/ (* amount (/ rate 1200)) (- 1 (expt (+ 1 (/ rate 1200)) (* years -12.0))))))
     (message "%s payments of $%.2f. Total interest $%.2f"
 	     (* years 12) payment (- (* payment years 12) amount))))
 
 (defun interest-basic-savings-calculator (principal rate years compounds)
-  "Calculate the future value of a savings account given PRINCIPAL at RATE for
-YEARS.  The RATE should be expressed as a percentage \(i.e. \'8.9\' instead of
-\'.089\'\) and must contain a decimal point."
+  "Calculate the future value of a savings account given PRINCIPAL at RATE
+for YEARS.  The RATE should be expressed as a percentage \(i.e. \'8.9\'
+instead of \'.089\'\) and must contain a decimal point."
   (interactive "nPrincipal: \nnRate (per): \nnLength (years): \nnCompound freq.: ")
   (let ((final (* principal (expt (+ 1 (/ (/ rate 100) compounds)) (* years compounds)))))
     (message "$%.2f after %s years at %.2f"
@@ -2915,10 +2916,10 @@ YEARS.  The RATE should be expressed as a percentage \(i.e. \'8.9\' instead of
 
 ;; Add compounding option?  Default to 12 ;;;;;; ##### FIXME TODO
 (defun interest-contributions-savings-calculator (principal rate years contrib)
-  "Calculate the future value of a savings account given PRINCIPAL at RATE for
-YEARS with CONTRIB contributions before every period.  The RATE should be
-expressed as a percentage \(i.e. \'8.9\' instead of \'.089\'\) and must
-contain a decimal point."
+  "Calculate the future value of a savings account given PRINCIPAL at RATE
+for YEARS with CONTRIB contributions before every period.  The RATE
+should be expressed as a percentage \(i.e. \'8.9\' instead of \'.089\'\)
+and must contain a decimal point."
   (interactive "nPrincipal: \nnRate (per): \nnLength (years): \nnContribution: ")
   (let  ((final (+ (* principal (expt (+ 1 (/ rate 100)) years)) (* contrib (/ (- (expt (+ 1 (/ rate 100)) (+ 1 years)) (+ 1 (/ rate 100))) (/ rate 100))))))
     (message "$%.2f after %s years at %.2f"
@@ -2926,17 +2927,17 @@ contain a decimal point."
 
 (defun interest-present-value-calculator (future rate years)
   "Calculate the present value needed to produce a future value FUTURE in
-YEARS given RATE.  The RATE should be expressed as a percentage \(i.e. \'8.9\'
-instead of \'.089\'\) and must contain a decimal point."
+YEARS given RATE.  The RATE should be expressed as a percentage
+\(i.e. \'8.9\' instead of \'.089\'\) and must contain a decimal point."
   (interactive "nFuture Value: \nnRate (per): \nnLength (years): ")
   (let ((final (/ future (expt (+ 1 (/ rate 100)) years))))
     (message "$%.2f given %s years at %.2f"
 	     final years rate)))
 
 (defun interest-rate-calculator (present future years)
-  "Calculate the interest rate RATE needed to produce a future value FUTURE in
-YEARS given a starting PRESENT value.  One of the years should contain a
-decimal point."
+  "Calculate the interest rate RATE needed to produce a future value FUTURE
+in YEARS given a starting PRESENT value.  One of the years should
+contain a decimal point."
   (interactive "nPrincipal: \nnFuture Value: \nnLength (years): ")
   (let ((final (- (expt (/ future present) (/ 1.0 years)) 1))) ; Decimal allows decimals
     (message "%.2f%% yields %.2f from %.2f after %s years"
@@ -2944,9 +2945,9 @@ decimal point."
 
 
 (defun round-to-decimal (value place)
-  "Round the given VALUE to a given decimal PLACE.  Entering 0 for PLACE will
-return an integer (with a 0 in the tenths place), while negative numbers will
-round to ones, tens, etc."
+  "Round the given VALUE to a given decimal PLACE.  Entering 0 for PLACE
+will return an integer (with a 0 in the tenths place), while negative
+numbers will round to ones, tens, etc."
   (interactive "nValue: \nnPlace: ")
   (let ((multiplier (* 1.0 (expt 10 place))))
     (message "%s" (/ (round (* multiplier value)) multiplier))))
@@ -3178,8 +3179,8 @@ in the buffer." t)
 ;; just in and with any selected region; improved version of
 ;; `get-scratch-buffer-create' (sort of))
 (defun new-scratch-buffer nil
-  "Initialize the scratch buffer with the highlighted region,
-setting whatever major mode was active."
+  "Initialize the scratch buffer with the highlighted region, setting
+whatever major mode was active."
   (interactive)
   (let* ((mode major-mode)
 	 (region (with-current-buffer (current-buffer)
@@ -3266,14 +3267,14 @@ setting whatever major mode was active."
 
 ;; Used by the below functions, far from perfect
 (defun cperl--get-current-subroutine-name ()
-  "Get the name of the current subroutine in cperl-mode."
+  "Get the name of the current subroutine in `cperl-mode'."
   (when (derived-mode-p 'cperl-mode)
     (save-excursion
       (re-search-backward "^sub[[:space:]]+\\([[:word:]]+\\)" nil t)
       (match-string 1))))
 
 (defun cperl-get-current-subroutine ()
-  "Display the current subroutine name from cperl-mode.
+  "Display the current subroutine name from `cperl-mode'.
 Uses `cperl--get-current-subroutine-name'."
   (interactive nil cperl-mode)
   (let ((current-subroutine (cperl--get-current-subroutine-name)))
@@ -3629,7 +3630,7 @@ Uses `cperl--get-current-subroutine-name'."
 
 ;; http://whattheemacsd.com/file-defuns.el-02.html
 (defun delete-current-buffer-file ()
-  "Remove file connected to current buffer and kill buffer."
+  "Remove file connected to current buffer and `kill-buffer'."
   (interactive)
   (let ((filename (buffer-file-name))
 	(buffer (current-buffer)))
@@ -3652,9 +3653,9 @@ Uses `cperl--get-current-subroutine-name'."
 		(window-buffer (minibuffer-selected-window))
 	      (current-buffer))))))
 
-;; See also `file-name-base'
 (defun copy-current-file-path ()
-  "Add current file path to kill ring."
+  "Add current file path to kill ring.
+See also `file-name-base'."
   (interactive)
   (let ((filename (buffer-file-name)))
     (kill-new filename)
@@ -3755,7 +3756,7 @@ Uses `cperl--get-current-subroutine-name'."
 ;; In shell: emacs -batch -f batch-byte-compile ~/.emacs.d/**/*.el
 ;; Aliased(ish) to recompile_emacs
 (defun byte-compile-init-dir ()
-  "Byte-compile everything in your `user-emacs-directory'."
+  "`byte-compile' everything in your `user-emacs-directory'."
   (interactive)
   (byte-recompile-directory user-emacs-directory 0))
 ;; An .elc file is probably out of date after a save, so remove it
@@ -3906,7 +3907,7 @@ Uses `cperl--get-current-subroutine-name'."
 (defalias 'ipsum 'lorem)
 
 (defun indent-or-expand (arg)
-  "Either indent according to mode, or expand the word preceding point."
+  "Either `indent-according-to-mode', or `dabbrev-expand' the word preceding point."
   (interactive "*P")
   (if (and
        (or (bobp) (= ?w (char-syntax (char-before))))
