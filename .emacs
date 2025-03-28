@@ -2837,13 +2837,14 @@ using `ido-completing-read'."
 	(forward-char 1)))))
 
 
-;; Might remember this better
+;; Might remember reload better.  see also `revert-buffer-quick': C-x x g
 (defalias 'reload-buffer 'revert-buffer)
-(global-set-key (kbd "C-x M-r") #'(lambda ()
-				   "Revert buffer without asking"
+(defun revert-buffer-no-ask ()
+  "Revert buffer without asking."
 				   (interactive)
-				   (reload-buffer 0 1)
-				   (message "Buffer reverted")))
+  (revert-buffer 0 1)
+  (message "Buffer reverted"))
+(global-set-key (kbd "C-x M-r") 'revert-buffer-no-ask)
 
 ;; insert a time stamp string
 ;; ADD PREFIX FOR date, %R, OR ALL ;;;;;;;;;;; FIXME TODO ##########
