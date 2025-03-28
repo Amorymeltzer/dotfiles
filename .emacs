@@ -1629,6 +1629,8 @@ that is not already being visited."
 (add-hook 'occur-mode-find-occurrence-hook 'recenter)
 ;; occur-mode-display-occurrence is nice, but C-o is annoying
 (define-key occur-mode-map (kbd "d") 'occur-mode-display-occurrence)
+;; I should use occur more often
+(global-set-key (kbd "C-c o") 'occur)
 
 ;; Utilize system's trash can
 (setq-default delete-by-moving-to-trash t
