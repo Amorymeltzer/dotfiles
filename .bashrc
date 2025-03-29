@@ -382,6 +382,7 @@ function prompt_command {
     ((fillsize=COLUMNS))	# fullscreen
     # room for battery charge plus the color control codes, not if sshing
     if [[ ! $SSH_TTY && ! $INSTANCEPROJECT && ! $KUBERNETES_PORT && $(which battery) ]]; then
+	# Takes care of the system type itself
 	battery=$(battery -a 2>/dev/null | tr -d ' ')
 	((fillsize=fillsize-${#battery}+12))
     fi

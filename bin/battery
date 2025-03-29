@@ -45,12 +45,13 @@ battery_charge() {
     case $(uname -s) in
 	"Darwin")
 	    if ((pmset_on)) && command -v pmset &>/dev/null; then
-		if pmset -g batt | grep -qo 'AC Power'; then
+		PMSET=$(pmset -g batt)
+		if echo "$PMSET" | grep -qo 'AC Power'; then
 		    BATT_CONNECTED=1
 		else
 		    BATT_CONNECTED=0
 		fi
-		BATT_PCT=$(pmset -g batt | grep -o '[0-9]*%' | tr -d %)
+		BATT_PCT=$(echo "$PMSET" | grep -o '[0-9]*%' | tr -d %)
 	    else
 		while read -r key value; do
 		    case $key in
