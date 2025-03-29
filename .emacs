@@ -1705,9 +1705,8 @@ that is not already being visited."
       ;; Sorting by size means I can use `dired-sort-toggle-or-edit' (s) in
       ;; dired to toggle sorting by size or time, which is what I want
       dired-listing-switches "-FlagoSh"
-      dired-clean-confirm-killing-deleted-buffers nil
-      ;; https://lmno.lol/alvaro/emacs-git-rename-courtesy-of-dired
-      dired-vc-rename-file t)
+      dired-clean-confirm-killing-deleted-buffers nil)
+
 (when (eq system-type 'darwin)
   (setq-default dired-ls-F-marks-symlinks t ; OSX uses @ after symlinks
 		dired-use-ls-dired nil))    ; OSX ls doesn't support --dired
@@ -1745,6 +1744,15 @@ so as to explicitly provide `..' as an argument."
 (with-eval-after-load "wdired"
   (define-key wdired-mode-map (kbd "C-w") 'wdired-abort-changes)
   (define-key wdired-mode-map (kbd "C-c k") 'wdired-abort-changes))
+
+;; Why are these things in here?  Annoying.  There are a few other things of
+;; note, and possibly worth considering
+(require 'dired-aux)
+(setq
+ ;; https://lmno.lol/alvaro/emacs-git-rename-courtesy-of-dired
+ dired-vc-rename-file t
+ dired-create-destination-dirs 'ask
+ dired-create-destination-dirs-on-trailing-dirsep t)
 
 ;; dired-x: ignore uninteresting files, get `dired-jump'
 (require 'dired-x)
