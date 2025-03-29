@@ -1087,6 +1087,9 @@ POS defaults to `point'."
   (progn
       (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-region)
       (define-key lisp-mode-shared-map (kbd "C-c C-e") 'eval-buffer)))
+;; `eval-last-sexp' is cool, `pp-eval-last-sexp' is maybe cooler, even if it
+;; doesn't allow for the prefix to replace
+(global-set-key [remap eval-last-sexp] 'pp-eval-last-sexp)
 
 
 ;; Use buffer name as window title for window-system
