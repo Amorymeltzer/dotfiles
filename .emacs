@@ -2508,9 +2508,13 @@ when in source code modes such as python-mode or perl-mode" t)
 (define-key goto-map (kbd "<down>") 'buf-move-down)
 (define-key goto-map (kbd "<left>") 'buf-move-left)
 (define-key goto-map (kbd "<right>") 'buf-move-right)
-;; `next-error' and `previous-error' are in here, and are useful for flycheck as
-;; well, but let's turn off the annoying message
-(setq next-error-verbose nil)
+
+(setq
+ ;; `next-error' and `previous-error' are in here, and are useful for flycheck as
+ ;; well, but let's turn off the annoying message
+ next-error-verbose nil
+ ;; But let's recenter?  Not sure if works
+ next-error-recenter t)
 
 
 ;; I rarely use quoted-insert (only to avoid annoying electric pairing), so I
