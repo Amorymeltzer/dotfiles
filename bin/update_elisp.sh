@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 
 ":"; exec emacs --script "$0" -- "$@" # -*-emacs-lisp-*-
-(setq package-archives
-      (quote
-       (("gnu" . "http://elpa.gnu.org/packages/")
-	("melpa" . "http://melpa.org/packages/")))
+(require 'package)
+(unless (assoc-default "melpa" package-archives)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/")))
+(setq package-archive-priorities
+      '(("melpa" . 9)
+	("gnu" . 6)
+	("nongnu" . 3))
       package-menu-async nil)
+(unless package--initialized
+  (package-initialize))
 (list-packages)
 (if package-menu--new-package-list
     (message "New packages: %s" package-menu--new-package-list)
