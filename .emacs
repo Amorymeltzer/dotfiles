@@ -1498,7 +1498,8 @@ that is not already being visited."
  scroll-down-aggressively 0.0           ;; ... annoying
  scroll-preserve-screen-position t)     ;; preserve screen pos with C-v/M-v
 
-;; Set recentering positions, will be used for below as well
+;; Set recentering positions, will be used for below as well.  See also
+;; `scroll-lock-mode', which is another way to move nicely.
 ;; I'd like to set scroll-margin to 2, but it's also active here, which is annoying
 (setq recenter-positions '(middle 5 top bottom))
 ;; Move pointer to center/top/bottom of buffer, compare to C-l
@@ -2228,6 +2229,11 @@ when in source code modes such as python-mode or perl-mode" t)
 (setq message-log-max 1500)
 ;; 2305843009213693951
 ;; (setq message-log-max most-positive-fixnum)
+
+
+;; `view-mode' lets you use pager commands--e.g. space and delete--to browse a
+;; document, so let's turn it on automatically in `read-only-mode' (C-x C-q)
+(setq view-read-only t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
