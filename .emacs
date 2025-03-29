@@ -1786,6 +1786,11 @@ so as to explicitly provide `..' as an argument."
 (require 'ido)
 (ido-mode t) ; is this the best place for this?
 
+;; First let's make the native mode-line completion styles a little better?
+(setq completion-styles '(initials partial-completion flex emacs22)
+      completion-cycle-threshold t)
+
+
 ;; https://github.com/scottjad/ido-hacks
 (require 'ido-hacks)
 (ido-hacks-mode 1)
