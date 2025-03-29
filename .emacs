@@ -2523,6 +2523,19 @@ when in source code modes such as python-mode or perl-mode" t)
  next-error-recenter t)
 
 
+;; Okay, pulse is cool?  This flashes the line you're on when scrolling; seems
+;; useful enough, but maybe eventually annoying?  Via:
+;; <https://karthinks.com/software/batteries-included-with-emacs/#pulse--pulse-dot-el>
+;; See also beacon <https://github.com/Malabarba/beacon
+(defun pulse-line (&rest _)
+  "Pulse the current line."
+  (pulse-momentary-highlight-one-line (point)))
+
+(dolist (command '(scroll-up-command scroll-down-command
+				     recenter-top-bottom other-window))
+  (advice-add command :after #'pulse-line))
+
+
 ;; I rarely use quoted-insert (only to avoid annoying electric pairing), so I
 ;; might as well make something more useful.
 ;; A lot of this might be happy in the original M-s search-map???? FIXME TODO
