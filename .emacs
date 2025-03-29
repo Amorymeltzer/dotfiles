@@ -3366,6 +3366,11 @@ Uses `cperl--get-current-subroutine-name'."
 (global-set-key (kbd "C-h K") #'describe-keymap)
 
 
+;; elisp-demos, show off how functions work, pretty awesome
+;; https://github.com/xuchunyang/elisp-demos
+(advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
+(advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update)
+
 ;; which-key has better sorting than guide-key
 ;; Originally <https://github.com/justbur/emacs-which-key>
 ;; Now in Emacs <https://elpa.gnu.org/packages/which-key.html>
