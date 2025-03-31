@@ -2259,10 +2259,6 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Actually, maybe that'd be better as a prefix, then have C-c g f or something
 ;; for this and C-c g l for git-link, etc.  Maybe?  FIXME TODO
 
-;; From within an ido prompt, open that file into magit-status.  Doesn't seem
-;; like there are other options?
-(define-key ido-common-completion-map
-  (kbd "C-x C-g") 'ido-enter-magit-status)
 ;; Open log, etc. in separate window?  Like vc-print-log
 ;; Look into tweaking faces?
 ;; Prior to magit, I turned off built-in vc handling, preferring manual git:
@@ -2297,8 +2293,6 @@ when in source code modes such as python-mode or perl-mode" t)
       ;; Eh, they multiply too much, things get
       ;; lost. 'magit-display-buffer-traditional is better
       ;; magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
-      ;; Turn this off if/when ivy
-      magit-completing-read-function 'magit-ido-completing-read
       ;; Not entirely sure what this does, but seems worthwhile
       magit-diff-refine-hunk t)
 
@@ -2387,11 +2381,22 @@ when in source code modes such as python-mode or perl-mode" t)
 (autoload 'gitattributes-mode "gitattributes-mode" "A major mode for editing .gitattributes files." t)
 
 
-;; Ability to mark commits in magit; not hugely used, but neat
-;; https://codeberg.org/ideasman42/emacs-magit-commit-mark
-;; Should maybe consider adjusting faces? FIXME TODO
 (with-eval-after-load 'magit
-  (add-hook 'magit-mode-hook 'magit-commit-mark-mode))
+  ;; Ability to mark commits in magit; not hugely used, but neat
+  ;; <https://codeberg.org/ideasman42/emacs-magit-commit-mark> Should maybe
+  ;; consider adjusting faces? FIXME TODO
+  (add-hook 'magit-mode-hook 'magit-commit-mark-mode)
+
+  ;; magit-ido, was originally in magit itself
+  ;; <https://github.com/emacsorphanage/magit-ido>
+  (require 'magit-ido)
+  ;; Turn this off if/when ivy (see also vertico and helm)
+  (setq magit-completing-read-function 'magit-ido-completing-read)
+  ;; From within an ido prompt, open that file into magit-status.  Doesn't seem
+  ;; like there are other options?
+  (keymap-set ido-common-completion-map
+	      "C-x g" 'magit-ido-enter-magit-status))
+
 (with-eval-after-load 'magit-log
   (define-key magit-log-mode-map (kbd ";") 'magit-commit-mark-toggle-read)
   (define-key magit-log-mode-map (kbd "M-;") 'magit-commit-mark-toggle-star)
