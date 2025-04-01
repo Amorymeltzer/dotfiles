@@ -251,7 +251,9 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 		 (concat ","  (propertize "RO" 'face 'font-lock-escape-face))))
        ;; %n introduces a leading space, so do this instead
        '(:eval (when (buffer-narrowed-p)
-		 (concat ","  (propertize "Nar" 'face 'font-lock-variable-name-face))))
+		 (concat ","  (propertize "Nar" 'face 'font-lock-preprocessor-face))))
+       '(:eval (when (bound-and-true-p scroll-lock-mode)
+		 (concat ","  (propertize "Scroll" 'face 'font-lock-preprocessor-face))))
        '(:eval (when (bound-and-true-p follow-mode)
 		 (concat ","  (propertize "Fol" 'face 'font-lock-type-face))))
        "]"
