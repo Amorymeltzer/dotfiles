@@ -191,11 +191,6 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 		    ;; unnecessary
 		    "@" "-") 'face 'font-lock-comment-face))
 
-       ;; Might as well?  Make it really clear
-       '(:eval (propertize
-		(if defining-kbd-macro
-		    "-K-" "") 'face 'font-lock-escape-face))
-
 
        ;; Buffer name.  Not using mode-line-buffer-identification but doing it
        ;; manually means that the mode-line-buffer-id face gets separated from
@@ -250,13 +245,13 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 		 (concat ","  (propertize "Mod" 'face 'font-lock-constant-face))))
        ;; A few other modes worth noting
        '(:eval (when defining-kbd-macro
-		 (concat ","  (propertize "Macro" 'face 'font-lock-constant-face))))
+		 (concat ","  (propertize "Macro" 'face 'font-lock-warning-face))))
        ;; Is this buffer read-only?
        '(:eval (when buffer-read-only
-		 (concat ","  (propertize "RO" 'face 'font-lock-type-face))))
+		 (concat ","  (propertize "RO" 'face 'font-lock-escape-face))))
        ;; %n introduces a leading space, so do this instead
        '(:eval (when (buffer-narrowed-p)
-		 (concat ","  (propertize "Nar" 'face 'font-lock-type-face))))
+		 (concat ","  (propertize "Nar" 'face 'font-lock-variable-name-face))))
        '(:eval (when (bound-and-true-p follow-mode)
 		 (concat ","  (propertize "Fol" 'face 'font-lock-type-face))))
        "]"
