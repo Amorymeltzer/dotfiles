@@ -130,8 +130,9 @@ calling this command again."
 (global-set-key (kbd "C-c \\") 'toggle-windows-split)
 
 
-;; Display line numbers temporarily when calling goto-line
-;; Looks messed up if linum-relative is called FIXME TODO
+;; Display line numbers temporarily when calling `goto-line'.  Should do
+;; something to adjust `goto-line-relative' as well? FIXME TODO This looks
+;; messed up if linum-relative is called FIXME TODO
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
 (defun goto-line-with-feedback ()
   "Show line numbers temporarily, while prompting for the line number input"
