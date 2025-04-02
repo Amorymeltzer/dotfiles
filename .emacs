@@ -3534,12 +3534,16 @@ Uses `cperl--get-current-subroutine-name'."
 	flyspell-issue-message-flag nil
 	flyspell-issue-welcome-flag nil
 
-	;; Turns out `flyspell-auto-correct-previous-word' is often/always
-	;; better than `flyspell-auto-correct-word'.  Can't set C-M-I for
-	;; `flyspell-auto-correct-word' since that registers as C-M-i also.
-	flyspell-auto-correct-binding (kbd "C-M-i")
+	;; Default is 400000
+	flyspell-duplicate-distance 100)
 
-	flyspell-duplicate-distance 100) ;Default is 400000
+  ;; Turns out `flyspell-auto-correct-previous-word' is often/always
+  ;; better than `flyspell-auto-correct-word'.  Can't set C-M-I for
+  ;; `flyspell-auto-correct-word' since that registers as C-M-i also.
+  (setq flyspell-auto-correct-binding (kbd "C-M-i"))
+  ;; That *used* to make it be `flyspell-auto-correct-previous-word' but not
+  ;; anymore?  I dunno.  C-; ain't work.
+  (define-key flyspell-mode-map (kbd "C-M-i") 'flyspell-auto-correct-previous-word)
 
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   (add-hook 'text-mode-hook 'flyspell-mode)
