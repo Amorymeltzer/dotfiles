@@ -1708,6 +1708,10 @@ that is not already being visited."
   (setq-default dired-ls-F-marks-symlinks t ; OSX uses @ after symlinks
 		dired-use-ls-dired nil))    ; OSX ls doesn't support --dired
 (add-hook 'dired-mode-hook 'hl-line-mode)
+;; More faces in dired <https://github.com/purcell/diredfl> The dired-k package
+;; does something philosophically similar.  Should really customize faces,
+;; especially around the perms and the like, woof FIXME TODO
+(add-hook 'dired-mode-hook 'diredfl-mode)
 ;; Use `a' rather than `return' so as not to open up so many damn windows
 ;; Don't warn/disable/whatever
 (put 'dired-find-alternate-file 'disabled nil)

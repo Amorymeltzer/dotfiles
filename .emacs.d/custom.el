@@ -13,7 +13,7 @@
 		  challenger-deep-theme color-identifiers-mode communinfo
 		  crontab-mode csv-mode darkokai-theme darktooth-theme dashboard
 		  dashboard-ls define-word diminish dired-gitignore
-		  dired-sidebar discover-my-major dna-mode doom-themes
+		  dired-sidebar diredfl discover-my-major dna-mode doom-themes
 		  edit-indirect editorconfig ef-themes eldoc elisp-demos elsa
 		  emmet-mode ess expand-region fancy-narrow feed-discovery
 		  fill-column-indicator fillcode find-file-in-project fireplace
