@@ -3550,11 +3550,11 @@ Uses `cperl--get-current-subroutine-name'."
   ;; `flyspell-auto-correct-word' since that registers as C-M-i also.
   (setq flyspell-auto-correct-binding (kbd "C-M-i"))
   ;; That *used* to make it be `flyspell-auto-correct-previous-word' but not
-  ;; anymore?  I dunno.  C-; ain't work.
+  ;; anymore?  I dunno.  C-; ain't work.  This is also M-TAB
   (define-key flyspell-mode-map (kbd "C-M-i") 'flyspell-auto-correct-previous-word)
 
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-  (add-hook 'text-mode-hook 'flyspell-mode)
+  (add-hook 'text-mode-hook 'turn-on-flyspell)
 
   ;; Ew
   (with-eval-after-load 'auto-complete
