@@ -3516,8 +3516,8 @@ Uses `cperl--get-current-subroutine-name'."
 ;;; http://app.aspell.net/create
 ;;; http://aspell.net/man-html/Creating-an-Individual-Word-List.html
 ;;; http://aspell.net/man-html/Format-of-the-Personal-and-Replacement-Dictionaries.html
-;; Test: 60: autobiographic 70: biltongs  80: cellulolytic personal: xkcd
-;; Things like ispell-dictionary and ispell-personal dictionary should be
+;; Test: 60: autobiographic; 70: biltongs; 80: cellulolytic; personal: xkcd
+;; Things like `ispell-dictionary' and `ispell-personal-dictionary' should be
 ;; handled by default and by .aspell.conf, assuming the dictionary is installed
 ;; properly.  I've also put sug-mode in there too, but again, you never know.
 (require 'ispell)
@@ -3527,7 +3527,9 @@ Uses `cperl--get-current-subroutine-name'."
       ispell-silently-savep t
       ;; --camel-case is neat, but since I'm using flyspell-prog-mode - only
       ;; strings and comments - it's unlikely to be necessary
-      ispell-extra-args '("--sug-mode=ultra"))
+      ;; ispell-extra-args '("--sug-mode=ultra"))
+      ispell-extra-args '("--sug-mode=ultra"
+			  "--lang=en_US"))
 
 
 ;; Flyspell spell checking
