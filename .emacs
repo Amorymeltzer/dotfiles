@@ -1699,6 +1699,8 @@ that is not already being visited."
       dired-hide-details-hide-symlink-targets nil
       ;; Don't need disk space info
       dired-free-space nil
+      ;; Kill the buffer?  idk
+      dired-kill-when-opening-new-dired-buffer t
       ;; Sorting by size means I can use `dired-sort-toggle-or-edit' (s) in
       ;; dired to toggle sorting by size or time, which is what I want
       dired-listing-switches "-FlagoSh"
