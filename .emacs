@@ -1535,12 +1535,14 @@ that is not already being visited."
 ;; Scroll history in isearch, same as minibuffer
 (define-key isearch-mode-map (kbd "M-p") 'isearch-ring-retreat)
 (define-key isearch-mode-map (kbd "M-n") 'isearch-ring-advance)
-
 ;; Grab the full word for searching
 (define-key isearch-mode-map (kbd "C-M-w") 'isearch-forward-symbol-at-point)
-
 ;; Activate occur easily inside isearch, also M-s o
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+
+;; Fuzzy matching in isearch, space matches anything, not greedily.  Maybe means
+;; don't need to use various packages below, just `isearch-forward', etc.
+(setq search-whitespace-regexp "[-_ \n]") ;or do ".*?" ?
 
 ;; Search the project for isearch's current search term
 ;; <https://blog.chmouel.com/posts/emacs-isearch/#do-a-project-search-from-a-search-term>
@@ -1591,11 +1593,13 @@ that is not already being visited."
 ;; (global-set-key (kbd "C-c q") 'vr/query-replace)
 
 ;; Display number of matches in modeline for isearch.  Use anzu instead of
-;; visual regexp since it does much the same thing??? FIXME TODO
+;; visual regexp since it does much the same thing??? FIXME TODO Truth be told
+;; if I want just the modeline lighter I can use `isearch-lazy-count' and
+;; `isearch-lazy-highlight'? FIXME TODO
 ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
 ;; (global-set-key (kbd "C-x M-%") 'anzu-query-replace-at-cursor)
 ;; (global-set-key (kbd "C-x %") 'anzu-replace-at-cursor-thing)
-;; https://github.com/syohex/emacs-anzu
+;; <https://github.com/syohex/emacs-anzu>
 (require 'anzu)
 (global-anzu-mode t)
 (setq anzu-deactivate-region t
