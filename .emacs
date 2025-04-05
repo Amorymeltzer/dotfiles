@@ -2837,10 +2837,12 @@ using `ido-completing-read'."
 ;; Make links in man pages, etc., work, in ansi-mode
 (add-hook 'term-mode-hook 'goto-address-mode)
 
-;; Add some coloring to manpages, not much tbh
 (with-eval-after-load "man"
+  ;; Add some coloring to manpages, not much tbh
   (set-face-attribute 'Man-overstrike nil :inherit font-lock-builtin-face :bold t)
-  (set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t))
+  (set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t)
+  ;; Open man page and activate that buffer
+  (setq 'Man-notify-method 'aggressive))
 
 
 ;; Copy current buffer file contents to clipboard, but only when on macOS
@@ -3506,7 +3508,7 @@ Uses `cperl--get-current-subroutine-name'."
 ;; Make scripts executable after they have been saved.  Probably covered with my
 ;; bash newscript function, but just in case
 (add-hook 'after-save-hook
-	  'executable-make-buffer-file-executable-if-script-p)
+	  #'executable-make-buffer-file-executable-if-script-p)
 
 
 ;; Enable wildcard open files
