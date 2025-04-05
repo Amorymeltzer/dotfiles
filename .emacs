@@ -3812,6 +3812,9 @@ See also `file-name-base'."
 (autoload 'kill-ring-ido "kill-ring-ido" "Kill-ring browsing with ido" t)
 (global-set-key (kbd "M-y") 'kill-ring-ido)
 
+;; Don't save duplicates
+(setq kill-do-not-save-duplicates t)
+
 
 ;;; Byte-compile everthing in .emacs.d folder
 ;; Required for byte-compilation not to fail???
