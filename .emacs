@@ -3276,18 +3276,21 @@ whatever major mode was active."
 ;; `cperl-electric-linefeed', `cperl-electric-keywords', `cperl-lazy-help-time'
 ;; `cperl-info-on-command-no-prompt', `cperl-clobber-lisp-bindings'.  See also
 ;; `cperl-style-examples' and `cperl-file-style'
-(setq cperl-hairy t)
-;; `cperl-hairy' overrides `cperl-electric-parens'; electric-parens, however,
-;; takes care of things, so certain characters like ( and { can end up doubling
-;; their mate.  Setting this explicitly to null takes care of things
-(setq cperl-electric-parens 'null)
-;; Default is 5s with `cperl-hairy'.  Can do C-h v (except when clobbered by
-;; lisp, see below) for immediate help.  See also `cperl-mode-map' for more
-;; along that line
-(setq cperl-lazy-help-time 1)
-;; Don't mess with C-h; would be useful but for the above
-;; Not working since helpful defined below?  Blah.  FIXME TODO
-(setq cperl-clobber-lisp-bindings t)
+(setq cperl-hairy t
+      ;; `cperl-hairy' overrides `cperl-electric-parens'; electric-parens, however,
+      ;; takes care of things, so certain characters like ( and { can end up doubling
+      ;; their mate.  Setting this explicitly to null takes care of things
+      cperl-electric-parens 'null
+      ;; Default is 5s with `cperl-hairy'.  Can do C-h v (except when clobbered by
+      ;; lisp, see below) for immediate help.  See also `cperl-mode-map' for more
+      ;; along that line
+      cperl-lazy-help-time 1
+      ;; Don't mess with C-h; would be useful but for the above
+      ;; Not working since helpful defined below?  Blah.  FIXME TODO
+      cperl-clobber-lisp-bindings t
+      ;; Treat __END__ or __DATA__ stuff as comments, not actual perl-code.  New
+      ;; in emacs 30.1
+      cperl-fontify-trailer 'comment)
 ;; Treat _ as word character, probably counter-intuitive.  cperl-under-as-char
 ;; is deprecated, so use superword-mode (well, don't, but you know)
 ;; (setq cperl-under-as-char t)
@@ -3476,6 +3479,7 @@ Uses `cperl--get-current-subroutine-name'."
   (interactive)
   (imenu--menubar-select imenu--rescan-item))
 (global-set-key "\C-cI" 'imenu-rescan)
+;; Consider `imenu-flatten'?
 
 
 ;; Which line, probably not hugely useful, C-x l more useful
