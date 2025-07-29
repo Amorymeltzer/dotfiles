@@ -2427,6 +2427,10 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; Still, maybe just use all the project stuff?  `C-x p' prefix
 (setq project-kill-buffers-display-buffer-list t)
 
+;; list-projects, vaguely useful
+;; <https://github.com/MatthewTromp/list-projects>
+(keymap-global-set "C-x p l" #'list-projects)
+
 ;; smerge-mode, for resolving git conflicts/merges
 ;; default prefix is C-c ^, which is a pain
 (setq smerge-command-prefix "\C-ce")

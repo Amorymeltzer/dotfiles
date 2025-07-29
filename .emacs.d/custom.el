@@ -28,21 +28,22 @@
 		  ido-at-point ido-complete-space-or-hyphen ido-completing-read+
 		  ido-hacks ido-vertical-mode ido-yes-or-no js-doc js2-mode
 		  js2-refactor json-mode kaolin-themes key-chord
-		  know-your-http-well license-snippets linum-relative lush-theme
-		  magit magit-commit-mark magit-delta magit-ido magit-todos
-		  markdown-mode md-readme moe-theme monokai-pro-theme
-		  monokai-theme nimbus-theme nord-theme nordic-night-theme
-		  paradox php-mode poker pretty-mode rainbow-identifiers
-		  rainbow-mode rebecca-theme recentf-ext relint restclient
-		  reveal-in-osx-finder selectric-mode smart-shift smartscan
-		  smooth-scrolling solarized-theme spacemacs-theme
-		  ssh-config-mode standard-themes stock-tracker swift-mode
-		  timu-caribbean-theme timu-macos-theme timu-rouge-theme
-		  timu-spacegrey-theme transpose-frame typing-game undo-tree
-		  unicode-troll-stopper use-package visual-regexp
-		  visual-regexp-steroids vscode-dark-plus-theme wc-goal-mode
-		  wc-mode window-numbering wrap-region writegood-mode yasnippet
-		  yasnippet-classic-snippets yasnippet-snippets))
+		  know-your-http-well license-snippets linum-relative
+		  list-projects lush-theme magit magit-commit-mark magit-delta
+		  magit-ido magit-todos markdown-mode md-readme moe-theme
+		  monokai-pro-theme monokai-theme nimbus-theme nord-theme
+		  nordic-night-theme paradox php-mode poker pretty-mode
+		  rainbow-identifiers rainbow-mode rebecca-theme recentf-ext
+		  relint restclient reveal-in-osx-finder selectric-mode
+		  smart-shift smartscan smooth-scrolling solarized-theme
+		  spacemacs-theme ssh-config-mode standard-themes stock-tracker
+		  swift-mode timu-caribbean-theme timu-macos-theme
+		  timu-rouge-theme timu-spacegrey-theme transpose-frame
+		  typing-game undo-tree unicode-troll-stopper use-package
+		  visual-regexp visual-regexp-steroids vscode-dark-plus-theme
+		  wc-goal-mode wc-mode window-numbering wrap-region
+		  writegood-mode yasnippet yasnippet-classic-snippets
+		  yasnippet-snippets))
  '(paradox-column-width-package 24)
  '(paradox-display-download-count t)
  '(paradox-execute-asynchronously nil)
