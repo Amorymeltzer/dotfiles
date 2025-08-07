@@ -425,7 +425,7 @@ trap _exit EXIT
 # Consider loading in .bash_profile, with GIT_PERS_DIR and GIT_EXTL_DIR??
 
 # Some personal/private stuff, used in various places, both bash and lisp.
-# USER_NAME, NAME, EMAIL
+# USER_NAME, NAME, EMAIL, USER_BIRTHDAY
 # LATITUDE, LONGITUDE, LOCATION
 # WIKI_USERNAME, WIKI_EMAIL_ADDRESS, TOOLFORGE_USERNAME
 # DIARY_DIR, TIL_DIR, HOME_SSID, TWITTER_USERNAME, GITHUB_USERNAME

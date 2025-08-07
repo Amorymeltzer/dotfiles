@@ -5,6 +5,7 @@
 # http://dotshare.it/dots/516/ (deadlink)
 
 case $(date +"%B %d") in
+    "$USER_BIRTHDAY") holgreet="Happy Birthday!";;
     "January 01")
 	# get current year (for new years greeting)
 	year=$(date +"%Y")
