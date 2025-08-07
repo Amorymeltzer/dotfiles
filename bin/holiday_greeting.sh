@@ -13,7 +13,6 @@ case $(date +"%B %d") in
     "February 14") holgreet="Happy ${Color_Magenta}Valentine's Day!${Color_zOff}";;
     "April 01") holgreet="${Color_zOff}It's April Fools' Day, ${Color_Red_Intense}beware${Color_zOff}!";;
     "July 04") holgreet="Happy ${Color_Red_Intense}Fourth ${Color_White_Intense}of ${Color_Blue_Intense}July!${Color_zOff}";;
-    "August 12") holgreet="Happy Birthday!";;
     "October 31") holgreet="${Color_Red_Bold}Happy Halloween!${Color_zOff}";;
     "December 24") holgreet="Happy ${Color_Green_Intense}Christmas ${Color_Red}Eve!${Color_zOff}";;
     "December 25") holgreet="${Color_Green_Intense}Merry ${Color_Red}Christmas!${Color_zOff}";;
