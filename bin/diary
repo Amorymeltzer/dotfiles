@@ -63,9 +63,12 @@ function newDay {
 	title=$(date +"%A, %B %d, %Y")
 
 	# Try to check ssid, insert a reminder to note location if not at home.
-	if [[ -n $(command -v ssid) ]] && [[ -n $HOME_SSID ]] && [[ $HOME_SSID != "$(ssid)" ]]; then
-	    away=" (INSERTLOCATION)"
-	fi
+	# Broken in 15.6 (from 15.5) for no fucking reason? FIXME TODO  Can
+	# still use `system_profiler SPAirPortDataType`, which is slow, and
+	# various other things, but come on!
+	# if [[ -n $(command -v ssid) ]] && [[ -n $HOME_SSID ]] && [[ $HOME_SSID != "$(ssid)" ]]; then
+	#     away=" (INSERTLOCATION)"
+	# fi
 
 	printf "# %s%s\n\n" "${title}" "${away}" > "$today"
 	notes=$(cat "$notesfile")

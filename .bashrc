@@ -1773,6 +1773,10 @@ if [[ $OSTYPE == darwin* ]]; then
 	# <https://stackoverflow.com/a/79123269/2521092>
 	# Could probably just default to en0 and skip the `networksetup` call,
 	# but why not be more portable?
+
+	# Broken in 15.6 (from 15.5) for no fucking reason? FIXME TODO  Can
+	# still use `system_profiler SPAirPortDataType`, which is slow, and
+	# various other things, but come on!
 	ssid=$(ipconfig getsummary "$(networksetup -listallhardwareports | awk '/Hardware Port: Wi-Fi/{getline; print $2}')" | awk -F ' SSID : ' '/ SSID : / {print $2}')
 
 	if [ "$1" ]; then
