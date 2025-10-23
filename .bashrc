@@ -2513,6 +2513,35 @@ function extract-text-from-image() {
 }
 
 
+# Remove exif data from images
+noexif() {
+    if [[ -f $(command -v exiftool) ]]; then
+	echo "exiftool not found"
+	return 1
+    fi
+
+    if [ $# -eq 0 ]; then
+	echo "Usage: noexif <image1> [image2 ...]"
+	return 1
+    fi
+
+    for img in "$@"; do
+	if [[ ! -f "$img" ]]; then
+	    echo "Skipping '$img' (not a file)"
+	    continue
+	fi
+
+	local base="${img%.*}"
+	local ext="${img##*.}"
+	local out="${base}_clean.${ext}"
+
+	exiftool -all= -o "$out" "$img" >/dev/null
+	echo "Created: $out"
+    done
+}
+
+
+
 #### Dictionary stuff
 # wordnet
 dictionary () { curl dict://dict.org/d:"${1}":wn; }
