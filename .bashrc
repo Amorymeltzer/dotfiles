@@ -1522,9 +1522,9 @@ function metacpan() {
 
 # Start an HTTP server from a directory, optionally specifying the port
 function server() {
-    local port="${1:+$1}"
+    local port="${1:-8000}"
     sleep 1 && open "http://localhost:${port}/" &
-    python -m SimpleHTTPServer "$port"
+    python3 -m http.server "$port"
 }
 
 # Functions to start/stop mysql server (installed via dmg, not macports/homebrew)
