@@ -1197,6 +1197,7 @@ function last-modified {
 # Maybe other options...
 # Just use terminal-notifier...
 # Also checkout boxcar, notify-send
+# Or, you know, osascript -e "display notification...
 alias growl='growlnotify -t Terminal -m "Done" && tput bel' # Red badge? and popping only in 10.7+
 alias beep='tput bel'
 
@@ -1718,8 +1719,16 @@ function lock-screen() {
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
 alias stopwatch='timer'
 
+# See also iso8601 script in ~/bin
+alias ymd="date '+%Y-%m-%d'"
 # Get week number
 alias weeknum='date +%V'
+# <https://codeberg.org/EvanHahn/dotfiles/src/commit/843b9ee13d949d346a4a73ccee2a99351aed285b/home/bin/bin/rn>
+function now() {
+    date "+%-I:%M%p on %A, %B %e, %Y"
+    echo
+    cal | grep -E "\b$(date '+%e')\b| "
+}
 
 # See also .icalBuddy.plist
 alias events='icalBuddy -sd -t -li 7 eventsFrom:today to:today+5'
@@ -1791,7 +1800,9 @@ if [[ $OSTYPE == darwin* ]]; then
     export -f ssid
 
     # Toggle wifi status, via <http://apple.stackexchange.com/a/36897/53735>
-    # Could try and handle determining the interface, but meh
+    # Could try and handle determining the interface, but meh.  See also fancier
+    # ideas from
+    # <https://codeberg.org/EvanHahn/dotfiles/src/commit/843b9ee13d949d346a4a73ccee2a99351aed285b/home/bin/bin/wifi>
     function toggle-wifi {
 	local interface=$1
 	if [[ -z $interface ]]; then
@@ -2006,6 +2017,7 @@ body () {
 	head -n "$line" "$file" | tail -n 1
     fi
 }
+alias line='body '
 
 # Quick view of the market
 function marketupdate() {
