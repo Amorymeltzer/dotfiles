@@ -3311,6 +3311,8 @@ whatever major mode was active."
 (define-key cperl-mode-map (kbd "C-c C-f") nil)
 ;; Was cperl-find-bad-style
 (define-key cperl-mode-map (kbd "C-c C-b") nil)
+;; Was cperl-pod-spell
+(define-key cperl-mode-map (kbd "C-c C-p") nil)
 
 ;; cperl always better than perl.  As of emacs 29.1 can use
 ;; `major-mode-remap-alist', although it's mainly for tree-sitter?
