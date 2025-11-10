@@ -3346,26 +3346,44 @@ Uses `cperl--get-current-subroutine-name'."
 (define-key cperl-mode-map (kbd "C-c C-s") 'cperl-get-current-subroutine)
 
 ;; This is a monstrosity mostly to ensure the file is created in the right
-;; place.  Vaguely useful!
-(defun cperl-create-testfile-for-subroutine ()
-  "Create a new test file in the t/ directory named after the current subroutine."
+;; place.  Increasingly useful!
+(defun cperl-create/open-testfile-for-subroutine ()
+  "Create or open a test file in the t/ directory for the current subroutine.
+If a test file already exists (potentially with numeric prefixes like '12-subroutine.t'),
+open it instead."
   (interactive nil cperl-mode)
   (let ((subroutine-name (cperl--get-current-subroutine-name)))
-    (when subroutine-name
+    (if (not subroutine-name)
+	(message "Not currently in a subroutine")
       (let* ((current-directory (file-name-directory buffer-file-name))
 	     (lib-directory (locate-dominating-file current-directory "lib/"))
 	     (base-directory (if lib-directory
 				 (file-name-as-directory (expand-file-name lib-directory))
 			       current-directory))
 	     (test-file-directory (concat base-directory "t/"))
-	     (test-file-name (format "%s/%s.t" test-file-directory subroutine-name)))
-	(unless (file-exists-p test-file-directory)
-	  (make-directory test-file-directory t))
-	(find-file test-file-name)
-	;; (insert (format "# Test for subroutine: %s\n\n" subroutine-name))
-	(save-buffer)
-	(message (format "Test file %s created." test-file-name))))))
-(define-key cperl-mode-map (kbd "C-c C-t") 'cperl-create-testfile-for-subroutine)
+	     (pattern (concat "\\(?:[0-9]+-\\)?" (regexp-quote subroutine-name) "\\.t$"))
+	     (matching-files (when (file-exists-p test-file-directory)
+			       (directory-files test-file-directory t pattern))))
+	(cond
+	 ;; If matching file(s) exist, open one
+	 ((and matching-files (> (length matching-files) 0))
+	  (let ((file-to-open (if (= 1 (length matching-files))
+				  (car matching-files)
+				(completing-read
+				 (format "Multiple test files found for %s: " subroutine-name)
+				 matching-files nil t))))
+	    (find-file file-to-open)
+	    (message "Opened existing test file: %s" (file-name-nondirectory file-to-open))))
+	 ;; Otherwise, create new test file
+	 (t
+	  (let ((test-file-name (format "%s/%s.t" test-file-directory subroutine-name)))
+	    (unless (file-exists-p test-file-directory)
+	      (make-directory test-file-directory t))
+	    (find-file test-file-name)
+	    (save-buffer)
+	    (message (format "Test file %s created." test-file-name)))))))))
+
+(define-key cperl-mode-map (kbd "C-c C-t") 'cperl-create/open-testfile-for-subroutine)
 
 
 
