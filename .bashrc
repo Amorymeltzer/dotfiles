@@ -1353,9 +1353,6 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # install bat if this is set and it's not installed (by homebrew!)
     export HOMEBREW_BAT=1
 
-    # New in 4.6.0, future default
-    export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
-
     # See also brew shellenv
     HOMEBREW_REPOSITORY=$(brew --repo)
     alias dgh='cd $HOMEBREW_REPOSITORY'
