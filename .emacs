@@ -3372,14 +3372,14 @@ open it instead."
 				(completing-read
 				 (format "Multiple test files found for %s: " subroutine-name)
 				 matching-files nil t))))
-	    (find-file file-to-open)
+	    (find-file-other-window file-to-open)
 	    (message "Opened existing test file: %s" (file-name-nondirectory file-to-open))))
 	 ;; Otherwise, create new test file
 	 (t
 	  (let ((test-file-name (format "%s/%s.t" test-file-directory subroutine-name)))
 	    (unless (file-exists-p test-file-directory)
 	      (make-directory test-file-directory t))
-	    (find-file test-file-name)
+	    (find-file-other-window test-file-name)
 	    (save-buffer)
 	    (message (format "Test file %s created." test-file-name)))))))))
 
