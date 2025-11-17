@@ -863,8 +863,8 @@ alias provecoverreleaselv='provecoverreleasel -v'
 alias provecoverreleaseq='provecoverrelease -Q'
 alias provecoverreleaselq='provecoverrelease -lQ'
 # Why not?
-alias covergen='cover -delete && provecoverlq && cover'
-alias covergenrelease='cover -delete && provecoverreleaselq && cover'
+alias covergen='cover -delete && provecoverlq; cover'
+alias covergenrelease='cover -delete && provecoverreleaselq; cover'
 
 # Access Perl::Critic documentation
 if [[ -f $(command -v perlcritic) && -n "$PERLBREW_INSTALLED" ]]; then
