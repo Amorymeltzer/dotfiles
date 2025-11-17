@@ -2377,6 +2377,10 @@ if type -a &>/dev/null youtube-dl; then
 fi
 ########
 
+# Hide banner
+alias ffmpeg='ffmpeg -hide_banner '
+alias ffprobe='ffprobe -hide_banner '
+
 # Generate family tree without polutting current directory
 function family() {
     Rscript ~/Documents/R/kinship/family_tree.R
