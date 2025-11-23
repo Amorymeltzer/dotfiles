@@ -1742,6 +1742,13 @@ function now() {
     echo
     cal | grep -E "\b$(date '+%e')\b| "
 }
+# Show unix date, optionally with human-readable version of a unix timestamp
+function unixdate() {
+    if [ $# -gt 0 ]; then
+	echo "Arg: $(date -r "$1")"
+    fi
+    echo "Now: $(date) - $(date +%s)"
+}
 
 # See also .icalBuddy.plist
 alias events='icalBuddy -sd -t -li 7 eventsFrom:today to:today+5'
