@@ -171,133 +171,133 @@ See also `enable-theme-functions' and `disable-theme-functions'")
 ;; Also: https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Variables.html
 ;; Check out moody? TODO
 (setq-default mode-line-format
-      (list
-       ;; Error if memory full?
-       "%e"
+	      (list
+	       ;; Error if memory full?
+	       "%e"
 
-       ;; window-numbering-mode will insert itself here, which is fine.  Uses
-       ;; window-numbering-face, which is also fine, but I've set it to
-       ;; mode-line-buffer-id, in order to be bold, which is also fine.  The
-       ;; main point is that by using the various built-in mode-line faces, it
-       ;; dims when inactive, which is ideal.
+	       ;; window-numbering-mode will insert itself here, which is fine.  Uses
+	       ;; window-numbering-face, which is also fine, but I've set it to
+	       ;; mode-line-buffer-id, in order to be bold, which is also fine.  The
+	       ;; main point is that by using the various built-in mode-line faces, it
+	       ;; dims when inactive, which is ideal.
 
-       ;; Toss in @ if we're editing via emacsclient server, otherwise -, the
-       ;; former borrowed from `mode-line-remote'.  Serves as sort of a spacer
-       ;; that recapitulates `mode-line-client' in the place of
-       ;; `mode-line-front-space'.  See also `(daemonp)'
-       '(:eval (propertize
-		(if (frame-parameter nil 'client)
-		    ;; This should be subtle since it's technically
-		    ;; unnecessary
-		    "@" "-") 'face 'font-lock-comment-face))
-
-
-       ;; Buffer name.  Not using mode-line-buffer-identification but doing it
-       ;; manually means that the mode-line-buffer-id face gets separated from
-       ;; this.  Maybe that's not so bad?!  It'd be nice to truncate the buffer
-       ;; name (e.g. `(format-mode-line '(-20 "%b ") font-lock-keyword-face)' or
-       ;; whatever) but it's a drag for helpful mode, etc.  Not sure if there's
-       ;; a good way to have this be mode-specific, or if it's worth it. TODO
-       ;; Additionally, I want different a different face depending on whether
-       ;; we're in light or night mode.  Also, this should really handle the
-       ;; case where timu-macos-theme isn't available FIXME
-       '(:eval (if (equal timu-macos-flavour "dark")
-		   (propertize "%b " 'face 'font-lock-function-name-face)
-		 (propertize "%b " 'face 'font-lock-keyword-face)))
+	       ;; Toss in @ if we're editing via emacsclient server, otherwise -, the
+	       ;; former borrowed from `mode-line-remote'.  Serves as sort of a spacer
+	       ;; that recapitulates `mode-line-client' in the place of
+	       ;; `mode-line-front-space'.  See also `(daemonp)'
+	       '(:eval (propertize
+			(if (frame-parameter nil 'client)
+			    ;; This should be subtle since it's technically
+			    ;; unnecessary
+			    "@" "-") 'face 'font-lock-comment-face))
 
 
-
-       ;; The below largely amounts to a more concise way of doing
-       ;; `mode-line-position', giving line and column and percent.
-
-       ;; Line and (1-based) column.  Could do '%02' to always do two
-       ;; characters, but it'll change (especially the line counter) at three
-       ;; digits anyway, so I don't think I really care that much.
-       "("
-       (propertize "%l" 'face 'font-lock-keyword-face)
-       ","
-       (propertize "%02C" 'face 'font-lock-keyword-face)
-       ") "
-       ;; Position and file length/size
-       "["
-       ;; %p is percent of buffer above top of window (or Top/Bot/All), and %o
-       ;; is travel?  Automatically accounts for two characters?  Ugh.  %q is
-       ;; neat, does the range
-       (propertize "%o" 'face 'font-lock-constant-face)
-       ;; Total count of lines, formatted nicely
-       '(:eval (concat "/" (propertize (file-size-human-readable (line-number-at-pos (point-max)) 'si) 'face 'font-lock-constant-face)))
-       ;; Size in bytes, abbreviated.  Not particularly useful?
-       ;; (concat "/" (propertize "%I" 'face 'font-lock-constant-face))
-       "] "
+	       ;; Buffer name.  Not using mode-line-buffer-identification but doing it
+	       ;; manually means that the mode-line-buffer-id face gets separated from
+	       ;; this.  Maybe that's not so bad?!  It'd be nice to truncate the buffer
+	       ;; name (e.g. `(format-mode-line '(-20 "%b ") font-lock-keyword-face)' or
+	       ;; whatever) but it's a drag for helpful mode, etc.  Not sure if there's
+	       ;; a good way to have this be mode-specific, or if it's worth it. TODO
+	       ;; Additionally, I want different a different face depending on whether
+	       ;; we're in light or night mode.  Also, this should really handle the
+	       ;; case where timu-macos-theme isn't available FIXME
+	       '(:eval (if (equal timu-macos-flavour "dark")
+			   (propertize "%b " 'face 'font-lock-function-name-face)
+			 (propertize "%b " 'face 'font-lock-keyword-face)))
 
 
-       "["
-       ;; The current major mode for the buffer; `mode-line-modes' is too much
-       ;; Use builtin-face? FIXME Actually, reassess all the below faces TODO
-       ;; '(:eval (propertize "%m" 'face 'font-lock-string-face))
-       ;; '(:eval (propertize "%m" 'face 'font-lock-builtin-face))
-       '(:eval (propertize "%m" 'face 'font-lock-keyword-face))
-       ;; Should these be turned off for dashboard, paradox?  Weird to see 'em
-       ;; there.... FIXME TODO
 
-       ;; Was this buffer modified since the last save?  Differs from `mode-line-modified'
-       '(:eval (when (buffer-modified-p)
-		 (concat ","  (propertize "Mod" 'face 'font-lock-constant-face))))
-       ;; A few other modes worth noting
-       '(:eval (when defining-kbd-macro
-		 (concat ","  (propertize "Macro" 'face 'font-lock-warning-face))))
-       ;; Is this buffer read-only?
-       '(:eval (when buffer-read-only
-		 (concat ","  (propertize "RO" 'face 'font-lock-escape-face))))
-       ;; %n introduces a leading space, so do this instead
-       '(:eval (when (buffer-narrowed-p)
-		 (concat ","  (propertize "Nar" 'face 'font-lock-preprocessor-face))))
-       '(:eval (when (bound-and-true-p scroll-lock-mode)
-		 (concat ","  (propertize "Scroll" 'face 'font-lock-preprocessor-face))))
-       '(:eval (when (bound-and-true-p follow-mode)
-		 (concat ","  (propertize "Fol" 'face 'font-lock-type-face))))
-       "]"
+	       ;; The below largely amounts to a more concise way of doing
+	       ;; `mode-line-position', giving line and column and percent.
 
-       ;; Flycheck status, manually since not using minor-mode-alist and because
-       ;; it's smort.
-       ;; Can't remove the annoying leading space?  Ugh.
-       ;; What I want: gone when nothing? No leading space. Color.
-       ;; Could put up with major mode?  Eh.  Wrap in <>?  Would have to
-       ;; redefine 'cause of the space, but I might have to anyway... TODO
-       ;; Maybe also include info in modeline?  Otherwise colored but no number,
-       ;; is that weird?  Or expected?
-       '(:eval (when (and
-		      flycheck-mode
-		      ;; Confirm flycheck isn't running but without a valid
-		      ;; checker configuration
-		      (not (string= "no-checker" flycheck-last-status-change))
-		      (not (string= "not-checked" flycheck-last-status-change)))
-		 ;; (flycheck-mode-line-status-text)))
-		 (propertize (flycheck-mode-line-status-text) 'face 'flycheck-mode-line-color-face)))
-       " "
+	       ;; Line and (1-based) column.  Could do '%02' to always do two
+	       ;; characters, but it'll change (especially the line counter) at three
+	       ;; digits anyway, so I don't think I really care that much.
+	       "("
+	       (propertize "%l" 'face 'font-lock-keyword-face)
+	       ","
+	       (propertize "%02C" 'face 'font-lock-keyword-face)
+	       ") "
+	       ;; Position and file length/size
+	       "["
+	       ;; %p is percent of buffer above top of window (or Top/Bot/All), and %o
+	       ;; is travel?  Automatically accounts for two characters?  Ugh.  %q is
+	       ;; neat, does the range
+	       (propertize "%o" 'face 'font-lock-constant-face)
+	       ;; Total count of lines, formatted nicely
+	       '(:eval (concat "/" (propertize (file-size-human-readable (line-number-at-pos (point-max)) 'si) 'face 'font-lock-constant-face)))
+	       ;; Size in bytes, abbreviated.  Not particularly useful?
+	       ;; (concat "/" (propertize "%I" 'face 'font-lock-constant-face))
+	       "] "
 
-       ;; Add the time, date, and emacs server uptime (maybe dumb).  The uptime
-       ;; is dependent on server status, and although I like the emacsclient @
-       ;; above (a la mode-line-client), this does the same thing, really, and
-       ;; it's not super necessary.  The date/time/battery largely recapitulates
-       ;; global-mode-string, but with some more sensible spacing and
-       ;; arrangement.
-       '(:eval (propertize (format-time-string "%R %a %h %-d")))
-       '(:eval (when (frame-parameter nil 'client)
-		 (concat ", Up " (emacs-uptime "%D, %z%h:%.2m"))))
-       ;; This format always seems simpler but more opaque.  Spaces included.
-       '(battery-mode-line-string (" " battery-mode-line-string))
 
-       "--"
+	       "["
+	       ;; The current major mode for the buffer; `mode-line-modes' is too much
+	       ;; Use builtin-face? FIXME Actually, reassess all the below faces TODO
+	       ;; '(:eval (propertize "%m" 'face 'font-lock-string-face))
+	       ;; '(:eval (propertize "%m" 'face 'font-lock-builtin-face))
+	       '(:eval (propertize "%m" 'face 'font-lock-keyword-face))
+	       ;; Should these be turned off for dashboard, paradox?  Weird to see 'em
+	       ;; there.... FIXME TODO
 
-       ;; List of minor modes.  I don't really want them, but maybe it's useful to note them here?
-       ;; Diminish still removes most of them, but maybe it's kind of
-       ;; unnecessary?  In theory, though, would be good to know when certain
-       ;; things are on or off...
-       ;; minor-mode-alist
+	       ;; Was this buffer modified since the last save?  Differs from `mode-line-modified'
+	       '(:eval (when (buffer-modified-p)
+			 (concat ","  (propertize "Mod" 'face 'font-lock-constant-face))))
+	       ;; A few other modes worth noting
+	       '(:eval (when defining-kbd-macro
+			 (concat ","  (propertize "Macro" 'face 'font-lock-warning-face))))
+	       ;; Is this buffer read-only?
+	       '(:eval (when buffer-read-only
+			 (concat ","  (propertize "RO" 'face 'font-lock-escape-face))))
+	       ;; %n introduces a leading space, so do this instead
+	       '(:eval (when (buffer-narrowed-p)
+			 (concat ","  (propertize "Nar" 'face 'font-lock-preprocessor-face))))
+	       '(:eval (when (bound-and-true-p scroll-lock-mode)
+			 (concat ","  (propertize "Scroll" 'face 'font-lock-preprocessor-face))))
+	       '(:eval (when (bound-and-true-p follow-mode)
+			 (concat ","  (propertize "Fol" 'face 'font-lock-type-face))))
+	       "]"
 
-       mode-line-end-spaces ;; fill with '-'
-       ))
+	       ;; Flycheck status, manually since not using minor-mode-alist and because
+	       ;; it's smort.
+	       ;; Can't remove the annoying leading space?  Ugh.
+	       ;; What I want: gone when nothing? No leading space. Color.
+	       ;; Could put up with major mode?  Eh.  Wrap in <>?  Would have to
+	       ;; redefine 'cause of the space, but I might have to anyway... TODO
+	       ;; Maybe also include info in modeline?  Otherwise colored but no number,
+	       ;; is that weird?  Or expected?
+	       '(:eval (when (and
+			      flycheck-mode
+			      ;; Confirm flycheck isn't running but without a valid
+			      ;; checker configuration
+			      (not (string= "no-checker" flycheck-last-status-change))
+			      (not (string= "not-checked" flycheck-last-status-change)))
+			 ;; (flycheck-mode-line-status-text)))
+			 (propertize (flycheck-mode-line-status-text) 'face 'flycheck-mode-line-color-face)))
+	       " "
+
+	       ;; Add the time, date, and emacs server uptime (maybe dumb).  The uptime
+	       ;; is dependent on server status, and although I like the emacsclient @
+	       ;; above (a la mode-line-client), this does the same thing, really, and
+	       ;; it's not super necessary.  The date/time/battery largely recapitulates
+	       ;; global-mode-string, but with some more sensible spacing and
+	       ;; arrangement.
+	       '(:eval (propertize (format-time-string "%R %a %h %-d")))
+	       '(:eval (when (frame-parameter nil 'client)
+			 (concat ", Up " (emacs-uptime "%D, %z%h:%.2m"))))
+	       ;; This format always seems simpler but more opaque.  Spaces included.
+	       '(battery-mode-line-string (" " battery-mode-line-string))
+
+	       "--"
+
+	       ;; List of minor modes.  I don't really want them, but maybe it's useful to note them here?
+	       ;; Diminish still removes most of them, but maybe it's kind of
+	       ;; unnecessary?  In theory, though, would be good to know when certain
+	       ;; things are on or off...
+	       ;; minor-mode-alist
+
+	       mode-line-end-spaces ;; fill with '-'
+	       ))
 
 
 ;; Time.  Pointless given the above?
@@ -461,6 +461,9 @@ Record that in `paradox--backups', but do nothing if
 ;; and one half.  Right now it's different color highlighting (`region' face)
 ;; and not being unable to see orange in the light modeline.
 (with-eval-after-load 'flycheck
+  ;; custom-visibility, etc. FIXME TODO See screenshots for more color tweaks.
+  ;; Also, in light mode, `flycheck-color-mode-line-info-face' should be blue or
+  ;; cyan?
   (advice-add 'timu-macos-toggle-dark-light :after
 	      (lambda ()
 		"Set face attribute for `region' based on `timu-macos-flavour'."
@@ -736,7 +739,7 @@ Used for insertion into the dashboard."
 ;; (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
 ;;   (add-to-list 'exec-path-from-shell-variables var))
 ;; (when (daemonp)
-  ;; (exec-path-from-shell-initialize))
+;; (exec-path-from-shell-initialize))
 
 
 
@@ -1082,8 +1085,8 @@ POS defaults to `point'."
       (define-key lisp-mode-shared-map (kbd "C-c e") 'elisp-eval-region-or-buffer)
       (define-key lisp-mode-shared-map (kbd "C-c C-e") 'elisp-eval-region-or-buffer))
   (progn
-      (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-region)
-      (define-key lisp-mode-shared-map (kbd "C-c C-e") 'eval-buffer)))
+    (define-key lisp-mode-shared-map (kbd "C-c e") 'eval-region)
+    (define-key lisp-mode-shared-map (kbd "C-c C-e") 'eval-buffer)))
 ;; `eval-last-sexp' is cool, `pp-eval-last-sexp' is maybe cooler, even if it
 ;; doesn't allow for the prefix to replace
 (global-set-key [remap eval-last-sexp] 'pp-eval-last-sexp)
@@ -1903,7 +1906,7 @@ merged work directory list."
 (defun endless/define-ido-bury-key ()
   "Define key binding for burying buffer in ido."
   (define-key ido-completion-map
-    (kbd "C-b") 'endless/ido-bury-buffer-at-head))
+	      (kbd "C-b") 'endless/ido-bury-buffer-at-head))
 (add-hook 'ido-setup-hook #'endless/define-ido-bury-key)
 
 (defun endless/ido-bury-buffer-at-head ()
@@ -2718,6 +2721,7 @@ when in source code modes such as python-mode or perl-mode" t)
 ;; smartscan, go to next/previous symbol at point with M-n/M-p
 ;; <https://github.com/mickeynp/smart-scan> Was I really not using M-n/M-p in
 ;; prog modes beforehand?  Maybe remove FIXME TODO
+;; Consider advice to `recenter' after doing?  FIXME TODO  Same for paragraph?
 (require 'smartscan)
 (setq smartscan-symbol-selector "symbol")
 (add-hook 'prog-mode-hook 'smartscan-mode)
@@ -2846,6 +2850,7 @@ using `ido-completing-read'."
   (set-face-attribute 'Man-overstrike nil :inherit font-lock-builtin-face :bold t)
   (set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t)
   ;; Open man page and activate that buffer
+  ;; FIXME TODO
   (setq 'Man-notify-method 'aggressive))
 
 
@@ -3595,8 +3600,12 @@ open it instead."
     (ac-flyspell-workaround))
 
   ;; There's no flyspell-goto-prev-error?  Dumb.
+  ;; JUST DEFINE USING PREFIX FIXME TODO
+  ;; WHY DOES `flyspell-goto-next-error' with a prefix behave differently than
+  ;; this? FIXME TODO
   (defun flyspell-goto-prev-error ()
-    "Go to closest prior detected error.  Derived from FLYSPELL-GOTO-NEXT-ERROR."
+    "Go to closest prior detected error.
+Derived from `flyspell-goto-next-error'."
     (interactive)
     (let* ((arg 1))
       (while (not (= 0 arg))
@@ -3937,12 +3946,12 @@ See also `file-name-base'."
   (interactive)
   (let* ((ht (make-hash-table :test 'equal))
 	 (number-of-buffers (cl-loop for buffer being the buffers
-				  for mode-name = (symbol-name (buffer-local-value 'major-mode buffer))
-				  do (cl-incf (gethash mode-name ht 0))
-				  count 1))
+				     for mode-name = (symbol-name (buffer-local-value 'major-mode buffer))
+				     do (cl-incf (gethash mode-name ht 0))
+				     count 1))
 	 (totals (sort (cl-loop for key being the hash-keys of ht
-			     using (hash-values value)
-			     collect (list key value))
+				using (hash-values value)
+				collect (list key value))
 		       (lambda (x y) (if (eql (second x) (second y))
 					 (string-lessp (first x) (first y))
 				       (> (second x) (second y)))))))
@@ -3950,11 +3959,11 @@ See also `file-name-base'."
       (princ (format "%d buffers open, in %d distinct modes\n\n"
 		     number-of-buffers (length totals)))
       (cl-loop for (key count) in totals
-	    do (princ (format "%2d %20s %s\n"
-			      count
-			      (if (equal (substring key -5) "-mode")
-				  (substring key 0 -5) key)
-			      (make-string count ?+)))))))
+	       do (princ (format "%2d %20s %s\n"
+				 count
+				 (if (equal (substring key -5) "-mode")
+				     (substring key 0 -5) key)
+				 (make-string count ?+)))))))
 
 
 ;; wc-mode to display chars, words, lines in mode-line

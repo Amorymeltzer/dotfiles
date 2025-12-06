@@ -869,15 +869,15 @@ proveln() {
     shift || true
     prove -l "$@" $(ls -1t t/*.t | head -n "$n")
 }
-alias provel1='proveln 1'
-alias provel5='proveln 5'
-alias provel10='proveln 10'
-alias provel1v='proveln 1 -v'
-alias provel5v='proveln 5 -v'
-alias provel10v='proveln 10 -v'
-alias provel1q='proveln 1 -Q'
-alias provel5q='proveln 5 -Q'
-alias provel10q='proveln 10 -Q'
+alias proveln1='proveln 1'
+alias proveln5='proveln 5'
+alias proveln10='proveln 10'
+alias proveln1v='proveln 1 -v'
+alias proveln5v='proveln 5 -v'
+alias proveln10v='proveln 10 -v'
+alias proveln1q='proveln 1 -Q'
+alias proveln5q='proveln 5 -Q'
+alias proveln10q='proveln 10 -Q'
 # Why not?
 alias covergen='cover -delete && provecoverlq; cover'
 alias covergenrelease='cover -delete && provecoverreleaselq; cover'
