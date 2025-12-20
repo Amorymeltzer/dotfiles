@@ -879,8 +879,8 @@ alias proveln1q='proveln 1 -Q'
 alias proveln5q='proveln 5 -Q'
 alias proveln10q='proveln 10 -Q'
 # Why not?
-alias covergen='cover -delete && provecoverlq; cover'
-alias covergenrelease='cover -delete && provecoverreleaselq; cover'
+alias covergen='cover -delete && provecoverlq; cover -nosummary'
+alias covergenrelease='cover -delete && provecoverreleaselq; cover -nosummary'
 
 # Access Perl::Critic documentation
 if [[ -f $(command -v perlcritic) && -n "$PERLBREW_INSTALLED" ]]; then
