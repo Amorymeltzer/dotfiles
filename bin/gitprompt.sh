@@ -255,6 +255,10 @@ e=""
 s=""
 c=""
 p=""
+staged_count=0
+unstaged_count=0
+untracked_count=0
+conflict_count=0
 
 if [[ "$inside_gitdir" == "true" ]]; then
     # Not sure I care about this?
@@ -294,7 +298,7 @@ elif [[ "$inside_worktree" == "true" ]]; then
 
     # porcelain=v2 is inconsistent in the leading character for untracked
     # ?? is hard to match properly in a case, behaves very weirdly
-    status=$(git status --porcelain|cut -c 1-2|sed 's/??/untracked/'|sort|uniq)
+    status=$(git status --porcelain|cut -c 1-2|sed 's/??/untracked/'|sort)
     if [[ -n "$status" ]]; then
 	mapfile -t status <<< "$status"
 	for stat in "${status[@]}"; do
@@ -302,11 +306,23 @@ elif [[ "$inside_worktree" == "true" ]]; then
 		# Green=not staged, magenta=staged
 		# Currently ignores [ D][RC] and could maybe do better with
 		# renames (R), copies (C), and deletions (D)
-		[MARC][MD]) w=$(__wrap_color "+" "Green")
-			    i=$(__wrap_color "!" "Magenta");;
-		' '[MAC]) w=$(__wrap_color "+" "Green");;
-		[MAC]' ') i=$(__wrap_color "!" "Magenta");;
-		untracked) u=$(__wrap_color "?" "Cyan");;
+
+		# This system for counting is dumb and repetitive, but managing
+		# whitespace with something like uniq -c is worse? FIXME TODO
+		[MARC][MD])
+		    ((unstaged_count++))
+		    w=$(__wrap_color "+$unstaged_count" "Green")
+		    ((staged_count++))
+		    i=$(__wrap_color "!$staged_count" "Magenta");;
+		' '[MAC])
+		    ((unstaged_count++))
+		    w=$(__wrap_color "+$unstaged_count" "Green");;
+		[MAC]' ')
+		    ((staged_count++))
+		    i=$(__wrap_color "!$staged_count" "Magenta");;
+		untracked)
+		    ((untracked_count++))
+		    u=$(__wrap_color "?$untracked_count" "Cyan");;
 		' T') t=$(__wrap_color "T" "Green");;
 		'T ') t=$(__wrap_color "T" "Magenta");;
 		' R') m=$(__wrap_color "R" "Green");;
@@ -314,7 +330,9 @@ elif [[ "$inside_worktree" == "true" ]]; then
 		' D') d=$(__wrap_color "D" "Green");;
 		'D ') d=$(__wrap_color "D" "Magenta");;
 		# Various merge states in red
-		UU) x=$(__wrap_color "U" "Red");;
+		UU)
+		    ((conflict_count++))
+		    x=$(__wrap_color "U$conflict_count" "Red");;
 		DD|DU|UD) y=$(__wrap_color "D" "Red");;
 		AA|AU|UA) n=$(__wrap_color "A" "Red");;
 		*) e=$(__wrap_color "FIX" "Red");;
