@@ -399,9 +399,9 @@ case "$count" in
     "0	0") # equal to upstream
 	p="=" ;;
     "0	"*) # ahead of upstream
-	p="→$z${count#0	}";;
+	p="$z→${count#0	}";;
     *"	0") # behind upstream
-	p="←$z${count%	0}";;
+	p="$z←${count%	0}";;
     *)	    # diverged from upstream
 	# p="$z${count#*	}⇵$z${count%	*}";;
 	p="$z↓${count#*	}↑${count%	*}";;
