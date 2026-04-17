@@ -56,18 +56,18 @@ Color_zItalic="\033[3m"         # Italic
 __wrap_color () {
     local color
     case $2 in
-	Black) color=${Color_Black};;
-	Red) color=${Color_Red};;
-	Green) color=${Color_Green};;
-	Yellow) color=${Color_Yellow};;
-	Blue) color=${Color_Blue};;
-	Magenta) color=${Color_Magenta};;
-	Cyan) color=${Color_Cyan};;
-	White) color=${Color_White};;
-	Clear) color=${Color_zOff};;
-	Faint) color=${Color_zFaint};;
+        Black) color=${Color_Black};;
+        Red) color=${Color_Red};;
+        Green) color=${Color_Green};;
+        Yellow) color=${Color_Yellow};;
+        Blue) color=${Color_Blue};;
+        Magenta) color=${Color_Magenta};;
+        Cyan) color=${Color_Cyan};;
+        White) color=${Color_White};;
+        Clear) color=${Color_zOff};;
+        Faint) color=${Color_zFaint};;
 
-	*) color=$Color_zOff$Color_zFaint$Color_zItalic # default, matches PS1
+        *) color=$Color_zOff$Color_zFaint$Color_zItalic # default, matches PS1
     esac
     echo -ne "$color$1${Color_zOff}"
 }
@@ -84,24 +84,24 @@ __git_sequencer_status () {
     local todo
     if test -f "$gitdir/CHERRY_PICK_HEAD"
     then
-	r="Cherry-picking"
-	return 0;
+        r="Cherry-picking"
+        return 0;
     elif test -f "$gitdir/REVERT_HEAD"
     then
-	r="Reverting"
-	return 0;
+        r="Reverting"
+        return 0;
     elif __git_eread "$gitdir/sequencer/todo" todo
     then
-	case "$todo" in
-	    p[\ \	]|pick[\ \	]*)
-		r="Cherry-picking"
-		return 0
-		;;
-	    revert[\ \	]*)
-		r="Reverting"
-		return 0
-		;;
-	esac
+        case "$todo" in
+            p[\ \	]|pick[\ \	]*)
+                r="Cherry-picking"
+                return 0
+                ;;
+            revert[\ \	]*)
+                r="Reverting"
+                return 0
+                ;;
+        esac
     fi
     return 1
 }
@@ -153,74 +153,74 @@ if [ -d "$gitdir/rebase-merge" ]; then
     __git_eread "$gitdir/rebase-merge/end" total
     r="Rebasing"
     if __git_eread "$gitdir/rebase-merge/orig-head" orighead; then
-	orighead=$(git rev-parse --short "$orighead")
-	r="$r $(__wrap_color "$orighead")"
+        orighead=$(git rev-parse --short "$orighead")
+        r="$r $(__wrap_color "$orighead")"
     fi
     if __git_eread "$gitdir/rebase-merge/onto" o; then
-	o=$(git rev-parse --short "$o")
-	o="$(__wrap_color "onto" "Red") $o"
+        o=$(git rev-parse --short "$o")
+        o="$(__wrap_color "onto" "Red") $o"
     fi
     # Get action, probably needs work FIXME TODO
     done=$(tail -n 1 "$gitdir/rebase-merge/done" 2>/dev/null)
     if [[ -n "$done" ]]; then
-	a="$done"
-	if [[ "$a" != "break" && $(echo "$done" | cut -f 1 -d ' ') != "exec" ]]; then
-	    a=$(echo -n "$done" | grep "$short_sha" | cut -f 1 -d ' ')
-	    # There's a way to get better message here?  reword sha steps
-	    # instead of just reword steps, like with stopped? FIXME TODO
-	    # With break, maybe grab the last?  or next?  Or both?
+        a="$done"
+        if [[ "$a" != "break" && $(echo "$done" | cut -f 1 -d ' ') != "exec" ]]; then
+            a=$(echo -n "$done" | grep "$short_sha" | cut -f 1 -d ' ')
+            # There's a way to get better message here?  reword sha steps
+            # instead of just reword steps, like with stopped? FIXME TODO
+            # With break, maybe grab the last?  or next?  Or both?
 
-	    # Weirdness with merges and shit, hopefully don't get here
-	    # Could be smarter and check for stopped and amend
-	    # then output extra info if present and different
-	    if [[ -z "$a" ]]; then
-		a="stopped"
-		__git_eread "$gitdir/rebase-merge/stopped-sha" stopped
-		if [[ -n "$stopped" ]]; then
-		    stopped=$(git rev-parse --short "$stopped") # Just in case
-		    a="stopped at $stopped"
-		fi
-	    fi
-	fi
+            # Weirdness with merges and shit, hopefully don't get here
+            # Could be smarter and check for stopped and amend
+            # then output extra info if present and different
+            if [[ -z "$a" ]]; then
+                a="stopped"
+                __git_eread "$gitdir/rebase-merge/stopped-sha" stopped
+                if [[ -n "$stopped" ]]; then
+                    stopped=$(git rev-parse --short "$stopped") # Just in case
+                    a="stopped at $stopped"
+                fi
+            fi
+        fi
     fi
 else
     if [ -d "$gitdir/rebase-apply" ]; then
-	__git_eread "$gitdir/rebase-apply/next" step
-	__git_eread "$gitdir/rebase-apply/last" total
-	if [ -f "$gitdir/rebase-apply/rebasing" ]; then
-	    __git_eread "$gitdir/rebase-apply/head-name" b
-	    r="Rebasing"
-	elif [ -f "$gitdir/rebase-apply/applying" ]; then
-	    r="Applying"
-	else
-	    r="Applying/Rebasing"
-	fi
+        __git_eread "$gitdir/rebase-apply/next" step
+        __git_eread "$gitdir/rebase-apply/last" total
+        if [ -f "$gitdir/rebase-apply/rebasing" ]; then
+            __git_eread "$gitdir/rebase-apply/head-name" b
+            r="Rebasing"
+        elif [ -f "$gitdir/rebase-apply/applying" ]; then
+            r="Applying"
+        else
+            r="Applying/Rebasing"
+        fi
     elif [ -f "$gitdir/MERGE_HEAD" ]; then
-	r="Merging"
+        r="Merging"
     elif __git_sequencer_status; then
-	:
+        :
     elif [ -f "$gitdir/BISECT_LOG" ]; then
-	r="Bisecting"
+        r="Bisecting"
     fi
 
     if [ -n "$b" ]; then
-	: # bash builtin for true, already have a branch name from the above actions
+        : # bash builtin for true, already have a branch name from the above actions
     elif [ -h "$gitdir/HEAD" ]; then
-	# symlink symbolic ref
-	b="$(git symbolic-ref HEAD 2>/dev/null)"
+        # symlink symbolic ref
+        b="$(git symbolic-ref HEAD 2>/dev/null)"
     else
-	head=""
-	# Quit, what state is this?  No head...
-	if ! __git_eread "$gitdir/HEAD" head; then
-	    echo -n "$out"
-	    exit
-	fi
-	# is it a symbolic ref?
-	b="${head#ref: }"
-	if [ "$head" = "$b" ]; then
-	    detached=yes	# Used to colorize detched head in red
-	    b="$(git describe --contains --all HEAD)"
-	fi
+        head=""
+        # Quit, what state is this?  No head...
+        if ! __git_eread "$gitdir/HEAD" head; then
+            echo -n "$out"
+            exit
+        fi
+        # is it a symbolic ref?
+        b="${head#ref: }"
+        if [ "$head" = "$b" ]; then
+            detached=yes	# Used to colorize detched head in red
+            b="$(git describe --contains --all HEAD)"
+        fi
     fi
 fi
 
@@ -229,8 +229,8 @@ if [[ -n "$r" ]]; then
     # How far along in the rebase we are
     # Consider moving to end of gitstring??? FIXME TODO
     if [ -n "$step" ] && [ -n "$total" ]; then
-	a="(${a:+$a$z}$step/$total)"
-	a="$(__wrap_color "$a" "Blue")"
+        a="(${a:+$a$z}$step/$total)"
+        a="$(__wrap_color "$a" "Blue")"
     fi
     r="$r${a:+$z$a}"
 fi
@@ -263,9 +263,9 @@ conflict_count=0
 if [[ "$inside_gitdir" == "true" ]]; then
     # Not sure I care about this?
     if [[ "$bare_repo" == "true" ]]; then
-	c="BARE:"
+        c="BARE:"
     else
-	b="GIT_DIR!"
+        b="GIT_DIR!"
     fi
 elif [[ "$inside_worktree" == "true" ]]; then
 
@@ -300,65 +300,65 @@ elif [[ "$inside_worktree" == "true" ]]; then
     # ?? is hard to match properly in a case, behaves very weirdly
     status=$(git status --porcelain|cut -c 1-2|sed 's/??/untracked/'|sort)
     if [[ -n "$status" ]]; then
-	mapfile -t status <<< "$status"
-	for stat in "${status[@]}"; do
-	    case "$stat" in
-		# Green=not staged, magenta=staged
-		# Currently ignores [ D][RC] and could maybe do better with
-		# renames (R), copies (C), and deletions (D)
+        mapfile -t status <<< "$status"
+        for stat in "${status[@]}"; do
+            case "$stat" in
+                # Green=not staged, magenta=staged
+                # Currently ignores [ D][RC] and could maybe do better with
+                # renames (R), copies (C), and deletions (D)
 
-		# This system for counting is dumb and repetitive, but managing
-		# whitespace with something like uniq -c is worse? FIXME TODO
-		[MARC][MD])
-		    ((unstaged_count++))
-		    w=$(__wrap_color "+$unstaged_count" "Green")
-		    ((staged_count++))
-		    i=$(__wrap_color "!$staged_count" "Magenta");;
-		' '[MAC])
-		    ((unstaged_count++))
-		    w=$(__wrap_color "+$unstaged_count" "Green");;
-		[MAC]' ')
-		    ((staged_count++))
-		    i=$(__wrap_color "!$staged_count" "Magenta");;
-		untracked)
-		    ((untracked_count++))
-		    u=$(__wrap_color "?$untracked_count" "Cyan");;
-		' T') t=$(__wrap_color "T" "Green");;
-		'T ') t=$(__wrap_color "T" "Magenta");;
-		' R') m=$(__wrap_color "R" "Green");;
-		'R ') m=$(__wrap_color "R" "Magenta");;
-		' D') d=$(__wrap_color "D" "Green");;
-		'D ') d=$(__wrap_color "D" "Magenta");;
-		# Various merge states in red
-		UU)
-		    ((conflict_count++))
-		    x=$(__wrap_color "U$conflict_count" "Red");;
-		DD|DU|UD) y=$(__wrap_color "D" "Red");;
-		AA|AU|UA) n=$(__wrap_color "A" "Red");;
-		*) e=$(__wrap_color "FIX" "Red");;
-	    esac
-	done
+                # This system for counting is dumb and repetitive, but managing
+                # whitespace with something like uniq -c is worse? FIXME TODO
+                [MARC][MD])
+                    ((unstaged_count++))
+                    w=$(__wrap_color "+$unstaged_count" "Green")
+                    ((staged_count++))
+                    i=$(__wrap_color "!$staged_count" "Magenta");;
+                ' '[MAC])
+                    ((unstaged_count++))
+                    w=$(__wrap_color "+$unstaged_count" "Green");;
+                [MAC]' ')
+                    ((staged_count++))
+                    i=$(__wrap_color "!$staged_count" "Magenta");;
+                untracked)
+                    ((untracked_count++))
+                    u=$(__wrap_color "?$untracked_count" "Cyan");;
+                ' T') t=$(__wrap_color "T" "Green");;
+                'T ') t=$(__wrap_color "T" "Magenta");;
+                ' R') m=$(__wrap_color "R" "Green");;
+                'R ') m=$(__wrap_color "R" "Magenta");;
+                ' D') d=$(__wrap_color "D" "Green");;
+                'D ') d=$(__wrap_color "D" "Magenta");;
+                # Various merge states in red
+                UU)
+                    ((conflict_count++))
+                    x=$(__wrap_color "U$conflict_count" "Red");;
+                DD|DU|UD) y=$(__wrap_color "D" "Red");;
+                AA|AU|UA) n=$(__wrap_color "A" "Red");;
+                *) e=$(__wrap_color "FIX" "Red");;
+            esac
+        done
     fi
     # Old, imperfect:
-    # git diff --no-ext-diff --quiet || w=$(__wrap_color "+" "Green")	     # Unstaged
+    # git diff --no-ext-diff --quiet || w=$(__wrap_color "+" "Green")        # Unstaged
     # git diff --no-ext-diff --cached --quiet || i=$(__wrap_color "!" "Magenta") # Staged
     # if git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>/dev/null
 
     # Not entirely sure what this does yet...
     if [ -z "$short_sha" ] && [ -z "$i" ]; then
-	i=$(__wrap_color "#" "Red")
+        i=$(__wrap_color "#" "Red")
     else
-	short_sha=$(__wrap_color "$short_sha")
+        short_sha=$(__wrap_color "$short_sha")
     fi
     # Stash
     if git rev-parse --verify --quiet refs/stash >/dev/null
     then
-	s=$(__wrap_color "$" "Green")
+        s=$(__wrap_color "$" "Green")
     fi
 
     # Include text for sparse checkout
     if [ "$(git config --bool core.sparseCheckout)" = "true" ]; then
-	h="(sparse)"
+        h="(sparse)"
     fi
 fi
 
@@ -370,11 +370,11 @@ b=${b##refs/heads/}
 
 if [[ "$b" != "master" ]] && [[ "$b" != "main" ]]; then
     if [[ "$detached" = 'yes' ]]; then
-	b=$(__wrap_color "Detached: $b" "Red")
+        b=$(__wrap_color "Detached: $b" "Red")
     elif [[ "$b" = 'GIT_DIR!' ]]; then
-	b=$(__wrap_color "$b" "Red")
+        b=$(__wrap_color "$b" "Red")
     else
-	b=$(__wrap_color "$b" "Cyan")
+        b=$(__wrap_color "$b" "Cyan")
     fi
 else
     b=$(__wrap_color "$b")
@@ -395,16 +395,16 @@ count="$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)"
 # note the tabs
 case "$count" in
     "") # no upstream
-	p="" ;;
+        p="" ;;
     "0	0") # equal to upstream
-	p="=" ;;
+        p="=" ;;
     "0	"*) # ahead of upstream
-	p="$z→${count#0	}";;
+        p="$z→${count#0	}";;
     *"	0") # behind upstream
-	p="$z←${count%	0}";;
-    *)	    # diverged from upstream
-	# p="$z${count#*	}⇵$z${count%	*}";;
-	p="$z↓${count#*	}↑${count%	*}";;
+        p="$z←${count%	0}";;
+    *)      # diverged from upstream
+        # p="$z${count#*	}⇵$z${count%	*}";;
+        p="$z↓${count#*	}↑${count%	*}";;
 esac
 p=$(__wrap_color "$p" "Faint")
 
