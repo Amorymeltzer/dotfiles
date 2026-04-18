@@ -16,12 +16,12 @@
 -i=2
 # Continuation indent also 2 cols
 -ci=2
-# Indent via tabs, 1 tab=8 spaces
--et=8
+# Maybe help things a bit
+#-xci
 # Align wide operators (=>, etc.)
 -vwe
 # Line up list indentation
--xlp
+#-xlp
 # No trailing commas in lists, just in case
 -wtc=0
 -dtc
