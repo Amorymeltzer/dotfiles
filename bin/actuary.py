@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 import sys
 import datetime
 
@@ -80,7 +80,7 @@ def calcexp(ages, prob, flag):
     return i
 
 ages=[]
-# print sys.argv[1:]
+# print(sys.argv[1:])
 for arg in sys.argv[1:]:
     gender=1
     years=1.0
@@ -88,28 +88,28 @@ for arg in sys.argv[1:]:
         try:
             ages.append(1*float(arg[:-1]))
         except:
-            print "Error parsing argument", arg
+            print("Error parsing argument", arg)
     elif arg[-1]=='f' or arg[-1]=='F':
         try:
             ages.append(-1*float(arg[:-1]))
         except:
-            print "Error parsing argument", arg
+            print("Error parsing argument", arg)
     else:
         try:
             years=float(arg)
             break
         except:
-            print "Error parsing argument", arg
+            print("Error parsing argument", arg)
 
 if not sys.argv[1:]:
-    print "The format is 'actuary.py 15m 80f 23', with a list of ages and a number of years to run the projections."
+    print("The format is 'actuary.py 15m 80f 23', with a list of ages and a number of years to run the projections.")
     raise SystemExit
 if not ages:
-    print "No ages specified.  Format is 12m, 17f, etc."
+    print("No ages specified.  Format is 12m, 17f, etc.")
     raise SystemExit
 
-# print "Ages:", ages
-# print "Years:", years
+# print("Ages:", ages)
+# print("Years:", years)
 
 (datetime.date.today()+datetime.timedelta(days=365.242191*1)).year
 someone_years=[calcexp(ages, 0.05, 1),
@@ -118,10 +118,10 @@ someone_years=[calcexp(ages, 0.05, 1),
 someone_dates=[(datetime.date.today()+datetime.timedelta(days=365.242191*someone_years[0])).year,
                (datetime.date.today()+datetime.timedelta(days=365.242191*someone_years[1])).year,
                (datetime.date.today()+datetime.timedelta(days=365.242191*someone_years[2])).year]
-print "There is a 5%  chance of someone dying within", someone_years[0], "years (by", str(someone_dates[0])+")."
-print "There is a 50% chance of someone dying within", someone_years[1], "years (by", str(someone_dates[1])+")."
-print "There is a 95% chance of someone dying within", someone_years[2], "years (by", str(someone_dates[2])+")."
-print ""
+print("There is a 5%  chance of someone dying within", someone_years[0], "years (by", str(someone_dates[0])+").")
+print("There is a 50% chance of someone dying within", someone_years[1], "years (by", str(someone_dates[1])+").")
+print("There is a 95% chance of someone dying within", someone_years[2], "years (by", str(someone_dates[2])+").")
+print()
 
 if len(ages)>1:
     everyone_years=[calcexp(ages, 0.05, 0),
@@ -130,9 +130,9 @@ if len(ages)>1:
     everyone_dates=[(datetime.date.today()+datetime.timedelta(days=365.242191*everyone_years[0])).year,
                    (datetime.date.today()+datetime.timedelta(days=365.242191*everyone_years[1])).year,
                    (datetime.date.today()+datetime.timedelta(days=365.242191*everyone_years[2])).year]
-    print "There is a 5%  chance of everyone dying within", everyone_years[0], "years (by", str(everyone_dates[0])+")."
-    print "There is a 50% chance of everyone dying within", everyone_years[1], "years (by", str(everyone_dates[1])+")."
-    print "There is a 95% chance of everyone dying within", everyone_years[2], "years (by", str(everyone_dates[2])+")."
+    print("There is a 5%  chance of everyone dying within", everyone_years[0], "years (by", str(everyone_dates[0])+").")
+    print("There is a 50% chance of everyone dying within", everyone_years[1], "years (by", str(everyone_dates[1])+").")
+    print("There is a 95% chance of everyone dying within", everyone_years[2], "years (by", str(everyone_dates[2])+").")
 
 
 if years:
@@ -140,7 +140,7 @@ if years:
     if years==1:
         yearword="year"
 
-    print ""
+    print()
     if years>datetime.date.today().year:
         years=years-datetime.date.today().year
     if len(ages)>1:
@@ -152,16 +152,15 @@ if years:
             printable=">99.99"
         else:
             printable=str(p)[:5]
-        print "Probability of all dying in", years, yearword+":  ", printable+"%"
+        print("Probability of all dying in", years, yearword+":  ", printable+"%")
     p=100*probanydie(ages, years)
     printable=""
     if p<0.001:
         printable="<0.001"
     elif p>99.99:
         printable=">99.99"
-        print p
+        print(p)
     else:
         printable=str(p)[:5]
-    print "Probability of a death within", years, yearword+":", printable+"%"
+    print("Probability of a death within", years, yearword+":", printable+"%")
 raise SystemExit
-
