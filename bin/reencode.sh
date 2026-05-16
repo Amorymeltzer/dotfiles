@@ -16,29 +16,33 @@
 
 
 
-for filename in *.mkv; do
+for filename in *.mkv *.mp4; do
+    # Bash dumb
+    [[ -e "$filename" ]] || continue
+
+    ext="${filename##*.}"
     file="${filename%.*}"
     printf "\tProcessing %s\n" "$file";
 
-    bitrate=$(ffprobe -i "${file}.mkv" -show_entries format=bit_rate -v quiet -of csv="p=0")
+    bitrate=$(ffprobe -i "${file}.${ext}" -show_entries format=bit_rate -v quiet -of csv="p=0")
     if [ "$bitrate" -lt 4000000 ]; then
-	echo "$file likely already compressed, bit rate is $bitrate"
-	continue
+        echo "$file likely already compressed, bit rate is $bitrate"
+        continue
     fi
 
-    bitrate=$(ffprobe -v error -show_entries format=bit_rate -of csv=p=0 "$file.mkv")
-    length=$(ffprobe -show_entries format=duration -sexagesimal -v quiet -of csv="p=0" "$file.mkv")
+    bitrate=$(ffprobe -v error -show_entries format=bit_rate -of csv=p=0 "${file}.${ext}")
+    length=$(ffprobe -show_entries format=duration -sexagesimal -v quiet -of csv="p=0" "${file}.${ext}")
 
     echo "$file bit rate is $bitrate; length is $length"
 
-    ffmpeg -hide_banner -loglevel warning -stats -i "${file}.mkv" -c:v libx264 -preset slow -crf 21 -vf format=yuv420p -c:a aac_at -b:a 192k -c:s copy -map 0 "${file}-x264.mkv"
+    ffmpeg -hide_banner -loglevel warning -stats -i "${file}.${ext}" -c:v libx264 -preset slow -crf 21 -vf format=yuv420p -c:a aac_at -b:a 192k -c:s copy -map 0 "${file}-x264.mkv"
 
     # Just in case?
-    original_size=$(stat -f%z "${file}.mkv")
+    original_size=$(stat -f%z "${file}.${ext}")
     new_size=$(stat -f%z "${file}-x264.mkv")
     if [ "$new_size" -ge "$original_size" ]; then
-	echo "Warning: new file is larger than original, removing"
-	rm "${file}-x264.mkv"
+        echo "Warning: new file is larger than original, removing"
+        rm "${file}-x264.mkv"
     fi
 
 
