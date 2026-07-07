@@ -485,7 +485,7 @@ Record that in `paradox--backups', but do nothing if
  ;; The default of 5 seems like it should be fine, but it seems to have a quite
  ;; noticable slowdown.  Setting it higher isn't a big deal, so it's a
  ;; no-brainer.  Could definitely go higher!
- auto-dark-polling-interval-seconds 10
+ auto-dark-polling-interval-seconds 30
  ;; The timu-macos theme is weird, with just one actual theme but a function to
  ;; toggle between dark and light mode.  Thankfully, auto-dark offers hooks!
  ;; This is just in case?  Prior to 0.13 it was auto-dark-(dark|light)-theme
