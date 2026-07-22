@@ -863,21 +863,21 @@ alias provecoverreleaselv='provecoverreleasel -v'
 alias provecoverreleaseq='provecoverrelease -Q'
 alias provecoverreleaselq='provecoverrelease -lQ'
 # Test just the most recently modified file in t/
-proveln() {
+provelr() {
     local n="${1:-1}"
     # Handle additional args if present
     shift || true
     prove -l "$@" $(ls -1t t/*.t | head -n "$n")
 }
-alias proveln1='proveln 1'
-alias proveln5='proveln 5'
-alias proveln10='proveln 10'
-alias proveln1v='proveln 1 -v'
-alias proveln5v='proveln 5 -v'
-alias proveln10v='proveln 10 -v'
-alias proveln1q='proveln 1 -Q'
-alias proveln5q='proveln 5 -Q'
-alias proveln10q='proveln 10 -Q'
+alias provelr1='provelr 1'
+alias provelr5='provelr 5'
+alias provelr10='provelr 10'
+alias provelr1v='provelr 1 -v'
+alias provelr5v='provelr 5 -v'
+alias provelr10v='provelr 10 -v'
+alias provelr1q='provelr 1 -Q'
+alias provelr5q='provelr 5 -Q'
+alias provelr10q='provelr 10 -Q'
 # Why not?
 alias covergen='cover -delete && provecoverlq; cover -nosummary'
 alias covergenrelease='cover -delete && provecoverreleaselq; cover -nosummary'
