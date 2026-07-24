@@ -1487,34 +1487,49 @@ function newscript() {
 alias d="diary "
 # Completion for diary
 _diary_completion() {
-    local cur prev opts
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
+  local cur prev opts
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-    case "${prev}" in
-	diary|d)
-	    opts="new note notes last show showlast rand random search ss log list onthis memory remove rm delete stats"
-	    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
-	    return 0
-	    ;;
-	show)
-	    opts=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" ! -name "notes.md" -exec basename {} + 2>/dev/null)
-	    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
-	    return 0
-	    ;;
-	rand|random|list)
-	    files=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" ! -name "notes.md" -exec basename {} + 2>/dev/null)
-	    # YYYY-MM
-	    yopts=$(echo "$files" | cut -d'-' -f1-2 | sort -u)
-	    # YYYY
-	    mopts=$(echo "$files" | cut -d'-' -f1 | sort -u)
-	    mapfile -t COMPREPLY < <(compgen -W "${yopts} ${mopts}" -- "${cur}")
-	    return 0
-	    ;;
-	*)
-	    ;;
-    esac
+  case "${prev}" in
+		diary|d)
+			opts="new note notes last show showlast rand random search ss log list onthis memory remove rm delete stats"
+			mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
+			return 0
+			;;
+		show)
+			files=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" ! -name "notes.md" -exec basename {} + 2>/dev/null)
+			case "$cur" in
+				????-??-*)
+					# Have year-month-: matching full names
+					opts="${files}"
+					;;
+				????-*)
+					# Have year-: months within that year
+					opts=$(echo "$files" | cut -d'-' -f1-2 | sort -u)
+					;;
+				*)
+					# Nothing: years
+					opts=$(echo "$files" | cut -d'-' -f1 | sort -u)
+					;;
+			esac
+			mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
+			compopt -o nospace
+			return 0
+			;;
+		rand|random|list)
+			files=$(find "$DIARY_DIR" -maxdepth 1 -type f -name "*.md" ! -name "notes.md" -exec basename {} + 2>/dev/null)
+			# YYYY-MM
+			yopts=$(echo "$files" | cut -d'-' -f1-2 | sort -u)
+			# YYYY
+			mopts=$(echo "$files" | cut -d'-' -f1 | sort -u)
+			mapfile -t COMPREPLY < <(compgen -W "${yopts} ${mopts}" -- "${cur}")
+			return 0
+			;;
+		*)
+			;;
+  esac
 }
 complete -F _diary_completion diary d
 
