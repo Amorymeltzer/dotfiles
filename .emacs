@@ -1338,6 +1338,8 @@ buffer or region to mardown and display it in a separate window."
 (autoload 'html-tidy-then-indent "tidy" "Run Tidy HTML parser then indent the
 current buffer" t)
 (defalias 'html-tidy-indent 'html-tidy-then-indent)
+;; Should customize `tidy-shell-command' to take whatever's on path aka not just
+;; the built-in path FIXME TODO
 
 ;; Bug hunter
 ;; https://github.com/Malabarba/elisp-bug-hunter
