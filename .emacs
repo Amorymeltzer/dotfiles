@@ -1486,6 +1486,7 @@ that is not already being visited."
 ;; Fuck I should use these more
 (require 'bookmark)
 (global-set-key "\C-xrd" 'bookmark-delete)
+(setq bookmark-sort-flag 'last-modified)
 ;; where to save the bookmarks
 (setq bookmark-default-file (expand-file-name "bookmarks" user-emacs-directory))
 ;; each command that sets a bookmark will also save your bookmarks
