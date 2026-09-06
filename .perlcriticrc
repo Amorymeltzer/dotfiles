@@ -8,9 +8,7 @@ exclude = Freenode
 
 # Minimum length of regex before whining about /x; default is 0
 [RegularExpressions::RequireExtendedFormatting]
-minimum_regex_length_to_complain_about = 45
-# Refuses unescaped spaces in regex, useful when using /x flag
-# strict = 1
+minimum_regex_length_to_complain_about = 60
 # Don't complain about certain postfix control structures
 # until when unless when while also available
 [ControlStructures::ProhibitPostfixControls]
