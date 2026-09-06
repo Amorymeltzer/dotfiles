@@ -575,7 +575,7 @@ Used for insertion into the dashboard."
 
 ;; Expand recents; not using bookmarks or agenda, but keep here as reminder to
 ;; do so.  Should use projectile at some point
-(setq dashboard-items '((recents  . 15)
+(setq dashboard-items '((recents  . 20)
 			;; (ls-files . 5)
 			;; (ls-directories . 3)
 			(bookmarks . 5)
