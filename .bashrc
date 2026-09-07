@@ -882,6 +882,27 @@ alias provelr10q='provelr 10 -Q'
 alias covergen='cover -delete && provecoverlq; cover -nosummary'
 alias covergenrelease='cover -delete && provecoverreleaselq; cover -nosummary'
 
+# Auto-complete Perl's prove with test files, via Olaf Alders
+# <https://www.olafalders.com/2021/07/13/prove-tab-completion/>; should move
+# this up with other fzf stuff, but need prove aliases to be first
+if [[ -f $(command -v fzf) ]]; then
+    _fzf_complete_prove() {
+	_fzf_complete --reverse --multi --prompt="prove> " -- "$@" < <(
+	    find t -type f -name '*.t')
+    }
+    _fzf_complete_prove_post() {
+	awk '{print $1}'
+    }
+    # Include all prove aliases
+    # complete -F _fzf_complete_prove -o default -o bashdefault "$(alias -p prove|sed -n 's/^alias \(prove[^=]*\)=.*/\1/p')"
+    # complete -F _fzf_complete_prove -o default -o bashdefault prove
+
+    # Register completion for prove and all aliases beginning with "prove"
+    for cmd in prove $(compgen -a | grep '^prove'); do
+	complete -F _fzf_complete_prove -o default -o bashdefault "$cmd"
+    done
+fi
+
 # Access Perl::Critic documentation
 if [[ -f $(command -v perlcritic) && -n "$PERLBREW_INSTALLED" ]]; then
     function explain_perlcritic() {
