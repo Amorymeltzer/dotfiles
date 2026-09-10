@@ -573,16 +573,17 @@ Used for insertion into the dashboard."
   (totd))
 (add-to-list 'dashboard-item-generators '(totd . dashboard-insert-totd))
 
-;; Expand recents; not using bookmarks or agenda, but keep here as reminder to
+;; Expand recents, move bookmarks up; not agenda, but keep here as reminder to
 ;; do so.  Should use projectile at some point
-(setq dashboard-items '((recents  . 20)
-			;; (ls-files . 5)
-			;; (ls-directories . 3)
-			(bookmarks . 5)
-			;; (projects . 5)	; Depends on projectile
-			;; (agenda . 5)
-			;; (registers . 5)
-			(totd . 1)))
+(setq dashboard-items
+	'((bookmarks . 5)
+		 (recents  . 20)
+		 ;; (ls-files . 5)
+		 ;; (ls-directories . 3)
+		 ;; (projects . 5)	; Depends on projectile
+		 ;; (agenda . 5)
+		 ;; (registers . 5)
+		 (totd . 1)))
 
 ;; Weird that this gets the startup time wrong with emacsclient, not sure of why
 ;; since it appears to be using the right hooks
