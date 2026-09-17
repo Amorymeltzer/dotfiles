@@ -1386,6 +1386,9 @@ if [[ -n "$BREW_INSTALLED" ]]; then
     # Or just GA
     # export HOMEBREW_NO_GOOGLE_ANALYTICS=1
 
+    # Default 120, takes up a lot of space, blah
+    export HOMEBREW_CLEANUP_MAX_AGE_DAYS=90
+
     # Use bat for brew cat. As of v3.3.6, homebrew will attempt to automatically
     # install bat if this is set and it's not installed (by homebrew!)
     export HOMEBREW_BAT=1
