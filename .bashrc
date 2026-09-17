@@ -632,6 +632,8 @@ alias greh='g reh'
 # once there to jump to bottom then to the top.  Ill-advised for large files
 export MANPAGER="less -FXiRgMw";
 export LESS="-FXiRgMw";
+# Turn off less history
+export LESSHISTFILE=-
 
 # Open the manual page for the last command you executed.
 function lastman {
