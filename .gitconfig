@@ -318,6 +318,7 @@ rebi = "!git rebase -i HEAD~$1 \"${@:2}\" #"
 # As above, but with the --exec option
 rebix = "!git rebase -i -x \"$2\" HEAD~$1 \"${@:3}\" #"
 rebim = "!git rebase -i $(git default-branch)"
+rebiu = rebase -i @{upstream}
 # Relies on split-from alias, rebases commits since splitting this branch
 rebis = "!git rebase -i $(git split-from)"
 # Use fzf to pick the interactive rebase, via graton <https://news.ycombinator.com/item?id=32955969>
