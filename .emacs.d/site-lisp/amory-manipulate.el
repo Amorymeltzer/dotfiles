@@ -61,7 +61,8 @@
   (split-window-horizontally)
   (split-window-horizontally)
   (balance-windows)
-  (follow-mode t))
+  (follow-mode t)
+	(message "turn off via 'follow-mode"))
 
 ;; Better C-x 3
 (defun split-window-right-and-move ()
