@@ -2193,18 +2193,6 @@ merged work directory list."
 (autoload 'fillcode-mode "fillcode" "A minor mode to enhance fill functions
 when in source code modes such as python-mode or perl-mode" t)
 
-(defun unfill-paragraph ()
-  "Unfill a paragraph."
-  (interactive)
-  (let ((fill-column (point-max)))
-    (fill-paragraph nil)))
-
-(defun unfill-region ()
-  "Unfill the selected region."
-  (interactive)
-  (let ((fill-column (point-max)))
-    (fill-region (region-beginning) (region-end) nil)))
-
 (global-set-key (kbd "M-Q") 'unfill-region)
 
 
@@ -2851,8 +2839,8 @@ using `ido-completing-read'."
 
 (with-eval-after-load "man"
   ;; Add some coloring to manpages, not much tbh
-  (set-face-attribute 'Man-overstrike nil :inherit font-lock-builtin-face :bold t)
-  (set-face-attribute 'Man-underline nil :inherit font-lock-function-name-face :underline t)
+  (set-face-attribute 'Man-overstrike nil :inherit 'font-lock-builtin-face :bold t)
+  (set-face-attribute 'Man-underline nil :inherit 'font-lock-function-name-face :underline t)
   ;; Open man page and activate that buffer
   ;; FIXME TODO
   (setq 'Man-notify-method 'aggressive))
@@ -2937,7 +2925,7 @@ day of the week.  With two prefix arguments, add day of week and time."
 ;; On duplicate filenames, show paths not <2>
 ;; Default in 24.4?
 (require 'uniquify)
-(setq uniquify-after-kill-buffer-p t
+(setq uniquify-after-kill-buffer-flag t
       uniquify-buffer-name-style 'post-forward
       uniquify-ignore-buffers-re "^\\*")
 
