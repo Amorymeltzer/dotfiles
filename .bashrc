@@ -526,6 +526,12 @@ alias lt='ls -lt'
 alias lr='ll -R'
 alias ltr='ls -ltr'
 alias latr='ltr -A'
+function ltrt {
+	ls -ltr "${1:-.}" | tail -n "${2:-5}"
+}
+function latrt {
+	ls -ltrA "${1:-.}" | tail -n "${2:-5}"
+}
 alias lat='lt -A'
 alias lss='ls -lS'
 alias lsr='ls -lrS'
