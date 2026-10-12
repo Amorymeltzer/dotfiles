@@ -280,7 +280,7 @@ export HISTSIZE=-1
 export HISTTIMEFORMAT='[%F %T] '
 # Apparently certain bash sessions truncate .bash_history on close
 # https://superuser.com/a/753158/240421
-export HISTFILE=~/.bash_eternal_history
+export HISTFILE=$HOME/.bash_eternal_history
 # Ignore some things
 # export HISTIGNORE='ls:la:ll:lal:lla:l1:ltr:lsr:lasr:lt:l:cdl:pwd:clear:exit:logout:pg'
 
@@ -315,7 +315,7 @@ shopt -s expand_aliases
 
 # Load in .bashrc -------------------------------------------------
 # shellcheck source=./.bashrc
-source ~/.bashrc
+source $HOME/.bashrc
 
 # Welcome Messsage --------------------------------------------------
 echo -ne "Welcome to ${Color_Green}$(hostname -s)${Color_zOff} on "

@@ -493,7 +493,7 @@ fi
 
 # Supplement the above with some missing items, at this point just some
 # mac-specific peccadilloes (defaults, eject)
-sources+=(~/.completions.d/*)
+sources+=($HOME/.completions.d/*)
 
 # Source all the (readable) things (files)!
 for file in "${sources[@]}"; do
@@ -503,12 +503,12 @@ done;
 unset file;
 
 #  alias reload="exec $SHELL -l"
-alias reload='. ~/.bashrc'
+alias reload='. $HOME/.bashrc'
 
 # Half-assedly replicate ssh, etc. completion for whois
 # Honestly, should just use fzf
-if [[ -e ~/.ssh/known_hosts ]]; then
-    complete -o default -W "$(sed 's/[, ].*//' < ~/.ssh/known_hosts | sort | uniq | grep -v '[0-9]')" whois
+if [[ -e $HOME/.ssh/known_hosts ]]; then
+    complete -o default -W "$(sed 's/[, ].*//' < $HOME/.ssh/known_hosts | sort | uniq | grep -v '[0-9]')" whois
 fi
 # macOS networksetup completion
 if [[ $OSTYPE == darwin* ]]; then
@@ -986,7 +986,7 @@ fi
 
 # Tell tidy to use a config file if it's there
 if [[ -f $(command -v tidy) ]]; then
-    export HTML_TIDY=~/.tidyrc
+    export HTML_TIDY=$HOME/.tidyrc
 fi
 
 # Emacs stuff.  Makes which/type confused, but order is important
@@ -1021,15 +1021,15 @@ alias magit='emacs --eval "(progn (magit-status) (delete-other-windows))"'
 alias m='magit'
 # Make customization easier
 # Should these use $HOME? FIXME TODO
-alias bashrc='$VISUAL ~/.bashrc'
-alias rc='$VISUAL ~/.bashrc'
-alias eb='$VISUAL ~/.bashrc'
-alias bashprofile='$VISUAL ~/.bash_profile'
-alias bp='$VISUAL ~/.bash_profile'
-alias ep='$VISUAL ~/.bash_profile'
-alias ee='$VISUAL ~/.emacs'
-alias eg='$VISUAL ~/.gitconfig'
-alias gitconfig='$VISUAL ~/.gitconfig'
+alias bashrc='$VISUAL $HOME/.bashrc'
+alias rc='$VISUAL $HOME/.bashrc'
+alias eb='$VISUAL $HOME/.bashrc'
+alias bashprofile='$VISUAL $HOME/.bash_profile'
+alias bp='$VISUAL $HOME/.bash_profile'
+alias ep='$VISUAL $HOME/.bash_profile'
+alias ee='$VISUAL $HOME/.emacs'
+alias eg='$VISUAL $HOME/.gitconfig'
+alias gitconfig='$VISUAL $HOME/.gitconfig'
 function gitignore() {
     local ignore=".gitignore"
     if [[ ! -f $ignore ]]; then
@@ -1050,15 +1050,15 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
-alias ~="cd ~"
+alias ~='cd $HOME'
 alias -- --='cd -'		# go back a directory, -- means end of options
 alias -- -='cd -'
 
 # Shortcuts
-alias bin="cd ~/bin"
-alias dt="cd ~/dotfiles"
-alias dr="cd ~/Dropbox"
-alias de="cd ~/Desktop"
+alias bin="cd $HOME/bin"
+alias dt="cd $HOME/dotfiles"
+alias dr="cd $HOME/Dropbox"
+alias de="cd $HOME/Desktop"
 alias dg='cd $GIT_MAIN_DIR'
 alias dge='cd $GIT_EXTL_DIR'
 alias dgt='cd $GIT_EXTL_DIR/twinkle@azatoth'
@@ -1074,8 +1074,8 @@ alias dpw='cd $GIT_PERS_DIR/wiki'
 alias dwc='cd $GIT_PERS_DIR/wiki/crathighlighter'
 alias dws='cd $GIT_PERS_DIR/wiki/sysopIndex'
 alias dwu='cd $GIT_PERS_DIR/wiki/userScripts'
-alias drk="cd ~/Documents/R/kinship/"
-alias edd="cd ~/.emacs.d/"
+alias drk="cd $HOME/Documents/R/kinship/"
+alias edd="cd $HOME/.emacs.d/"
 alias e='$VISUAL '
 alias hig='history | grep -i'
 alias cl='clear'
@@ -1143,7 +1143,7 @@ if [[ ! -f $(command -v trash) ]]; then
 fi
 function emptyalltrashes() {
     sudo rm -rfv /Volumes/*/.Trashes;
-    sudo rm -rfv ~/.Trash;
+    sudo rm -rfv $HOME/.Trash;
 }
 
 # Make intermediate directories and be verbose about it
@@ -1365,7 +1365,7 @@ if [[ -n "$PORT_INSTALLED" ]]; then
     alias puo='pug'
     alias pleaves='port echo leaves'
     alias pclean='sudo port clean -v --all installed'
-    alias pcleanleaves='port echo leaves >> ~/port_leaves_log.txt && sudo port uninstall leaves'
+    alias pcleanleaves='port echo leaves >> $HOME/port_leaves_log.txt && sudo port uninstall leaves'
     alias pactive='port echo active'
     alias pinactive='port echo inactive'
     alias pinfo='port info'
@@ -1379,7 +1379,7 @@ if [[ -n "$PORT_INSTALLED" ]]; then
 
     # Macports changelog
     # https://trac.macports.org/browser/contrib/port-whatsnew/port-whatsnew
-    alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 ~/bin/port-whatsnew.sh'
+    alias whatsnew='port echo outdated | cut -f 1 -d" " | xargs -n 1 $HOME/bin/port-whatsnew.sh'
 fi
 
 # Homebrew/Cask
@@ -1568,7 +1568,7 @@ complete -F _diary_completion diary d
 
 
 
-alias keys="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
+alias keys="more $HOME/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 
 # Quickly open MetaCPAN.  Probably pointless, but I find I'm reaching for the
 # terminal and not a launcher or something more correct
@@ -2106,7 +2106,7 @@ alias inflation='perl $GIT_PERS_DIR/sandbox/inflation.pl'
 if [[ "$LOGNAME" != "tools.amorybot.k8s" ]]; then
     if [[ ! "$INSTANCEPROJECT" ]]; then
 	# shellcheck disable=SC2262 # Doesn't like the function tf below
-	alias toolforge='ssh -i ~/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
+	alias toolforge='ssh -i $HOME/.ssh/id_rsa_toolforge $TOOLFORGE_USERNAME@login.toolforge.org'
 	# This won't get confusing at all!
 	alias tf='toolforge '
     elif [[ "$LOGNAME" == "tools.amorybot" ]]; then
@@ -2452,7 +2452,7 @@ alias ffprobe='ffprobe -hide_banner '
 
 # Generate family tree without polutting current directory
 function family() {
-    Rscript ~/Documents/R/kinship/family_tree.R
+    Rscript "$HOME/Documents/R/kinship/family_tree.R"
     rm Rplots.pdf
 }
 
