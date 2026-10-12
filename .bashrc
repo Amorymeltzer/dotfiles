@@ -2432,13 +2432,12 @@ if type -a &>/dev/null youtube-dl; then
 		   --audio-quality=0 "$*"
     }
     # Probably better to just do mpv directly?  It can handle it, but maybe just
-    # audio like above?  Also skip-dash-manifest is deprecated...
+    # audio like above?
     function listen-youtube {
 	# Skip DASH manifest for speed purposes. This might actually disable being
 	# able to specify things like 'bestaudio' as the requested format, but try
 	# anyway. Use "$*" so that quoting the requested song isn't necessary.
 	yt-dlp --default-search=ytsearch: \
-		   --youtube-skip-dash-manifest \
 		   --output="${TMPDIR:-/tmp}/%(title)s-%(id)s.%(ext)s" \
 		   --restrict-filenames \
 		   --format=bestaudio \
