@@ -25,10 +25,10 @@ allowed_values = all_integers
 # [Modules::ProhibitExcessMainComplexity]
 # max_mccabe = 25
 # Just for subroutines.  The default is 20, which seems kind of high?  I think
-# maybe 10 is something good to shoot for, so for now let's be generous but
+# maybe 15 is something good to shoot for, so for now let's be generous but
 # slightly more strict.
-[Subroutines::ProhibitExcessComplexity]
-max_mccabe = 15
+# [Subroutines::ProhibitExcessComplexity]
+# max_mccabe = 18
 
 # Deeply nested ifs, etc.  Default 5
 [ControlStructures::ProhibitDeepNests]
