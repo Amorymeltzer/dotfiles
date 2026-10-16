@@ -89,6 +89,11 @@ severity = 1
 # [ErrorHandling::RequireCarping]
 # severity = 2
 
+# Lower from level 4 to level 3; it's a good note, I suppose, but I basically
+# never do it except for some annoying testing stuff, so not a big deal
+[Modules::ProhibitMultiplePackages]
+severity = 3
+
 # Oh boy gotta tweak this.  Good but let's leave some simple ones alone, but
 # also bump things up a bit
 [InputOutput::RequireCheckedSyscalls]
