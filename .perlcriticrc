@@ -128,8 +128,8 @@ severity = 3
 debugging_modules = diagnostics
 
 # Raise to severity 4 from 3, despite being largely cosmetic
-[Bangs::ProhibitNumberedNames]
-severity = 4
+# [Bangs::ProhibitNumberedNames]
+# severity = 4
 [Bangs::ProhibitVagueNames]
 severity = 4
 
