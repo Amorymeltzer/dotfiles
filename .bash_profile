@@ -69,6 +69,15 @@ fi
 if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
     homebrew_pathstring="${homebrew_pathstring:+${homebrew_pathstring}:}$HOMEBREW_PREFIX/sbin"
 fi
+# Brew curl is special
+if [[ -d "$HOMEBREW_PREFIX/opt/curl/bin" ]]; then
+    homebrew_pathstring="${homebrew_pathstring:+${homebrew_pathstring}:}$HOMEBREW_PREFIX/opt/curl/bin"
+    # Compilers
+    export LDFLAGS=-L/opt/homebrew/opt/curl/lib
+    export CPPFLAGS=-I/opt/homebrew/opt/curl/include
+    # pkgconf
+    export PKG_CONFIG_PATH=/opt/homebrew/opt/curl/lib/pkgconfig
+fi
 if [[ -n "$homebrew_pathstring" ]]; then
     new_path="${new_path:+${new_path}:}$homebrew_pathstring"
 fi
@@ -315,7 +324,7 @@ shopt -s expand_aliases
 
 # Load in .bashrc -------------------------------------------------
 # shellcheck source=./.bashrc
-source $HOME/.bashrc
+source "$HOME/.bashrc"
 
 # Welcome Messsage --------------------------------------------------
 echo -ne "Welcome to ${Color_Green}$(hostname -s)${Color_zOff} on "
