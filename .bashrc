@@ -854,7 +854,7 @@ alias provelv='provel -v'
 alias proveq='prove -Q'
 alias provelq='prove -lQ'
 # Easier Devel::Cover testing by setting the harness.
-alias provecover='HARNESS_PERL_SWITCHES=-MDevel::Cover prove '
+alias provecover='HARNESS_PERL_SWITCHES=-MDevel::Cover=+ignore,^t/ prove '
 alias provecoverl='provecover -l'
 alias provecoverlv='provecoverl -v'
 alias provecoverq='provecover -Q'
