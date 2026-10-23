@@ -13,3 +13,4 @@ cp -R "$jellydata/config/" "$bk/config/"
 cp -R "$jellydata/data/" "$bk/data/"
 cp -R "$jellydata/root/" "$bk/root/"
 ls -lFGh "$bk"
+du -hd 1
