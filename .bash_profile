@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/Amory/.docker/bin"
+# End of Docker Desktop section.
+
 ## Some helpful environment vars and configs
 # Worth noting that export doesn't take in aliases
 export EDITOR='emacsclient -tqu '
@@ -222,6 +226,9 @@ unalias python
 # installs that are managed separately/externally are ideally in a virtual
 # environment venv but possibly via pipx, and thus in .local
 new_path="$new_path:$HOME/.local/bin"
+
+# Docker desktop
+new_path="$new_path:$HOME/.docker/bin"
 
 # Tack on original path
 new_path="$new_path:$orig_path"
