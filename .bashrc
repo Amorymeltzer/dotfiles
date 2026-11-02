@@ -1273,6 +1273,7 @@ alias dwdiff='dwdiff -sc'
 # to light/dark-mode on macOS (we once again repeat ourselves).
 if [[ -f $(command -v delta) ]]; then
     alias delta='DELTA_FEATURES="+side-styles $(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)" delta '
+    alias si='delta '
 fi
 
 # grep prints line number if piped, kinda sorta breaks other things
