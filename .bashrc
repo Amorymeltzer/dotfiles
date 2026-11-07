@@ -1574,12 +1574,13 @@ alias keys="more $HOME/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to 
 # Quickly open MetaCPAN.  Probably pointless, but I find I'm reaching for the
 # terminal and not a launcher or something more correct
 function metacpan() {
-    if [ -n "$1" ]; then
-	open "https://metacpan.org/pod/${1}"
+    if [ "$#" -gt 0 ]; then
+	for arg in "$@"; do
+	    open "https://metacpan.org/pod/${arg}"
+	done
     else
 	open "https://metacpan.org/"
     fi
-
 }
 
 # Start an HTTP server from a directory, optionally specifying the port
