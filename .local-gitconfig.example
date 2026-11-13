@@ -13,7 +13,8 @@ editor = emacsclient -cqu
 # Default is dark, this adjusts it based on macOS' status, just like the
 # terminal profile itself is.  In theory, the defaults adapt well enough, and
 # don't become illegible when changing modes, but this is more fun?  Duplicated
-# below for the si alias for side-styles a la icdiff
+# below for the si alias for side-styles a la icdiff  This breaks `git am -i`
+# which is annoying FIXME TODO
 pager = delta --features "$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark-mode || echo light-mode)"
 
 [delta "light-mode"]
